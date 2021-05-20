@@ -1,2 +1,2 @@
 # Rnssp
-A Signature R package for the National Syndromic and Surveillance Program (NSSP) at the Centers for Disease Control and Prevention (CDC). A collection of tools, functions, and Rmarkdown templates that supports the Community of Practice of the NSSP.
+The Rnssp R package is a catalog of data processing and analytics tools, templates, and functions commonly used across the National Syndromic and Surveillance Program at the Centers for Disease Control and Prevention (CDC). Its goal is to improve code reproducibility, standardize and document reusable functions, facilitate the sharing of routine reports across the NSSP Community of Practice (CoP), and better engage the NSSP CoP.
