@@ -101,7 +101,7 @@ api_data_ts <- myProfile$get_api_data(url)
 
 class(api_data_ts)
 names(api_data_ts)
-glimpse(api_data_ts$timeSeriesData)
+# glimpse(api_data_ts$timeSeriesData)
 ```
 
 Alternatively, the example below could be performed via the `$get_api_response()` method (as shown below), but with extra steps:
