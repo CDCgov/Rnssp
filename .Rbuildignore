@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^.*\.rds$
+^data-raw$
+^Rnssp\.Rcheck$
+^\.github$

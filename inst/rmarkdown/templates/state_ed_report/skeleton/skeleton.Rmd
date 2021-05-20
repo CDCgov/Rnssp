@@ -1,0 +1,610 @@
+---
+title: "State ED Report Template"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+description: This report is a template State ED Report. 
+  Remember to change the title to match your State.
+  PLEASE Knit it with Parameters!!!
+output:
+  html_document:
+    toc: true
+params:
+  username:
+    label: "NSSP Username: "
+    value: ""
+    input: text
+  password:
+    label: "NSSP Password: "
+    value: ""
+    input: password
+  state_fips:
+    label: "Enter State FIPS"
+    value: "01"
+    input: text
+  start_date:
+    label: "Enter Start Date: "
+    value: !r as.Date(paste0(format(Sys.Date(), "%Y-"),"01-01"))
+    input: date
+  end_date:
+    label: "Enter End Date: "
+    value: !r Sys.Date()
+    input: date
+  gard_band:
+    label: "Guardband: "
+    value: 3
+    input: numeric
+    min: 1
+    max: 14
+  days_before:
+    label: "Days Before: "
+    value: 11
+    input: numeric
+    min: 7
+    max: 14
+editor_options:
+  chunk_output_type: console
+---
+
+<style type="text/css">
+  .main-container {
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+
+
+```{r setup, echo=FALSE, message=FALSE, include=FALSE}
+## Libraries ----
+library(Rnssp)
+library(tidyverse)
+library(lubridate)
+library(httr)
+library(janitor) 
+library(DT)
+library(kableExtra)
+library(purrr)
+library(wesanderson)
+library(rgdal)
+library(ggrepel)
+library(ggsci) 
+library(ggpubr)
+library(ggformula)
+library(ggthemes)
+library(grid)
+library(gridExtra)
+library(jsonlite)
+library(data.table)
+```
+
+
+```{r set_end_start_dates, echo=FALSE, message=FALSE, include=FALSE}
+endDate <- format(params$end_date, "%d%b%Y")
+startDate <- format(params$start_date, "%d%b%Y")
+```
+
+
+```{r set_nssp_user_profile, echo=FALSE, message=FALSE, include=FALSE}
+## Set NSSP user profile
+userProfile <- Credentials$new(
+  username = params$username,
+  password = params$password
+)
+```
+
+
+
+```{r set_shapefile, echo=FALSE, message=FALSE, include=FALSE}
+## Enter state FIPS code below ----
+state_fip <- params$state_fips #"04"
+
+data("county_sf")
+data("state_sf")
+
+us_counties_base <- county_sf %>% 
+  st_transform("+proj=longlat +datum=WGS84") # changing coordinate system to longlat
+
+state.counties <- subset(us_counties_base, STATEFP == state_fip)
+
+state.regions <- state.counties %>%
+  mutate(CENTROID = map(geometry, st_centroid),
+         COORDS = map(CENTROID, st_coordinates),
+         COORDS_X = map_dbl(COORDS, 1),
+         COORDS_Y = map_dbl(COORDS, 2),
+         GEOID = as.character(GEOID))
+
+state_name <- state_sf %>% 
+  st_set_geometry(NULL) %>% 
+  filter(STATEFP == state_fip) %>% 
+  select(NAME) %>% pull %>% 
+  as.character()
+```
+
+
+
+```{r state data pull, echo = FALSE, message = FALSE, warning = FALSE}
+
+guardband <- params$gard_band#3
+daysbefore <- params$days_before#11
+
+date_marker <- params$end_date - guardband - daysbefore
+
+endDate <- (params$end_date - guardband) %>%
+  format("%d%b%Y")
+startDate <- (params$end_date - guardband - 120) %>%
+  format("%d%b%Y")
+
+labelEndDate <- (params$end_date - guardband) %>%
+  format("%B %d, %Y")
+labelStartDate <- (params$end_date - guardband - daysbefore) %>%
+  format("%B %d, %Y")
+
+category.list <- "ccddCategory=cdc%20coronavirus-dd%20v1&ccddCategory=cdc%20pneumonia%20ccdd%20v1&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2"
+
+geography <- state_sf %>% 
+  st_set_geometry(NULL) %>% 
+  filter(STATEFP == state_fip) %>% 
+  select(STUSPS) %>% pull %>% 
+  as.character %>% 
+  tolower
+
+url1 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?"
+url2 <- paste0("endDate=", endDate, "&geography=", geography, "&percentParam=ccddCategory&datasource=va_hosp&")
+url3 <- paste0("startDate=", startDate, "&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&", category.list, "&geographySystem=hospitalstate&detector=probrepswitch&timeResolution=daily&hasBeenE=1&stratVal=ccddCategory&multiStratVal=&graphOnly=true&numSeries=3&graphOptions=single&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=ccddCategory&multiStratVal=&graphOnly=true&numSeries=3&graphOptions=single&seriesPerYear=false&startMonth=January&nonZeroComposite=false")
+url <- paste0(url1, url2, url3)
+
+api_data_json <- userProfile$get_api_data(url)
+
+api_state <- api_data_json$timeSeriesData %>%
+  rename(percent = count) 
+
+state.data <- api_state %>%
+  select(date, 
+         ccdd_category = ccddCategory_display,
+         data_count = dataCount, 
+         all_count = allCount, 
+         percent, 
+         alert = color, 
+         p.value.alert = levels) %>%
+  mutate(date = as.Date(date)) 
+
+```
+
+```{r county data pull, echo = FALSE, message = FALSE, warning = FALSE}
+
+# Remember to match the county.fips variable to the counties in your state
+county.fips <- paste0(
+  paste0("&facilityfips=", state.counties$STATEFP,state.counties$COUNTYFP),
+  sep="", collapse="")
+
+category.list <- "ccddCategory=cdc%20coronavirus-dd%20v1&ccddCategory=cdc%20pneumonia%20ccdd%20v1&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2"
+
+url1 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?"
+url2 <- paste0("endDate=", endDate, county.fips, "&percentParam=ccddCategory&datasource=va_hosp&")
+url3 <- paste0("startDate=", startDate, "&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&", category.list, "&geographySystem=hospital&detector=probrepswitch&timeResolution=daily&hasBeenE=1&stratVal=ccddCategory&multiStratVal=facilityfips&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=false&startMonth=January&stratVal=ccddCategory&multiStratVal=facilityfips&refValues=false&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false")
+url <- paste0(url1, url2, url3)
+
+api_data_json <- userProfile$get_api_data(url)
+
+api_county <- api_data_json$timeSeriesData %>%
+  rename(percent = count) 
+
+county.data <- api_county %>%
+  select(date, 
+         county = facilityfips_id, 
+         county_name = facilityfips_display, 
+         ccdd_category = ccddCategory_display,
+         data_count = dataCount, 
+         all_count = allCount, 
+         percent, 
+         alert = color, 
+         p.value.alert = levels) %>%
+  mutate(date = as.Date(date)) %>%
+  mutate(county_name = str_remove_all(county_name, "County")) %>%
+  separate(county_name, c("state", "county_name"), sep = " - ")
+
+```
+
+### Introduction
+
+The purpose of this report is to summarize trend classification and ESSENCE alerting for the CDC Coronavirus-DD v1, CDC Pneumonia CCDD v1, and CLI CC with CLI DD and Coronavirus DD v2 categories at the state, region, and county level. All trends are reported as percent of daily emergency department visits.
+
+To classify all trends over time, we iteratively fit separate binomial regression models to moving 12 day baselines where the statistic and p-value resulting from the statistical test (Wald) are used to define the last day of the baseline as significantly increasing, significantly decreasing, not significant with positive slope, or not significant with negative slope. Data is pulled up to the current date minus 3 days to prevent the most recent dates that will have lower counts due to lags in receiving data from biasing the most recent classification. The significance threshold for p-values is set to 0.01, where trend classification is specified as follows: 
+
+  **Significantly Increasing:** Time term in model is positive and p-value < 0.01
+  
+  **Significantly Decreasing:** Time term in model is negative and p-value < 0.01 
+  
+  **Not Significant, Positive Slope:** Time term in model is positive and p-value >= 0.01 
+  
+  **Not Significant, Negative Slope:** Time term in model is negative and p-value >= 0.01 
+  
+Note that in instances where the number of encounters for a category in the 12-day time window is less than 10, a binomial model is not fit in order to prevent convergence errors from `glm`. In those instances, the trend is classified as \"Less than 10 Encounters or Not Reporting\". 
+
+To improve identification of stratifications with recent and anomalous increases in syndromic activity, ESSENCE alerting is overlaid on the percentage trends for each county and CCDD category. These alerts correspond to ESSENCE\'s default alerting algorithm, Poisson/EWMA/Regression Switch, with alerting thresholds 0.05 (yellow) and 0.01 (red). Daily stratified alerting indicators and statistics are pulled along with the percentages, numerators, and denominators from the time series data table API (new to ESSENCE as of July 2020). 
+
+```{r state analysis, echo = FALSE, warning = FALSE, message = FALSE}
+
+max.date <- max(state.data$date)
+min.date <- min(state.data$date)
+
+#......................................................................................
+# > Begin processing 
+#......................................................................................
+dt <- state.data %>%
+  as.data.table() 
+
+dt[, non_count := all_count - data_count]
+shifted.numerator <- setnames(dt[, shift(get("data_count"), (0:daysbefore)), by = c("ccdd_category")], 
+                              old = 2:13, 
+                              new = paste0("pos", 1:(daysbefore + 1)))
+shifted.denominator <- setnames(dt[, shift(get("non_count"), (0:daysbefore)), by = c("ccdd_category")],
+                                old = 2:13, 
+                                new = paste0("neg", 1:(daysbefore + 1)))
+res <- cbind(dt[, .SD, .SDcols = c("date")], shifted.numerator, shifted.denominator) %>%
+  melt(id = c("date", "ccdd_category"),
+       measure = patterns("pos", "neg"), 
+       value.name = c("pos", "neg"), 
+       variable.name = "date_num") %>%
+  setorderv(cols = c("date", "date_num"))
+res[, date_num := (daysbefore + 1) - as.integer(date_num)]
+
+src.analysis <- res
+src.analysis[, threshmet := sum(pos, na.rm = TRUE) >= 10, by = c("ccdd_category", "date")]
+
+return_stat <- function(y1, y2, x) {
+  mod <- glm(cbind(y1, y2) ~ x, family = "binomial", model = FALSE)
+  return(mod$coef[2]/sqrt(vcov(mod)[2,2]))
+}
+
+src.result <- src.analysis[threshmet == TRUE,
+                           .("statistic" = return_stat(pos, neg, date_num)),
+                           by = c("ccdd_category", "date")]
+src.result[, p.value := 2*pnorm(-abs(statistic))]
+src.result[, status := fcase(p.value < 0.01 & statistic > 0,"Significantly Increasing", 
+                          p.value < 0.01 & statistic < 0, "Significantly Decreasing", 
+                          p.value >= 0.01 & statistic > 0, "Not Significant, Positive Slope",
+                          p.value >= 0.01 & statistic < 0, "Not Significant, Negative Slope", 
+                          is.na(statistic), "Less than 10 Encounters or not Reporting")]
+
+state.trends.analyzed <- state.data %>%
+  filter(date >= min.date + daysbefore) %>%
+  left_join(src.result %>% as.data.frame() %>% arrange(date), by = c("date", "ccdd_category")) %>%
+  arrange(ccdd_category, date) %>%
+  mutate(status = ifelse(is.na(status), "Less than 10 Encounters or not Reporting", status)) %>%
+  mutate(status = factor(status, levels = c("Significantly Increasing", 
+                                            "Not Significant, Positive Slope",
+                                            "Significantly Decreasing", 
+                                            "Not Significant, Negative Slope", 
+                                            "Less than 10 Encounters or not Reporting"))) %>%
+  filter(date >= max(date) - 120) %>%
+  ungroup() %>%
+  mutate(
+    alert = case_when(
+      alert %in% c("grey", "blue") ~ "None", 
+      alert == "red" ~ "Alert", 
+      alert == "yellow" ~ "Warning"
+    ),
+    alert = factor(alert, levels = c("Alert", "Warning", "None")),
+    p.value.alert = as.numeric(p.value.alert)
+  )
+
+```
+
+```{r county analysis, echo = FALSE, warning = FALSE, message = FALSE}
+
+max.date <- max(county.data$date)
+min.date <- min(county.data$date)
+
+#......................................................................................
+# > Begin processing 
+#......................................................................................
+dt <- county.data %>%
+  as.data.table() 
+
+dt[, non_count := all_count - data_count]
+shifted.numerator <- setnames(dt[, shift(get("data_count"), (0:daysbefore)), by = c("county", "ccdd_category")], 
+                              old = 3:14, 
+                              new = paste0("pos", 1:(daysbefore + 1)))
+shifted.denominator <- setnames(dt[, shift(get("non_count"), (0:daysbefore)), by = c("county", "ccdd_category")],
+                                old = 3:14, 
+                                new = paste0("neg", 1:(daysbefore + 1)))
+res <- cbind(dt[, .SD, .SDcols = c("date")], shifted.numerator, shifted.denominator) %>%
+  melt(id = c("date", "county", "ccdd_category"),
+       measure = patterns("pos", "neg"), 
+       value.name = c("pos", "neg"), 
+       variable.name = "date_num") %>%
+  setorderv(cols = c("date", "date_num"))
+res[, date_num := (daysbefore + 1) - as.integer(date_num)]
+
+src.analysis <- res
+src.analysis[, threshmet := sum(pos, na.rm = TRUE) >= 10, by = c("county", "ccdd_category", "date")]
+
+return_stat <- function(y1, y2, x) {
+  mod <- glm(cbind(y1, y2) ~ x, family = "binomial", model = FALSE)
+  return(mod$coef[2]/sqrt(vcov(mod)[2,2]))
+}
+
+src.result <- src.analysis[threshmet == TRUE,
+                           .("statistic" = return_stat(pos, neg, date_num)),
+                           by = c("county", "ccdd_category", "date")]
+src.result[, p.value := 2*pnorm(-abs(statistic))]
+src.result[, status := fcase(p.value < 0.01 & statistic > 0,"Significantly Increasing", 
+                             p.value < 0.01 & statistic < 0, "Significantly Decreasing", 
+                             p.value >= 0.01 & statistic > 0, "Not Significant, Positive Slope",
+                             p.value >= 0.01 & statistic < 0, "Not Significant, Negative Slope", 
+                             is.na(statistic), "Less than 10 Encounters or not Reporting")]
+
+county.trends.analyzed <- county.data %>%
+  filter(date >= min.date + daysbefore) %>%
+  left_join(src.result %>% as.data.frame() %>% arrange(county, date), by = c("county", "date", "ccdd_category")) %>%
+  arrange(ccdd_category, county, date) %>%
+  mutate(status = ifelse(is.na(status), "Less than 10 Encounters or not Reporting", status)) %>%
+  mutate(status = factor(status, levels = c("Significantly Increasing", 
+                                            "Not Significant, Positive Slope",
+                                            "Significantly Decreasing", 
+                                            "Not Significant, Negative Slope", 
+                                            "Less than 10 Encounters or not Reporting"))) %>%
+  filter(date >= max(date) - 120) %>%
+  ungroup() %>%
+  mutate(
+    alert = case_when(
+      alert %in% c("grey", "blue") ~ "None", 
+      alert == "red" ~ "Alert", 
+      alert == "yellow" ~ "Warning"
+    ),
+    alert = factor(alert, levels = c("Alert", "Warning", "None")),
+    p.value.alert = as.numeric(p.value.alert)
+  )
+
+```
+
+### State Level Trend Classifcation and Alert Status over Time
+
+```{r state trend, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 14, fig.height = 4, fig.align = "center"}
+
+wes.pal <- wes_palette(n = 5, name = "Darjeeling1")
+
+trend.pal <- wes_palette("Zissou1")
+alert.pal <- wes_palette("BottleRocket2")
+category.pal <- c(wes.pal[c(1, 4, 2, 3)], "#DDDDDD")
+
+state.plot <- state.trends.analyzed %>%
+  mutate(category_name = ccdd_category) %>%
+  nest(data = -ccdd_category) %>%
+  mutate(
+    trend = purrr::map(data, function(.x){
+      
+      .recent.status <- tail(.x$status, n = 1)
+      .category <- unique(.x$category_name)
+      
+        ggplot(data = .x, aes(x = date, y = percent)) + 
+          geom_line(color = trend.pal[1], size = 0.7, alpha = 0.5) + 
+          geom_spline(spar = 0.5, size = 0.7, color = trend.pal[1]) +
+          geom_point(data = subset(.x, alert == "Alert"), color = alert.pal[2]) +
+          geom_point(data = subset(.x, alert == "Warning"), color = alert.pal[1]) +
+          geom_vline(xintercept = date_marker, linetype = "dashed") +
+          geom_hline(yintercept = -0.4, size = 4.5, color = "white") + 
+          geom_segment(aes(x = date, xend = max(date), y = -0.4, yend = -0.4, colour = status), size = 3) + 
+          scale_color_manual(values = category.pal, name = "Trend Classification", drop = FALSE) +
+          labs(title = .category,
+               subtitle = paste("Recent Status:", 
+                                .recent.status,
+                                "\np = ",
+                                format(unique(.x$p.value), digits = 2, scientific = TRUE)),
+               x = "Date",
+               y = "Percent of ED Visits") +
+          theme_few() +
+          scale_x_date(date_labels = "%b %d", date_breaks = "21 day") +
+          theme(axis.title.x = element_blank(),
+                legend.title = element_blank(),
+                legend.position = "right",
+                axis.text.x = element_text(angle = 0, size = 8),
+                plot.title = element_text(face = "bold"),
+                plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
+                plot.caption = element_text(hjust = 0)) 
+      
+    })
+  ) %>%
+  select(-data) %>%
+  pivot_wider(names_from = ccdd_category, values_from = trend) %>%
+  as.data.frame() 
+
+grid <- ggarrange(plotlist = c(state.plot[1, 1], state.plot[1, 2], state.plot[1, 3]), ncol = 3, nrow = 1, common.legend = TRUE, legend = "bottom")
+annotate_figure(grid, 
+                top = text_grob(paste(paste(state_name, "State Trends:"), 
+                                      format(min(state.trends.analyzed$date), "%B %d, %Y"), 
+                                      "to", 
+                                      format(max(state.trends.analyzed$date), "%B %d, %Y")), 
+                                size = 14, face = "bold"))
+  
+```
+
+### Recent Trend Classification - County Map: `r labelStartDate` to `r labelEndDate`
+
+```{r cli_map, echo = FALSE, warning = FALSE, message = FALSE} 
+
+my.pal <- c(wes.pal[c(1, 4, 2, 3)], "#FFFFFF")
+names(my.pal) <- c("Significantly Increasing", 
+                   "Not Significant, Positive Slope", 
+                   "Significantly Decreasing", 
+                   "Not Significant, Negative Slope", 
+                   "Less than 10 Encoutners or not Reporting")
+
+county.trends.recent <- county.trends.analyzed %>%
+  filter(date == max(date))
+
+spatial.sf <- state.regions %>%
+  left_join(county.trends.recent, by = c("GEOID" = "county")) %>%
+  mutate(nudge_x = 0, 
+         nudge_y = 0, 
+         status = factor(status, levels = c("Significantly Increasing", 
+                                            "Not Significant, Positive Slope",
+                                            "Significantly Decreasing", 
+                                            "Not Significant, Negative Slope", 
+                                            "Less than 10 Encounters or not Reporting"))) %>%
+  group_by(ccdd_category) %>%
+  mutate(category = ccdd_category) %>%
+  nest(data = -ccdd_category) %>%
+  mutate(category_map = map(data, function(.x){
+    
+    ggplot() + 
+      geom_sf(data = .x, aes(fill = status), color = "black") + 
+      scale_fill_manual(labels = c("Significantly Increasing", 
+                                   "Not Significant, Positive Slope",
+                                   "Significantly Decreasing", 
+                                   "Not Significant, Negative Slope", 
+                                   "Less than 10 Encounters or not Reporting"),
+                        values = my.pal,
+                        drop = FALSE) + 
+      labs(fill = "Recent Trend Classification") + 
+      geom_text_repel(
+        data = .x,
+        mapping = aes(
+          x = COORDS_X,
+          y = COORDS_Y,
+          label = NAME),
+        nudge_x = .x$nudge_x,
+        nudge_y = .x$nudge_y,
+        size = 3,
+        min.segment.length = 0,
+        point.padding = NA,
+        segment.color = "grey20"
+      ) +
+      theme_bw() +
+      theme(axis.line=element_blank(),axis.text.x=element_blank(),
+            axis.text.y=element_blank(),axis.ticks=element_blank(),
+            axis.title.x=element_blank(), axis.title.y=element_blank(), legend.justification="top",
+            panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
+            panel.grid.minor=element_blank(),plot.background=element_blank(),
+            plot.margin=unit(c(0, 0, 0, 0), "cm"), plot.caption = element_text(hjust = 0, lineheight=1.1),
+            plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+            legend.key = element_rect(colour = "black"),
+            legend.box.margin=margin(t=0, r=0, b=0, l=15)) + 
+      labs(title = paste("ESSENCE CCDD Category Definition:", unique(.x$category))) 
+  }))
+
+
+```
+
+```{r combine all, echo = FALSE, fig.width = 16, fig.height = 7, fig.align = "center"}
+
+for(i in 1:nrow(spatial.sf)){
+  grid.arrange(spatial.sf$category_map[[i]])
+}
+
+```
+
+### County Summary Table 
+
+**Note**: Counties with a recent significant status will be highlighted with the same color used in the county maps above - Counties with a status of \"Significantly Increasing\" will be highlighted in red, while counties with a status of \"Significantly Decreasing\" will be highlighted in green. 
+
+```{r summary table, echo = FALSE, warning = FALSE, message = FALSE}
+
+master.table <- county.trends.recent %>%
+  filter(!is.na(p.value)) %>%
+  left_join(state.regions %>% as.data.frame() %>% select(GEOID, NAME), by = c("county" = "GEOID")) %>%
+  mutate(p.value = format(p.value, digits = 2, scientific = TRUE)) %>%
+  select(`County Name` = NAME, 
+         `County FIPS` = county,  
+         `CCDD Category` = ccdd_category, 
+         `Status` = status,
+         `p Value` = p.value)
+
+master.table %>%
+  datatable(class = "cell-border stripe",
+            style = "bootstrap", 
+            filter = "top", 
+            extensions = "Buttons",
+            options = list(
+              dom = "Bfrtip",
+              buttons = c("csv", "excel", "pdf"),
+              scrollY = 400,
+              pageLength = 25)
+  ) %>%
+  formatStyle(
+    "Status",
+    target = "row", 
+    backgroundColor = styleEqual(c("Significantly Increasing", "Significantly Decreasing"), c(my.pal[[1]], my.pal[[3]]))
+  )
+
+```
+
+## County Level Trend Classification and Alert Status over Time 
+
+```{r all counties, echo = FALSE, warning = FALSE, message = FALSE, fig.height = 4}
+
+trend.pal <- wes_palette("Zissou1")
+alert.pal <- wes_palette("BottleRocket2")
+category.pal <- c(wes.pal[c(1, 4, 2, 3)], "#DDDDDD")
+
+all.county.plots <- county.trends.analyzed %>%
+  arrange(ccdd_category, county, date) %>%
+  group_by(county, ccdd_category) %>%
+  filter(sum(data_count) > 0) %>%
+  ungroup() %>%
+  mutate(category_name = ccdd_category) %>%
+  nest(data = -c(county, ccdd_category)) %>%
+  mutate(
+    trend = purrr::map(data,  function(.x){
+      
+      .recent.status <- as.character(tail(.x$status, n = 1))
+      .p.value <- tail(.x$p.value, n = 1)
+      .category <- unique(.x$category_name)
+      
+      ggplot(data = .x, aes(x = date, y = percent)) + 
+        geom_line(color = trend.pal[1], size = 0.7, alpha = 0.5) + 
+        geom_spline(spar = 0.5, size = 0.7, color = trend.pal[1]) +
+        geom_point(data = subset(.x, alert == "Alert"), color = alert.pal[2]) +
+        geom_point(data = subset(.x, alert == "Warning"), color = alert.pal[1]) +
+        geom_vline(xintercept = date_marker, linetype = "dashed") +
+        geom_hline(yintercept = -0.4, size = 4.5, color = "white") + 
+        geom_segment(aes(x = date, xend = max(date), y = -0.4, yend = -0.4, colour = status), size = 3) + 
+        scale_color_manual(values = category.pal, name = "Trend Classification", drop = FALSE) +
+        labs(title = .category,
+             subtitle = paste("Recent Status:", 
+                              .recent.status,
+                              "\np = ",
+                              format(.p.value, digits = 2, scientific = TRUE)),
+             x = "Date",
+             y = "Percent of ED Visits") +
+        theme_few() +
+        scale_x_date(date_labels = "%b %d", date_breaks = "21 day") +
+        theme(axis.title.x = element_blank(),
+              legend.title = element_blank(),
+              legend.position = "right",
+              axis.text.x = element_text(angle = 0, size = 8),
+              plot.title = element_text(face = "bold"),
+              plot.margin=unit(c(0.5, 0.5, 1.0, 0.5), "cm"),
+              plot.caption = element_text(hjust = 0)) 
+      
+    }
+    )
+  ) %>%
+  select(-data) %>%
+  pivot_wider(names_from = ccdd_category, values_from = trend) %>%
+  inner_join(state.regions %>%
+               select(GEOID, NAME) %>%
+               as.data.frame() %>%
+               select(-geometry) %>%
+               mutate(NAME = as.character(NAME)), by = c("county" = "GEOID")) %>%
+  as.data.frame() %>%
+  arrange(NAME)
+
+```
+
+```{r do plots, echo = FALSE, fig.width = 15, fig.height = 4, fig.align = "center"}
+
+for(i in 1:nrow(all.county.plots)){
+  grid <- ggarrange(plotlist = c(all.county.plots[i, 2], all.county.plots[i, 3], all.county.plots[i, 4]), 
+                    ncol = 3, nrow = 1, 
+                    common.legend = TRUE, legend = "top")
+  annotated.grid <- annotate_figure(grid, 
+                  top = text_grob(paste0(all.county.plots[i, 5], " County: ", 
+                                         format(min(county.trends.analyzed$date), "%B %d, %Y"), 
+                                         " to ",
+                                         format(max(county.trends.analyzed$date), "%B %d, %Y")),
+                                  size = 14, face = "bold"))
+  print(annotated.grid)
+}
+
+```

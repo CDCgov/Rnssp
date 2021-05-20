@@ -1,0 +1,8 @@
+name: State Emergency Department Report
+description: >
+  An automated state emergency department report template summarizing CCDD categories.
+  Original Code By: Michael Sheppard.
+  Adapted to the Rnssp Package by: Gbedegnon Roseric Azondekon.
+  National Syndromic and Surveillance Program.
+  Centers for Disease Control and Prevention (CDC).
+create_dir: false

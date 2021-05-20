@@ -1,0 +1,53 @@
+Package: Rnssp
+Type: Package
+Title: A Signature R package for the National Syndromic and Surveillance Program (NSSP)
+Version: 0.0.1
+Date: 2021-01-27
+Authors@R: c(
+    person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
+                  role = c("aut", "cre")),
+    person("Michael", "Sheppard", email = "msheppard@cdc.gov",
+                  role = c("ctb")))
+Maintainer: Gbedegnon Roseric Azondekon <gazondekon@cdc.gov>
+Description: A collection of tools, functions, and Rmarkdown templates 
+    that supports the National Syndromic and Surveillance Program Community of Practice.
+Depends: 
+    R (>= 3.6.0),
+    magrittr,
+    purrr,
+    dplyr,
+    data.table,
+    stringr,
+    tidyr,
+    slider,
+    sf
+License: MIT + file LICENSE
+Encoding: ISO-8859-1
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    scales,
+    forcats,
+    ggplot2,
+    ggpubr,
+    ggraph,
+    ggthemes,
+    igraph,
+    igraph,
+    tidytext,
+    widyr
+Imports: 
+    R6,
+    stringi,
+    assertive.types,
+    safer,
+    jsonlite,
+    httr,
+    askpass,
+    readr,
+    janitor,
+    tibble
+VignetteBuilder: knitr
