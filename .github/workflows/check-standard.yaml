@@ -14,33 +14,36 @@ jobs:
     container:
       image: rocker/geospatial:4.0.2-ubuntugis
     steps:
-      - name: Check1
+      - name: Checkout Rnssp repository code
+        uses: actions/checkout@v2
+
+      # Performs a clean installation of all dependencies
+      - name: Install Dependencies
         run: |
-          pwd
-      - name: Check2
+          R -e "remotes::install_deps(dependencies = TRUE)"
+
+      - name: Check
         run: |
-          ls . -all
-      - name: Check3
+          R -e 'devtools::test()'
+          R -e 'devtools::load_all()'
+
+      - name: Build
         run: |
-          ls .. -all
-      - name: Check4
+          R CMD build . --no-build-vignettes
+          R CMD INSTALL Rnssp_*tar.gz
+
+      - name: Test
         run: |
-          R -e "R.Version()"
-#          R -e "remotes::install_deps(dependencies = TRUE)"
-#          R -e 'devtools::test()'
-#          R -e 'devtools::load_all()'
-#
-#      - name: Test
-#        run: |
-#          R -e "remotes::install_deps(dependencies = TRUE)"
-#          R CMD build . --no-build-vignettes
-#          R CMD INSTALL Rnssp_*tar.gz
-#          R -e "library(Rnssp)"
-#
-#
-#      - name: Deploy
-#        run: |
-#          R -e "remotes::install_deps(dependencies = TRUE)"
-#          R CMD build . --no-build-vignettes
+          R -e "library(Rnssp)"
+
+      - name: Deploy
+        run: |
+          mkdir public
+          cp -r Rnssp_*tar.gz public
+
+      - name: Upload Package Build
+        uses: actions/upload-artifact@v2
+        with:
+          path: public
 
 
