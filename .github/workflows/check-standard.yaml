@@ -8,12 +8,10 @@ on:
 name: Rnssp Pipeline
 
 jobs:
-  job-name:
+  node-docker:
     runs-on: ubuntu-latest
-    services:
-      service-name-1:
-        image: rocker:geospatial
-
+    container:
+      image: rocker/geospatial:4.0.2-ubuntugis
     steps:
       - name: Build
         run: |
