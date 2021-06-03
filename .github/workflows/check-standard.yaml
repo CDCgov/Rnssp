@@ -13,10 +13,23 @@ jobs:
     container:
       image: rocker/geospatial:4.0.2-ubuntugis
     steps:
-      - name: Build
+      - name: Check1
         run: |
-          pwd
+          ls / -all
+      - name: Check2
+        run: |
+          ls /-w -all
+      - name: Check3
+        run: |
+          ls /__w/Rnssp -all
+      - name: Check4
+        run: |
+          ls /__w/Rnssp/Rnssp -all
+      - name: Check5
+        run: |
           ls -all
+      - name: Check6
+        run: |
           ls ~
 #          R -e "remotes::install_deps(dependencies = TRUE)"
 #          R -e 'devtools::test()'
