@@ -18,19 +18,13 @@ jobs:
           ls / -all
       - name: Check2
         run: |
-          ls /__w -all
+          ls /home -all
       - name: Check3
         run: |
-          ls /__w/Rnssp -all
+          ls /github -all
       - name: Check4
         run: |
-          ls /__w/Rnssp/Rnssp -all
-      - name: Check5
-        run: |
-          ls -all
-      - name: Check6
-        run: |
-          ls ~
+          ls /__t -all
 #          R -e "remotes::install_deps(dependencies = TRUE)"
 #          R -e 'devtools::test()'
 #          R -e 'devtools::load_all()'
