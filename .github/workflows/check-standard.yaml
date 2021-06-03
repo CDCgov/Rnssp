@@ -15,16 +15,19 @@ jobs:
     steps:
       - name: Build
         run: |
-          R -e "remotes::install_deps(dependencies = TRUE)"
-          R -e 'devtools::test()'
-          R -e 'devtools::load_all()'
-
-      - name: Test
-        run: |
-          R -e "remotes::install_deps(dependencies = TRUE)"
-          R CMD build . --no-build-vignettes
-          R CMD INSTALL Rnssp_*tar.gz
-          R -e "library(Rnssp)"
+          pwd
+          ls -all
+          ls ~
+#          R -e "remotes::install_deps(dependencies = TRUE)"
+#          R -e 'devtools::test()'
+#          R -e 'devtools::load_all()'
+#
+#      - name: Test
+#        run: |
+#          R -e "remotes::install_deps(dependencies = TRUE)"
+#          R CMD build . --no-build-vignettes
+#          R CMD INSTALL Rnssp_*tar.gz
+#          R -e "library(Rnssp)"
 #
 #
 #      - name: Deploy
