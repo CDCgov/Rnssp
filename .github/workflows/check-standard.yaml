@@ -18,7 +18,7 @@ jobs:
           ls / -all
       - name: Check2
         run: |
-          ls /-w -all
+          ls /__w -all
       - name: Check3
         run: |
           ls /__w/Rnssp -all
