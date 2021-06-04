@@ -21,7 +21,7 @@ Depends:
     tidyr,
     slider,
     sf
-License: MIT + file LICENSE
+License: Apache License (>= 2)
 Encoding: ISO-8859-1
 LazyData: true
 RoxygenNote: 7.1.1
