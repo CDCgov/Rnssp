@@ -32,6 +32,6 @@
 #' library(Rnssp)
 #' data("tribal_sf")
 #'
-#' plot(ttribal_sf$geometry)
+#' plot(tribal_sf$geometry)
 #'
 "tribal_sf"

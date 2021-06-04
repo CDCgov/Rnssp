@@ -17,6 +17,8 @@ Converts a dataframe or tibble into a data.table object,
 removes stop words and patterns identified by a series of regular expressions.
 }
 \examples{
+\dontrun{
 data <- api_data \%>\%
   clean_text()
+}
 }

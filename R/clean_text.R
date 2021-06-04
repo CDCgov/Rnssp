@@ -9,8 +9,10 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data <- api_data %>%
 #'   clean_text()
+#' }
 clean_text <- function(tbl){
   if(!all(c("ChiefComplaintParsed", "DischargeDiagnosis") %in% names(tbl))){
     stop("tbl argument is not a standardized dataset!")
@@ -26,11 +28,11 @@ clean_text <- function(tbl){
                         "\\b2020\\b|\\bTO\\b")
 
   .pattern1 <- "[A-TV-Z][0-9][0-9AB]\\.?[0-9]{0,2}|PG[0-9]{0,3}"
-  .pattern2 <- "[[:cntrl:]]|<BR>|[#?!·.'+)(:=@%]"
+  .pattern2 <- "[[:cntrl:]]|<BR>|[#?!?.'+)(:=@%]"
   .pattern3 <- "\\b[0-9]{1}\\b|\\b[0-9]{2}\\b|\\bNA\\b|\\|"
   .pattern4 <- "[;/,\\\\*-]|([a-zA-Z])/([\\d])|([\\d])/([a-zA-Z])|([a-zA-Z])/([a-zA-Z])|([\\d])/([\\d])"
   .pattern5 <- "\\b[A-Za-z]{2,20}\\b"
-  .pattern6 <- "[[:cntrl:]]|<BR>|[#?!·.'+)(:=@%]"
+  .pattern6 <- "[[:cntrl:]]|<BR>|[#?!?.'+)(:=@%]"
   .pattern7 <- "\\b[0-9]{1}\\b|\\b[0-9]{2}\\b|\\bNA\\b|\\|"
   .pattern8 <- "[;/,\\\\*-]|([a-zA-Z])/([\\d])|([\\d])/([a-zA-Z])|([a-zA-Z])/([a-zA-Z])|([\\d])/([\\d])"
 

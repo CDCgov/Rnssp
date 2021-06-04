@@ -47,7 +47,7 @@ a model is not fit and a value of NA is returned for the test statistic
 and p-value
 }
 \examples{
-# Exmple 1
+# Example 1
 df <- data.frame(date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
                  dataCount = floor(runif(366, min=0, max=101)),
                  allCount = floor(runif(366, min=101, max=500)))

@@ -45,7 +45,7 @@ $ geometry   <MULTIPOLYGON [m]> MULTIPOLYGON (((2269262 266..., MULTIPOLYGON (((
 library(Rnssp)
 data("tribal_sf")
 
-plot(ttribal_sf$geometry)
+plot(tribal_sf$geometry)
 
 }
 \keyword{datasets}

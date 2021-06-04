@@ -5,3 +5,6 @@
 ^data-raw$
 ^Rnssp\.Rcheck$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

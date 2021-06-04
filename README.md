@@ -3,6 +3,7 @@
 
 <!-- badges: start -->
 [![Rnssp Pipeline](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml/badge.svg?branch=master)](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 The **Rnssp** R package is a catalog of data processing and analytics tools, templates, and functions commonly used across the National Syndromic and Surveillance Program at the Centers for Disease Control and Prevention (CDC). Its goal is to improve code reproducibility, standardize and document reusable functions, facilitate the sharing of routine reports across the NSSP Community of Practice (CoP), and better engage the NSSP CoP.
@@ -13,7 +14,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # install the Rnssp package
-devtools::install_github("cdcent/Rnssp")
+devtools::install_github("cdcgov/Rnssp")
 ```
 
 
@@ -58,7 +59,7 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
-subject to domestic copyright protection under 17 USC § 105. This repository is in
+subject to domestic copyright protection under 17 USC ? 105. This repository is in
 the public domain within the United States, and copyright and related rights in
 the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 All contributions to this repository will be released under the CC0 dedication. By
