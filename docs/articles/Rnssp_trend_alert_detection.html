@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anomaly Detection and Trend Classification • Rnssp</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -39,9 +39,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/Rnssp_intro.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,7 +71,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/CDCgov/Rnssp/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -78,15 +88,15 @@
 
       
 
-      </header><div class="row">
+      </header><script src="Rnssp_trend_alert_detection_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Anomaly Detection and Trend Classification</h1>
                         <h4 class="author">Gbedegnon Roseric Azondekon</h4>
             
-            <h4 class="date">June 04, 2021</h4>
+            <h4 class="date">June 05, 2021</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/master/vignettes/Rnssp_trend_alert_detection.Rmd"><code>vignettes/Rnssp_trend_alert_detection.Rmd</code></a></small>
       <div class="hidden name"><code>Rnssp_trend_alert_detection.Rmd</code></div>
 
     </div>
@@ -99,7 +109,7 @@
 <p>In this tutorial, we describe how to perform anomaly detection and trend classification analysis using line-level data from NSSP-ESSENCE. This vignette uses time series data from NSSP-ESSENCE data source for the CLI CC with CLI DD and Coronavirus DD v2 definition, limiting to ED visits (Has been Emergency = “Yes”).</p>
 <p>We start this tutorial by loading the <code>Rnssp</code> package and all other necessary packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">Rnssp</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CDCgov/Rnssp">Rnssp</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jrnold/ggthemes">ggthemes</a></span><span class="op">)</span></code></pre></div>
 <p>The next step is to create an NSSP user profile by creating an object of the class <code>Credentials</code>.</p>
@@ -131,7 +141,7 @@
 <div id="anomaly-detection" class="section level1">
 <h1 class="hasAnchor">
 <a href="#anomaly-detection" class="anchor"></a>Anomaly Detection</h1>
-<p>As of June 04, 2021, the <code>Rnssp</code> package implements two anomaly detection algorithms:</p>
+<p>As of June 05, 2021, the <code>Rnssp</code> package implements two anomaly detection algorithms:</p>
 <div id="exponentially-weighted-moving-average-ewma" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exponentially-weighted-moving-average-ewma" class="anchor"></a>Exponentially Weighted Moving Average (EWMA)</h2>

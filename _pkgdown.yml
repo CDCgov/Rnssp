@@ -1,1 +1,55 @@
+url: https://cdcgov.github.io/Rnssp/
+
+navbar:
+  components:
+    get-started:
+      text: Get started
+      href: articles/Rnssp_intro.html
+  structure:
+    left:  [home, get-started, reference, articles, tutorials, news]
+    right: [github]
+
+sidebar:
+  components:
+    disclaimer:
+      text: Disclaimer
+      href: DISCLAIMER.html
+
+template:
+  params:
+    bootswatch: flatly
+
+news:
+  strip_header: true
+
+
+home:
+  title: A Signature R package for the National Syndromic and Surveillance Program (NSSP)
+  links:
+  - text: Download build release
+    href: https://github.com/CDCgov/Rnssp/releases/
+  - text: Report a bug
+    href: https://github.com/CDCgov/Rnssp/issues
+  - text: Explore all Rnssp vignettes
+    href: https://cdcgov.github.io/Rnssp/articles
+
+reference:
+  - title: Exported Functions and Classes
+    desc: Functions and classes exported by the Rnssp package
+    contents:
+      - add_rmd_template
+      - alert_ewma
+      - alert_mar
+      - askme
+      - change_dates
+      - classify_trend
+      - clean_text
+      - Credentials
+      - NSSPContainer
+      - remove_rmd_template
+      - Rnssp
+  - title: Available Datasets
+    desc: Datasets contained in the Rnssp package
+    contents:
+      - ends_with("_sf", internal = TRUE)
 
