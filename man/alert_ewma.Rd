@@ -16,7 +16,7 @@ alert_ewma(df, t = date, y = count, B = 28, g = 2, w = 0.4)
 \item{B}{Baseline parameter. The baseline length is the number of days from which to
 compute the EWMA and compare to in order to form the test statistic (default is 28)}
 
-\item{g}{Guardband paramter. The guardband length is the number of days separating
+\item{g}{Guardband parameter. The guardband length is the number of days separating
 the baseline from the current date in consideration for alerting (default is 2)}
 
 \item{w}{Smoothing parameter. The smoothing parameter controls the amount of

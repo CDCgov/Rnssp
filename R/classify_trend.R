@@ -22,7 +22,7 @@
 #' @param data_count Name of the column with counts for positive encounters
 #' @param all_count Name of the column with total counts of encounters
 #' @param B Baseline parameter. The baseline length is the number of days to which
-#' each binomail model is fit (default is 12)
+#' each binomial model is fit (default is 12)
 #'
 #' @return A data frame. The first B rows within each group will be missing.
 #' @export

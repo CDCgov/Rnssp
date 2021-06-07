@@ -177,7 +177,7 @@ significantly decreasing, or stable.</p>
     <tr>
       <th>B</th>
       <td><p>Baseline parameter. The baseline length is the number of days to which
-each binomail model is fit (default is 12)</p></td>
+each binomial model is fit (default is 12)</p></td>
     </tr>
     </table>
 
@@ -198,23 +198,14 @@ a model is not fit and a value of NA is returned for the test statistic
 and p-value</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1</span>
+    <pre class="examples"><span class='co'># Example 1</span>
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-12-31"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
                  dataCount <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span>, min<span class='op'>=</span><span class='fl'>0</span>, max<span class='op'>=</span><span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span>,
                  allCount <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span>, min<span class='op'>=</span><span class='fl'>101</span>, max<span class='op'>=</span><span class='fl'>500</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>df_trend</span> <span class='op'>&lt;-</span> <span class='fu'>classify_trend</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_trend</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 9</span>
-#&gt;   date       dataCount allCount t          data_count all_count statistic
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 2020-01-13        14      465 2020-01-13         14       465     -<span style='color: #BB0000;'>4.52</span>
-#&gt; <span style='color: #BCBCBC;'>2</span> 2020-01-14        71      403 2020-01-14         71       403     -<span style='color: #BB0000;'>8.19</span>
-#&gt; <span style='color: #BCBCBC;'>3</span> 2020-01-15        12      455 2020-01-15         12       455    -<span style='color: #BB0000;'>10.6</span> 
-#&gt; <span style='color: #BCBCBC;'>4</span> 2020-01-16        84      209 2020-01-16         84       209     -<span style='color: #BB0000;'>6.37</span>
-#&gt; <span style='color: #BCBCBC;'>5</span> 2020-01-17        30      470 2020-01-17         30       470     -<span style='color: #BB0000;'>9.70</span>
-#&gt; <span style='color: #BCBCBC;'>6</span> 2020-01-18        38      439 2020-01-18         38       439     -<span style='color: #BB0000;'>6.31</span>
-#&gt; <span style='color: #949494;'># ... with 2 more variables: p.value &lt;dbl&gt;, trend_classification &lt;fct&gt;</span></div><div class='input'>
+
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Example 2 with Data from NSSP-ESSENCE</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
@@ -258,7 +249,7 @@ endDate=20Nov20&amp;percentParam=ccddCategory&amp;datasource=va_hosp&amp;startDa
        y <span class='op'>=</span> <span class='st'>"Percent"</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-</div></pre>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

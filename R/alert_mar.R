@@ -15,7 +15,7 @@
 #' @param y Name of the column of type Numeric containing counts or percentages
 #' @param B Baseline parameter. The baseline length is the number of days to which
 #' each liner model is fit (default is 28)
-#' @param g Guardband paramter. The guardband length is the number of days separating
+#' @param g Guardband parameter. The guardband length is the number of days separating
 #'     the baseline from the current date in consideration for alerting (default is 2)
 #'
 #' @return A data frame

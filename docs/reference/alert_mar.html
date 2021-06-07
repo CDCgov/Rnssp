@@ -181,7 +181,7 @@ each liner model is fit (default is 28)</p></td>
     </tr>
     <tr>
       <th>g</th>
-      <td><p>Guardband paramter. The guardband length is the number of days separating
+      <td><p>Guardband parameter. The guardband length is the number of days separating
 the baseline from the current date in consideration for alerting (default is 2)</p></td>
     </tr>
     </table>
@@ -191,54 +191,22 @@ the baseline from the current date in consideration for alerting (default is 2)<
     <p>A data frame</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1</span>
+    <pre class="examples"><span class='co'># Example 1</span>
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-12-31"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
                  count <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span>, min<span class='op'>=</span><span class='fl'>0</span>, max<span class='op'>=</span><span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>df_mar</span> <span class='op'>&lt;-</span> <span class='fu'>alert_mar</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         date count
-#&gt; 1 2020-01-01     4
-#&gt; 2 2020-01-02    80
-#&gt; 3 2020-01-03    20
-#&gt; 4 2020-01-04     6
-#&gt; 5 2020-01-05    87
-#&gt; 6 2020-01-06     7</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_mar</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 17</span>
-#&gt;   date       count t              y   row initial_vals   Wed   Thu   Fri   Sat
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 2020-01-31    36 2020-01-31    36    31 no               0     0     1     0
-#&gt; <span style='color: #BCBCBC;'>2</span> 2020-02-01    62 2020-02-01    62    32 no               0     0     0     1
-#&gt; <span style='color: #BCBCBC;'>3</span> 2020-02-02    46 2020-02-02    46    33 no               0     0     0     0
-#&gt; <span style='color: #BCBCBC;'>4</span> 2020-02-03    16 2020-02-03    16    34 no               0     0     0     0
-#&gt; <span style='color: #BCBCBC;'>5</span> 2020-02-04    51 2020-02-04    51    35 no               0     0     0     0
-#&gt; <span style='color: #BCBCBC;'>6</span> 2020-02-05    14 2020-02-05    14    36 no               1     0     0     0
-#&gt; <span style='color: #949494;'># ... with 7 more variables: Sun &lt;dbl&gt;, Mon &lt;dbl&gt;, Tue &lt;dbl&gt;, fitted &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, alert &lt;chr&gt;</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_mar</span><span class='op'>)</span>
+
 <span class='co'># Example 2</span>
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-12-31"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
                  percent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>df_mar</span> <span class='op'>&lt;-</span> <span class='fu'>alert_mar</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>Date</span>, y <span class='op'>=</span> <span class='va'>percent</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;         Date   percent
-#&gt; 1 2020-01-01 0.2433926
-#&gt; 2 2020-01-02 0.2829591
-#&gt; 3 2020-01-03 0.2166260
-#&gt; 4 2020-01-04 0.1200414
-#&gt; 5 2020-01-05 0.1702637
-#&gt; 6 2020-01-06 0.5215289</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_mar</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 17</span>
-#&gt;   Date       percent t                y   row initial_vals   Wed   Thu   Fri
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> 2020-01-31 0.004<span style='text-decoration: underline;'>08</span> 2020-01-31 0.004<span style='text-decoration: underline;'>08</span>    31 no               0     0     1
-#&gt; <span style='color: #BCBCBC;'>2</span> 2020-02-01 0.657   2020-02-01 0.657      32 no               0     0     0
-#&gt; <span style='color: #BCBCBC;'>3</span> 2020-02-02 0.151   2020-02-02 0.151      33 no               0     0     0
-#&gt; <span style='color: #BCBCBC;'>4</span> 2020-02-03 0.199   2020-02-03 0.199      34 no               0     0     0
-#&gt; <span style='color: #BCBCBC;'>5</span> 2020-02-04 0.240   2020-02-04 0.240      35 no               0     0     0
-#&gt; <span style='color: #BCBCBC;'>6</span> 2020-02-05 0.662   2020-02-05 0.662      36 no               1     0     0
-#&gt; <span style='color: #949494;'># ... with 8 more variables: Sat &lt;dbl&gt;, Sun &lt;dbl&gt;, Mon &lt;dbl&gt;, Tue &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   fitted &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, alert &lt;chr&gt;</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_mar</span><span class='op'>)</span>
+
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Example 3: Data from NSSP-ESSENCE</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
@@ -275,7 +243,7 @@ the baseline from the current date in consideration for alerting (default is 2)<
        y <span class='op'>=</span> <span class='st'>"Percent"</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-</div></pre>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

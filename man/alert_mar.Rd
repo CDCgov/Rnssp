@@ -16,7 +16,7 @@ alert_mar(df, t = date, y = count, B = 28, g = 2)
 \item{B}{Baseline parameter. The baseline length is the number of days to which
 each liner model is fit (default is 28)}
 
-\item{g}{Guardband paramter. The guardband length is the number of days separating
+\item{g}{Guardband parameter. The guardband length is the number of days separating
 the baseline from the current date in consideration for alerting (default is 2)}
 }
 \value{

@@ -7,7 +7,11 @@
 |_| \\_\\_| |_|___/___/ .__/   package version 0.0.1,
                     |_|
 A Signature R package for the National Syndromic and Surveillance Program at
-the Centers for Disease Control and Prevention (CDC)")
+the Centers for Disease Control and Prevention (CDC)
+
+Full Documentation available at: https://cdcgov.github.io/Rnssp
+Run 'Rnssp_vgnettes()' to browse all Rnssp vignettes.
+")
 }
 
 # .onLoad <- function(libname, pkgname) {

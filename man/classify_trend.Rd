@@ -22,7 +22,7 @@ classify_trend(
 \item{all_count}{Name of the column with total counts of encounters}
 
 \item{B}{Baseline parameter. The baseline length is the number of days to which
-each binomail model is fit (default is 12)}
+each binomial model is fit (default is 12)}
 }
 \value{
 A data frame. The first B rows within each group will be missing.

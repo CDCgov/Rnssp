@@ -156,7 +156,7 @@ data_trend %>%
   scale_color_manual(values = pal, name = "Trend Classification") +
   theme_few() +
   labs(title = "Percent of Emergency Department Visits with Diagnosed COVID-19",
-       subtitle = "November 1st, 2020 to February 27th, 2020",
+       subtitle = "August 22nd, 2020 to November 20th, 2020",
        x = "Date",
        y = "Percent")
 ```

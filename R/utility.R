@@ -179,3 +179,28 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
     str_replace(., old_start, new_start) %>%
     gsub("[[:space:]]", "", .)
 }
+
+#' View vignettes from the Rnssp package
+#'
+#' Browse a specified Rnssp vignette, or browse the available ones
+#' from the Rnssp online documentation.
+#'
+#' @param topic a character string giving the (base) name of the vignette to view.
+#' If omitted, the webpage with all vignettes from the Rnssp package is browsed
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' Rnssp_vignettes()
+#' Rnssp_vignettes(topic = "Rnssp_intro")
+#' }
+Rnssp_vignettes <- function(topic = NULL){
+  base_url <- "https://cdcgov.github.io/Rnssp/articles"
+  url <- base_url
+  if(!is.null(topic)){
+    url <- file.path(base_url, paste0(topic, ".html"))
+  }
+  browseURL(url)
+}
