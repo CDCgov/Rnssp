@@ -2,16 +2,13 @@
 % Please edit documentation in R/utility.R
 \name{Rnssp_vignettes}
 \alias{Rnssp_vignettes}
-\title{View vignettes from the Rnssp package}
+\title{Browse Rnssp vignettes}
 \usage{
 Rnssp_vignettes(topic = NULL)
 }
 \arguments{
 \item{topic}{a character string giving the (base) name of the vignette to view.
 If omitted, the webpage with all vignettes from the Rnssp package is browsed}
-}
-\value{
-
 }
 \description{
 Browse a specified Rnssp vignette, or browse the available ones

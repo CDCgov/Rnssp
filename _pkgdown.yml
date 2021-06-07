@@ -48,6 +48,7 @@ reference:
       - NSSPContainer
       - remove_rmd_template
       - Rnssp
+      - Rnssp_vignettes
   - title: Available Datasets
     desc: Datasets contained in the Rnssp package
     contents:

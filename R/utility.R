@@ -180,7 +180,7 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
     gsub("[[:space:]]", "", .)
 }
 
-#' View vignettes from the Rnssp package
+#' Browse Rnssp vignettes
 #'
 #' Browse a specified Rnssp vignette, or browse the available ones
 #' from the Rnssp online documentation.
@@ -188,7 +188,7 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
 #' @param topic a character string giving the (base) name of the vignette to view.
 #' If omitted, the webpage with all vignettes from the Rnssp package is browsed
 #'
-#' @return
+#' @return NULL
 #' @export
 #'
 #' @examples
