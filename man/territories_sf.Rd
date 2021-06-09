@@ -27,6 +27,5 @@ library(Rnssp)
 data("territories_sf")
 
 plot(territories_sf$geometry)
-
 }
 \keyword{datasets}

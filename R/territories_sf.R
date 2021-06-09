@@ -14,5 +14,4 @@
 #' data("territories_sf")
 #'
 #' plot(territories_sf$geometry)
-#'
 "territories_sf"

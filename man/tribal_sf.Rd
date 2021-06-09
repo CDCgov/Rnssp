@@ -46,6 +46,5 @@ library(Rnssp)
 data("tribal_sf")
 
 plot(tribal_sf$geometry)
-
 }
 \keyword{datasets}

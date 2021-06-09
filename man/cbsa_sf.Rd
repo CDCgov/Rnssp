@@ -33,6 +33,5 @@ library(Rnssp)
 data("cbsa_sf")
 
 plot(cbsa_sf$geometry)
-
 }
 \keyword{datasets}

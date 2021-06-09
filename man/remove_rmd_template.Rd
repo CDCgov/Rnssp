@@ -9,7 +9,13 @@ remove_rmd_template(template, pkg = "Rnssp", recursive = TRUE, force = TRUE)
 \arguments{
 \item{template}{a character string with the name of the template to delete}
 
-\item{pkg}{a character string with the name of a single package. An error occurs if more than one package name is given.}
+\item{pkg}{a character string with the name of a single package.
+An error occurs if more than one package name is given.}
+
+\item{recursive}{logical. Should directories be deleted recursively? (Default is TRUE)}
+
+\item{force}{logical. Should permissions be changed (if possible) to allow the file
+or directory to be removed? (Default is TRUE)}
 }
 \value{
 a character string

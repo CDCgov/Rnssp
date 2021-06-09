@@ -21,5 +21,4 @@
 #' data("state_sf")
 #'
 #' plot(state_sf$geometry)
-#'
 "state_sf"

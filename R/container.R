@@ -11,7 +11,7 @@ NSSPContainer <- R6::R6Class(
     ..value = NULL
   ),
   active = list(
-    value = function(){
+    value = function() {
       private$..value
     }
   ),
@@ -21,10 +21,10 @@ NSSPContainer <- R6::R6Class(
     #' Initializes a new NSSPContainer object.
     #' @param entry an object or value to be stored
     #' @return A new `NSSPContainer` object
-    initialize = function(entry){
-      if(missing(entry)){
+    initialize = function(entry) {
+      if (missing(entry)) {
         private$..value
-      }else{
+      } else {
         private$..value <- entry
       }
     }

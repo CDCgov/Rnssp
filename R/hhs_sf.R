@@ -13,5 +13,4 @@
 #' data("hhs_sf")
 #'
 #' plot(hhs_sf)
-#'
 "hhs_sf"

@@ -1,7 +1,6 @@
 ---
 title: "Anomaly Detection and Trend Classification"
 author: "Gbedegnon Roseric Azondekon"
-date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output:
    rmarkdown::html_document:
      toc: true

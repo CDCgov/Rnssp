@@ -34,6 +34,5 @@ library(Rnssp)
 data("county_sf")
 
 plot(county_sf$geometry)
-
 }
 \keyword{datasets}

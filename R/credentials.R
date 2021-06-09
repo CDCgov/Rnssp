@@ -8,13 +8,11 @@
 
 Credentials <- R6::R6Class(
   "NSSPCredentials",
-
   private = list(
     ..username = NSSPContainer$new(NULL),
     ..password = NSSPContainer$new(NULL),
     ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9]"))
   ),
-
   public = list(
 
     #' @description
@@ -73,9 +71,13 @@ Credentials <- R6::R6Class(
     #' }
     get_api_data = function(url, fromCSV = FALSE) {
       assertive.types::assert_is_a_string(url)
-      self$get_api_response(url) %>%
-        {if(fromCSV) httr::content(., by = "text/csv") %>% readr::read_csv()
-          else httr::content(., as = "text") %>% jsonlite::fromJSON()}
+      self$get_api_response(url) %>% {
+        if (fromCSV) {
+          httr::content(., by = "text/csv") %>% readr::read_csv()
+        } else {
+          httr::content(., as = "text") %>% jsonlite::fromJSON()
+        }
+      }
     },
 
     #' @description
@@ -97,7 +99,7 @@ Credentials <- R6::R6Class(
         httr::GET(., httr::authenticate(
           private$..username$value %>% safer::decrypt_string(., private$..__$value),
           private$..password$value %>% safer::decrypt_string(., private$..__$value)
-        ), httr::write_disk(tsgraph, overwrite=TRUE))
+        ), httr::write_disk(tsgraph, overwrite = TRUE))
       list("api_response" = apir, "tsgraph" = tsgraph)
     }
   )

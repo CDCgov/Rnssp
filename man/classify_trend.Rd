@@ -48,13 +48,14 @@ and p-value
 }
 \examples{
 # Example 1
-df <- data.frame(date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-                 dataCount = floor(runif(366, min=0, max=101)),
-                 allCount = floor(runif(366, min=101, max=500)))
+df <- data.frame(
+  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  dataCount = floor(runif(366, min = 0, max = 101)),
+  allCount = floor(runif(366, min = 101, max = 500))
+)
 
 df_trend <- classify_trend(df)
 head(df_trend)
-
 \dontrun{
 # Example 2 with Data from NSSP-ESSENCE
 library(ggplot2)
@@ -84,7 +85,7 @@ data_trend <- classify_trend(df, data_count = dataCount, all_count = allCount)
 pal <- c("#FF0000", "#1D8AFF", "#FFF70E", "grey90")
 
 data_trend \%>\%
-  mutate(percent = data_count/all_count * 100) \%>\%
+  mutate(percent = data_count / all_count * 100) \%>\%
   filter(title == "Montana") \%>\%
   ggplot(., aes(x = t, y = percent)) +
   geom_line(color = pal[2], alpha = 0.5) +
@@ -92,10 +93,12 @@ data_trend \%>\%
   geom_segment(aes(x = t, xend = max(t), y = -0.4, yend = -0.4, color = trend_classification), size = 3) +
   scale_color_manual(values = pal, name = "Trend Classification") +
   theme_few() +
-  labs(title = "Percent of Emergency Department Visits with Diagnosed COVID-19",
-       subtitle = "November 1st, 2020 to February 27th, 2020",
-       x = "Date",
-       y = "Percent")
+  labs(
+    title = "Percent of Emergency Department Visits with Diagnosed COVID-19",
+    subtitle = "November 1st, 2020 to February 27th, 2020",
+    x = "Date",
+    y = "Percent"
+  )
 }
 
 }

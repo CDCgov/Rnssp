@@ -20,3 +20,6 @@ Rnssp_vignettes()
 Rnssp_vignettes(topic = "Rnssp_intro")
 }
 }
+\seealso{
+\code{\link[utils]{browseURL}}
+}

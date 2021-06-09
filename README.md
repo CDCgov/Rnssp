@@ -3,6 +3,9 @@
 
 <!-- badges: start -->
 [![Rnssp Pipeline](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml/badge.svg?branch=master)](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml)
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/CDCgov/Rnssp)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->

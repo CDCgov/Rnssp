@@ -23,21 +23,24 @@
 #'
 #' @examples
 #' # Example 1
-#' df <- data.frame(date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'                  count = floor(runif(366, min=0, max=101)))
+#' df <- data.frame(
+#'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   count = floor(runif(366, min = 0, max = 101))
+#' )
 #' df_mar <- alert_mar(df)
 #'
 #' head(df)
 #' head(df_mar)
 #'
 #' # Example 2
-#' df <- data.frame(Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'                  percent = runif(366))
+#' df <- data.frame(
+#'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   percent = runif(366)
+#' )
 #' df_mar <- alert_mar(df, t = Date, y = percent)
 #'
 #' head(df)
 #' head(df_mar)
-#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
 #' library(ggplot2)
@@ -70,13 +73,13 @@
 #'   geom_point(data = subset(df_mar_state, alert == "red"), color = "red") +
 #'   geom_point(data = subset(df_mar_state, alert == "yellow"), color = "yellow") +
 #'   theme_bw() +
-#'   labs(x = "Date",
-#'        y = "Percent")
+#'   labs(
+#'     x = "Date",
+#'     y = "Percent"
+#'   )
 #' }
 #'
-
-alert_mar <- function(df, t = date, y = count, B = 28, g = 2){
-
+alert_mar <- function(df, t = date, y = count, B = 28, g = 2) {
   grouping <- group_vars(df)
 
   t <- enquo(t)
@@ -95,8 +98,7 @@ alert_mar <- function(df, t = date, y = count, B = 28, g = 2){
     mutate(
       detection = slider::slide(
         .x = tibble(t, y, Mon, Tue, Wed, Thu, Fri, Sat),
-        .f = function(.x){
-
+        .f = function(.x) {
           .current <- .x %>%
             mutate(X1 = seq(1, B + g + 1, 1)) %>%
             slice_tail(n = 1)
@@ -130,5 +132,4 @@ alert_mar <- function(df, t = date, y = count, B = 28, g = 2){
       )
     ) %>%
     tidyr::unnest(detection)
-
 }

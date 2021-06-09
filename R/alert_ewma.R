@@ -24,21 +24,24 @@
 #'
 #' @examples
 #' # Example 1
-#' df <- data.frame(date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'                  count = floor(runif(366, min=0, max=101)))
+#' df <- data.frame(
+#'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   count = floor(runif(366, min = 0, max = 101))
+#' )
 #' df_ewma <- alert_ewma(df)
 #'
 #' head(df)
 #' head(df_ewma)
 #'
 #' # Example 2
-#' df <- data.frame(Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'                  percent = runif(366))
+#' df <- data.frame(
+#'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   percent = runif(366)
+#' )
 #' df_ewma <- alert_ewma(df, t = Date, y = percent)
 #'
 #' head(df)
 #' head(df_ewma)
-#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
 #' library(ggplot2)
@@ -71,15 +74,15 @@
 #'   geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
 #'   geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
 #'   theme_bw() +
-#'   labs(x = "Date",
-#'        y = "Percent")
+#'   labs(
+#'     x = "Date",
+#'     y = "Percent"
+#'   )
 #' }
 #'
-
-alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4){
-
+alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
   sigma_min <- 0.5
-  sigma_correction <- sqrt((w/(2 - w)) + (1/B) - 2*(1 - w)^(g + 1)*((((1 - w)^B) - 1)/B))
+  sigma_correction <- sqrt((w / (2 - w)) + (1 / B) - 2 * (1 - w)^(g + 1) * ((((1 - w)^B) - 1) / B))
 
   grouping <- group_vars(df)
 
@@ -93,7 +96,7 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4){
     .[, mu := lag(frollmean(y, n = B, align = "right"), g + 1), by = grouping] %>%
     .[, s := lag(frollapply(y, n = B, FUN = sd, align = "right"), g + 1), by = grouping] %>%
     .[, s := max(0.5, s), by = c(grouping, "t")] %>%
-    .[, z := accumulate(.x = y, ~w * .y + (1 - w) * .x, init = first(y)), by = grouping] %>%
+    .[, z := accumulate(.x = y, ~ w * .y + (1 - w) * .x, init = first(y)), by = grouping] %>%
     .[, test_statistic := (z - mu) / (s * sigma_correction)] %>%
     .[, p.value := pt(-abs(test_statistic), df = B - 1)] %>%
     .[, alert := fcase(

@@ -45,6 +45,7 @@ reference:
       - classify_trend
       - clean_text
       - Credentials
+      - list_templates
       - NSSPContainer
       - remove_rmd_template
       - Rnssp

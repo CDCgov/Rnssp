@@ -37,21 +37,24 @@ chosen geographic region.
 }
 \examples{
 # Example 1
-df <- data.frame(date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-                 count = floor(runif(366, min=0, max=101)))
+df <- data.frame(
+  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  count = floor(runif(366, min = 0, max = 101))
+)
 df_ewma <- alert_ewma(df)
 
 head(df)
 head(df_ewma)
 
 # Example 2
-df <- data.frame(Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-                 percent = runif(366))
+df <- data.frame(
+  Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  percent = runif(366)
+)
 df_ewma <- alert_ewma(df, t = Date, y = percent)
 
 head(df)
 head(df_ewma)
-
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
 library(ggplot2)
@@ -84,8 +87,10 @@ df_ewma_state \%>\%
   geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
   geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
   theme_bw() +
-  labs(x = "Date",
-       y = "Percent")
+  labs(
+    x = "Date",
+    y = "Percent"
+  )
 }
 
 }

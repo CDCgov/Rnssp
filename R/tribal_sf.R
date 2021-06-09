@@ -33,5 +33,4 @@
 #' data("tribal_sf")
 #'
 #' plot(tribal_sf$geometry)
-#'
 "tribal_sf"

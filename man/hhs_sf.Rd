@@ -26,6 +26,5 @@ library(Rnssp)
 data("hhs_sf")
 
 plot(hhs_sf)
-
 }
 \keyword{datasets}

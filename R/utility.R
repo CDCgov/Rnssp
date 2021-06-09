@@ -10,60 +10,121 @@
 #'
 #' @examples
 #' password <- askme()
-askme <- function(prompt = "Please enter your password: "){
+askme <- function(prompt = "Please enter your password: ") {
   askpass::askpass(prompt = prompt)
 }
 
 
-#' Prompt Utility to Add a New RMarkdown Template
+#' Utility to Add a New RMarkdown Template
 #'
-#' Prompt the user to select an Rmarkdown template .zip file.
+#' Add an NSSP RMarkdown template report to
+#' extend an existing installation of the Rnssp package.
 #'
-#' @param pkg a character string with the name of a single package. An error occurs if more than one package name is given.
+#' @param pkg a character string with the name of a single package.
+#' An error occurs if more than one package name is given.
+#' @param template_name a character string with the name of a single template name.
+#' The template name must be one of the elements of the vector returned
+#' by `Rnssp::list_templates()`.
+#'
+#' @details
+#' In interactive mode, this utility function prompts the user to select an
+#' Rmarkdown template .zip file when the `template_name` argument is not
+#' specified or set to `NULL`.
+#'
+#' In non-interactive mode, this utility function prompts the user to specify a
+#' path to an Rmarkdown template .zip file when the `template_name` argument
+#' is not specified or set to `NULL`.
+#'
+#' When the `template_name` is specified, regardless of the `pkg` argument,
+#' this utility function download the specified template from the
+#' Rnssp-rmd-templates Github repository.
+#' When the specified template name is not available, it throws an error.
 #'
 #' @return a character string
+#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' add_rmd_template() # Add a new Rmd template to the 'Rnssp' package
 #' add_rmd_template("rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
+#' add_rmd_template(template_name = "text_mining") # Add the 'text_mining' template report to the Rnssp package
 #' }
-add_rmd_template <- function(pkg = "Rnssp") {
-  if(!dir.exists(system.file(package = pkg))){
-    stop(paste0("The package '", pkg, "' is not installed!\n"))
-  }
-  zipfile <- NULL
-  tryCatch({
-    filtre <- matrix(c("Template", ".zip"), 1, 2, byrow = TRUE)
-    if (interactive() && .Platform$OS.type == "windows"){
-      zipfile <- choose.files(filters = Filters[c("zip"),])
-    } else if (interactive() && .Platform$OS.type == "unix"){
-      zipfile <- file.choose()
-    } else if(!interactive()){
-      zipfile <- readline("Enter full path to template zip file: ")
+add_rmd_template <- function(pkg = "Rnssp", template_name = NULL) {
+  if (is.null(template_name)) {
+    if (!dir.exists(system.file(package = pkg))) {
+      stop(paste0("The package '", pkg, "' is not installed!\n"))
     }
-    if(!endsWith(zipfile, ".zip")){
-      stop("File provided is not a .zip file")
+    zipfile <- NULL
+    tryCatch(
+      {
+        filtre <- matrix(c("Template", ".zip"), 1, 2, byrow = TRUE)
+        if (interactive() && .Platform$OS.type == "windows") {
+          zipfile <- choose.files(filters = Filters[c("zip"), ])
+        } else if (interactive() && .Platform$OS.type == "unix") {
+          zipfile <- file.choose()
+        } else if (!interactive()) {
+          zipfile <- readline("Enter full path to template zip file: ")
+        }
+        if (!endsWith(zipfile, ".zip")) {
+          stop("File provided is not a .zip file")
+        }
+        template_folder <- unlist(strsplit(basename(zipfile), "[.]"))[1]
+        zipcontent <- unzip(zipfile, list = TRUE)
+        stopifnot(exprs = {
+          file.path(template_folder, "template.yaml") %in% zipcontent$Name
+          file.path(template_folder, "skeleton", "skeleton.Rmd") %in% zipcontent$Name
+        })
+        exDir <- file.path(system.file(package = pkg), "rmarkdown/templates")
+        unzip(zipfile, exdir = exDir)
+        cat(paste0(
+          "Template '",
+          template_folder,
+          "' has been successfully added in\n",
+          file.path(exDir, template_folder),
+          "\nPlease, restart R session to update template list!"
+        ))
+      },
+      error = function(e) {
+        stop("No template added!\nThe file provided is not a template zip file!")
+      }
+    )
+  } else {
+    repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
+    template_list <- list_templates()
+    if (!template_name %in% template_list) {
+      stop(paste0(
+        "'", template_name, "'",
+        " is not a valid template. Please run `Rnssp::list_templates()` to list available templates!"
+      ))
     }
-    template_folder <- unlist(strsplit(basename(zipfile), '[.]'))[1]
+    temp_dir <- tempdir()
+    zipfile <- file.path(temp_dir, paste0(template_name, ".zip"))
+    download.file(file.path(repoURL, "zip", paste0(template_name, ".zip")),
+      destfile = zipfile
+    )
+    if (!file.exists(zipfile)) {
+      stop(paste("Download of ", template_name, ".zip", " was unsuccessful!"))
+    }
+    template_folder <- unlist(strsplit(basename(zipfile), "[.]"))[1]
     zipcontent <- unzip(zipfile, list = TRUE)
     stopifnot(exprs = {
       file.path(template_folder, "template.yaml") %in% zipcontent$Name
       file.path(template_folder, "skeleton", "skeleton.Rmd") %in% zipcontent$Name
     })
-    exDir <- file.path(system.file(package = pkg),"rmarkdown/templates")
+    exDir <- file.path(system.file(package = "Rnssp"), "rmarkdown/templates")
+    if (!dir.exists(exDir)) {
+      stop("Package Rnssp is not installed!")
+    }
     unzip(zipfile, exdir = exDir)
-    cat(paste("Template",
-              template_folder,
-              "has been successfully added in\n",
-              file.path(exDir, template_folder),
-              "\nPlease, restart R session to update template list!"))
-  },
-
-  error = function(e)
-    stop("No template added!\nThe file provided is not a template zip file!")
-  )
+    cat(paste0(
+      "Template '",
+      template_folder,
+      "' has been successfully added in\n",
+      file.path(exDir, template_folder),
+      "\nPlease, restart R session to update template list!"
+    ))
+  }
 }
 
 
@@ -72,7 +133,11 @@ add_rmd_template <- function(pkg = "Rnssp") {
 #' Remove an Existing Rnssp Rmarkdown template directory.
 #'
 #' @param template a character string with the name of the template to delete
-#' @param pkg a character string with the name of a single package. An error occurs if more than one package name is given.
+#' @param pkg a character string with the name of a single package.
+#' An error occurs if more than one package name is given.
+#' @param recursive logical. Should directories be deleted recursively? (Default is TRUE)
+#' @param force logical. Should permissions be changed (if possible) to allow the file
+#' or directory to be removed? (Default is TRUE)
 #'
 #' @return a character string
 #' @export
@@ -82,19 +147,21 @@ add_rmd_template <- function(pkg = "Rnssp") {
 #' remove_rmd_template("text_mining") # Remove the Existing Rnssp 'text_mining' template
 #' }
 remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force = TRUE) {
-  if(!dir.exists(system.file(package = pkg))){
+  if (!dir.exists(system.file(package = pkg))) {
     stop(paste0("The package '", pkg, "' is not installed!\n"))
   }
-  if(!dir.exists(file.path(system.file(package = pkg),"rmarkdown/templates", template))){
+  if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
     stop(paste0("The template '", template, "' does not exist for the package ", pkg, "!\n"))
-  } else{
-    unlink(file.path(system.file(package = pkg),"rmarkdown/templates", template), recursive = recursive, force = force)
-    if(!dir.exists(file.path(system.file(package = pkg),"rmarkdown/templates", template))){
-      cat(paste0("Template ",
-                 template,
-                 " has been successfully removed from package",
-                 pkg,
-                 ".\nPlease, restart R session to update template list!"))
+  } else {
+    unlink(file.path(system.file(package = pkg), "rmarkdown/templates", template), recursive = recursive, force = force)
+    if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
+      cat(paste0(
+        "Template ",
+        template,
+        " has been successfully removed from package",
+        pkg,
+        ".\nPlease, restart R session to update template list!"
+      ))
     }
   }
 }
@@ -134,45 +201,47 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
   assertive.types::assert_is_a_string(url)
   prefixes <- list(
     epref = url %>%
-      regmatches(., regexpr('endDate=\\d+[A-Za-z]+\\d+|end_date=\\d+[A-Za-z]+\\d+', .)) %>%
+      regmatches(., regexpr("endDate=\\d+[A-Za-z]+\\d+|end_date=\\d+[A-Za-z]+\\d+", .)) %>%
       str_split("=") %>%
       unlist() %>%
       .[1] %>%
       paste0(., "="),
     spref = url %>%
-      regmatches(., regexpr('startDate=\\d+[A-Za-z]+\\d+|start_date=\\d+[A-Za-z]+\\d+', .)) %>%
+      regmatches(., regexpr("startDate=\\d+[A-Za-z]+\\d+|start_date=\\d+[A-Za-z]+\\d+", .)) %>%
       str_split("=") %>%
       unlist() %>%
       .[1] %>%
       paste0(., "=")
   )
   old_end <- url %>%
-    regmatches(., regexpr('endDate=\\d+[A-Za-z]+\\d+|end_date=\\d+[A-Za-z]+\\d+', .)) %>%
+    regmatches(., regexpr("endDate=\\d+[A-Za-z]+\\d+|end_date=\\d+[A-Za-z]+\\d+", .)) %>%
     str_replace(., prefixes[["epref"]], "")
   old_start <- url %>%
-    regmatches(., regexpr('startDate=\\d+[A-Za-z]+\\d+|start_date=\\d+[A-Za-z]+\\d+', .)) %>%
+    regmatches(., regexpr("startDate=\\d+[A-Za-z]+\\d+|start_date=\\d+[A-Za-z]+\\d+", .)) %>%
     str_replace(., prefixes[["spref"]], "")
   new_end <- old_end
   new_start <- old_start
-  if(!is.null(end_date)){
+  if (!is.null(end_date)) {
     new_end <- end_date %>%
       as.Date() %>%
       format(., "%e%b%Y") %>%
       str_trim()
   }
-  if(!is.null(start_date)){
+  if (!is.null(start_date)) {
     new_start <- start_date %>%
       as.Date() %>%
       format(., "%e%b%Y") %>%
       str_trim()
   }
   new_startd <- ifelse(nchar(new_start) > 7,
-                       as.Date(new_start, "%e%b%Y"),
-                       as.Date(new_start, "%e%b%y"))
+    as.Date(new_start, "%e%b%Y"),
+    as.Date(new_start, "%e%b%y")
+  )
   new_endd <- ifelse(nchar(new_end) > 7,
-                     as.Date(new_end, "%e%b%Y"),
-                     as.Date(new_end, "%e%b%y"))
-  if(new_startd > new_endd){
+    as.Date(new_end, "%e%b%Y"),
+    as.Date(new_end, "%e%b%y")
+  )
+  if (new_startd > new_endd) {
     stop(paste0("Start Date '", new_start, "' is posterior to End Date '", new_end, "'."))
   }
   str_replace(url, old_end, new_end) %>%
@@ -189,6 +258,7 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
 #' If omitted, the webpage with all vignettes from the Rnssp package is browsed
 #'
 #' @return NULL
+#' @seealso \code{\link[utils]{browseURL}}
 #' @export
 #'
 #' @examples
@@ -196,11 +266,49 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
 #' Rnssp_vignettes()
 #' Rnssp_vignettes(topic = "Rnssp_intro")
 #' }
-Rnssp_vignettes <- function(topic = NULL){
+Rnssp_vignettes <- function(topic = NULL) {
   base_url <- "https://cdcgov.github.io/Rnssp/articles"
   url <- base_url
-  if(!is.null(topic)){
+  if (!is.null(topic)) {
     url <- file.path(base_url, paste0(topic, ".html"))
   }
   browseURL(url)
+}
+
+
+#' List Available Report Templates
+#'
+#' List available NSSP report templates from the Rnssp-rmd-templates Github repository.
+#'
+#' @param as.table a logical, if TRUE, a data frame is returned.
+#' Otherwise, a vector is returned (Default is FALSE).
+#'
+#' @return A data frame or a vector
+#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+#' @export
+#'
+#' @examples
+#' list_templates()
+#' list_templates(as.table = TRUE)
+list_templates <- function(as.table = FALSE) {
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-rmd-templates/git/trees/master?recursive=1")
+  repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
+  httr::stop_for_status(req)
+  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = F)
+  templates <- unique(dirname(filelist[grepl("/skeleton$", filelist)]))
+  if (as.table) {
+    lapply(
+      templates,
+      function(template) {
+        template %>%
+          file.path(repoURL, ., "template.yaml") %>%
+          yaml::read_yaml() %>%
+          tibble::as_tibble() %>%
+          tibble::add_column(.before = 1, id = template)
+      }
+    ) %>%
+      do.call(rbind.data.frame, .)
+  } else {
+    templates
+  }
 }

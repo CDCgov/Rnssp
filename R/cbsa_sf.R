@@ -20,5 +20,4 @@
 #' data("cbsa_sf")
 #'
 #' plot(cbsa_sf$geometry)
-#'
 "cbsa_sf"

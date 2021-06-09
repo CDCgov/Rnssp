@@ -1,6 +1,5 @@
 ---
 title: "Text Mining Example"
-date: "`r format(Sys.Date(), '%B %d, %Y')`"
 author: 
 output:
    rmarkdown::html_document:

@@ -21,5 +21,4 @@
 #' data("county_sf")
 #'
 #' plot(county_sf$geometry)
-#'
 "county_sf"
