@@ -13,10 +13,11 @@ improve reusability, reproducibility, and distribution of the analytical resourc
 \section{Rnssp functions}{
 
 The Rnssp functions include:
-- API functions to pull data from the ESSENCE system
-- Various utility functions to securely set user credentials, add or remove
-R Markdown templates, or set new dates in API urls.
-- Anomaly detection and Time Series Trend classification algorithms
+\itemize{
+    \item API functions to pull data from the ESSENCE system
+    \item Various utility functions to securely set user credentials, add or remove R Markdown templates, or set new dates in API urls.
+    \item Anomaly detection and Time Series Trend classification algorithms
+}
 }
 
 \section{Rnssp vignettes}{
