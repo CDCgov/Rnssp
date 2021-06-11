@@ -13,6 +13,7 @@ A collection of tools, functions, and Rmarkdown templates
 Useful links:
 \itemize{
   \item \url{https://github.com/CDCgov/Rnssp}
+  \item \url{https://cdcgov.github.io/Rnssp}
 }
 
 }

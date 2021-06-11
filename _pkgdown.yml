@@ -18,6 +18,7 @@ sidebar:
 template:
   params:
     bootswatch: flatly
+    ganalytics: G-ZWFZHWFRD0
 
 news:
   strip_header: true
