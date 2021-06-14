@@ -1,6 +1,6 @@
 ---
 title: "Introduction to the Rnssp package"
-author: "Gbedegnon Roseric Azondekon"
+author:
 output:
    rmarkdown::html_document:
      toc: true

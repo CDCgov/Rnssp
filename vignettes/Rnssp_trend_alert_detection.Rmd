@@ -1,6 +1,6 @@
 ---
 title: "Anomaly Detection and Trend Classification"
-author: "Gbedegnon Roseric Azondekon"
+author:
 output:
    rmarkdown::html_document:
      toc: true
