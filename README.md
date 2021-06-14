@@ -61,6 +61,11 @@ Should you want to contribute to this project, submit a push request to this Git
 ## Getting Help
 If you encounter a clear bug, please consider emailing the author at gazondekon@cdc.gov and/or file an issue with a minimal reproducible example.
 
+## Citing the `Rnssp` package
+```r
+citation(Rnssp)
+```
+
 ## Public Domain Standard Notice
 This repository constitutes a work of the United States Government and is not
 subject to domestic copyright protection under 17 USC ? 105. This repository is in

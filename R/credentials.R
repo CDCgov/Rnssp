@@ -47,11 +47,13 @@ Credentials <- R6::R6Class(
         message("Please, set your ESSENCE credentials (username and password)!")
       } else {
         assertive.types::assert_is_a_string(url)
-        url %>%
+        res <- url %>%
           httr::GET(., httr::authenticate(
             private$..username$value %>% safer::decrypt_string(., private$..__$value),
             private$..password$value %>% safer::decrypt_string(., private$..__$value)
           ))
+        res$request$options$userpwd <- ""
+        return(res)
       }
     },
 
