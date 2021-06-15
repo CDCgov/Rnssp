@@ -63,7 +63,7 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 
 ## Citing the `Rnssp` package
 ```r
-citation(Rnssp)
+citation("Rnssp")
 ```
 
 ## Public Domain Standard Notice
