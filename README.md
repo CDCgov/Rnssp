@@ -1,5 +1,6 @@
 
-# Rnssp <a href='https://cdcgov.github.io/Rnssp'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# Rnssp
+<!-- <a href='https://cdcgov.github.io/Rnssp'><img src='man/figures/logo.png' align="right" height="139" /></a> -->
 
 <!-- badges: start -->
 [![Rnssp Pipeline](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml/badge.svg?branch=master)](https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml)
