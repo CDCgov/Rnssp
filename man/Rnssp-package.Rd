@@ -22,7 +22,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Michael Sheppard \email{msheppard@cdc.gov} [contributor]
+  \item Michael Sheppard \email{msheppard@cdc.gov} (\href{https://orcid.org/0000-0003-3660-575X}{ORCID}) [contributor]
 }
 
 }
