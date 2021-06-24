@@ -127,7 +127,7 @@ Although, we present the alternate code above, the following sections will only 
 # Time Series Graph from ESSENCE
 
 The example below shows how to retrieve the Time Series Graph from ESSENCE and insert it in the Rmarkdown report.
-```{r tsgraph, fig.width=8, fig.height=6}
+```{r tsgraph, fig.width=8, fig.height=6, eval=FALSE}
 # URL from ESSENCE Time Series Graph from ESSENCE API
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries&graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&xAxisLabel=Date&yAxisLabel=Count"
 
@@ -136,7 +136,9 @@ api_data_graph <- myProfile$get_api_tsgraph(url)
 
 # Inspecting api_data_graph object
 class(api_data_graph)
+#> [1] "list"
 names(api_data_graph)
+#> [1] "api_response" "tsgraph"
 
 # Inserting graph in the report
 knitr::include_graphics(api_data_graph$tsgraph)
