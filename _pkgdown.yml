@@ -6,7 +6,7 @@ navbar:
       text: Get started
       href: articles/Rnssp_intro.html
   structure:
-    left:  [home, get-started, reference, articles, tutorials, news]
+    left:  [home, get-started, reference, articles, tutorials, news, search]
     right: [github]
 
 sidebar:
@@ -59,3 +59,8 @@ reference:
     contents:
       - ends_with("_sf", internal = TRUE)
 
+authors:
+  Gbedegnon Roseric Azondekon:
+    href: https://github.com/rosericazondekon
+  Michael Sheppard:
+    href: https://github.com/Michael-Sheppard
