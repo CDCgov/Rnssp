@@ -4,7 +4,7 @@
 |  _ \\ _ __  ___ ___ _ __
 | |_) | '_ \\/ __/ __| '_ \\
 |  _ <| | | \\__ \\__ \\ |_) |
-|_| \\_\\_| |_|___/___/ .__/   package version 0.0.1,
+|_| \\_\\_| |_|___/___/ .__/   package version 0.0.2,
                     |_|
 A Signature R package for the National Syndromic and Surveillance Program at
 the Centers for Disease Control and Prevention (CDC)

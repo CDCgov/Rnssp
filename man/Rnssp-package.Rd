@@ -6,6 +6,8 @@
 \alias{Rnssp-package}
 \title{Rnssp: A Signature R package for the National Syndromic and Surveillance Program (NSSP)}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 A collection of tools, functions, and Rmarkdown templates 
     that supports the National Syndromic and Surveillance Program Community of Practice.
 }
