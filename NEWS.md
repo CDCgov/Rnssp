@@ -22,7 +22,7 @@
 
 ## New Features
 
-* `alert_ewma()` implements EWMA time Series anomaly detection algorithm
+* `alert_ewma()` implements EWMA time series anomaly detection algorithm
 * `alert_mar()` implements MAR time series anomaly detection algorithm
 * `classify_trend()` implements a time series trend classification algorithm
 * Added a vignette for time series anomaly detection and trend classification
