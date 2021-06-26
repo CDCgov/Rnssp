@@ -61,6 +61,7 @@ Credentials <- R6::R6Class(
     #' Get ESSENCE API data
     #' @param url a character of ESSENCE API URL
     #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format
+    #' @param ... Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when `fromCSV = TRUE`.
     #' @return A dataframe (`fromCSV = TRUE`) or a list containing a dataframe and its metadata (`fromCSV = FALSE`)
     #' @examples
     #' \dontrun{
@@ -71,11 +72,11 @@ Credentials <- R6::R6Class(
     #' csv_url <- "<csv type ESSENCE_url>"
     #' api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
     #' }
-    get_api_data = function(url, fromCSV = FALSE) {
+    get_api_data = function(url, fromCSV = FALSE, ...) {
       assertive.types::assert_is_a_string(url)
       self$get_api_response(url) %>% {
         if (fromCSV) {
-          httr::content(., by = "text/csv") %>% readr::read_csv()
+          httr::content(., by = "text/csv") %>% readr::read_csv(...)
         } else {
           httr::content(., as = "text") %>% jsonlite::fromJSON()
         }

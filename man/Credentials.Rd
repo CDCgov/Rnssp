@@ -117,7 +117,7 @@ api_response <- myProfile$get_api_response(url)
 \subsection{Method \code{get_api_data()}}{
 Get ESSENCE API data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_data(url, fromCSV = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -126,6 +126,8 @@ Get ESSENCE API data
 \item{\code{url}}{a character of ESSENCE API URL}
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
+
+\item{\code{...}}{Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when `fromCSV = TRUE`.}
 }
 \if{html}{\out{</div>}}
 }

@@ -10,6 +10,7 @@
 
 ## Bug Fixes
 * Abstracted critical user credentials from response object.
+* The `$get_api_data()` method has been extended to accept further arguments to parse CSV files.
 
 ## Other News
 * Added CI/CD pipeline
