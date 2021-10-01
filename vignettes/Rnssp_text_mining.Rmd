@@ -146,7 +146,8 @@ cc_unigram_freq <- cc_unigrams %>%
        x = "Unigram", 
        y = "Frequency") +
   coord_flip() +
-  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"),
+        title = element_text(size = 9))
 
 cc_bigram_freq <- cc_bigrams %>%
   count(bigram, sort = TRUE) %>%
@@ -164,7 +165,8 @@ cc_bigram_freq <- cc_bigrams %>%
        x = "Bigram", 
        y = "Frequency") +
   coord_flip() +
-  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"),
+        title = element_text(size = 9))
 
 ggarrange(cc_unigram_freq, cc_bigram_freq, nrow = 1, ncol = 2)
 
