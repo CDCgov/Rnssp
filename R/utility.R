@@ -158,7 +158,7 @@ remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force
       cat(paste0(
         "Template ",
         template,
-        " has been successfully removed from package",
+        " has been successfully removed from package ",
         pkg,
         ".\nPlease, restart R session to update template list!"
       ))
