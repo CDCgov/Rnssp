@@ -34,8 +34,8 @@ home:
     href: https://github.com/CDCgov/Rnssp/releases/
   - text: Report a bug
     href: https://github.com/CDCgov/Rnssp/issues
-  - text: Explore all Rnssp vignettes
-    href: https://cdcgov.github.io/Rnssp/articles
+  - text: Rnssp Templates Documentation
+    href: https://cdcgov.github.io/Rnssp-rmd-templates
 
 reference:
   - title: Exported Functions and Classes
