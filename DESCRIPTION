@@ -19,7 +19,6 @@ Depends:
     data.table,
     stringr,
     tidyr,
-    slider,
     sf
 License: Apache License (>= 2)
 URL: https://github.com/CDCgov/Rnssp, https://cdcgov.github.io/Rnssp
