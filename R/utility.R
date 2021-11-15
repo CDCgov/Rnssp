@@ -22,20 +22,20 @@ askme <- function(prompt = "Please enter your password: ") {
 #'
 #' @param pkg a character string with the name of a single package.
 #' An error occurs if more than one package name is given.
-#' @param template_name a character string with the name of a single template name.
+#' @param template a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
 #' by `Rnssp::list_templates()`.
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an
-#' Rmarkdown template .zip file when the `template_name` argument is not
+#' Rmarkdown template .zip file when the `template` argument is not
 #' specified or set to `NULL`.
 #'
 #' In non-interactive mode, this utility function prompts the user to specify a
-#' path to an Rmarkdown template .zip file when the `template_name` argument
+#' path to an Rmarkdown template .zip file when the `template` argument
 #' is not specified or set to `NULL`.
 #'
-#' When the `template_name` is specified, regardless of the `pkg` argument,
+#' When the `template` is specified, regardless of the `pkg` argument,
 #' this utility function download the specified template from the
 #' Rnssp-rmd-templates Github repository.
 #' When the specified template name is not available, it throws an error.
@@ -47,11 +47,11 @@ askme <- function(prompt = "Please enter your password: ") {
 #' @examples
 #' \dontrun{
 #' add_rmd_template() # Add a new Rmd template to the 'Rnssp' package
-#' add_rmd_template("rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
-#' add_rmd_template(template_name = "text_mining") # Add the 'text_mining' template report to the Rnssp package
+#' add_rmd_template(pkg = "rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
+#' add_rmd_template("text_mining") # Add the 'text_mining' template report to the Rnssp package
 #' }
-add_rmd_template <- function(pkg = "Rnssp", template_name = NULL) {
-  if (is.null(template_name)) {
+add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
+  if (is.null(template)) {
     if (!dir.exists(system.file(package = pkg))) {
       stop(paste0("The package '", pkg, "' is not installed!\n"))
     }
@@ -92,19 +92,19 @@ add_rmd_template <- function(pkg = "Rnssp", template_name = NULL) {
   } else {
     repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
     template_list <- list_templates()
-    if (!template_name %in% template_list) {
+    if (!template %in% template_list) {
       stop(paste0(
-        "'", template_name, "'",
+        "'", template, "'",
         " is not a valid template. Please run `Rnssp::list_templates()` to list available templates!"
       ))
     }
     temp_dir <- tempdir()
-    zipfile <- file.path(temp_dir, paste0(template_name, ".zip"))
-    download.file(file.path(repoURL, "zip", paste0(template_name, ".zip")),
+    zipfile <- file.path(temp_dir, paste0(template, ".zip"))
+    download.file(file.path(repoURL, "zip", paste0(template, ".zip")),
       destfile = zipfile
     )
     if (!file.exists(zipfile)) {
-      stop(paste("Download of ", template_name, ".zip", " was unsuccessful!"))
+      stop(paste("Download of ", template, ".zip", " was unsuccessful!"))
     }
     template_folder <- unlist(strsplit(basename(zipfile), "[.]"))[1]
     zipcontent <- unzip(zipfile, list = TRUE)

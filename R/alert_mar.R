@@ -18,7 +18,7 @@
 #' @param g Guardband parameter. The guardband length is the number of days separating
 #'     the baseline from the current date in consideration for alerting (default is 2)
 #'
-#' @return A data frame
+#' @return A data frame with test statistic, p.value, and alert indicator
 #' @export
 #'
 #' @examples
@@ -68,10 +68,10 @@
 #'   filter(hospitalstate_display == "South Dakota")
 #'
 #' df_mar_state %>%
-#'   ggplot(aes(x = t, y = count)) +
+#'   ggplot(aes(x = date, y = count)) +
 #'   geom_line(color = "blue") +
-#'   geom_point(data = subset(df_mar_state, alert == "red"), color = "red") +
-#'   geom_point(data = subset(df_mar_state, alert == "yellow"), color = "yellow") +
+#'   geom_point(data = subset(df_mar_state, alert == "alert"), color = "red") +
+#'   geom_point(data = subset(df_mar_state, alert == "warning"), color = "yellow") +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
@@ -82,54 +82,41 @@
 alert_mar <- function(df, t = date, y = count, B = 28, g = 2) {
   grouping <- group_vars(df)
 
-  t <- enquo(t)
-  y <- enquo(y)
+  col_names <- setdiff(names(df), c(ensym(t), ensym(y), grouping))
+
+  tph <- quo_name(enquo(t))
+  yph <- quo_name(enquo(y))
+
+  t <- substitute(t)
+  y <- substitute(y)
 
   df %>%
-    mutate(
-      t = as.Date(!!t),
-      y = as.numeric(!!y),
-      row = row_number(),
-      days = weekdays(t, abbreviate = TRUE),
-      initial_vals = ifelse(row <= B, "yes", "no"),
-      var = 1
-    ) %>%
-    tidyr::pivot_wider(names_from = days, values_from = var, values_fill = 0) %>%
-    mutate(
-      detection = slider::slide(
-        .x = tibble(t, y, Mon, Tue, Wed, Thu, Fri, Sat),
-        .f = function(.x) {
-          .current <- .x %>%
-            mutate(X1 = seq(1, B + g + 1, 1)) %>%
-            slice_tail(n = 1)
-
-          .baseline <- head(.x, n = B)
-          .y <- last(.x$y)
-
-          .model <- .baseline %>%
-            mutate(X1 = seq(1, B, 1)) %>%
-            lm(y ~ X1 + Mon + Tue + Wed + Thu + Fri + Sat, .)
-
-          .pred <- predict(.model, newdata = .current, se.fit = TRUE)
-          .fitted <- .pred$fit[1]
-          .mse <- .pred$residual.scale[1]^2
-          .sigma <- sqrt(.pred$se.fit[1]^2 + .mse)
-
-          .statistic <- (.y - .fitted) / .sigma
-          .p.value <- pt(-abs(.statistic), df = B - 7 - 1)
-
-          data.frame(fitted = .fitted, statistic = .statistic, p.value = .p.value) %>%
-            mutate(
-              alert = case_when(
-                statistic > 0 & p.value < 0.01 ~ "red",
-                statistic > 0 & 0.01 <= p.value & p.value < 0.05 ~ "yellow",
-                TRUE ~ "none"
-              )
-            )
-        },
-        .before = B + g,
-        .complete = TRUE
-      )
-    ) %>%
-    tidyr::unnest(detection)
+    as.data.table() %>%
+    .[, t := as.Date(eval(t))] %>%
+    .[, y := as.numeric(eval(y))] %>%
+    .[, paste0("lag", 0:(B + g)) := shift(y, n = 0:(B + g)), by = grouping] %>%
+    na.omit() %>%
+    melt(measure.vars = paste0("lag", 0:(B + g)), variable.name = "var", value.name = "observed") %>%
+    setorderv(c(grouping, "t", "var")) %>%
+    .[, !"var"] %>%
+    .[, base_date := seq_len(.N), by = c(grouping, "t")] %>%
+    .[, base_date := t - base_date + 1] %>%
+    .[, dow := weekdays(base_date, abbreviate = TRUE)] %>%
+    .[, var := 1] %>%
+    dcast(... ~ dow, value.var = "var", fill = 0) %>%
+    setorderv(c(grouping, "t", "base_date")) %>%
+    .[, .(.(.SD)), by = c(grouping, "t", "y", col_names)] %>%
+    setnames(old = "V1", new = "baseline") %>%
+    .[, test_statistic := as.numeric(lapply(baseline, detection_reg, "regression", B, g))] %>%
+    .[, !"baseline"] %>%
+    .[, p.value := pt(-abs(test_statistic), df = B - 7 - 1)] %>%
+    .[, alert := fcase(test_statistic > 0 & p.value < 0.01, "alert",
+      test_statistic > 0 & p.value >= 0.01 & p.value < 0.05, "warning",
+      default = "none"
+    )] %>%
+    as.data.frame() %>%
+    dplyr::rename(
+      !!tph := t,
+      !!yph := y
+    )
 }
