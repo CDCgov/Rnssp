@@ -1,6 +1,6 @@
-#' Multiple Adaptive Regression
+#' Adaptive Multiple Regression
 #'
-#' The multiple adaptive regression algorithm fits a linear model to a baseline
+#' The adaptive multiple regression algorithm fits a linear model to a baseline
 #' of counts or percentages of length B, and forecasts a predicted value g + 1
 #' days later (guard-band). This value is compared to the current observed value and
 #' divided by the standard error of prediction in the test-statistic. The model includes

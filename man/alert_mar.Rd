@@ -2,7 +2,7 @@
 % Please edit documentation in R/alert_mar.R
 \name{alert_mar}
 \alias{alert_mar}
-\title{Multiple Adaptive Regression}
+\title{Adaptive Multiple Regression}
 \usage{
 alert_mar(df, t = date, y = count, B = 28, g = 2)
 }
@@ -23,7 +23,7 @@ the baseline from the current date in consideration for alerting (default is 2)}
 A data frame with test statistic, p.value, and alert indicator
 }
 \description{
-The multiple adaptive regression algorithm fits a linear model to a baseline
+The adaptive multiple regression algorithm fits a linear model to a baseline
 of counts or percentages of length B, and forecasts a predicted value g + 1
 days later (guard-band). This value is compared to the current observed value and
 divided by the standard error of prediction in the test-statistic. The model includes
