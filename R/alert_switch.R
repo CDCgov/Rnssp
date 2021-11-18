@@ -120,7 +120,7 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
                        p.value == 0.5 & (is.infinite(test_statistic) | is.nan(test_statistic)) , "none",
                        default = "none")] %>%
     as.data.frame() %>%
-    mutate(detector = "Multiple Adaptive Regression") %>%
+    mutate(detector = "Adaptive Multiple Regression") %>%
     rename(
       !! tph := t,
       !! yph := y
