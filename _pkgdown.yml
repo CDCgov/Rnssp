@@ -20,7 +20,7 @@ template:
     bootswatch: flatly
     ganalytics: G-ZWFZHWFRD0
     docsearch:
-      api_key: 4f263fbcfdfdf71e5b57da76adc21316
+      api_key: 55d5dd00ad5af8c2fb80f47768f87d21
       index_name: rnssp
 
 news:
