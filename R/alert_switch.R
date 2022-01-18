@@ -163,7 +163,7 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
       filter(r_sqrd_adj >= 0.60) %>%
       select(-r_sqrd_adj) %>%
       bind_rows(replace_dates) %>%
-      arrange(!!enquo(t)))
+      arrange(!!enquo(t))
   } else {
     combined_out <- reg_out %>%
       filter(r_sqrd_adj >= 0.60) %>%

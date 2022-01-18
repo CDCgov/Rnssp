@@ -1,0 +1,987 @@
+---
+title: "State ED Report Template"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+description: This report is a template State ED Report. 
+  Remember to change the title to match your State.
+  PLEASE Knit it with Parameters!!!
+output:
+  html_document:
+    toc: true
+params:
+  username:
+    label: "NSSP Username: "
+    value: ""
+    input: text
+    placeholder: "username"
+  password:
+    label: "NSSP Password: "
+    value: ""
+    input: password
+    placeholder: "password"
+  state_abbr:
+    label: "Enter State Abbreviation"
+    value: "AL"
+    input: select
+    choices: !r state.abb
+  ccdd_categories:
+    label: "CCDD Categories"
+    value: !r c("CLI CC with CLI DD and Coronavirus DD v1", "CDC Pneumonia CCDD v1", "CDC COVID-Specific DD v1")
+    choices: !r fl <- tempfile(fileext =".rds"); download.file(file.path("https://raw.githubusercontent.com", "cdcgov", "Rnssp-rmd-templates", "master", "state_ed_report", "skeleton", "ccdd_cat.rds"), destfile = fl); dplyr::pull(readRDS(fl), ccdd_category)
+    input: select
+    multiple: yes
+  ts_type: 
+    label: "Time Series Metric"
+    value: "Percentages"
+    input: select
+    choices: [Percentages, Counts, Percentages and Counts]
+  start_date:
+    label: "Enter Start Date: "
+    value: !r as.Date(paste0(format(Sys.Date(), "%Y-"),"01-01"))
+    input: date
+  end_date:
+    label: "Enter End Date: "
+    value: !r as.Date(cut(Sys.Date(), "week", start.on.monday = FALSE)) - 1
+    input: date
+editor_options:
+  chunk_output_type: inline
+---
+
+<style type="text/css">
+  .main-container {
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style> 
+
+```{r libraries, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+
+library(Rnssp)
+library(tidyverse)
+library(lubridate)
+library(httr)
+library(janitor) 
+library(DT)
+library(kableExtra)
+library(purrr)
+library(wesanderson)
+library(rgdal)
+library(ggrepel)
+library(ggsci) 
+library(ggpubr)
+library(ggformula)
+library(ggthemes)
+library(grid)
+library(gridExtra)
+library(jsonlite)
+library(data.table)
+library(sparkline)
+library(patchwork)
+
+```
+
+```{r set params, echo = FALSE, message = FALSE, warning = FALSE, include = FALSE}
+
+endDate <- format(params$end_date, "%d%b%Y")
+startDate <- format(params$start_date, "%d%b%Y")
+
+ncat <- length(params$ccdd_categories)
+
+ht_single <- ncat + 0.67
+ht_combined <- 2 * ht_single
+
+counts_percentages <- ifelse(params$ts_type == "Percentages and Counts", TRUE, FALSE)
+counts_only <- ifelse(params$ts_type == "Counts", TRUE, FALSE)
+percentages_only <- ifelse(params$ts_type == "Percentages", TRUE, FALSE)
+
+```
+
+```{r load NSSP profile, echo=FALSE, message=FALSE, include=FALSE}
+
+myProfile <- Credentials$new(
+  username = params$username,
+  password = params$password
+)
+
+```
+
+```{r set_shapefile, echo = FALSE, warning = FALSE, message = FALSE}
+
+state_fips <- ifelse(nchar(cdlTools::fips(params$state_abbr)) == 1, paste0("0", cdlTools::fips(params$state_abbr)), cdlTools::fips(params$state_abbr))
+
+data("county_sf")
+data("state_sf")
+
+us_counties_base <- county_sf %>% 
+  st_transform("+proj=longlat +datum=WGS84") 
+
+state_counties <- subset(us_counties_base, STATEFP == state_fips) %>%
+  st_as_sf() %>%
+  mutate(
+    CENTROID = map(geometry, st_centroid),
+    COORDS = map(CENTROID, st_coordinates), 
+    COORDS_X = map_dbl(COORDS, 1), 
+    COORDS_Y = map_dbl(COORDS, 2),
+    GEOID = as.character(GEOID)
+  )
+
+state_regions <- state_counties %>%
+  mutate(
+    CENTROID = map(geometry, st_centroid),
+    COORDS = map(CENTROID, st_coordinates),
+    COORDS_X = map_dbl(COORDS, 1),
+    COORDS_Y = map_dbl(COORDS, 2),
+    GEOID = as.character(GEOID)
+  )
+
+state_name <- state_sf %>% 
+  st_set_geometry(NULL) %>% 
+  filter(STATEFP == state_fips) %>% 
+  select(NAME) %>% 
+  pull() %>% 
+  as.character()
+
+```
+
+```{r state data pull, echo = FALSE, warning = FALSE, message = FALSE}
+
+metric <- params$ts_type
+
+category_list <- paste0("ccddCategory=", str_replace_all(paste(tolower(params$ccdd_categories), collapse = "&ccddCategory="), " ", "%20"))
+
+geography <- state_sf %>% 
+  st_set_geometry(NULL) %>% 
+  filter(STATEFP == state_fips) %>% 
+  select(STUSPS) %>% pull %>% 
+  as.character %>% 
+  tolower
+
+url <- paste0("https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=", endDate, "&geography=", geography, "&percentParam=ccddCategory&datasource=va_hosp&startDate=", startDate, "&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&", category_list, "&geographySystem=hospitalstate&detector=probrepswitch&timeResolution=daily&hasBeenE=1&stratVal=ccddCategory&multiStratVal=&graphOnly=true&numSeries=3&graphOptions=single&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=ccddCategory&multiStratVal=&graphOnly=true&numSeries=3&graphOptions=single&seriesPerYear=false&startMonth=January&nonZeroComposite=false")
+
+api_data <- myProfile$get_api_data(url) %>%
+  pluck("timeSeriesData")
+
+state_data <- api_data %>%
+  clean_names() %>%
+  select(
+    date, 
+    ccdd_category = ccdd_category_display,
+    data_count = data_count, 
+    all_count = all_count, 
+    percent = count, 
+    alert_percent = color, 
+    alert_count = color_data_count, 
+    p.value_percent = levels,
+    p.value_counts = levels_data_count
+  ) %>%
+  mutate(date = as.Date(date)) %>%
+  mutate_at(c("alert_percent", "alert_count"), ~case_when(
+    . %in% c("grey", "blue") ~ "None", 
+    . == "red" ~ "Alert", 
+    . == "yellow" ~ "Warning"
+  )) %>%
+  mutate_at(c("alert_percent", "alert_count"), ~factor(., levels = c("Alert", "Warning", "None"))) %>%
+  mutate_at(c("p.value_percent", "p.value_counts"), ~as.numeric(.))
+
+```
+
+```{r county data pull, echo = FALSE, message = FALSE, warning = FALSE}
+
+county_fips <- paste0(paste0("&facilityfips=", state_counties$STATEFP, state_counties$COUNTYFP), sep = "", collapse = "")
+
+url <- paste0("https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=", endDate, county_fips, "&percentParam=ccddCategory&datasource=va_hosp&startDate=", startDate, "&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&", category_list, "&geographySystem=hospital&detector=probrepswitch&timeResolution=daily&hasBeenE=1&stratVal=ccddCategory&multiStratVal=facilityfips&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=false&startMonth=January&stratVal=ccddCategory&multiStratVal=facilityfips&refValues=false&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false")
+
+api_data <- myProfile$get_api_data(url) %>%
+  pluck("timeSeriesData")
+
+county_data <- api_data %>%
+  clean_names() %>%
+  select(
+    date, 
+    county = facilityfips_id,
+    county_name = facilityfips_display, 
+    ccdd_category = ccdd_category_display,
+    data_count = data_count, 
+    all_count = all_count, 
+    percent = count, 
+    alert_percent = color, 
+    alert_count = color_data_count, 
+    p.value_percent = levels,
+    p.value_counts = levels_data_count
+  ) %>%
+  mutate(
+    date = as.Date(date),
+    county_name = str_remove_all(county_name, "County")
+  ) %>%
+  separate(county_name, c("state", "county_name"), sep = " - ") %>%
+  mutate(county_name = str_squish(county_name)) %>%
+  mutate_at(c("alert_percent", "alert_count"), ~case_when(
+    . %in% c("grey", "blue") ~ "None", 
+    . == "red" ~ "Alert", 
+    . == "yellow" ~ "Warning"
+  )) %>%
+  mutate_at(c("alert_percent", "alert_count"), ~factor(., levels = c("Alert", "Warning", "None"))) %>%
+  mutate_at(c("p.value_percent", "p.value_counts"), ~as.numeric(.))
+
+```
+
+### Introduction
+
+The purpose of this report is to summarize trend classification and ESSENCE alerting for the `r paste(params$ccdd_categories, collapse = ", ")` categories at the state and county level. All trends are reported as percent of daily emergency department visits.
+
+To classify trends of percentages over time, we fit penalized least squares smoothing splines to state and county-level trends of 7-day averages. A smoothing parameter of $\omega = 0.5$ is applied to strike a balance between approximating the 7-day moving average and over smoothing. The slopes of the cubic smoothing spline are used to classify daily trajectory statuses into categories of increase, stable, or decrease. Slopes greater than a pre-defined slope cut point of 0.01 are classified as increasing, while slopes less than -0.01 are classified as decreasing. Slopes with an absolute value less than or equal to 0.01 are classified as stable. This method is best suited for classification of county-level time series with higher variability in day-to-day trends. For trends of counts, generalized additive models (Poisson family) are used to smooth daily time series. First order differences are used to approximate the first derivative. The same cut point of 0.01 is used for trend classification. 
+
+To improve identification of stratifications with recent and anomalous increases in syndromic activity, ESSENCE alerting is overlaid on the percentage trends for each county and CCDD category. These alerts correspond to ESSENCE\'s default alerting algorithm, Poisson/EWMA/Regression Switch, with alerting thresholds 0.05 (yellow) and 0.01 (red). Daily stratified alerting indicators and statistics are pulled along with the percentages, numerators, and denominators from the time series data table API (new to ESSENCE as of July 2020). Time series are presented for counties with at least 10 or more encounters for each CCDD category. 
+
+### Instructions
+
+This report is included in the `Rnssp` package as a template, and therefore requires users to interactively define input parameters by using the Knit with Parameters option. Parameter selections are available for the following: 
+
+  1. AMC username and password (securely encrypted to a user profile object of class `Credentials`)
+  2. State (data are pulled by hospital state from the Facility Location (Full Details) data source)
+  3. CCDD Categories - currently includes all existing CCDD Categories available in ESSENCE. Users may select as many categories as they choose. The default categories are CLI CC with CLI DD and Coronavirus DD v1, CDC Pneumonia CCDD v1, and CDC COVID-Specific DD v1.
+  4. Start and end date of query
+  5. Time series type - percentages, counts, or percentages *and* counts (default)
+
+```{r state trend analysis, echo = FALSE, warning = FALSE, message = FALSE}
+
+cubic_spline_poisson <- function(x, y, knot_interval = 21){
+  y[y < 0] <- NA
+  knots = floor(sum(!is.na(x)) / knot_interval)
+  tryCatch(
+    expr = return(exp(predict(mgcv::gam(y ~ s(x, bs = "cs", k = knots), model = FALSE, family = "poisson"), data.frame(x = x)))), 
+    error = function(e) return(as.double(rep(NA, length(x))))
+  )
+}
+
+state_trends_analyzed <- state_data %>%
+  group_by(ccdd_category) %>%
+  mutate(
+    seven_day = slide(
+      .x = tibble(data_count, all_count),
+      .f = function (.x) {
+        (sum(.x$data_count) / sum(.x$all_count)) * 100
+      },
+      .before = 6,
+      .complete = FALSE
+    ),
+    seven_day = as.numeric(seven_day),
+    seven_day = ifelse(is.nan(seven_day), 0, seven_day),
+    seven_day_counts = zoo::rollapply(data_count, width = 7, FUN = mean, align = "right", partial = TRUE)
+  ) %>%
+  ungroup() %>%
+  nest(data = -ccdd_category) %>%
+  mutate(
+    ss = map(.x = data, .f = function (.x) {
+      
+      .ss_percent <- smooth.spline(x = as.numeric(.x$date), y = .x$seven_day, spar = 0.5)
+      .fitted_percent <- predict(.ss_percent, as.numeric(.x$date))$y
+      .deriv1_percent <- predict(.ss_percent, as.numeric(.x$date), deriv = 1)$y
+      
+      data.frame(spline_percent = .fitted_percent, deriv1_percent = .deriv1_percent)
+      
+    })
+  ) %>%
+  unnest(c(data, ss)) %>%
+  group_by(ccdd_category) %>%
+  mutate(
+    spline_counts = cubic_spline_poisson(x = as.double(date), y = data_count, knot_interval = 21),
+    deriv1_counts = (spline_counts - lag(spline_counts)) / (as.double(date) - as.double(lag(date)))
+    ) %>%
+  filter(!is.na(deriv1_counts)) %>%
+  mutate(
+    row = row_number(), 
+    trajectory_percent = case_when(
+      abs(deriv1_percent) < 0.01 ~ "Stable", 
+      deriv1_percent <= -0.01 ~ "Decreasing", 
+      deriv1_percent >= 0.01 ~ "Increasing"
+    ),
+    trajectory_counts = case_when(
+      abs(deriv1_counts) < 0.01 ~ "Stable", 
+      deriv1_counts <= -0.01 ~ "Decreasing", 
+      deriv1_counts >= 0.01 ~ "Increasing"
+    )
+  ) %>%
+  ungroup() %>%
+  mutate_at(.vars = c("trajectory_percent", "trajectory_counts"), ~factor(., levels = c("Increasing", "Stable", "Decreasing")))
+
+```
+
+```{r county trend analysis, echo = FALSE, warning = FALSE, message = FALSE}
+
+county_trends_analyzed <- county_data %>%
+  group_by(county, ccdd_category) %>%
+  mutate(
+    seven_day = slide(
+      .x = tibble(data_count, all_count),
+      .f = function (.x) {
+        (sum(.x$data_count) / sum(.x$all_count)) * 100
+      },
+      .before = 6,
+      .complete = FALSE
+    ),
+    seven_day = as.numeric(seven_day),
+    seven_day = ifelse(is.nan(seven_day), 0, seven_day),
+    seven_day_counts = zoo::rollapply(data_count, width = 7, FUN = mean, align = "right", partial = TRUE)
+  ) %>%
+  ungroup() %>%
+  nest(data = -c(county, ccdd_category)) %>%
+  mutate(
+    ss = map(.x = data, .f = function (.x) {
+      
+      .ss_percent <- smooth.spline(x = as.numeric(.x$date), y = .x$seven_day, spar = 0.5)
+      .fitted_percent <- predict(.ss_percent, as.numeric(.x$date))$y
+      .deriv1_percent <- predict(.ss_percent, as.numeric(.x$date), deriv = 1)$y
+      
+      data.frame(spline_percent = .fitted_percent, deriv1_percent = .deriv1_percent)
+      
+    })
+  ) %>%
+  unnest(c(data, ss)) %>%
+  group_by(county, ccdd_category) %>%
+    mutate(
+    spline_counts = cubic_spline_poisson(x = as.double(date), y = data_count, knot_interval = 7),
+    deriv1_counts = (spline_counts - lag(spline_counts)) / (as.double(date) - as.double(lag(date)))
+  ) %>%
+  filter(!is.na(deriv1_counts)) %>%
+  mutate(
+    total = sum(data_count), 
+    row = row_number(), 
+    trajectory_percent = case_when(
+      abs(deriv1_percent) < 0.01 & total > 0 ~ "Stable", 
+      spline_percent < 0 & deriv1_percent > 0 ~ "Stable", 
+      deriv1_percent <= -0.01 ~ "Decreasing", 
+      deriv1_percent >= 0.01 ~ "Increasing",
+      total == 0 ~ "No Data Reported"
+    ),
+    trajectory_counts = case_when(
+      abs(deriv1_counts) < 0.01 & total > 0 ~ "Stable",
+      deriv1_counts <= -0.01 ~ "Decreasing", 
+      deriv1_counts >= 0.01 ~ "Increasing", 
+      total == 0 ~ "No Data Reported"
+    )
+  ) %>%
+  mutate_at(.vars = c("trajectory_percent", "trajectory_counts"), ~factor(., levels = c("Increasing", "Stable", "Decreasing", "No Data Reported")))
+
+```
+
+### County Level Maps 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+pal <- c("#D73027", "#FEE090", "#4575B4", "#FFFFFF")
+
+county_trends_recent <- county_trends_analyzed %>%
+  left_join(state_counties, by = c("county" = "GEOID")) %>%
+  filter(date == max(date))
+
+trends_sf <- county_trends_recent %>%
+  st_as_sf() %>%
+  mutate(category_label = ccdd_category) %>%
+  nest(data = -ccdd_category) %>%
+  mutate(
+    percentages = map(.x = data, .f = function(.x) {
+      
+        .date <- format(max(.x$date), "%B %d, %Y")
+        .subtitle <- str_wrap("Trajectory of daily emergency department encounters are classified by fitting penalized least squares smoothing splines and using a pre-defined slope threshold of 0.01 to bin into categories of increase, stable, or decrease. A smoothing parameter of 0.5 and 7-day averages are used to reduce the daily variability common to county-level time series and to capture local changes in trend.", 150)
+        
+        plot <- ggplot() + 
+          geom_sf(data = .x, aes(fill = trajectory_percent), color = "black") + 
+          scale_fill_manual(values = pal, drop = FALSE) + 
+          labs(fill = "Trend Classification (Percentages)") + 
+          geom_text(data = .x, aes(x = COORDS_X, y = COORDS_Y, label = NAME), size = 3) + 
+          theme_classic() +
+          labs(
+            title = paste0("Recent Trajectory in Daily Percentages for ", unique(.x$category_label), ": ", .date),
+            subtitle = .subtitle
+          ) + 
+          theme_map() + 
+          theme(
+            legend.text = element_text(size = 10),
+            legend.title = element_text(size = 10, face = "bold"),
+            plot.title = element_text(size = 14, face = "bold"), 
+            plot.subtitle = element_text(size = 12),
+            legend.position = "right"
+          )
+        
+      plot
+      
+    }),
+    counts = map(.x = data, .f = function(.x) {
+      
+        .date <- format(max(.x$date), "%B %d, %Y")
+        .subtitle <- str_wrap("Trajectory of daily emergency department encounters are classified by fitting generalized additive models (Poisson family) to daily counts and using a pre-defined slope threshold of 0.01 to bin into categories of increase, stable, or decrease. 7-day averages are used to reduce the daily variability common to county-level time series and to capture local changes in trend. The degree of smoothness of model terms is estimated as part of fitting.", 150)
+        
+        plot <- ggplot() + 
+          geom_sf(data = .x, aes(fill = trajectory_counts), color = "black") + 
+          scale_fill_manual(values = pal, drop = FALSE) + 
+          labs(fill = "Trend Classification (Counts)") + 
+          geom_text(data = .x, aes(x = COORDS_X, y = COORDS_Y, label = NAME), size = 3) + 
+          theme_classic() +
+          labs(
+            title = paste0("Recent Trajectory in Daily Counts for ", unique(.x$category_label), ": ", .date),
+            subtitle = .subtitle
+          ) + 
+          theme_map() + 
+          theme(
+            legend.text = element_text(size = 10),
+            legend.title = element_text(size = 10, face = "bold"),
+            plot.title = element_text(size = 14, face = "bold"), 
+            plot.subtitle = element_text(size = 12),
+            legend.position = "right"
+          )
+        
+      plot
+      
+    })
+  ) %>%
+  select(-data)
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8}
+
+if(params$ts_type == "Percentages and Counts"){
+  for (i in 1:nrow(trends_sf)) {
+    grid.arrange(trends_sf$counts[[i]])
+    grid.arrange(trends_sf$percentages[[i]])
+  }
+}
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8}
+
+if(params$ts_type == "Percentages"){
+  for (i in 1:nrow(trends_sf)) {
+    grid.arrange(trends_sf$percentages[[i]])
+  }
+}
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8}
+
+if(params$ts_type == "Counts"){
+  for (i in 1:nrow(trends_sf)) {
+    grid.arrange(trends_sf$counts[[i]])
+  }
+}
+
+```
+
+### `r paste("Plots for State-level Trajectory Based on", metric)` 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+pal <- c("#D73027", "#FEE090", "#4575B4", "#CCCCCC")
+
+state_traj <- state_trends_analyzed %>%
+  group_by(ccdd_category) %>%
+  mutate(
+    category_label_percent = paste0(ccdd_category, " Percentages \n", last(trajectory_percent)),
+    category_label_counts = paste0(ccdd_category, " Counts \n", last(trajectory_counts))
+  )
+
+date_range <- paste(format(min(state_trends_analyzed$date), "%B %d, %Y"), "to", format(max(state_trends_analyzed$date), "%B %d, %Y"))
+
+state_percent_plot <- ggplot(data = state_trends_analyzed) + 
+  geom_line(aes(x = date, y = percent), color = "grey70", alpha = 0.5, size = 0.7) +
+  geom_line(aes(x = date, y = spline_percent), color = "#014D64", size = 1.0) + 
+  geom_segment(aes(x = date, xend = max(date), y = 0, yend = 0, color = trajectory_percent), size = 3) + 
+  geom_point(data = subset(state_trends_analyzed, alert_percent == "Alert"), aes(x = date, y = percent), color = "#FFC107", size = 1) +
+  geom_point(data = subset(state_trends_analyzed, alert_percent == "Warning"), aes(x = date, y = percent), color = "#DC3545", size = 1) +
+  scale_x_date(date_breaks = "60 day", date_labels = "%b %d %y", expand = c(0, 0)) + 
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 4), limits = c(0, NA)) + 
+  scale_color_manual(values = pal, name = "", drop = FALSE) +
+  labs(
+    x = "Date", 
+    y = "Percent",
+    title = "Percentages"
+  ) +
+  theme_few() + 
+  theme(
+    plot.title = element_text(size = 12), 
+    strip.text = element_text(size = 10, face = "bold", hjust = 0.5), 
+    panel.background = element_rect(fill="white"),
+    axis.text.x = element_text(color = "black", size = 10, angle = 45, vjust = 0.5),
+    axis.text.y = element_text(color = "black", size = 12),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.9), 
+    legend.position = "top",
+    legend.text = element_text(size = 10),
+    legend.title = element_blank()
+  ) +
+  facet_wrap(~ccdd_category, scales = "free_x", ncol = 3, dir = "h") 
+
+state_counts_plot <- ggplot(data = state_trends_analyzed) + 
+  geom_line(aes(x = date, y = data_count), color = "grey70", alpha = 0.5, size = 0.7) +
+  geom_line(aes(x = date, y = spline_counts), color = "#014D64", size = 1.0) + 
+  geom_segment(aes(x = date, xend = max(date), y = 0, yend = 0, color = trajectory_counts), size = 3) + 
+  geom_point(data = subset(state_trends_analyzed, alert_count == "Alert"), aes(x = date, y = data_count), color = "#FFC107", size = 1) +
+  geom_point(data = subset(state_trends_analyzed, alert_count == "Warning"), aes(x = date, y = data_count), color = "#DC3545", size = 1) +
+  scale_x_date(date_breaks = "60 day", date_labels = "%b %d %y", expand = c(0, 0)) + 
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 4), limits = c(0, NA)) + 
+  scale_color_manual(values = pal, name = "", drop = FALSE) +
+  labs(
+    x = "Date", 
+    y = "Count",
+    title = "Counts"
+  ) +
+  theme_few() + 
+  theme(
+    plot.title = element_text(size = 12), 
+    strip.text = element_text(size = 10, face = "bold", hjust = 0.5), 
+    panel.background = element_rect(fill="white"),
+    axis.text.x = element_text(color = "black", size = 10, angle = 45, vjust = 0.5),
+    axis.text.y = element_text(color = "black", size = 12),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.9), 
+    legend.position = "top",
+    legend.text = element_text(size = 10),
+    legend.title = element_blank()
+  ) +
+  facet_wrap(~ccdd_category, scales = "free_x", ncol = 3, dir = "h") 
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_percentages, fig.width = 13, fig.height = ht_combined}
+
+(state_percent_plot / state_counts_plot) + 
+  plot_annotation(
+    title = paste0(state_name, " - State-level Trajectory for Selected CCDD Categories: ", date_range),
+    theme = theme(plot.title = element_text(face = "bold"))
+  ) +
+  plot_layout(guides = "collect") & theme(legend.position = "top")
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = percentages_only, fig.width = 13, fig.height = ht_single}
+
+state_percent_plot + 
+  labs(title = paste0(state_name, " - State-level Trajectory for Selected CCDD Categories: ", date_range, "\nPercentages"))
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_only, fig.width = 13, fig.height = ht_single}
+
+state_counts_plot + 
+  labs(title = paste0(state_name, " - State-level Trajectory for Selected CCDD Categories: ", date_range, "\nCounts"))
+
+```
+
+### `r paste("Plots for County-level Trajectory Based on", metric)` 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 13, fig.height = 4}
+
+pal <- c("#D73027", "#FEE090", "#4575B4", "#CCCCCC")
+
+date_range <- paste(format(min(county_trends_analyzed$date), "%B %d, %Y"), "to", format(max(county_trends_analyzed$date), "%B %d, %Y"))
+
+county_traj_plots <- county_trends_analyzed %>%
+  group_by(county) %>%
+  filter(sum(data_count) > 10) %>%
+  ungroup() %>%
+  nest(data = -county_name) %>%
+  mutate(
+    percentages = map(.x = data, .f = function(.x) {
+      
+      ggplot(data = .x) + 
+        geom_line(aes(x = date, y = percent), color = "grey70", alpha = 0.5, size = 0.7) +
+        geom_line(aes(x = date, y = spline_percent), color = "#014D64", size = 1.0) + 
+        geom_segment(aes(x = date, xend = max(date) + 1, y = 0, yend = 0, color = trajectory_percent), size = 3) + 
+        geom_point(data = subset(.x, alert_percent == "Alert"), aes(x = date, y = percent), color = "#DC3545", size = 1) +
+        geom_point(data = subset(.x, alert_percent == "Warning"), aes(x = date, y = percent), color = "#FFC107", size = 1) +
+        scale_x_date(date_breaks = "60 day", date_labels = "%b %d %y", expand = c(0, 0)) + 
+        scale_y_continuous(breaks = scales::pretty_breaks(n = 4), limits = c(0, NA)) + 
+        scale_color_manual(values = pal, name = "", drop = FALSE) + 
+        labs(
+          x = "Date", 
+          y = "Percent",
+          title = "Percentages"
+        ) +
+        theme_few() + 
+        theme(
+          plot.title = element_text(size = 12), 
+          strip.text = element_text(size = 12, face = "bold", hjust = 0.5), 
+          panel.background = element_rect(fill="white"),
+          axis.text.x = element_text(color = "black", size = 10, angle = 45, vjust = 0.5),
+          axis.text.y = element_text(color = "black", size = 12),
+          plot.subtitle = element_text(size = 12, hjust = 0, face = "italic"),
+          panel.border = element_rect(color = "black", fill = NA, size = 0.9), 
+          legend.position = "top",
+          legend.text = element_text(size = 12),
+          legend.title = element_blank()
+        ) +
+        facet_wrap(~ccdd_category, scales = "free_x", ncol = 3, dir = "h") 
+      
+    }),
+    counts = map(.x = data, .f = function(.x) {
+      
+      ggplot(data = .x) + 
+        geom_line(aes(x = date, y = data_count), color = "grey70", alpha = 0.5, size = 0.7) +
+        geom_line(aes(x = date, y = spline_counts), color = "#014D64", size = 1.0) + 
+        geom_segment(aes(x = date, xend = max(date), y = 0, yend = 0, color = trajectory_counts), size = 3) + 
+        geom_point(data = subset(.x, alert_count == "Alert"), aes(x = date, y = data_count), color = "#DC3545", size = 1) +
+        geom_point(data = subset(.x, alert_count == "Warning"), aes(x = date, y = data_count), color = "#FFC107", size = 1) +
+        scale_x_date(date_breaks = "60 day", date_labels = "%b %d %y", expand = c(0, 0)) + 
+        scale_y_continuous(breaks = scales::pretty_breaks(n = 4), limits = c(0, NA)) + 
+        scale_color_manual(values = pal, name = "", drop = FALSE) + 
+        labs(
+          x = "Date", 
+          y = "Count",
+          title = "Counts"
+        ) +
+        theme_few() + 
+        theme(
+          plot.title = element_text(size = 12), 
+          strip.text = element_text(size = 12, face = "bold", hjust = 0.5), 
+          panel.background = element_rect(fill="white"),
+          axis.text.x = element_text(color = "black", size = 10, angle = 45, vjust = 0.5),
+          axis.text.y = element_text(color = "black", size = 12),
+          plot.subtitle = element_text(size = 12, hjust = 0, face = "italic"),
+          panel.border = element_rect(color = "black", fill = NA, size = 0.9), 
+          legend.position = "top",
+          legend.text = element_text(size = 12),
+          legend.title = element_blank()
+        ) +
+        facet_wrap(~ccdd_category, scales = "free_x", ncol = 3, dir = "h") 
+      
+    })
+  )
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_percentages, fig.width = 13, fig.height = ht_combined, fig.align = "center"}
+
+for(i in 1:nrow(county_traj_plots)) {
+  plot_out <- (county_traj_plots$percentages[[i]] / county_traj_plots$counts[[i]]) + 
+    plot_annotation(
+      title = paste0(county_traj_plots$county_name[[i]], " - County-level Trajectory for Selected CCDD Categories: ", date_range),
+      theme = theme(plot.title = element_text(face = "bold"))
+    ) + 
+    plot_layout(guides = "collect") & theme(legend.position = "top")
+  
+  print(plot_out)
+}
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = percentages_only, fig.width = 13, fig.height = ht_single, fig.align = "center"}
+
+for(i in 1:nrow(county_traj_plots)) {
+  grid.arrange(
+    county_traj_plots$percentages[[i]] + 
+      labs(title = paste(county_traj_plots$county_name[[i]], " - County-level Trajectory for Selected CCDD Categories: ", date_range)) + 
+      theme(plot.title = element_text(face = "bold", size = 14))
+  ) 
+}
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_only, fig.width = 13, fig.height = ht_single, fig.align = "center"}
+
+for(i in 1:nrow(county_traj_plots)) {
+  grid.arrange(
+    county_traj_plots$counts[[i]] + 
+      labs(title = paste(county_traj_plots$county_name[[i]], " - County-level Trajectory for Selected CCDD Categories: ", date_range)) + 
+      theme(plot.title = element_text(face = "bold", size = 14))
+  ) 
+}
+
+```
+
+### County Summary Table
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = !counts_percentages}
+
+county_summary_percent <- county_trends_analyzed %>%
+  select(
+    county_name, 
+    county,
+    ccdd_category, 
+    date,
+    spline_percent,
+    trajectory_percent, 
+    p.value = p.value_percent,
+    alert = alert_percent
+  ) %>%
+  filter(!grepl("not Reporting", trajectory_percent)) %>%
+  mutate(p.value = format(p.value, digits = 2, scientific = TRUE)) %>%
+  arrange(county_name, ccdd_category, date) %>%
+  group_by(county_name, county, ccdd_category) %>%
+  mutate(
+    date = last(date), 
+    trajectory_percent = last(trajectory_percent), 
+    p.value = last(p.value),
+    alert = last(alert)
+  ) %>%
+  group_by(county_name, county, ccdd_category, trajectory_percent, p.value, alert) %>%
+  summarise(
+    sparkline = spk_chr(
+      spline_percent,
+      type = "line",
+      width = 120,
+      height = 30
+    )
+  ) %>%
+  select(
+    `County Name` = county_name, 
+    `FIPS` = county, 
+    `CCDD Category` = ccdd_category, 
+    `Trend Classification (Percentages)` = trajectory_percent, 
+    `Temporal Alert (Percentages)` = alert,
+    `Alert p-value (Percentages)` = p.value, 
+    `Sparkline (Percentages)` = sparkline
+  )
+
+county_summary_counts <- county_trends_analyzed %>%
+  select(
+    county_name, 
+    county,
+    ccdd_category, 
+    date,
+    spline_counts,
+    trajectory_counts, 
+    p.value = p.value_counts,
+    alert = alert_count
+  ) %>%
+  filter(!grepl("not Reporting", trajectory_counts)) %>%
+  mutate(p.value = format(p.value, digits = 2, scientific = TRUE)) %>%
+  arrange(county_name, ccdd_category, date) %>%
+  group_by(county_name, county, ccdd_category) %>%
+  mutate(
+    date = last(date), 
+    trajectory_counts = last(trajectory_counts), 
+    p.value = last(p.value),
+    alert = last(alert)
+  ) %>%
+  group_by(county_name, county, ccdd_category, trajectory_counts, p.value, alert) %>%
+  summarise(
+    sparkline = spk_chr(
+      spline_counts,
+      type = "line",
+      width = 120,
+      height = 30
+    )
+  ) %>%
+  select(
+    `County Name` = county_name, 
+    `FIPS` = county, 
+    `CCDD Category` = ccdd_category, 
+    `Trend Classification (Counts)` = trajectory_counts, 
+    `Temporal Alert (Counts)` = alert,
+    `Alert p-value (Counts)` = p.value, 
+    `Sparkline (Counts)` = sparkline
+  )
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_percentages}
+
+county_summary_percent <- county_trends_analyzed %>%
+  select(
+    county_name, 
+    county,
+    ccdd_category, 
+    date,
+    spline_percent,
+    trajectory_percent, 
+    p.value = p.value_percent,
+    alert = alert_percent
+  ) %>%
+  filter(!grepl("not Reporting", trajectory_percent)) %>%
+  mutate(p.value = format(p.value, digits = 2, scientific = TRUE)) %>%
+  arrange(county_name, ccdd_category, date) %>%
+  group_by(county_name, county, ccdd_category) %>%
+  mutate(
+    date = last(date), 
+    trajectory_percent = last(trajectory_percent), 
+    p.value = last(p.value),
+    alert = last(alert)
+  ) %>%
+  group_by(county_name, county, ccdd_category, trajectory_percent, p.value, alert) %>%
+  summarise(
+    sparkline = spk_chr(
+      spline_percent,
+      type = "line",
+      width = 90,
+      height = 30
+    )
+  ) %>%
+  select(
+    `County Name` = county_name, 
+    `FIPS` = county, 
+    `CCDD Category` = ccdd_category, 
+    `Trend Classification (Percentages)` = trajectory_percent, 
+    `Temporal Alert (Percentages)` = alert,
+    `Alert p-value (Percentages)` = p.value, 
+    `Sparkline (Percentages)` = sparkline
+  )
+
+county_summary_counts <- county_trends_analyzed %>%
+  select(
+    county_name, 
+    county,
+    ccdd_category, 
+    date,
+    spline_counts,
+    trajectory_counts, 
+    p.value = p.value_counts,
+    alert = alert_count
+  ) %>%
+  filter(!grepl("not Reporting", trajectory_counts)) %>%
+  mutate(p.value = format(p.value, digits = 2, scientific = TRUE)) %>%
+  arrange(county_name, ccdd_category, date) %>%
+  group_by(county_name, county, ccdd_category) %>%
+  mutate(
+    date = last(date), 
+    trajectory_counts = last(trajectory_counts), 
+    p.value = last(p.value),
+    alert = last(alert)
+  ) %>%
+  group_by(county_name, county, ccdd_category, trajectory_counts, p.value, alert) %>%
+  summarise(
+    sparkline = spk_chr(
+      spline_counts,
+      type = "line",
+      width = 90,
+      height = 30
+    )
+  ) %>%
+  select(
+    `County Name` = county_name, 
+    `FIPS` = county, 
+    `CCDD Category` = ccdd_category, 
+    `Trend Classification (Counts)` = trajectory_counts, 
+    `Temporal Alert (Counts)` = alert,
+    `Alert p-value (Counts)` = p.value, 
+    `Sparkline (Counts)` = sparkline
+  )
+
+county_summary_combined <- county_summary_percent %>%
+  inner_join(county_summary_counts, by = c("County Name", "FIPS", "CCDD Category"))
+
+county_summary_combined %>%
+  datatable(class = "cell-border stripe",
+            style = "bootstrap", 
+            rownames = FALSE, 
+            filter = "top", 
+            escape = FALSE, 
+            extensions = "Buttons",
+            options = list(
+              autoWidth = TRUE, 
+              dom = "Bfrtip",
+              buttons = c("csv", "excel", "pdf"),
+              scrollY = 700,
+              pageLength = nrow(county_summary_combined)
+            )) %>%
+  formatStyle(
+    c("Trend Classification (Percentages)", "Trend Classification (Counts)"), 
+    target = "cell",
+    color = styleEqual(c("Increasing", "Decreasing"), c("white", "white")),
+    backgroundColor = styleEqual(c("Increasing", "Decreasing"), c(pal[[1]], pal[[3]]))
+  ) %>%
+  formatStyle(
+    c("Temporal Alert (Percentages)", "Temporal Alert (Counts)"),
+    target = "cell", 
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>% 
+  formatStyle(
+    "Alert p-value (Percentages)", "Temporal Alert (Percentages)",
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>%
+  formatStyle(
+    "Alert p-value (Counts)", "Temporal Alert (Counts)",
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>%
+  spk_add_deps()
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = percentages_only}
+
+county_summary_percent %>%
+  datatable(class = "cell-border stripe",
+            style = "bootstrap",
+            rownames = FALSE, 
+            filter = "top", 
+            escape = FALSE, 
+            extensions = "Buttons",
+            options = list(
+              dom = "Bfrtip",
+              buttons = c("csv", "excel", "pdf"),
+              scrollY = 700,
+              scrollX = TRUE,
+              pageLength = nrow(county_summary_percent)
+            )) %>%
+  formatStyle(
+    "Trend Classification (Percentages)",
+    target = "cell",
+    color = styleEqual(c("Increasing", "Decreasing"), c("white", "white")),
+    backgroundColor = styleEqual(c("Increasing", "Decreasing"), c(pal[[1]], pal[[3]]))
+  ) %>%
+  spk_add_deps() %>%
+  formatStyle(
+    "Trend Classification (Percentages)", 
+    target = "cell",
+    color = styleEqual(c("Increasing", "Decreasing"), c("white", "white")),
+    backgroundColor = styleEqual(c("Increasing", "Decreasing"), c(pal[[1]], pal[[3]]))
+  ) %>%
+  formatStyle(
+    "Temporal Alert (Percentages)", 
+    target = "cell", 
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>% 
+  formatStyle(
+    "Alert p-value (Percentages)", "Temporal Alert (Percentages)",
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) 
+
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, eval = counts_only}
+
+county_summary_counts %>%
+  datatable(class = "cell-border stripe",
+            style = "bootstrap", 
+            rownames = FALSE, 
+            filter = "top", 
+            escape = FALSE, 
+            extensions = "Buttons",
+            options = list(
+              dom = "Bfrtip",
+              buttons = c("csv", "excel", "pdf"),
+              scrollY = 700,
+              pageLength = nrow(county_summary_counts)
+            )) %>%
+  formatStyle(
+    "Trend Classification (Counts)",
+    target = "cell",
+    color = styleEqual(c("Increasing", "Decreasing"), c("white", "white")),
+    backgroundColor = styleEqual(c("Increasing", "Decreasing"), c(pal[[1]], pal[[3]]))
+  ) %>%
+  spk_add_deps() %>%
+  formatStyle(
+    "Trend Classification (Counts)", 
+    target = "cell",
+    color = styleEqual(c("Increasing", "Decreasing"), c("white", "white")),
+    backgroundColor = styleEqual(c("Increasing", "Decreasing"), c(pal[[1]], pal[[3]]))
+  ) %>%
+  formatStyle(
+    "Temporal Alert (Counts)",
+    target = "cell", 
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>% 
+  formatStyle(
+    "Alert p-value (Counts)", "Temporal Alert (Counts)",
+    color = styleEqual(c("Alert", "Warning"), c("white", "black")), 
+    backgroundColor = styleEqual(c("Alert", "Warning"), c(pal[[1]], pal[[2]]))
+  ) %>%
+  spk_add_deps()
+
+```
