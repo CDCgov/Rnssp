@@ -20,6 +20,7 @@ remove_rmd_template_gui <- function() {
     miniUI::miniContentPanel(
       shiny::checkboxGroupInput("templ",
                                 label = "Existing templates",
+                                inline = TRUE,
                                 choices = templates)
     )
   )
