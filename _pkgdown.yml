@@ -44,6 +44,7 @@ reference:
       - add_rmd_template
       - alert_ewma
       - alert_mar
+      - alert_switch
       - askme
       - change_dates
       - classify_trend

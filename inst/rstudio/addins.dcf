@@ -18,7 +18,7 @@ Description: Browse the Rnssp R Markdown online documentation
 Binding: rnssp_templates_manual
 Interactive: true
 
-Name: Rnssp Manual
+Name: Rnssp Documentation
 Description: Browse the Rnssp online documentation
 Binding: rnssp_manual
 Interactive: true

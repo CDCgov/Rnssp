@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A NSSPCredentials Class to store a value in a container object — NSSPContainer • Rnssp</title>
+<title>Fit linear regression model with time and day-of-week terms — detection_reg • Rnssp</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="A NSSPCredentials Class to store a value in a container object — NSSPContainer" />
-<meta property="og:description" content="A NSSPCredentials object stores a value" />
+<meta property="og:title" content="Fit linear regression model with time and day-of-week terms — detection_reg" />
+<meta property="og:description" content="Fit linear regression model with time and day-of-week terms" />
 <meta property="og:image" content="https://cdcgov.github.io/Rnssp/logo.png" />
 
 
@@ -162,53 +162,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A <code>NSSPCredentials</code> Class to store a value in a container object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/R/container.R'><code>R/container.R</code></a></small>
-    <div class="hidden name"><code>NSSPContainer.Rd</code></div>
+    <h1>Fit linear regression model with time and day-of-week terms</h1>
+    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/R/detection_reg.R'><code>R/detection_reg.R</code></a></small>
+    <div class="hidden name"><code>detection_reg.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A <code>NSSPCredentials</code> object stores a value</p>
+    <p>Fit linear regression model with time and day-of-week terms</p>
     </div>
 
+    <pre class="usage"><span class='fu'>detection_reg</span><span class='op'>(</span><span class='va'>x</span>, algorithm <span class='op'>=</span> <span class='st'>"regression"</span>, <span class='va'>B</span>, <span class='va'>g</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A datatable object.</p></td>
+    </tr>
+    <tr>
+      <th>algorithm</th>
+      <td><p>Specifies detection algorithm. Defaults to "regression".</p></td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <td><p>Baseline parameter. The baseline length is the number of days to
+which each linear model is fit. Defaults to 28 days.</p></td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td><p>Guardband parameter. Number of days in buffer period to separate
+the test date from the baseline.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>NSSPCredentials</code> object can be used to retrieve a value</p>
-    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
-
-    
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
-
-<ul>
-<li><p><a href='#method-new'><code>NSSPContainer$new()</code></a></p></li>
-<li><p><a href='#method-clone'><code>NSSPContainer$clone()</code></a></p></li>
-</ul>
-<p><hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Initializes a new NSSPContainer object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>NSSPContainer</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>entry</span><span class='op'>)</span></pre><p></div></p>
-
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
-<p><div class="arguments"></p><dl>
-<dt><code>entry</code></dt><dd><p>an object or value to be stored</p></dd>
-
-</dl><p></div></p>
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>A new <code>NSSPCredentials</code> object</p>
-<p><hr>
-<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>NSSPContainer</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
-
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
-<p><div class="arguments"></p><dl>
-<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
-
-</dl><p></div></p>
-
-
+    <p>- A numeric value of test statistic for one-sided Student's t-test when
+      algorithm is "regression"
+    - A character string specifying the fitted value, test statistic, and
+      adjusted R-squared when algorithm is "switch".</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
