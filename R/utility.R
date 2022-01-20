@@ -24,24 +24,24 @@ askme <- function(prompt = "Please enter your password: ") {
 #' An error occurs if more than one package name is given.
 #' @param template a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
-#' by \code{\link[Rnssp]{Rnssp::list_templates()}}.
+#' by \code{\link[Rnssp]{list_templates()}}.
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an
-#' Rmarkdown template .zip file when the `template` argument is not
-#' specified or set to `NULL`.
+#' Rmarkdown template .zip file when the \code{template} argument is not
+#' specified or set to \code{NULL}.
 #'
 #' In non-interactive mode, this utility function prompts the user to specify a
-#' path to an Rmarkdown template .zip file when the `template` argument
-#' is not specified or set to `NULL`.
+#' path to an Rmarkdown template .zip file when the \code{template} argument
+#' is not specified or set to \code{NULL}.
 #'
-#' When the `template` is specified, regardless of the `pkg` argument,
+#' When the \code{template} is specified, regardless of the \code{pkg} argument,
 #' this utility function download the specified template from the
 #' Rnssp-rmd-templates Github repository.
 #' When the specified template name is not available, it throws an error.
 #'
 #' @return a character string
-#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-rmd-templates}{https://github.com/CDCgov/Rnssp-rmd-templates}
 #' @export
 #'
 #' @examples
@@ -284,7 +284,7 @@ Rnssp_vignettes <- function(topic = NULL) {
 #' Otherwise, a vector is returned (Default is FALSE).
 #'
 #' @return A data frame or a vector
-#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-rmd-templates}{https://github.com/CDCgov/Rnssp-rmd-templates}
 #' @export
 #'
 #' @examples

@@ -11,7 +11,7 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 3436 rows an
 hsa_sf
 }
 \description{
-Useful `sf`` object shapefile for US Hospital Service Area (HSA) Shapefile
+Useful \code{sf} object shapefile for US Hospital Service Area (HSA) Shapefile
 }
 \details{
 \preformatted{

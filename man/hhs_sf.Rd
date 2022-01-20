@@ -11,7 +11,7 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 12 rows and 
 hhs_sf
 }
 \description{
-Useful `sf`` object shapefile for US Health and Human Services (HHS) Regions.
+Useful \code{sf}` object shapefile for US Health and Human Services (HHS) Regions.
 }
 \details{
 \preformatted{

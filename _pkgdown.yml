@@ -50,6 +50,7 @@ reference:
       - classify_trend
       - clean_text
       - Credentials
+      - detection_reg
       - list_templates
       - NSSPContainer
       - remove_rmd_template

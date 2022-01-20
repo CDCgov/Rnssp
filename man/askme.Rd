@@ -13,7 +13,7 @@ askme(prompt = "Please enter your password: ")
 a character string
 }
 \description{
-Prompt the user for a password. This function is a wrapper for the `askpass::askpass()` function.
+Prompt the user for a password. This function is a wrapper for the \code{\link[askpass]{askpass}} function.
 }
 \examples{
 password <- askme()
