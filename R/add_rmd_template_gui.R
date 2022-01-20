@@ -19,14 +19,14 @@ add_rmd_template_gui <- function() {
         shiny::tags$script(
           shiny::HTML(
             '$(document).on("click", "input", function () {
-             var checkboxes = document.getElementsByName("selected");
-             var checkboxesChecked = [];
-             for (var i=0; i<checkboxes.length; i++) {
-             if (checkboxes[i].checked) {
-             checkboxesChecked.push(checkboxes[i].value);
-             }
-             }
-             Shiny.onInputChange("checked_rows",checkboxesChecked);  })')
+              var checkboxes = document.getElementsByName("selected");
+              var checkboxesChecked = [];
+              for (var i=0; i<checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                  checkboxesChecked.push(checkboxes[i].value);
+                }
+              }
+              Shiny.onInputChange("checked_rows",checkboxesChecked);  })')
         )
       )
     )
@@ -86,18 +86,17 @@ add_rmd_template_gui <- function() {
 
       part2 <- .child_row_table2(x, pos = pos)
 
-      part3 <-
-        "
-   table.on('click', 'td.details-control', function() {
-    var td = $(this), row = table.row(td.closest('tr'));
-    if (row.child.isShown()) {
-      row.child.hide();
-      td.html('&oplus;');
-    } else {
-      row.child(format(row.data())).show();
-      td.html('&ominus;');
-    }
-  });"
+      part3 <- "
+        table.on('click', 'td.details-control', function() {
+          var td = $(this), row = table.row(td.closest('tr'));
+          if (row.child.isShown()) {
+            row.child.hide();
+            td.html('&oplus;');
+          } else {
+          row.child(format(row.data())).show();
+          td.html('&ominus;');
+        }
+      });"
 
       paste(part1, part2, part3)
     }
@@ -106,9 +105,9 @@ add_rmd_template_gui <- function() {
 
       names_x <- paste0(names(x), ":")
       text <- "
-  var format = function(d) {
-    text = '<div><table >' +
-  "
+        var format = function(d) {
+          text = '<div><table >' +
+      "
 
       for (i in seq_along(pos)) {
         text <- paste(text, glue::glue(
@@ -123,8 +122,6 @@ add_rmd_template_gui <- function() {
       return text;};"
       )
     }
-
-    output$value1 <- renderPrint({ input$checked_rows })
 
     output$table <- DT::renderDataTable({
 
