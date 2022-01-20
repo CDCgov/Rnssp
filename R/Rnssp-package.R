@@ -24,7 +24,7 @@
 #' to users to decide which template to extend the package with post-installation.
 #' To list all available template, run the \code{\link[Rnnsp]{list_templates()}} function. Please, check
 #' the Rnssp R markdown template Github repository at
-#' https://github.com/cdcgov/rnssp-rmd-templates.
+#' \href{https://github.com/cdcgov/rnssp-rmd-templates}{https://github.com/cdcgov/rnssp-rmd-templates}.
 #'
 #' @docType package
 #' @name Rnssp
