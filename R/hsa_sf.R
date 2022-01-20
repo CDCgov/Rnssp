@@ -1,6 +1,6 @@
 #' US Hospital Service Area Shapefile
 #'
-#' Useful `sf`` object shapefile for US Hospital Service Area (HSA) Shapefile
+#' Useful \code{sf} object shapefile for US Hospital Service Area (HSA) Shapefile
 #'
 #' \preformatted{
 #' Rows: 3,436

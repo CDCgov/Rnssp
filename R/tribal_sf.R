@@ -1,6 +1,6 @@
 #' US Native American Lands Shapefile
 #'
-#' Useful `sf`` object shapefile for US Native American Lands.
+#' Useful \code{sf}` object shapefile for US Native American Lands.
 #'
 #' \preformatted{
 #' Rows: 770

@@ -44,7 +44,7 @@ add_rmd_template_gui <- function() {
       documentation = paste0(
         "<a href='",
         file.path("https://cdcgov.github.io/Rnssp-rmd-templates/templates",
-                  stringr::str_remove(template, "_")),
+                  stringr::str_remove_all(template, "_")),
         "/' target='_blank'>Full documentation</a>")
     )
 

@@ -1,6 +1,6 @@
 #' Password Prompt Utility
 #'
-#' Prompt the user for a password. This function is a wrapper for the `askpass::askpass()` function.
+#' Prompt the user for a password. This function is a wrapper for the \code{\link[askpass]{askpass}} function.
 #'
 #' @inheritParams askpass::askpass
 #' @return a character string
@@ -24,7 +24,7 @@ askme <- function(prompt = "Please enter your password: ") {
 #' An error occurs if more than one package name is given.
 #' @param template a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
-#' by `Rnssp::list_templates()`.
+#' by \code{\link[Rnssp]{Rnssp::list_templates()}}.
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an
