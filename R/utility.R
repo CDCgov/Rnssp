@@ -1,6 +1,6 @@
 #' Password Prompt Utility
 #'
-#' Prompt the user for a password. This function is a wrapper for the `askpass::askpass()` function.
+#' Prompt the user for a password. This function is a wrapper for the \code{\link[askpass]{askpass}} function.
 #'
 #' @inheritParams askpass::askpass
 #' @return a character string
@@ -24,24 +24,24 @@ askme <- function(prompt = "Please enter your password: ") {
 #' An error occurs if more than one package name is given.
 #' @param template_name a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
-#' by `Rnssp::list_templates()`.
+#' by \code{\link[Rnssp]{list_templates()}}.
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an
-#' Rmarkdown template .zip file when the `template_name` argument is not
-#' specified or set to `NULL`.
+#' Rmarkdown template .zip file when the \code{template_name} argument is not
+#' specified or set to \code{NULL}.
 #'
 #' In non-interactive mode, this utility function prompts the user to specify a
-#' path to an Rmarkdown template .zip file when the `template_name` argument
-#' is not specified or set to `NULL`.
+#' path to an Rmarkdown template .zip file when the \code{template_name} argument
+#' is not specified or set to \code{NULL}.
 #'
-#' When the `template_name` is specified, regardless of the `pkg` argument,
+#' When the \code{template_name} is specified, regardless of the \code{pkg} argument,
 #' this utility function download the specified template from the
 #' Rnssp-rmd-templates Github repository.
 #' When the specified template name is not available, it throws an error.
 #'
 #' @return a character string
-#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-rmd-templates}{https://github.com/CDCgov/Rnssp-rmd-templates}
 #' @export
 #'
 #' @examples
@@ -284,7 +284,7 @@ Rnssp_vignettes <- function(topic = NULL) {
 #' Otherwise, a vector is returned (Default is FALSE).
 #'
 #' @return A data frame or a vector
-#' @seealso \code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-rmd-templates}{https://github.com/CDCgov/Rnssp-rmd-templates}
 #' @export
 #'
 #' @examples

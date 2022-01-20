@@ -187,7 +187,7 @@ An error occurs if more than one package name is given.</p></td>
       <th>template_name</th>
       <td><p>a character string with the name of a single template name.
 The template name must be one of the elements of the vector returned
-by `Rnssp::list_templates()`.</p></td>
+by <code><a href='list_templates.html'>list_templates()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -197,18 +197,18 @@ by `Rnssp::list_templates()`.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In interactive mode, this utility function prompts the user to select an
-Rmarkdown template .zip file when the `template_name` argument is not
-specified or set to `NULL`.</p>
+Rmarkdown template .zip file when the <code>template_name</code> argument is not
+specified or set to <code>NULL</code>.</p>
 <p>In non-interactive mode, this utility function prompts the user to specify a
-path to an Rmarkdown template .zip file when the `template_name` argument
-is not specified or set to `NULL`.</p>
-<p>When the `template_name` is specified, regardless of the `pkg` argument,
+path to an Rmarkdown template .zip file when the <code>template_name</code> argument
+is not specified or set to <code>NULL</code>.</p>
+<p>When the <code>template_name</code> is specified, regardless of the <code>pkg</code> argument,
 this utility function download the specified template from the
 Rnssp-rmd-templates Github repository.
 When the specified template name is not available, it throws an error.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>https://github.com/CDCgov/Rnssp-rmd-templates</code></p></div>
+    <div class='dont-index'><p><a href='https://github.com/CDCgov/Rnssp-rmd-templates'>https://github.com/CDCgov/Rnssp-rmd-templates</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>

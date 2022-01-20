@@ -11,7 +11,7 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 3142 rows an
 county_sf
 }
 \description{
-Useful `sf`` object shapefile for US Counties.
+Useful \code{sf} object shapefile for US Counties.
 }
 \details{
 \preformatted{

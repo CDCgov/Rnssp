@@ -2,12 +2,12 @@
 % Please edit documentation in R/credentials.R
 \name{Credentials}
 \alias{Credentials}
-\title{A `NSSPCredentials` Class Representing a Credentials object}
+\title{A \code{NSSPCredentials} Class Representing a Credentials object}
 \description{
-A `Credentials` object has a username, a password and a key.
+A \code{Credentials} object has a username, a password and a key.
 }
 \details{
-A `Credentials` object can get ESSENCE API data via an API URL.
+A \code{Credentials} object can get ESSENCE API data via an API URL.
 }
 \examples{
 
@@ -76,7 +76,7 @@ Initializes a new Credentials object.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Credentials` object
+A new \code{Credentials} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -127,12 +127,12 @@ Get ESSENCE API data
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
 
-\item{\code{...}}{Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when `fromCSV = TRUE`.}
+\item{\code{...}}{Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A dataframe (`fromCSV = TRUE`) or a list containing a dataframe and its metadata (`fromCSV = FALSE`)
+A dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

@@ -1,6 +1,6 @@
 #' US Health and Human Services Regions Shapefile
 #'
-#' Useful `sf`` object shapefile for US Health and Human Services (HHS) Regions.
+#' Useful \code{sf} object shapefile for US Health and Human Services (HHS) Regions.
 #'
 #' \preformatted{
 #' Rows: 12

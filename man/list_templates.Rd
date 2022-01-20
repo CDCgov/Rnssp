@@ -21,5 +21,5 @@ list_templates()
 list_templates(as.table = TRUE)
 }
 \seealso{
-\code{\link{https://github.com/CDCgov/Rnssp-rmd-templates}}
+\href{https://github.com/CDCgov/Rnssp-rmd-templates}{https://github.com/CDCgov/Rnssp-rmd-templates}
 }

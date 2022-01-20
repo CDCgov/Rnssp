@@ -1,10 +1,10 @@
-#' A `NSSPCredentials` Class Representing a Credentials object
+#' A \code{NSSPCredentials} Class Representing a Credentials object
 #'
 #' @description
-#' A `Credentials` object has a username, a password and a key.
+#' A \code{Credentials} object has a username, a password and a key.
 #'
 #' @details
-#' A `Credentials` object can get ESSENCE API data via an API URL.
+#' A \code{Credentials} object can get ESSENCE API data via an API URL.
 
 Credentials <- R6::R6Class(
   "NSSPCredentials",
@@ -19,7 +19,7 @@ Credentials <- R6::R6Class(
     #' Initializes a new Credentials object.
     #' @param username a character of ESSENCE username
     #' @param password a character of ESSENCE password
-    #' @return A new `Credentials` object
+    #' @return A new \code{Credentials} object
     initialize = function(username, password) {
       if (!missing(username)) {
         private$..username <- NSSPContainer$new(safer::encrypt_string(username, key = private$..__$value, ascii = FALSE))
@@ -61,8 +61,8 @@ Credentials <- R6::R6Class(
     #' Get ESSENCE API data
     #' @param url a character of ESSENCE API URL
     #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format
-    #' @param ... Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when `fromCSV = TRUE`.
-    #' @return A dataframe (`fromCSV = TRUE`) or a list containing a dataframe and its metadata (`fromCSV = FALSE`)
+    #' @param ... Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
+    #' @return A dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())

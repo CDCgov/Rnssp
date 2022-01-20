@@ -11,7 +11,7 @@ An object of class \code{sf} (inherits from \code{data.frame}) with 933 rows and
 cbsa_sf
 }
 \description{
-Useful `sf`` object shapefile for US Core-Based Statistical Area.
+Useful \code{sf} object shapefile for US Core-Based Statistical Area.
 }
 \details{
 \preformatted{
