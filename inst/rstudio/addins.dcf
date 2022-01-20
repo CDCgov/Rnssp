@@ -1,4 +1,4 @@
-Name: List Available Rnssp Templates
+Name: List Rnssp Templates
 Description: List available NSSP report templates from the Rnssp templates Github repository
 Binding: list_templates
 Interactive: true
@@ -11,4 +11,14 @@ Interactive: true
 Name: Remove Rnssp Templates
 Description: Remove Existing NSSP RMarkdown report Templates
 Binding: remove_rmd_template_gui
+Interactive: true
+
+Name: Rnssp Templates Documentation
+Description: Browse the Rnssp R Markdown online documentation
+Binding: rnssp_templates_manual
+Interactive: true
+
+Name: Rnssp Manual
+Description: Browse the Rnssp online documentation
+Binding: rnssp_manual
 Interactive: true
