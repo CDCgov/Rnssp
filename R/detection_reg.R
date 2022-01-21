@@ -13,13 +13,12 @@
 #'       adjusted R-squared when algorithm is "switch".
 #'
 
-detection_reg <- function (x, algorithm = "regression", B, g) {
-
+detection_reg <- function(x, algorithm = "regression", B, g) {
   .matrix <- as.matrix(cbind(time = 1:B, x[1:B, c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat")]))
 
   .model <- lm.fit(x = cbind(1, .matrix), y = x[1:B, ]$observed)
   .resid <- .model$residuals
-  .mse <- (1 / (B - 7 - 1)) * sum(.resid ^ 2)
+  .mse <- (1 / (B - 7 - 1)) * sum(.resid^2)
   .sigma <- sqrt(.mse) * sqrt(((B + 7) * (B - 4)) / (B * (B - 7)))
   .beta <- .model$coefficients
 
@@ -34,13 +33,12 @@ detection_reg <- function (x, algorithm = "regression", B, g) {
   .test_statistic <- (last(x$observed) - .fit) / .sigma
 
   if (algorithm == "switch") {
-
     .f <- .model$fitted.values
-    .mss <- sum((.f - mean(.f)) ^ 2)
-    .rss <- sum(.resid ^ 2)
+    .mss <- sum((.f - mean(.f))^2)
+    .rss <- sum(.resid^2)
     .r_sqrd <- (.mss / (.rss + .mss))
     .r_sqrd_adj <- 1 - (1 - .r_sqrd) * ((nrow(.matrix) - 1) / .model$df.residual)
-    .r_sqrd_adj <- if(is.nan(.r_sqrd_adj)) {
+    .r_sqrd_adj <- if (is.nan(.r_sqrd_adj)) {
       0
     } else {
       .r_sqrd_adj
@@ -48,9 +46,6 @@ detection_reg <- function (x, algorithm = "regression", B, g) {
 
     return(paste0("Fitted: ", .fit, "|TestStatistic: ", .test_statistic, "|AdjustedRSqrd: ", .r_sqrd_adj))
   } else {
-
     return(.test_statistic)
-
   }
-
 }

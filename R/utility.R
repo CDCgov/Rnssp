@@ -101,7 +101,7 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
     temp_dir <- tempdir()
     zipfile <- file.path(temp_dir, paste0(template, ".zip"))
     download.file(file.path(repoURL, "zip", paste0(template, ".zip")),
-                  destfile = zipfile
+      destfile = zipfile
     )
     if (!file.exists(zipfile)) {
       stop(paste("Download of ", template, ".zip", " was unsuccessful!"))
@@ -234,12 +234,12 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
       str_trim()
   }
   new_startd <- ifelse(nchar(new_start) > 7,
-                       as.Date(new_start, "%e%b%Y"),
-                       as.Date(new_start, "%e%b%y")
+    as.Date(new_start, "%e%b%Y"),
+    as.Date(new_start, "%e%b%y")
   )
   new_endd <- ifelse(nchar(new_end) > 7,
-                     as.Date(new_end, "%e%b%Y"),
-                     as.Date(new_end, "%e%b%y")
+    as.Date(new_end, "%e%b%Y"),
+    as.Date(new_end, "%e%b%y")
   )
   if (new_startd > new_endd) {
     stop(paste0("Start Date '", new_start, "' is posterior to End Date '", new_end, "'."))
@@ -305,7 +305,9 @@ list_templates <- function(as.table = FALSE) {
           tibble::add_column(
             tibble::as_tibble(
               yaml::read_yaml(
-                file.path(repoURL, template, "template.yaml"))),
+                file.path(repoURL, template, "template.yaml")
+              )
+            ),
             .before = 1,
             id = template
           )

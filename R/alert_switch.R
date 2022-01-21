@@ -79,7 +79,6 @@
 #' }
 #'
 alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
-
   grouping <- group_vars(df)
 
   col_names <- setdiff(names(df), c(ensym(t), ensym(y), grouping))
@@ -116,18 +115,19 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
     .[, p.value := pt(-abs(test_statistic), df = B - 7 - 1)] %>%
     .[, p.value := fifelse(is.infinite(test_statistic) | is.nan(test_statistic), 0.5, p.value)] %>%
     .[, alert := fcase(test_statistic > 0 & p.value < 0.01, "alert",
-                       test_statistic > 0 & p.value >= 0.01 & p.value < 0.05, "warning",
-                       p.value == 0.5 & (is.infinite(test_statistic) | is.nan(test_statistic)) , "none",
-                       default = "none")] %>%
+      test_statistic > 0 & p.value >= 0.01 & p.value < 0.05, "warning",
+      p.value == 0.5 & (is.infinite(test_statistic) | is.nan(test_statistic)), "none",
+      default = "none"
+    )] %>%
     as.data.frame() %>%
     mutate(detector = "Adaptive Multiple Regression") %>%
     rename(
-      !! tph := t,
-      !! yph := y
+      !!tph := t,
+      !!yph := y
     )
 
   sigma_min <- 0.5
-  sigma_correction <- sqrt((w/(2 - w)) + (1/B) - 2*(1 - w)^(g + 1)*((((1 - w)^B) - 1)/B))
+  sigma_correction <- sqrt((w / (2 - w)) + (1 / B) - 2 * (1 - w)^(g + 1) * ((((1 - w)^B) - 1) / B))
 
   ewma_out <- df %>%
     as.data.table() %>%
@@ -136,7 +136,7 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
     .[, mu := lag(frollmean(y, n = B, align = "right"), g + 1), by = grouping] %>%
     .[, s := lag(frollapply(y, n = B, FUN = sd, align = "right"), g + 1), by = grouping] %>%
     .[, s := max(0.5, s), by = c(grouping, "t")] %>%
-    .[, z := accumulate(.x = y, ~w * .y + (1 - w) * .x, init = first(y)), by = grouping] %>%
+    .[, z := accumulate(.x = y, ~ w * .y + (1 - w) * .x, init = first(y)), by = grouping] %>%
     .[, test_statistic := (z - mu) / (s * sigma_correction)] %>%
     .[, p.value := pt(-abs(test_statistic), df = B - 1)] %>%
     .[, alert := fcase(
@@ -146,7 +146,7 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
     )] %>%
     .[!is.na(mu), ] %>%
     as.data.frame() %>%
-    mutate(!! tph := t) %>%
+    mutate(!!tph := t) %>%
     select(-c(t, y, s, z)) %>%
     rename(expected_switch = mu) %>%
     mutate(detector = "EWMA")

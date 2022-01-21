@@ -6,7 +6,6 @@
 #' @keywords internal
 #'
 add_rmd_template_gui <- function() {
-
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Add/Update Rnssp RMD Templates",
@@ -15,7 +14,7 @@ add_rmd_template_gui <- function() {
     miniUI::miniContentPanel(
       shiny::column(
         12,
-        DT::dataTableOutput('table'),
+        DT::dataTableOutput("table"),
         shiny::tags$script(
           shiny::HTML(
             '$(document).on("click", "input", function () {
@@ -27,38 +26,42 @@ add_rmd_template_gui <- function() {
                 }
               }
               Shiny.onInputChange("checked_rows",checkboxesChecked);  })'
-            )
+          )
         )
       )
     )
   )
 
   server <- function(input, output, session) {
-
     template_df <- dplyr::mutate(
       dplyr::rename(
         dplyr::select(
-          Rnssp::list_templates(TRUE), -create_dir)
-        , template = id),
+          Rnssp::list_templates(TRUE), -create_dir
+        ),
+        template = id
+      ),
       select = paste0('<input type="checkbox" name="selected" value="', template, '">'),
       documentation = paste0(
         "<a href='",
-        file.path("https://cdcgov.github.io/Rnssp-rmd-templates/templates",
-                  stringr::str_remove_all(template, "_")),
-        "/' target='_blank'>Full documentation</a>")
+        file.path(
+          "https://cdcgov.github.io/Rnssp-rmd-templates/templates",
+          stringr::str_remove_all(template, "_")
+        ),
+        "/' target='_blank'>Full documentation</a>"
+      )
     )
 
     datatable2 <- function(x, vars = NULL, opts = NULL, ...) {
-
       names_x <- names(x)
       if (is.null(vars)) stop("'vars' must be specified!")
       pos <- match(vars, names_x)
-      if (any(purrr::map_chr(x[, pos], typeof) == "list"))
+      if (any(purrr::map_chr(x[, pos], typeof) == "list")) {
         stop("list columns are not supported in datatable2()")
+      }
 
       pos <- pos[pos <= ncol(x)] + 1
       rownames(x) <- NULL
-      if (nrow(x) > 0) x <- cbind(' ' = '&oplus;', x)
+      if (nrow(x) > 0) x <- cbind(" " = "&oplus;", x)
 
       # options
       opts <- c(
@@ -66,11 +69,12 @@ add_rmd_template_gui <- function() {
         list(
           columnDefs = list(
             list(visible = FALSE, targets = c(0, pos)),
-            list(orderable = FALSE, className = 'details-control', targets = 1),
-            list(className = 'dt-left', targets = 1:3),
-            list(className = 'dt-right', targets = 4:ncol(x))
+            list(orderable = FALSE, className = "details-control", targets = 1),
+            list(className = "dt-left", targets = 1:3),
+            list(className = "dt-right", targets = 4:ncol(x))
           )
-        ))
+        )
+      )
 
       DT::datatable(
         x,
@@ -82,7 +86,6 @@ add_rmd_template_gui <- function() {
     }
 
     .callback2 <- function(x, pos = NULL) {
-
       part1 <- "table.column(1).nodes().to$().css({cursor: 'pointer'});"
 
       part2 <- .child_row_table2(x, pos = pos)
@@ -103,7 +106,6 @@ add_rmd_template_gui <- function() {
     }
 
     .child_row_table2 <- function(x, pos = NULL) {
-
       names_x <- paste0(names(x), ":")
       text <- "
         var format = function(d) {
@@ -115,29 +117,30 @@ add_rmd_template_gui <- function() {
           "'<tr>' +
           '<td>' + '{names_x[pos[i]]}' + '</td>' +
           '<td>' + d[{pos[i]}] + '</td>' +
-        '</tr>' + " ))
+        '</tr>' + "
+        ))
       }
 
-      paste0(text,
-             "'</table></div>'
+      paste0(
+        text,
+        "'</table></div>'
       return text;};"
       )
     }
 
     output$table <- DT::renderDataTable({
-
-      datatable2(x = template_df,
-                 vars = c("name", "description", "documentation"),
-                 opts=list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px"
-                 )
+      datatable2(
+        x = template_df,
+        vars = c("name", "description", "documentation"),
+        opts = list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px")
       )
     })
 
     shiny::observeEvent(input$done, {
-      if(is.null(input$checked_rows)){
+      if (is.null(input$checked_rows)) {
         shiny::stopApp()
       }
-      for(templ in input$checked_rows){
+      for (templ in input$checked_rows) {
         Rnssp::add_rmd_template(templ)
       }
       shiny::stopApp()
@@ -146,12 +149,10 @@ add_rmd_template_gui <- function() {
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
-
   }
 
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
-
 }
 
 
@@ -166,7 +167,10 @@ remove_rmd_template_gui <- function() {
   templates <- basename(
     list.dirs(
       file.path(
-        system.file(package = "Rnssp"), "rmarkdown/templates"), recursive = FALSE)
+        system.file(package = "Rnssp"), "rmarkdown/templates"
+      ),
+      recursive = FALSE
+    )
   )
 
   ui <- miniUI::miniPage(
@@ -176,19 +180,19 @@ remove_rmd_template_gui <- function() {
     ),
     miniUI::miniContentPanel(
       shiny::checkboxGroupInput("templ",
-                                label = "Existing templates",
-                                inline = TRUE,
-                                choices = templates)
+        label = "Existing templates",
+        inline = TRUE,
+        choices = templates
+      )
     )
   )
 
   server <- function(input, output, session) {
-
     shiny::observeEvent(input$done, {
-      if(is.null(input$templ)){
+      if (is.null(input$templ)) {
         shiny::stopApp()
       }
-      for(templ in input$templ){
+      for (templ in input$templ) {
         Rnssp::remove_rmd_template(templ)
       }
       shiny::stopApp()
@@ -197,10 +201,8 @@ remove_rmd_template_gui <- function() {
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
-
   }
 
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
-
 }
