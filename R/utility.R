@@ -67,7 +67,8 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
           zipfile <- readline("Enter full path to template zip file: ")
         }
         if (!endsWith(zipfile, ".zip")) {
-          stop("File provided is not a .zip file")
+          # stop("File provided is not a .zip file")
+          cli::cli_abort("File provided is not a {.field .zip} file")
         }
         template_folder <- unlist(strsplit(basename(zipfile), "[.]"))[1]
         zipcontent <- unzip(zipfile, list = TRUE)
@@ -77,26 +78,33 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
         })
         exDir <- file.path(system.file(package = pkg), "rmarkdown/templates")
         unzip(zipfile, exdir = exDir)
-        cat(paste0(
-          "Template '",
-          template_folder,
-          "' has been successfully added in\n",
-          file.path(exDir, template_folder),
-          "\nPlease, restart R session to update template list!"
-        ))
+        cli::cli({
+          cli::cli_alert_success("Template {.field {template_folder}} has been successfully added in {.file {file.path(exDir, template_folder)}}.")
+          cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
+        })
+        # cat(paste0(
+        #   "Template '",
+        #   template_folder,
+        #   "' has been successfully added in\n",
+        #   file.path(exDir, template_folder),
+        #   "\nPlease, restart R session to update template list!"
+        # ))
       },
       error = function(e) {
-        stop("No template added!\nThe file provided is not a template zip file!")
+        # stop("No template added!\nThe file provided is not a template zip file!")
+        cli::cli_abort("No template added! The file provided is not a template zip file!")
       }
     )
   } else {
     repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
     template_list <- list_templates()
     if (!template %in% template_list) {
-      stop(paste0(
-        "'", template, "'",
-        " is not a valid template. Please run `Rnssp::list_templates()` to list available templates!"
-      ))
+      # stop(paste0(
+      #   "'", template, "'",
+      #   " is not a valid template. Please run `Rnssp::list_templates()` to list available templates!"
+      # ))
+      cli::cli_abort("{.field {template}} is not a valid template.
+                     Please run {.fn Rnssp::list_templates} to list available templates!")
     }
     temp_dir <- tempdir()
     zipfile <- file.path(temp_dir, paste0(template, ".zip"))
@@ -104,7 +112,8 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
       destfile = zipfile
     )
     if (!file.exists(zipfile)) {
-      stop(paste("Download of ", template, ".zip", " was unsuccessful!"))
+      cli::cli_abort("Download of {.field {template}.zip} was unsuccessful!")
+      # stop(paste("Download of ", template, ".zip", " was unsuccessful!"))
     }
     template_folder <- unlist(strsplit(basename(zipfile), "[.]"))[1]
     zipcontent <- unzip(zipfile, list = TRUE)
@@ -114,16 +123,21 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
     })
     exDir <- file.path(system.file(package = "Rnssp"), "rmarkdown/templates")
     if (!dir.exists(exDir)) {
-      stop("Package Rnssp is not installed!")
+      # stop("Package Rnssp is not installed!")
+      cli::cli_abort("Package {.pkg Rnssp} is not installed!")
     }
     unzip(zipfile, exdir = exDir)
-    cat(paste0(
-      "Template '",
-      template_folder,
-      "' has been successfully added in\n",
-      file.path(exDir, template_folder),
-      "\nPlease, restart R session to update template list!"
-    ))
+    cli::cli({
+      cli::cli_alert_success("Template {.field {template_folder}} has been successfully added in {.file {file.path(exDir, template_folder)}}.")
+      cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
+    })
+    # cat(paste0(
+    #   "Template '",
+    #   template_folder,
+    #   "' has been successfully added in\n",
+    #   file.path(exDir, template_folder),
+    #   "\nPlease, restart R session to update template list!"
+    # ))
   }
 }
 
@@ -148,20 +162,26 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
 #' }
 remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force = TRUE) {
   if (!dir.exists(system.file(package = pkg))) {
-    stop(paste0("The package '", pkg, "' is not installed!\n"))
+    # stop(paste0("The package '", pkg, "' is not installed!\n"))
+    cli::cli_abort("The package {.pkg {pkg}} is not installed!")
   }
   if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
-    stop(paste0("The template '", template, "' does not exist for the package ", pkg, "!\n"))
+    # stop(paste0("The template '", template, "' does not exist for the package ", pkg, "!\n"))
+    cli::cli_abort("The template {.field {template}} does not exist for package {.pkg {pkg}}!")
   } else {
     unlink(file.path(system.file(package = pkg), "rmarkdown/templates", template), recursive = recursive, force = force)
     if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
-      cat(paste0(
-        "Template ",
-        template,
-        " has been successfully removed from package ",
-        pkg,
-        ".\nPlease, restart R session to update template list!"
-      ))
+      cli::cli({
+        cli::cli_alert_success("Template {.field {template_folder}} has been successfully removed from package {.pkg {pkg}}.")
+        cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+F10} or {.kbd CMD+F10}) to update the template list!")
+      })
+      # cat(paste0(
+      #   "Template ",
+      #   template,
+      #   " has been successfully removed from package ",
+      #   pkg,
+      #   ".\nPlease, restart R session to update template list!"
+      # ))
     }
   }
 }
@@ -242,7 +262,8 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
     as.Date(new_end, "%e%b%y")
   )
   if (new_startd > new_endd) {
-    stop(paste0("Start Date '", new_start, "' is posterior to End Date '", new_end, "'."))
+    # stop(paste0("Start Date '", new_start, "' is posterior to End Date '", new_end, "'."))
+    cli::cli_abort("Start Date {.field {new_start}} is posterior to End Date {.field {new_end}}.")
   }
   str_replace(url, old_end, new_end) %>%
     str_replace(., old_start, new_start) %>%

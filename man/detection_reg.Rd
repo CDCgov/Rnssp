@@ -7,7 +7,7 @@
 detection_reg(x, algorithm = "regression", B, g)
 }
 \arguments{
-\item{x}{A datatable object.}
+\item{x}{Baselines of length B for each individual test date}
 
 \item{algorithm}{Specifies detection algorithm. Defaults to "regression".}
 
@@ -18,11 +18,16 @@ which each linear model is fit. Defaults to 28 days.}
 the test date from the baseline.}
 }
 \value{
-- A numeric value of test statistic for one-sided Student's t-test when
-      algorithm is "regression"
-    - A character string specifying the fitted value, test statistic, and
-      adjusted R-squared when algorithm is "switch".
+\itemize{
+     \item If algorithm is "regression", numeric value of test statistic for
+     one-sided Student's t-test.
+
+     \item If algorithm is "switch", a character string specifying the fitted value,
+      test statistic, and adjusted R-squared value to determine if the switch
+      to EWMA is made.
+}
 }
 \description{
 Fit linear regression model with time and day-of-week terms
 }
+\keyword{internal}

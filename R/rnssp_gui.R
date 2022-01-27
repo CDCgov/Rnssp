@@ -206,3 +206,26 @@ remove_rmd_template_gui <- function() {
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
+
+
+#' User profile skeleton
+#'
+#' Generate a user profile skeleton script into the console.
+#'
+#' @keywords internal
+#'
+create_user_profile <- function() {
+  skeleton <- 'library("Rnssp")
+  myProfile <- Credentials$new(
+    username = askme("Enter your username: "),
+    password = askme()
+  )
+  '
+  if (any((.packages()) == "Rnssp")) {
+    skeleton <- 'myProfile <- Credentials$new(
+    username = askme("Enter your username: "),
+    password = askme()
+  )'
+  }
+  rstudioapi::sendToConsole(skeleton, execute = FALSE)
+}

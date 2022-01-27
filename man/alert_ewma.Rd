@@ -4,26 +4,33 @@
 \alias{alert_ewma}
 \title{Exponentially Weighted Moving Average (EWMA)}
 \usage{
-alert_ewma(df, t = date, y = count, B = 28, g = 2, w = 0.4)
+alert_ewma(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9)
 }
 \arguments{
-\item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
+\item{df}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame}
 
 \item{t}{Name of the column of type Date containing the dates}
 
 \item{y}{Name of the column of type Numeric containing counts or percentages}
 
-\item{B}{Baseline parameter. The baseline length is the number of days from which to
-compute the EWMA and compare to in order to form the test statistic (default is 28)}
+\item{B}{Baseline parameter. The baseline length is the number of days used to
+calculate rolling averages, standard deviations, and exponentially weighted
+moving averages. Defaults to 28 days to match ESSENCE implementation.}
 
 \item{g}{Guardband parameter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting (default is 2)}
+the baseline from the current test date. Defaults to 2 days to match ESSENCE
+implementation.}
 
-\item{w}{Smoothing parameter. The smoothing parameter controls the amount of
-smoothing in the exponentially weighted moving average (default is 0.4)}
+\item{w1}{Smoothing coefficient for sensitivity to gradual events. Must be between
+0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
+effects. defaults to 0.4 to match ESSENCE implementation.}
+
+\item{w2}{Smoothed coefficient for sensitivity to sudden events. Must be between
+0 and 1 and is recommended to be above 0.7 to account for sudden events.
+Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.}
 }
 \value{
-A data frame
+Original data frame with detection results.
 }
 \description{
 The EWMA compares a weighted average of the most recent visit counts
@@ -82,7 +89,7 @@ df_ewma_state <- df_ewma \%>\%
   filter(hospitalstate_display == "South Dakota")
 
 df_ewma_state \%>\%
-  ggplot(aes(x = t, y = count)) +
+  ggplot(aes(x = date, y = count)) +
   geom_line(color = "blue") +
   geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
   geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
