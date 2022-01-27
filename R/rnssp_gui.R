@@ -216,11 +216,10 @@ remove_rmd_template_gui <- function() {
 #'
 create_user_profile <- function() {
   skeleton <- 'library("Rnssp")
-  myProfile <- Credentials$new(
-    username = askme("Enter your username: "),
-    password = askme()
-  )
-  '
+myProfile <- Credentials$new(
+  username = askme("Enter your username: "),
+  password = askme()
+)'
   if (any((.packages()) == "Rnssp")) {
     skeleton <- 'myProfile <- Credentials$new(
     username = askme("Enter your username: "),
