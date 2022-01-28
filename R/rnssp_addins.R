@@ -278,7 +278,7 @@ create_user_profile_gui <- function() {
       if(grepl('[[:punct:][:space:]]', filename)){
         cli::cli_abort("Variable name {.var {filename}} is invalid! Try again!")
       } else {
-        profile <- Credentials$new(input$username, input$password)
+        profile <- Rnssp::Credentials$new(input$username, input$password)
         assign(
           filename,
           value = profile,
