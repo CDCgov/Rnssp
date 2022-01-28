@@ -1,4 +1,9 @@
-Name: Create a secured user profile
+Name: Create User Profile (GUI)
+Description: Create and/or save a user profile to the home directory.
+Binding: create_user_profile_gui
+Interactive: true
+
+Name: Create User Profile (code skeleton)
 Description: Generate a user profile skeleton script into the console
 Binding: create_user_profile
 Interactive: true

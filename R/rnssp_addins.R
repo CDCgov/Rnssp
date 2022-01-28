@@ -180,9 +180,9 @@ remove_rmd_template_gui <- function() {
     ),
     miniUI::miniContentPanel(
       shiny::checkboxGroupInput("templ",
-        label = "Existing templates",
-        inline = TRUE,
-        choices = templates
+                                label = "Existing templates",
+                                inline = TRUE,
+                                choices = templates
       )
     )
   )
@@ -227,4 +227,83 @@ myProfile <- Credentials$new(
   )'
   }
   rstudioapi::sendToConsole(skeleton, execute = FALSE)
+}
+
+#' Create User Profile (GUI)
+#'
+#' Create and/or save a user profile
+#'
+#' @keywords internal
+#'
+create_user_profile_gui <- function() {
+
+  alert_msg <- function(x, y){
+    if(class(x) == "try-error"){
+      cli::cli_alert_danger("Failed to save {.file {y}}")
+      shiny::stopApp()
+    } else{
+      cli::cli_alert_success(paste("User Profile saved to", "{.file {y}}"))
+    }
+  }
+
+  ui <- miniUI::miniPage(
+    miniUI::gadgetTitleBar(
+      "Create/Save User Credentials",
+      right = miniUI::miniTitleBarButton("done", "Done", primary = TRUE)
+    ),
+    miniUI::miniContentPanel(
+      shiny::textInput("username", "Username", placeholder = "Enter your username!"),
+      shiny::passwordInput("password", "Password", placeholder = "Enter your passeword!"),
+      shiny::tags$details(
+        shiny::tags$summary("Change user profile variable name"),
+        shiny::textInput("filename", "Filename", "myProfile")
+      ),
+      shiny::column(
+        12,
+        shiny::checkboxInput("saveProfile", label = "Save Profile to Home Directory?"),
+        shiny::conditionalPanel(
+          condition = "input.saveProfile == true",
+          shiny::radioButtons("format", "Select a format", inline = TRUE, choices = c(".rda", ".rds"), selected = ".rda"),
+        )
+      )
+    )
+  )
+
+  server <- function(input, output, session) {
+    shiny::observeEvent(input$done, {
+      filename <- input$filename
+      if (any(length(input$username) == 0, length(input$password) == 0)) {
+        shiny::stopApp()
+      }
+      if(grepl('[[:punct:][:space:]]', filename)){
+        cli::cli_abort("Variable name {.var {filename}} is invalid! Try again!")
+      } else {
+        profile <- Credentials$new(input$username, input$password)
+        assign(
+          filename,
+          value = profile,
+          envir = .GlobalEnv
+        )
+      }
+
+      if (input$saveProfile) {
+        target <- file.path(Sys.getenv("HOME"), paste0(filename, input$format))
+        if (input$format == ".rda"){
+          saveFile <- try(save(profile, file = target), silent = TRUE)
+          alert_msg(saveFile, target)
+        } else {
+          saveFile <- try(saveRDS(profile, file = target), silent = TRUE)
+          alert_msg(saveFile, target)
+        }
+      }
+      shiny::stopApp()
+    })
+
+    shiny::observeEvent(input$cancel, {
+      shiny::stopApp()
+    })
+  }
+
+  viewer <- shiny::dialogViewer("Add")
+  shiny::runGadget(ui, server, viewer = viewer)
 }
