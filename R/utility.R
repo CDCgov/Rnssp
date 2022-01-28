@@ -149,7 +149,7 @@ remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force
     if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
       cli::cli({
         cli::cli_alert_success("Template {.field {template}} has been successfully removed from package {.pkg {pkg}}.")
-        cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+F10} or {.kbd CMD+F10}) to update the template list!")
+        cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
       })
     }
   }
