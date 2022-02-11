@@ -96,7 +96,7 @@ Get ESSENCE API response
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An object of class response
+An object of class \code{response}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
@@ -127,12 +127,12 @@ Get ESSENCE API data
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
 
-\item{\code{...}}{Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
+\item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
@@ -154,7 +154,7 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 \if{html}{\out{<a id="method-get_api_tsgraph"></a>}}
 \if{latex}{\out{\hypertarget{method-get_api_tsgraph}{}}}
 \subsection{Method \code{get_api_tsgraph()}}{
-Get ESSENCE API data
+Get ESSENCE API Time Series Graph
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_tsgraph(url)}\if{html}{\out{</div>}}
 }

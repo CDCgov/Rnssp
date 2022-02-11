@@ -9,7 +9,7 @@ add_rmd_template(template = NULL, pkg = "Rnssp")
 \arguments{
 \item{template}{a character string with the name of a single template name.
 The template name must be one of the elements of the vector returned
-by \code{\link[Rnssp]{list_templates()}}.}
+by \code{\link[Rnssp]{list_templates}}.}
 
 \item{pkg}{a character string with the name of a single package.
 An error occurs if more than one package name is given.}

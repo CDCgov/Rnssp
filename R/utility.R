@@ -24,7 +24,7 @@ askme <- function(prompt = "Please enter your password: ") {
 #' An error occurs if more than one package name is given.
 #' @param template a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
-#' by \code{\link[Rnssp]{list_templates()}}.
+#' by \code{\link[Rnssp]{list_templates}}.
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an

@@ -50,6 +50,9 @@ reference:
       - classify_trend
       - clean_text
       - Credentials
+      - get_api_data
+      - get_api_response
+      - get_api_tsgraph
       - list_templates
       - NSSPContainer
       - remove_rmd_template
