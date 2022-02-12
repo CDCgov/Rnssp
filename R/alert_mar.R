@@ -19,6 +19,13 @@
 #'     the baseline from the current date in consideration for alerting (default is 2)
 #'
 #' @return A data frame with test statistic, p.value, and alert indicator
+#' @references
+#' \itemize{
+#'     \item \href{https://www.cambridge.org/core/books/introduction-to-statistical-methods-for-biosurveillance/370B0E8DC0C1DE12FCE2027CE653F332}{Statistical Methods for Biosurveillance, Fricker (2013)}
+#'     \item \href{https://www.jhuapl.edu/content/techdigest/pdf/V27-N04/27-04-BurkomDevelopments.pdf}{Developments in the Roles, Features, and Evaluation of Alerting Algorithms for Disease Outbreak Monitoring}
+#' }
+#'
+#'
 #' @export
 #'
 #' @examples
@@ -57,15 +64,20 @@
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
-#' api_data <- myProfile$get_api_data(url)
+#' api_data <- get_api_data(url)
 #'
 #' df <- api_data$timeSeriesData
 #'
-#' df_mar <- alert_mar(df, t = date, y = count)
+#' df_mar <- df %>%
+#'   select(date, count) %>%
+#'   group_by(date) %>%
+#'   summarise(count = sum(count)) %>%
+#'   alert_regression(t = date, y = count)
 #'
 #' # Visualize alert for South Dakota
-#' df_mar_state <- df_mar %>%
-#'   filter(hospitalstate_display == "South Dakota")
+#' df_mar_state <- df %>%
+#'   filter(hospitalstate_display == "South Dakota") %>%
+#'   alert_regression(t = date, y = count)
 #'
 #' df_mar_state %>%
 #'   ggplot(aes(x = date, y = count)) +
@@ -80,43 +92,8 @@
 #' }
 #'
 alert_mar <- function(df, t = date, y = count, B = 28, g = 2) {
-  grouping <- group_vars(df)
 
-  col_names <- setdiff(names(df), c(ensym(t), ensym(y), grouping))
+  .Deprecated("alert_regression")
 
-  tph <- quo_name(enquo(t))
-  yph <- quo_name(enquo(y))
-
-  t <- substitute(t)
-  y <- substitute(y)
-
-  df %>%
-    as.data.table() %>%
-    .[, t := as.Date(eval(t))] %>%
-    .[, y := as.numeric(eval(y))] %>%
-    .[, paste0("lag", 0:(B + g)) := shift(y, n = 0:(B + g)), by = grouping] %>%
-    na.omit() %>%
-    melt(measure.vars = paste0("lag", 0:(B + g)), variable.name = "var", value.name = "observed") %>%
-    setorderv(c(grouping, "t", "var")) %>%
-    .[, !"var"] %>%
-    .[, base_date := seq_len(.N), by = c(grouping, "t")] %>%
-    .[, base_date := t - base_date + 1] %>%
-    .[, dow := weekdays(base_date, abbreviate = TRUE)] %>%
-    .[, var := 1] %>%
-    dcast(... ~ dow, value.var = "var", fill = 0) %>%
-    setorderv(c(grouping, "t", "base_date")) %>%
-    .[, .(.(.SD)), by = c(grouping, "t", "y", col_names)] %>%
-    setnames(old = "V1", new = "baseline") %>%
-    .[, test_statistic := as.numeric(lapply(baseline, detection_reg, "regression", B, g))] %>%
-    .[, !"baseline"] %>%
-    .[, p.value := pt(-abs(test_statistic), df = B - 7 - 1)] %>%
-    .[, alert := fcase(test_statistic > 0 & p.value < 0.01, "alert",
-      test_statistic > 0 & p.value >= 0.01 & p.value < 0.05, "warning",
-      default = "none"
-    )] %>%
-    as.data.frame() %>%
-    dplyr::rename(
-      !!tph := t,
-      !!yph := y
-    )
+  alert_regression(df, t = date, y = count, B = B, g = g)
 }

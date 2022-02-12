@@ -19,7 +19,8 @@
 #'
 #' @keywords internal
 #'
-#' @return List of output p-values, test statistics, and EWMAs
+#' @return List of output p-values, test statistics, and Exponentially
+#'     Weighted Moving Averages (EWMAs)
 #'
 
 ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
@@ -93,7 +94,7 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #'     implementation.
 #' @param w1 Smoothing coefficient for sensitivity to gradual events. Must be between
 #'     0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
-#'     effects. defaults to 0.4 to match ESSENCE implementation.
+#'     effects. Defaults to 0.4 to match ESSENCE implementation.
 #' @param w2 Smoothed coefficient for sensitivity to sudden events. Must be between
 #'     0 and 1 and is recommended to be above 0.7 to account for sudden events.
 #'     Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.
@@ -137,7 +138,7 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
-#' api_data <- myProfile$get_api_data(url)
+#' api_data <- get_api_data(url)
 #'
 #' df <- api_data$timeSeriesData
 #'

@@ -7,16 +7,16 @@
 get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL}
+\item{url}{a character of ESSENCE API URL.}
 
-\item{fromCSV}{a logical, defines whether data are returned in .csv format or .json format}
+\item{fromCSV}{a logical, defines whether data are returned in .csv format or .json format.}
 
 \item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
 
 \item{...}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
 }
 \value{
-a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 }
 \description{
 A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.

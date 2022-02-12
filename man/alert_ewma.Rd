@@ -23,7 +23,7 @@ implementation.}
 
 \item{w1}{Smoothing coefficient for sensitivity to gradual events. Must be between
 0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
-effects. defaults to 0.4 to match ESSENCE implementation.}
+effects. Defaults to 0.4 to match ESSENCE implementation.}
 
 \item{w2}{Smoothed coefficient for sensitivity to sudden events. Must be between
 0 and 1 and is recommended to be above 0.7 to account for sudden events.
@@ -78,7 +78,7 @@ url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?e
 
 url <- url \%>\% gsub("\n", "", .)
 
-api_data <- myProfile$get_api_data(url)
+api_data <- get_api_data(url)
 
 df <- api_data$timeSeriesData
 

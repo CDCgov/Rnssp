@@ -7,12 +7,12 @@
 get_api_tsgraph(url, profile = myProfile)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL}
+\item{url}{a character of ESSENCE API URL.}
 
 \item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
 }
 \value{
-An object of class \code{response}
+An object of class \code{response}.
 }
 \description{
 A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.

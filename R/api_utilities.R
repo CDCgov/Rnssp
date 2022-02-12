@@ -2,13 +2,13 @@
 #'
 #' A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.
 #'
-#' @param url a character of ESSENCE API URL
-#' @param fromCSV a logical, defines whether data are returned in .csv format or .json format
+#' @param url a character of ESSENCE API URL.
+#' @param fromCSV a logical, defines whether data are returned in .csv format or .json format.
 #' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
 #' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
-#' @return a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+#' @return a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 #' @export
 #'
 #' @examples
@@ -34,7 +34,7 @@ get_api_data <- function(url, fromCSV = FALSE, profile = myProfile,  ...) {
 #' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
-#' @return An object of class \code{response}
+#' @return An object of class \code{response}.
 #' @export
 #'
 #' @examples
@@ -53,11 +53,11 @@ get_api_response <- function(url, profile = myProfile) {
 #'
 #' A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.
 #'
-#' @param url a character of ESSENCE API URL
+#' @param url a character of ESSENCE API URL.
 #' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
-#' @return An object of class \code{response}
+#' @return An object of class \code{response}.
 #' @export
 #'
 #' @examples

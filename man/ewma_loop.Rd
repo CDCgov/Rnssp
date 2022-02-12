@@ -23,7 +23,8 @@ gradual and sudden events}
 \item{alert_thresh}{Alert threshold value}
 }
 \value{
-List of output p-values, test statistics, and EWMAs
+List of output p-values, test statistics, and Exponentially
+    Weighted Moving Averages (EWMAs)
 }
 \description{
 Loop for EWMA and adjustment of outlying smoothed values

@@ -9,18 +9,18 @@ alert_switch(df, t = date, y = count, B = 28, g = 2, w = 0.4)
 \arguments{
 \item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
 
-\item{t}{Name of the column of type Date containing the dates}
+\item{t}{Name of the column of type Date containing the dates.}
 
-\item{y}{Name of the column of type Numeric containing counts or percentages}
+\item{y}{Name of the column of type Numeric containing counts or percentages.}
 
 \item{B}{Baseline parameter. The baseline length is the number of days to which
-each liner model is fit (default is 28)}
+each liner model is fit (default is 28).}
 
 \item{g}{Guardband paramter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting (default is 2)}
+the baseline from the current date in consideration for alerting (default is 2).}
 }
 \value{
-A data frame
+A data frame with detection results.
 }
 \description{
 The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and
@@ -68,7 +68,7 @@ url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?e
 
 url <- url \%>\% gsub("\n", "", .)
 
-api_data <- myProfile$get_api_data(url)
+api_data <-get_api_data(url)
 
 df <- api_data$timeSeriesData
 

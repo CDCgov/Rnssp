@@ -10,14 +10,14 @@
 #' coefficient for the EWMA algorithm is fixed to 0.4.
 #'
 #' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame.
-#' @param t Name of the column of type Date containing the dates
-#' @param y Name of the column of type Numeric containing counts or percentages
+#' @param t Name of the column of type Date containing the dates.
+#' @param y Name of the column of type Numeric containing counts or percentages.
 #' @param B Baseline parameter. The baseline length is the number of days to which
-#' each liner model is fit (default is 28)
+#' each liner model is fit (default is 28).
 #' @param g Guardband paramter. The guardband length is the number of days separating
-#'     the baseline from the current date in consideration for alerting (default is 2)
+#'     the baseline from the current date in consideration for alerting (default is 2).
 #'
-#' @return A data frame
+#' @return A data frame with detection results.
 #' @export
 #'
 #' @examples
@@ -56,7 +56,7 @@
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
-#' api_data <- myProfile$get_api_data(url)
+#' api_data <-get_api_data(url)
 #'
 #' df <- api_data$timeSeriesData
 #'
