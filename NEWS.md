@@ -14,8 +14,8 @@
   - List available Rnssp templates
   - Add or Update Rnssp templates
   - Remove Rnssp templates
-  - open Rnssp templates online documentation
-  - open Rnssp package online documentation
+  - Open Rnssp templates online documentation
+  - Open Rnssp package online documentation
 
 ## Updates
 * `add_rmd_template()` no longer has a `template_name` argument. The argument `template_name` has been replaced by `template` which is the first argument in the function call.
