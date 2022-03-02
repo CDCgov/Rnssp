@@ -142,17 +142,21 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #'
 #' df <- api_data$timeSeriesData
 #'
-#' df_ewma <- alert_ewma(df, t = date, y = count)
+#' df_ewma <- df %>%
+#'   group_by(hospitalstate_display) %>%
+#'   alert_ewma()
 #'
 #' # Visualize alert for South Dakota
 #' df_ewma_state <- df_ewma %>%
 #'   filter(hospitalstate_display == "South Dakota")
 #'
 #' df_ewma_state %>%
-#'   ggplot(aes(x = date, y = count)) +
-#'   geom_line(color = "blue") +
-#'   geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
-#'   geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
+#'   ggplot() +
+#'   geom_line(aes(x = t, y = count), color = "grey70") +
+#'   geom_line(data = subset(df_ewma_state, alert != "grey"), aes(x = t, y = count), color = "navy") +
+#'   geom_point(data = subset(df_ewma_state, alert == "blue"), aes(x = t, y = count), color = "navy") +
+#'   geom_point(data = subset(df_ewma_state, alert == "yellow"), aes(x = t, y = count), color = "yellow") +
+#'   geom_point(data = subset(df_ewma_state, alert == "red"), aes(x = t, y = count), color = "red") +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
@@ -176,7 +180,7 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.
   date_check <- df %>%
     pull(!!enquo(t))
 
-  if (!is_grouped_df(df) & length(unique(date_check) != length(date_check))) {
+  if (!is_grouped_df(df) & any(duplicated(date_check))) {
     cli::cli_abort("Duplicate dates detected. Please group your dataframe!")
   }
 
@@ -201,6 +205,6 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.
       p.value >= 0.05, "blue",
       default = "grey"
     )] %>%
-    .[, !c("t", "y", "mu", "sigma", "sigma1", "sigma2")] %>%
+    .[, !c("y", "mu", "sigma", "sigma1", "sigma2")] %>%
     as.data.frame()
 }

@@ -4,14 +4,7 @@
 \alias{alert_farrington}
 \title{Farrington Temporal Detector}
 \usage{
-alert_farrington(
-  df,
-  t = date,
-  y = data_count,
-  B = 4,
-  w = 3,
-  method = "original"
-)
+alert_farrington(df, t = date, y = count, B = 4, w = 3, method = "original")
 }
 \arguments{
 \item{df}{A dataframe, dataframe extension (e.g., a \code{tibble}), or a lazy dataframe}

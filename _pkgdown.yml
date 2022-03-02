@@ -59,6 +59,7 @@ reference:
       - remove_rmd_template
       - Rnssp
       - Rnssp_vignettes
+      - webscrape_icd
   - title: Available Datasets
     desc: Datasets contained in the Rnssp package
     contents:

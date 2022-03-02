@@ -4,7 +4,7 @@
 \alias{alert_regression}
 \title{Adaptive Multiple Regression}
 \usage{
-alert_regression(df, t = date, y = data_count, B = 28, g = 2)
+alert_regression(df, t = date, y = count, B = 28, g = 2)
 }
 \arguments{
 \item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
@@ -74,15 +74,12 @@ api_data <- get_api_data(url)
 df <- api_data$timeSeriesData
 
 df_regression <- df \%>\%
-  select(date, count) \%>\%
-  group_by(date) \%>\%
-  summarise(count = sum(count)) \%>\%
-  alert_regression(t = date, y = count)
+  group_by(hospitalstate_display) \%>\%
+  alert_regression()
 
 # Visualize alert for South Dakota
 df_regression_state <- df \%>\%
-  filter(hospitalstate_display == "South Dakota") \%>\%
-  alert_regression(t = date, y = count)
+  filter(hospitalstate_display == "South Dakota")
 
 df_regression_state \%>\%
   ggplot(aes(x = date, y = count)) +

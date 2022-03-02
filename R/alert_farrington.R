@@ -11,7 +11,7 @@
 #' @keywords internal
 #'
 #'
-farrington_original <- function (df, t = date, y = data_count, B = 4, w = 3) {
+farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
 
   t <- enquo(t)
   y <- enquo(y)
@@ -292,7 +292,7 @@ seasonal_groups <- function (B = 4, g = 27, w = 3, p = 10, base_length, base_wee
 #'
 #' @keywords internal
 #'
-farrington_modified <- function (df, t = date, y = data_count, B = 4, g = 27, w = 3, p = 10) {
+farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, p = 10) {
 
   t <- enquo(t)
   y <- enquo(y)
@@ -657,7 +657,7 @@ farrington_modified <- function (df, t = date, y = data_count, B = 4, g = 27, w 
 #' }
 #'
 
-alert_farrington <- function(df, t = date, y = data_count, B = 4, w = 3, method = "original") {
+alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "original") {
 
   # Ensure that df is a dataframe
   if (!is.data.frame(df)) {

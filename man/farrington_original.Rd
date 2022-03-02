@@ -4,7 +4,7 @@
 \alias{farrington_original}
 \title{Original Farrington Algorithm}
 \usage{
-farrington_original(df, t = date, y = data_count, B = 4, w = 3)
+farrington_original(df, t = date, y = count, B = 4, w = 3)
 }
 \arguments{
 \item{df}{Nested dataframe}

@@ -1,18 +1,30 @@
-# Rnssp 0.0.3 beta
+# Rnssp 0.0.3
 
 ## New Features
-* New Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
+* Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
+* Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.
+* Farrington Temporal Detector algorithm `alert_farrington()` added for weekly time series of counts spanning multiple years.
+* ICD Code Web Scraper function `webscrape_icd()` added to web scrape ICD discharge diagnosis code sets from the CDC FTP server (for ICD-10) or CMS website (for ICD-9).
+* New Rnssp addins added to:
+  - Create User Profile via a Graphical User Interface
+  - Create a User Profile with a script skeleton
+  - List available Rnssp templates
+  - Add or Update Rnssp templates
+  - Remove Rnssp templates
+  - open Rnssp templates online documentation
+  - open Rnssp package online documentation
 
 ## Updates
 * `add_rmd_template()` no longer has a `template_name` argument. The argument `template_name` has been replaced by `template` which is the first argument in the function call.
 * New test `test-add_rmd_template.R` added for `add_rmd_template()`
 * New test `test-remove_rmd_template.R` added for `remove_rmd_template()`
 * `alert_mar()` has been updated. Its implementation now uses data.table instead of the slider package which significantly reduces computation time.
-* `alert_mar()` now returns the original data frame with algorithm variables bound to the input data
-* Regression models in `alert_mar()` are now fit using `lm.fit` instead of `lm` to reduce computation time associated with extraneous computations made by `lm`.
+* `alert_mar()` is depecrated. Use `alert_regression` instead.
+* Regression models in `alert_regression()` are fit using `lm.fit()` instead of `lm()` to reduce computation time associated with extraneous computations made by `lm()`.
 
 ## Other News
 * `slider` package dependency no longer needed.
+* `cli` package is now a dependency for attractive Command Line Interfaces (CLIs)
 
 # Rnssp 0.0.2
 

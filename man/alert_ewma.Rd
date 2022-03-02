@@ -82,17 +82,21 @@ api_data <- get_api_data(url)
 
 df <- api_data$timeSeriesData
 
-df_ewma <- alert_ewma(df, t = date, y = count)
+df_ewma <- df \%>\%
+  group_by(hospitalstate_display) \%>\%
+  alert_ewma()
 
 # Visualize alert for South Dakota
 df_ewma_state <- df_ewma \%>\%
   filter(hospitalstate_display == "South Dakota")
 
 df_ewma_state \%>\%
-  ggplot(aes(x = date, y = count)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
-  geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
+  ggplot() +
+  geom_line(aes(x = t, y = count), color = "grey70") +
+  geom_line(data = subset(df_ewma_state, alert != "grey"), aes(x = t, y = count), color = "navy") +
+  geom_point(data = subset(df_ewma_state, alert == "blue"), aes(x = t, y = count), color = "navy") +
+  geom_point(data = subset(df_ewma_state, alert == "yellow"), aes(x = t, y = count), color = "yellow") +
+  geom_point(data = subset(df_ewma_state, alert == "red"), aes(x = t, y = count), color = "red") +
   theme_bw() +
   labs(
     x = "Date",

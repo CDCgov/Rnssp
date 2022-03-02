@@ -193,15 +193,12 @@ adaptive_regression <- function(df, t, y, B, g) {
 #' df <- api_data$timeSeriesData
 #'
 #' df_regression <- df %>%
-#'   select(date, count) %>%
-#'   group_by(date) %>%
-#'   summarise(count = sum(count)) %>%
-#'   alert_regression(t = date, y = count)
+#'   group_by(hospitalstate_display) %>%
+#'   alert_regression()
 #'
 #' # Visualize alert for South Dakota
 #' df_regression_state <- df %>%
-#'   filter(hospitalstate_display == "South Dakota") %>%
-#'   alert_regression(t = date, y = count)
+#'   filter(hospitalstate_display == "South Dakota")
 #'
 #' df_regression_state %>%
 #'   ggplot(aes(x = date, y = count)) +
@@ -215,7 +212,7 @@ adaptive_regression <- function(df, t, y, B, g) {
 #'   )
 #' }
 #'
-alert_regression <- function(df, t = date, y = data_count, B = 28, g = 2) {
+alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
 
   # Check baseline length argument
   if (B < 7) {
@@ -278,7 +275,7 @@ alert_regression <- function(df, t = date, y = data_count, B = 28, g = 2) {
       cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates does not equal the number of rows. Should your dataframe be grouped?")
     }
 
-    alert_tbl <- base_tbl %>%
+    base_tbl %>%
       nest(data_split = everything()) %>%
       mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = 28, g = 2)) %>%
       unnest(c(data_split, anomalies)) %>%
