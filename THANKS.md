@@ -9,6 +9,7 @@ We would like to acknowledge the following persons for their support to this pro
 
 * [Aaron Kite-Powell](https://github.com/akitepowell)
 * [Sara Chronister](https://github.com/sara-chronister)
+* [Howard Burkom](https://orcid.org/0000-0003-0667-9467)
 * [Douglas Wirtz](https://github.com/dswirtz)
 * The [National Syndromic Surveillance Program (NSSP)](https://www.cdc.gov/nssp/index.html)
 * and the [NSSP Community of Practice](https://nsspcommunityofpractice.org/)
