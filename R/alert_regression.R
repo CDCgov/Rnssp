@@ -14,7 +14,6 @@
 #'
 #' @keywords internal
 #'
-#' @examples
 adaptive_regression <- function(df, t, y, B, g) {
 
   t <- enquo(t)

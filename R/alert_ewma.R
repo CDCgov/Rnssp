@@ -24,12 +24,12 @@
 #'
 
 ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
-  z1 <- rep(0, length(y))
-  z2 <- rep(0, length(y))
-  test_stat1 <- rep(0, length(y))
-  test_stat2 <- rep(0, length(y))
-  pval1 <- rep(0.5, length(y))
-  pval2 <- rep(0.5, length(y))
+  z1 <- rep(NA, length(y))
+  z2 <- rep(NA, length(y))
+  test_stat1 <- rep(NA, length(y))
+  test_stat2 <- rep(NA, length(y))
+  pval1 <- rep(NA, length(y))
+  pval2 <- rep(NA, length(y))
 
   z <- z1
   test_stat <- test_stat1
@@ -160,18 +160,25 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #'   )
 #' }
 #'
-alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
+alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9){
   alert_thresh <- qt(1 - 0.01, df = B - 1)
   warning_thresh <- qt(1 - 0.05, df = B - 1)
 
   w <- c(w1, w2)
-  sigma_correction <- sqrt((w / (2 - w)) + (1 / B) - 2 * (1 - w)^(g + 1) * ((1 - (1 - w)^B) / B))
+  sigma_correction <- sqrt((w / (2 - w)) + (1 / B) - 2 * (1 - w) ^ (g + 1) * ((1 - (1 - w) ^ B) / B))
 
-  constant <- (0.1289 - (0.2414 - 0.1826 * (1 - w)^4) * log(10 * 0.05)) * (w / warning_thresh)
+  constant <- (0.1289 - (0.2414 - 0.1826 * (1 - w) ^ 4) * log(10 * 0.05)) * (w / warning_thresh)
 
-  sigma_min <- (w / warning_thresh) * (1 + 0.5 * (1 - w)^2)
+  sigma_min <- (w / warning_thresh) * (1 + 0.5 * (1 - w) ^ 2)
 
   grouping <- group_vars(df)
+
+  date_check <- df %>%
+    pull(!!enquo(t))
+
+  if (!is_grouped_df(df) & length(unique(date_check) != length(date_check))) {
+    cli::cli_abort("Duplicate dates detected. Please group your dataframe!")
+  }
 
   t <- substitute(t)
   y <- substitute(y)
@@ -188,11 +195,11 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.
     .[, sigma2 := max(sigma2, sigma_min[2]), by = c(grouping, "t")] %>%
     .[, c("p.value", "test_statistic", "ewma") := ewma_loop(y, mu, sigma1, sigma2, B, g, w, alert_thresh), by = grouping] %>%
     .[, p.value := round(p.value, 7)] %>%
-    .[!is.na(mu)] %>%
     .[, alert := fcase(
       p.value < 0.01, "red",
       p.value >= 0.01 & p.value < 0.05, "yellow",
-      default = "blue"
+      p.value >= 0.05, "blue",
+      default = "grey"
     )] %>%
     .[, !c("t", "y", "mu", "sigma", "sigma1", "sigma2")] %>%
     as.data.frame()

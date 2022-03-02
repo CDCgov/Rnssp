@@ -43,6 +43,7 @@ reference:
     contents:
       - add_rmd_template
       - alert_ewma
+      - alert_farrington
       - alert_mar
       - alert_switch
       - askme
