@@ -1,6 +1,9 @@
 # Rnssp 0.0.3
 
 ## New Features
+* New function `get_api_data()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
+* New function `get_api_response()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
+* New function `get_api_tsgraph()` added as a wrapper to the `$get_api_tsgraph()` method defined in the `Credentials` class.
 * Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
 * Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.
 * Farrington Temporal Detector algorithm `alert_farrington()` added for weekly time series of counts spanning multiple years.
@@ -16,10 +19,20 @@
 
 ## Updates
 * `add_rmd_template()` no longer has a `template_name` argument. The argument `template_name` has been replaced by `template` which is the first argument in the function call.
-* New test `test-add_rmd_template.R` added for `add_rmd_template()`
-* New test `test-remove_rmd_template.R` added for `remove_rmd_template()`
-* `alert_mar()` has been updated. Its implementation now uses data.table instead of the slider package which significantly reduces computation time.
+* New test `test-alert_farrington.R` added for `alert_farrington()`.
+* New test `test-alert_regression.R` added for `alert_regression()`.
+* New test `test-alert_switch.R` added for `alert_switch()`.
+* New test `test-add_rmd_template.R` added for `add_rmd_template()`.
+* New test `test-remove_rmd_template.R` added for `remove_rmd_template()`.
+* New test `test-get_api_data.R` added for the `get_api_data()` function.
+* New test `test-get_api_response.R` added for the `get_api_response()` function.
+* New test `test-get_api_tsgraph.R` added for the `get_api_tsgraph()` function.
+* New test `test-get_api_data_method.R` added for the `$get_api_data()` method.
+* New test `test-get_api_response_method.R` added for the `$get_api_response()` method.
+* New test `test-get_api_tsgraph_method.R` added for the `$get_api_tsgraph()` method.
+* New test `test-webscrape_icd.R` added for `webscrape_icd()`
 * `alert_mar()` is depecrated. Use `alert_regression` instead.
+* Test `test_alert_mar.R` has been removed for `alert_mar()`.
 * Regression models in `alert_regression()` are fit using `lm.fit()` instead of `lm()` to reduce computation time associated with extraneous computations made by `lm()`.
 
 ## Other News

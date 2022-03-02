@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction {-}
-The goal of `Rnssp` package is to facilitate the access to the `ESSENCE` system via a secure and simple interface. In addition, `Rnssp` provides methods that streamline the data pull by abstracting the complexity of the R codes from the users.
+The goal of `Rnssp` package is to facilitate the access to the `ESSENCE` system via a secure and simplified interface. In addition, `Rnssp` provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.
 
 In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:
 
