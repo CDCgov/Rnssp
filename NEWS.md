@@ -8,14 +8,14 @@
 * Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.
 * Farrington Temporal Detector algorithm `alert_farrington()` added for weekly time series of counts spanning multiple years.
 * ICD Code Web Scraper function `webscrape_icd()` added to web scrape ICD discharge diagnosis code sets from the CDC FTP server (for ICD-10) or CMS website (for ICD-9).
-* New Rnssp addins added to:
-  - Create User Profile via a Graphical User Interface
-  - Create a User Profile with a script skeleton
-  - List available Rnssp templates
-  - Add or Update Rnssp templates
-  - Remove Rnssp templates
-  - Open Rnssp templates online documentation
-  - Open Rnssp package online documentation
+* The following Addins have been added for RStudio users:
+  - Create User Profile via a Graphical User Interface (`Rnssp:::create_user_profile_gui()`)
+  - Create a User Profile with a script skeleton (`Rnssp:::create_user_profile()`)
+  - List available Rnssp templates (`list_templates()`)
+  - Add or Update Rnssp templates (`Rnssp:::add_rmd_template_gui()`)
+  - Remove Rnssp templates (`Rnssp:::remove_rmd_template_gui()`)
+  - Open Rnssp templates online documentation (`Rnssp:::rnssp_templates_manual()`)
+  - Open Rnssp package online documentation (`Rnssp:::rnssp_manual()`)
 
 ## Updates
 * `add_rmd_template()` no longer has a `template_name` argument. The argument `template_name` has been replaced by `template` which is the first argument in the function call.

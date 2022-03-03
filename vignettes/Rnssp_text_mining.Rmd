@@ -75,7 +75,7 @@ We now use the `myProfile` object to authenticate to NSSP-ESSENCE and pull the d
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?endDate=31Dec2020&ccddCategory=cdc%20coronavirus-dd%20v1&timeResolution=weekly&hasBeenE=1&percentParam=noPercent&userId=2362&datasource=va_erccdd&aqtTarget=DataDetails&detector=nodetectordetector&startDate=30Dec2020"
 
 # Data Pull from NSSP-ESSENCE
-api_data <- myProfile$get_api_data(url, fromCSV = TRUE)
+api_data <- get_api_data(url, fromCSV = TRUE) # or myProfile$get_api_data(url, fromCSV = TRUE)
 
 # glimpse(api_data)
 

@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction {-}
-The goal of `Rnssp` package is to facilitate the access to the `ESSENCE` system via a secure and simplified interface. In addition, `Rnssp` provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.
+The goal of `Rnssp` package is to facilitate the access to the Electronic Surveillance System for the Early Notification of Community-based Epidemics (`ESSENCE`) via a secure and simplified interface. In addition, `Rnssp` provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.
 
 In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:
 
@@ -85,7 +85,9 @@ myProfile
 str(myProfile) # or `structure(myProfile)`
 ```
 
-The created `myProfile` object comes with the `$get_api_response()`, the `$get_api_data()`, and the `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console.
+The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, and `get_api_tsgraph()` functions serve as wrappers to their respective methods. 
+
+For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, or `?get_api_tsgraph()` for a full documentation on each function.
 
 In the following sections, we show how to pull data from ESSENCE using the seven APIs listed above.
 
@@ -96,7 +98,7 @@ In the following sections, we show how to pull data from ESSENCE using the seven
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries"
 
 # pull time series data
-api_data_ts <- myProfile$get_api_data(url)
+api_data_ts <- get_api_data(url) # or api_data_ts <- myProfile$get_api_data(url)
 
 class(api_data_ts)
 names(api_data_ts)
@@ -110,7 +112,7 @@ Alternatively, the example below could be performed via the `$get_api_response()
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries"
 
 # pull time series data
-api_response <- myProfile$get_api_response(url) 
+api_response <- get_api_response(url) 
 
 api_response_content <- httr::content(api_response, as = "text")
 api_data_ts2 <- jsonlite::fromJSON(api_response_content)
@@ -132,7 +134,7 @@ The example below shows how to retrieve the Time Series Graph from ESSENCE and i
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries&graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&xAxisLabel=Date&yAxisLabel=Count"
 
 # Data pull from ESSENCE
-api_data_graph <- myProfile$get_api_tsgraph(url)
+api_data_graph <- get_api_tsgraph(url)
 
 # Inspecting api_data_graph object
 class(api_data_graph)
@@ -157,7 +159,7 @@ The CSV option of the Table Builder Results API pulls in data in the tabular for
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
 
 # Data Pull from ESSENCE
-api_data_tb_csv <- myProfile$get_api_data(url, fromCSV = TRUE)
+api_data_tb_csv <-get_api_data(url, fromCSV = TRUE)
 
 # Inspecting api_data_graph object
 class(api_data_tb_csv) 
@@ -171,7 +173,7 @@ class(api_data_tb_csv)
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
 
 # Data Pull from ESSENCE
-api_data_tb_json <- myProfile$get_api_data(url)
+api_data_tb_json <- get_api_data(url)
 
 class(api_data_tb_json)
 names(api_data_tb_json)
@@ -190,7 +192,7 @@ Similarly to the Table builder Results API, the Data Details (line level) provid
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?medicalGrouping=injury&geography=region%20i&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries&startDate=31Jan2021&endDate=31Jan2021"
 
 # Data Pull from ESSENCE
-api_data_dd_csv <- myProfile$get_api_data(url, fromCSV = TRUE)
+api_data_dd_csv <- get_api_data(url, fromCSV = TRUE)
 
 class(api_data_dd_csv)  
 
@@ -203,7 +205,7 @@ class(api_data_dd_csv)
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?endDate=31Jan2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=31Jan2021&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=DataDetails"
 
 # Data Pull from ESSENCE
-api_data_dd_json <- myProfile$get_api_data(url)
+api_data_dd_json <- get_api_data(url)
 
 class(api_data_dd_json)
 names(api_data_dd_json)
@@ -219,7 +221,7 @@ names(api_data_dd_json)
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/summaryData?endDate=31Jan2021&medicalGrouping=injury&geography=region%20i&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hosp&detector=probrepswitch&startDate=29Jan2021&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries"
 
 # Data Pull from ESSENCE
-api_data_ss <- myProfile$get_api_data(url)
+api_data_ss <- get_api_data(url)
 
 class(api_data_ss)
 names(api_data_ss)
@@ -238,7 +240,7 @@ Since the Alert List API provides programmatic access to the Alert List table on
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&start_date=29Jan2021"
 
 # Data Pull from ESSENCE
-api_data_alr <- myProfile$get_api_data(url)
+api_data_alr <- get_api_data(url)
 
 class(api_data_alr)
 names(api_data_alr)
@@ -252,7 +254,7 @@ names(api_data_alr)
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/hospitalSyndromeAlerts?end_date=31Jan2021&start_date=29Jan2021"
 
 # Data Pull from ESSENCE
-api_data_alh <- myProfile$get_api_data(url)
+api_data_alh <- get_api_data(url)
 
 class(api_data_alh)
 names(api_data_alh)
@@ -270,7 +272,7 @@ This functionality as of `r format(Sys.Date(), "%B %d, %Y")` is available from E
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&ccddCategory=cdc%20pneumonia%20ccdd%20v1&ccddCategory=cdc%20coronavirus-dd%20v1&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=ccddCategory&multiStratVal=geography&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=ccddCategory&multiStratVal=geography&graphOnly=true&numSeries=3&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 # Data Pull from ESSENCE
-api_data_tssh <- myProfile$get_api_data(url)
+api_data_tssh <- get_api_data(url)
 
 class(api_data_tssh)
 names(api_data_tssh)
