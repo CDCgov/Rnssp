@@ -110,9 +110,9 @@ df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified
 df_farr_modified \%>\%
   ggplot() +
   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-  geom_line(data = subset(df_modified, !is.na(alert)), aes(x = date, y = count), size = 0.4, color = "navy") +
-  geom_point(data = subset(df_modified, !alert), aes(x = date, y = count), size = 1.5, color = "navy") +
-  geom_point(data = subset(df_modified, alert), aes(x = date, y = count), color = "red", size = 1.5) +
+  geom_line(data = subset(df_farr_modified, !is.na(alert)), aes(x = date, y = count), size = 0.4, color = "navy") +
+  geom_point(data = subset(df_farr_modified, !alert), aes(x = date, y = count), size = 1.5, color = "navy") +
+  geom_point(data = subset(df_farr_modified, alert), aes(x = date, y = count), color = "red", size = 1.5) +
   theme_bw() +
   labs(
     x = "Date",

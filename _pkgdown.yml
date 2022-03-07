@@ -45,6 +45,7 @@ reference:
       - alert_ewma
       - alert_farrington
       - alert_mar
+      - alert_regression
       - alert_switch
       - askme
       - change_dates
@@ -64,6 +65,7 @@ reference:
     desc: Datasets contained in the Rnssp package
     contents:
       - ends_with("_sf", internal = TRUE)
+      - rnssp_stopwords
 
 authors:
   Gbedegnon Roseric Azondekon:

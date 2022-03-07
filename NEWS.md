@@ -31,6 +31,8 @@
 * New test `test-get_api_response_method.R` added for the `$get_api_response()` method.
 * New test `test-get_api_tsgraph_method.R` added for the `$get_api_tsgraph()` method.
 * New test `test-webscrape_icd.R` added for `webscrape_icd()`
+* Added shapefile for US Hospital Service Area (HSA) Shapefile (`hsa_sf`)
+* Added Rnssp stopwords (`rnssp_stopwords`)
 * `alert_mar()` is depecrated. Use `alert_regression` instead.
 * Test `test_alert_mar.R` has been removed for `alert_mar()`.
 * Regression models in `alert_regression()` are fit using `lm.fit()` instead of `lm()` to reduce computation time associated with extraneous computations made by `lm()`.
