@@ -36,6 +36,7 @@
 * `alert_mar()` is depecrated. Use `alert_regression` instead.
 * Test `test_alert_mar.R` has been removed for `alert_mar()`.
 * Regression models in `alert_regression()` are fit using `lm.fit()` instead of `lm()` to reduce computation time associated with extraneous computations made by `lm()`.
+* New vignette added to demonstrate the use of Rnssp addins.
 
 ## Other News
 * `slider` package dependency no longer needed.

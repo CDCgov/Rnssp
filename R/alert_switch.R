@@ -108,12 +108,12 @@ detection_reg <- function(x, algorithm = "regression", B, g) {
 #' myProfile <- Credentials$new(askme("Enter your username:"), askme())
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
-#' &percentParam=ccddCategory&datasource=va_hosp&startDate=22Aug20&medicalGroupingSystem=essencesyndromes
-#' &userId=2362&aqtTarget=TimeSeries&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
-#' &geographySystem=hospitalstate&detector=probregv2&timeResolution=daily&hasBeenE=1&stratVal=
-#' &multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
-#' &nonZeroComposite=false&removeZeroSeries=true&sigDigits=true&startMonth=January&stratVal=&multiStratVal=geography
-#' &graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+#' &ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory
+#' &geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20
+#' &timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries
+#' &stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
+#' &nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true
+#' &numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
@@ -121,17 +121,17 @@ detection_reg <- function(x, algorithm = "regression", B, g) {
 #'
 #' df <- api_data$timeSeriesData
 #'
-#' df_switch <- alert_switch(df, t = date, y = count)
+#' df_switch <- alert_switch(df, t = date, y = dataCount)
 #'
 #' # Visualize alert for South Dakota
-#' df_switch_state <- df_switch %>%
-#'   filter(hospitalstate_display == "South Dakota")
+#' df_switch_region <- df_switch %>%
+#'   filter(hospitaldhhsregion_display == "Region 4")
 #'
-#' df_switch_state %>%
-#'   ggplot(aes(x = date, y = count)) +
+#' df_switch_region %>%
+#'   ggplot(aes(x = date, y = dataCount)) +
 #'   geom_line(color = "blue") +
-#'   geom_point(data = subset(df_switch_state, alert == "alert"), color = "red") +
-#'   geom_point(data = subset(df_switch_state, alert == "warning"), color = "yellow") +
+#'   geom_point(data = subset(df_switch_region, alert == "alert"), color = "red") +
+#'   geom_point(data = subset(df_switch_region, alert == "warning"), color = "yellow") +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",

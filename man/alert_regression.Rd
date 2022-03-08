@@ -28,31 +28,34 @@ of counts or percentages of length B, and forecasts a predicted value g + 1
 days later (guard-band). This value is compared to the current observed value and
 divided by the standard error of prediction in the test-statistic. The model includes
 terms to account for linear trends and day-of-week effects. Note that this implementation
-does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE.
-An alert is signaled if the statistical test (student's t-test) applied to the
+does NOT account for federal holidays as in the Regression 1.2 algorithm in ESSENCE.
+An alert (red value) is signaled if the statistical test (student's t-test) applied to the
 test statistic yields a p-value less than 0.01. If the p-value is greater than or equal
-to 0.01 and strictly less than 0.05, a warning is signaled.
+to 0.01 and strictly less than 0.05, a warning (yellow value) is signaled. Blue values
+are returned if an alert or warning does not occur. Grey values represent instances where
+anomaly detection did not apply (i.e., observations for which baseline data were unavailable).
 }
 \examples{
+
 # Example 1
 df <- data.frame(
-  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-  count = floor(runif(366, min = 0, max = 101))
+ date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+ count = floor(runif(366, min = 0, max = 101))
 )
-df_mar <- alert_mar(df)
+df_regression <- alert_regression(df)
 
 head(df)
-head(df_mar)
+head(df_regression)
 
-# Example 2
 df <- data.frame(
-  Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-  percent = runif(366)
+ Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+ percent = runif(366)
 )
-df_mar <- alert_mar(df, t = Date, y = percent)
+df_regression <- alert_regression(df, t = Date, y = percent)
 
 head(df)
-head(df_mar)
+head(df_regression)
+
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
 library(ggplot2)
@@ -60,12 +63,12 @@ library(ggplot2)
 myProfile <- Credentials$new(askme("Enter your username:"), askme())
 
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
-&percentParam=ccddCategory&datasource=va_hosp&startDate=22Aug20&medicalGroupingSystem=essencesyndromes
-&userId=2362&aqtTarget=TimeSeries&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2
-&geographySystem=hospitalstate&detector=probregv2&timeResolution=daily&hasBeenE=1&stratVal=
-&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
-&nonZeroComposite=false&removeZeroSeries=true&sigDigits=true&startMonth=January&stratVal=&multiStratVal=geography
-&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2&percentParam=ccddCategory
+&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20
+&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries
+&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
+&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true
+&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 url <- url \%>\% gsub("\n", "", .)
 
@@ -74,22 +77,28 @@ api_data <- get_api_data(url)
 df <- api_data$timeSeriesData
 
 df_regression <- df \%>\%
-  group_by(hospitalstate_display) \%>\%
-  alert_regression()
+  group_by(hospitaldhhsregion_display) \%>\%
+  alert_regression(t = date, y = dataCount)
 
-# Visualize alert for South Dakota
-df_regression_state <- df \%>\%
-  filter(hospitalstate_display == "South Dakota")
+# Visualize alert for HHS Region 4
+df_regression_region <- df_regression \%>\%
+  filter(hospitaldhhsregion_display == "Region 4")
 
-df_regression_state \%>\%
-  ggplot(aes(x = date, y = count)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_regression_state, alert == "alert"), color = "red") +
-  geom_point(data = subset(df_regression_state, alert == "warning"), color = "yellow") +
+df_regression_region \%>\%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(data = subset(df_regression_region, alert != "grey"),
+                          aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_regression_region, alert == "blue"),
+                           aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_regression_region, alert == "yellow"),
+                           aes(x = date, y = dataCount), color = "yellow") +
+  geom_point(data = subset(df_regression_region, alert == "red"),
+                           aes(x = date, y = dataCount), color = "red") +
   theme_bw() +
   labs(
     x = "Date",
-    y = "Percent"
+    y = "Count"
   )
 }
 

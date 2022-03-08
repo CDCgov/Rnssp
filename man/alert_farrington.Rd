@@ -43,9 +43,11 @@ skewness common to time series with lower counts, after which expected value
 and variance estimates are used to derive upper and lower bounds for the
 prediction interval. The alert score is defined as the current observation minus
 the forecast value divided by the upper prediction interval bound minus the
-forecast value. If this score exceeds 1, an alert is raised given that the number
-of counts in the last 4 days is above 5. This algorithm requires that the number
-of years included in the baseline is 3 or higher.
+forecast value. If this score exceeds 1, an alert (red value) is raised given that the
+number of counts in the last 4 days is above 5. This algorithm requires that the number
+of years included in the baseline is 3 or higher. Blue values are returned if an alert
+does not occur. Grey values represent instances where anomaly detection did not apply
+(i.e., observations for which baseline data were unavailable).
 
 Modified Farrington Algorithm: In 2012, Angela Noufaily developed a modified
 implementation of the original Farrington algorithm that improved performance by
@@ -110,9 +112,14 @@ df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified
 df_farr_modified \%>\%
   ggplot() +
   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-  geom_line(data = subset(df_farr_modified, !is.na(alert)), aes(x = date, y = count), size = 0.4, color = "navy") +
-  geom_point(data = subset(df_farr_modified, !alert), aes(x = date, y = count), size = 1.5, color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert), aes(x = date, y = count), color = "red", size = 1.5) +
+  geom_line(data = subset(df_farr_modified, alert != "grey"),
+                          aes(x = date, y = count), color = "navy") +
+  geom_point(data = subset(df_farr_modified, alert == "blue"),
+                           aes(x = date, y = count), color = "navy") +
+  geom_point(data = subset(df_farr_modified, alert == "yellow"),
+                           aes(x = date, y = count), color = "yellow") +
+  geom_point(data = subset(df_farr_modified, alert == "red"),
+                           aes(x = date, y = count), color = "red") +
   theme_bw() +
   labs(
     x = "Date",

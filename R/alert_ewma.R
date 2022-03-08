@@ -81,7 +81,12 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #' characteristic features modeled in the regression algorithm. It is more applicable
 #' for Emergency Department data from certain hospital groups and for time series with
 #' small counts (daily average below 10) because of the limited case definition or
-#' chosen geographic region.
+#' chosen geographic region. An alert (red value) is signaled if the statistical test
+#' (student's t-test) applied to the test statistic yields a p-value less than 0.01.
+#' If the p-value is greater than or equal to 0.01 and strictly less than 0.05, a warning
+#' (yellow value) is signaled. Blue values are returned if an alert or warning does not
+#' occur. Grey values represent instances where anomaly detection did not apply
+#' (i.e., observations for which baseline data were unavailable).
 #'
 #' @param df A data frame, data frame extension (e.g., a tibble), or a lazy data frame
 #' @param t Name of the column of type Date containing the dates
@@ -129,12 +134,12 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #' myProfile <- Credentials$new(askme("Enter your username:"), askme())
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
-#' &percentParam=ccddCategory&datasource=va_hosp&startDate=22Aug20&medicalGroupingSystem=essencesyndromes
-#' &userId=2362&aqtTarget=TimeSeries&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
-#' &geographySystem=hospitalstate&detector=probregv2&timeResolution=daily&hasBeenE=1&stratVal=
-#' &multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
-#' &nonZeroComposite=false&removeZeroSeries=true&sigDigits=true&startMonth=January&stratVal=&multiStratVal=geography
-#' &graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+#' &ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory
+#' &geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20
+#' &timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries
+#' &stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
+#' &nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true
+#' &numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
@@ -143,24 +148,28 @@ ewma_loop <- function(y, mu, sigma1, sigma2, B, g, w, alert_thresh) {
 #' df <- api_data$timeSeriesData
 #'
 #' df_ewma <- df %>%
-#'   group_by(hospitalstate_display) %>%
-#'   alert_ewma()
+#'   group_by(hospitaldhhsregion_display) %>%
+#'   alert_ewma(t = date, y = dataCount)
 #'
-#' # Visualize alert for South Dakota
-#' df_ewma_state <- df_ewma %>%
-#'   filter(hospitalstate_display == "South Dakota")
+#' # Visualize alert for HHS Region 4
+#' df_ewma_region <- df_ewma %>%
+#'   filter(hospitaldhhsregion_display == "Region 4")
 #'
-#' df_ewma_state %>%
+#' df_ewma_region %>%
 #'   ggplot() +
-#'   geom_line(aes(x = t, y = count), color = "grey70") +
-#'   geom_line(data = subset(df_ewma_state, alert != "grey"), aes(x = t, y = count), color = "navy") +
-#'   geom_point(data = subset(df_ewma_state, alert == "blue"), aes(x = t, y = count), color = "navy") +
-#'   geom_point(data = subset(df_ewma_state, alert == "yellow"), aes(x = t, y = count), color = "yellow") +
-#'   geom_point(data = subset(df_ewma_state, alert == "red"), aes(x = t, y = count), color = "red") +
+#'   geom_line(aes(x = t, y = dataCount), color = "grey70") +
+#'   geom_line(data = subset(df_ewma_region, alert != "grey"),
+#'                           aes(x = t, y = dataCount), color = "navy") +
+#'   geom_point(data = subset(df_ewma_region, alert == "blue"),
+#'                            aes(x = t, y = dataCount), color = "navy") +
+#'   geom_point(data = subset(df_ewma_region, alert == "yellow"),
+#'                            aes(x = t, y = dataCount), color = "yellow") +
+#'   geom_point(data = subset(df_ewma_region, alert == "red"),
+#'                            aes(x = t, y = dataCount), color = "red") +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
-#'     y = "Percent"
+#'     y = "Count"
 #'   )
 #' }
 #'

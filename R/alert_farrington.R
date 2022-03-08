@@ -213,7 +213,7 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
 
     recent_counts <- sum(y_obs[(i - 4):i])
-    alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, TRUE, FALSE)
+    alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
 
   }
 
@@ -522,7 +522,7 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
 
     recent_counts <- sum(y_obs[(i - 4):i])
-    alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, TRUE, FALSE)
+    alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
     upper[i] <- if_else(recent_counts > 5, upper[i], NA_real_)
     predicted[i] <- exp(predicted[i])
 
@@ -559,9 +559,11 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #' and variance estimates are used to derive upper and lower bounds for the
 #' prediction interval. The alert score is defined as the current observation minus
 #' the forecast value divided by the upper prediction interval bound minus the
-#' forecast value. If this score exceeds 1, an alert is raised given that the number
-#' of counts in the last 4 days is above 5. This algorithm requires that the number
-#' of years included in the baseline is 3 or higher.
+#' forecast value. If this score exceeds 1, an alert (red value) is raised given that the
+#' number of counts in the last 4 days is above 5. This algorithm requires that the number
+#' of years included in the baseline is 3 or higher. Blue values are returned if an alert
+#' does not occur. Grey values represent instances where anomaly detection did not apply
+#' (i.e., observations for which baseline data were unavailable).
 #'
 #' Modified Farrington Algorithm: In 2012, Angela Noufaily developed a modified
 #' implementation of the original Farrington algorithm that improved performance by
@@ -646,9 +648,14 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #' df_farr_modified %>%
 #'   ggplot() +
 #'   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-#'   geom_line(data = subset(df_farr_modified, !is.na(alert)), aes(x = date, y = count), size = 0.4, color = "navy") +
-#'   geom_point(data = subset(df_farr_modified, !alert), aes(x = date, y = count), size = 1.5, color = "navy") +
-#'   geom_point(data = subset(df_farr_modified, alert), aes(x = date, y = count), color = "red", size = 1.5) +
+#'   geom_line(data = subset(df_farr_modified, alert != "grey"),
+#'                           aes(x = date, y = count), color = "navy") +
+#'   geom_point(data = subset(df_farr_modified, alert == "blue"),
+#'                            aes(x = date, y = count), color = "navy") +
+#'   geom_point(data = subset(df_farr_modified, alert == "yellow"),
+#'                            aes(x = date, y = count), color = "yellow") +
+#'   geom_point(data = subset(df_farr_modified, alert == "red"),
+#'                            aes(x = date, y = count), color = "red") +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
@@ -716,7 +723,8 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
-        unnest(c(data_split, anomalies))
+        unnest(c(data_split, anomalies)) %>%
+        mutate(alert = ifelse(is.na(alert), "grey", alert))
 
     } else if (method == "original") {
 
@@ -724,7 +732,8 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
-        unnest(c(data_split, anomalies))
+        unnest(c(data_split, anomalies)) %>%
+        mutate(alert = ifelse(is.na(alert), "grey", alert))
 
     } else {
       cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
@@ -738,7 +747,8 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
-        unnest(c(data_split, anomalies))
+        unnest(c(data_split, anomalies)) %>%
+        mutate(alert = ifelse(is.na(alert), "grey", alert))
 
     } else if (method == "original") {
 
@@ -746,7 +756,8 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
-        unnest(c(data_split, anomalies))
+        unnest(c(data_split, anomalies)) %>%
+        mutate(alert = ifelse(is.na(alert), "grey", alert))
 
     } else{
       cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
