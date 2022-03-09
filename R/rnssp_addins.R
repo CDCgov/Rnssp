@@ -278,10 +278,10 @@ create_user_profile_gui <- function() {
       if(grepl('[[:punct:][:space:]]', filename)){
         cli::cli_abort("Variable name {.var {filename}} is invalid! Try again!")
       } else {
-        profile <- Rnssp::Credentials$new(input$username, input$password)
+        myProfile <- Rnssp::Credentials$new(input$username, input$password)
         assign(
           filename,
-          value = profile,
+          value = myProfile,
           envir = .GlobalEnv
         )
       }
@@ -289,10 +289,10 @@ create_user_profile_gui <- function() {
       if (input$saveProfile) {
         target <- file.path(Sys.getenv("HOME"), paste0(filename, input$format))
         if (input$format == ".rda"){
-          saveFile <- try(save(profile, file = target), silent = TRUE)
+          saveFile <- try(save(myProfile, file = target), silent = TRUE)
           alert_msg(saveFile, target)
         } else {
-          saveFile <- try(saveRDS(profile, file = target), silent = TRUE)
+          saveFile <- try(saveRDS(myProfile, file = target), silent = TRUE)
           alert_msg(saveFile, target)
         }
       }
