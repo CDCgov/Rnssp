@@ -28,7 +28,7 @@
 #'
 #' @docType package
 #' @name Rnssp
-#' @author Gbedegnon Roseric Azondekon (\href{mailto:gazondekon@cdc.gov}{gazondekon@cdc.gov})
+#' @author Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
 #' @import dplyr, readr, magrittr, R6, stringi, assertive.types, safer, jsonlite, httr, askpass, yaml
 #' @import sf, shiny (>= 0.13), miniUI (>= 0.1.1), rstudioapi (>= 0.5)
 NULL
