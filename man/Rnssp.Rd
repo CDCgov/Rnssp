@@ -36,5 +36,5 @@ the Rnssp R markdown template Github repository at
 }
 
 \author{
-Gbedegnon Roseric Azondekon (\href{mailto:gazondekon@cdc.gov}{gazondekon@cdc.gov})
+Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
 }

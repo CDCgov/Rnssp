@@ -39,8 +39,8 @@ anomaly detection did not apply (i.e., observations for which baseline data were
 
 # Example 1
 df <- data.frame(
- date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
- count = floor(runif(366, min = 0, max = 101))
+  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  count = floor(runif(366, min = 0, max = 101))
 )
 df_regression <- alert_regression(df)
 
@@ -48,14 +48,13 @@ head(df)
 head(df_regression)
 
 df <- data.frame(
- Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
- percent = runif(366)
+  Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  percent = runif(366)
 )
 df_regression <- alert_regression(df, t = Date, y = percent)
 
 head(df)
 head(df_regression)
-
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
 library(ggplot2)
@@ -87,14 +86,22 @@ df_regression_region <- df_regression \%>\%
 df_regression_region \%>\%
   ggplot() +
   geom_line(aes(x = date, y = dataCount), color = "grey70") +
-  geom_line(data = subset(df_regression_region, alert != "grey"),
-                          aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_regression_region, alert == "blue"),
-                           aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_regression_region, alert == "yellow"),
-                           aes(x = date, y = dataCount), color = "yellow") +
-  geom_point(data = subset(df_regression_region, alert == "red"),
-                           aes(x = date, y = dataCount), color = "red") +
+  geom_line(
+    data = subset(df_regression_region, alert != "grey"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_regression_region, alert == "blue"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_regression_region, alert == "yellow"),
+    aes(x = date, y = dataCount), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_regression_region, alert == "red"),
+    aes(x = date, y = dataCount), color = "red"
+  ) +
   theme_bw() +
   labs(
     x = "Date",

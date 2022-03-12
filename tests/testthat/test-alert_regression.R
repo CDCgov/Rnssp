@@ -8,5 +8,5 @@ test_that("alert_regression functions as expected!", {
   df_regression <- alert_regression(df, t = date, y = count)
 
   expect(is.data.frame(df_regression), failure_message = "alert_regression test fails!")
-  expect_equal(length(df_regression), length(df) + 5)
+  expect_equal(length(df_regression), length(df) + 6)
 })

@@ -59,7 +59,7 @@ myProfile <- Credentials$new(
 # Data Pull from NSSP-ESSENCE
 With the NSSP `myProfile` object, we authenticate to NSSP-ESSENCE and pull in the data using the Time series data table API.
 ```{r data_pull, collapse=TRUE}
-url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=22Aug20&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 # Data Pull from NSSP-ESSENCE
 api_data <- myProfile$get_api_data(url)
@@ -69,12 +69,11 @@ df <- api_data$timeSeriesData
 
 ```
 
-In this tutorial, we will only show national level trends.
+First, let's group the data by HHS regions
 ```{r national}
 # Aggregating data to national level
-df_national <- df %>% 
-  group_by(date) %>% 
-  summarise(count = sum(dataCount), allCount = sum(allCount))
+df_hhs <- df %>%
+  group_by(hospitaldhhsregion_display)
 ```
 
 # Anomaly Detection
@@ -84,21 +83,26 @@ As of `r format(Sys.Date(), "%B %d, %Y")`, the `Rnssp` package implements two an
 The Exponentially Weighted Moving Average (EWMA) compares a weighted average of the most recent visit counts to a baseline expectation. For the weighted average to be tested, an exponential weighting gives the most influence to the most recent observations. This algorithm is appropriate for daily counts that do not have the characteristic features modeled in the regression algorithm. It is more applicable for Emergency Department data from certain hospital groups and for time series with small counts (daily average below 10) because of the limited case definition or chosen geographic region. The EWMA detection algorithm can be performed with `alert_ewma()` function (run `help(alert_ewma)` or `?alert_ewma` in the R console for more).
 
 ```{r alert_ewma}
-df_ewma <- alert_ewma(df_national, t = date, y = count)
+df_ewma <- alert_ewma(df_hhs, t = date, y = dataCount)
 ```
 
-Let's visualize the National level time series with the anomalies:
+Let's visualize the time series with the anomalies for Region 4:
 
 ```{r alert_ewma_viz}
+# Filter the dataset
+df_ewma_region <- df_ewma %>%
+  filter(hospitaldhhsregion_display == "Region 4")
+
 # Plot time series data
-df_ewma %>%
-  ggplot(aes(x = t, y = count)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_ewma, alert == "red"), color = "red") +
-  geom_point(data = subset(df_ewma, alert == "yellow"), color = "yellow") +
+df_ewma_region %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(data = subset(df_ewma_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_ewma_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_ewma_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
+  geom_point(data = subset(df_ewma_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
   theme_bw() +
-  labs(x = "Date",
-       y = "Percent")
+  labs(x = "Date", y = "Count")
 ```
 
 
@@ -107,22 +111,58 @@ The Multiple Adaptive Regression (MAR) algorithm fits a linear model to a baseli
 
 
 ```{r alert_regression}
-df_regression <- alert_regression(df_national, t = date, y = count)
+df_regression <- alert_regression(df_hhs, t = date, y = dataCount)
 ```
 
-Let's visualize the National level time series with the anomalies:
+Let's visualize the time series with the anomalies for Region 4:
 
 ```{r alert_regression_viz}
+# Filter the dataset
+df_regression_region <- df_regression %>%
+  filter(hospitaldhhsregion_display == "Region 4")
+
 # Plot time series data
-df_regression %>%
-  ggplot(aes(x = t, y = count)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_regression, alert == "red"), color = "red") +
-  geom_point(data = subset(df_regression, alert == "yellow"), color = "yellow") +
+df_regression_region %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(data = subset(df_regression_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_regression_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_regression_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
+  geom_point(data = subset(df_regression_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
   theme_bw() +
-  labs(x = "Date",
-       y = "Percent")
+  labs(x = "Date", y = "Count")
 ```
+
+
+## Regression/EWMA Switch
+The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and EWMA algorithms by applying the most appropriate algorithm for the data in the baseline. First, multiple adaptive regression is applied where the adjusted R squared value of the model is examined to see if it meets a threshold of 0.60. If this threshold is not met, then the model is considered to not explain the data well. In this case, the algorithm switches to the EWMA algorithm, which is more appropriate for sparser time series that are common with county level trends.
+
+The Regression/EWMA algorithm can be performed with the `alert_switch()` function (run `help(alert_switch)` or `?alert_switch` in the R console for more).
+
+
+```{r alert_switch}
+df_switch <- alert_switch(df_national, t = date, y = dataCount)
+```
+
+Let's visualize the time series with the anomalies for Region 4:
+
+```{r alert_switch_viz}
+# Filter the dataset
+df_switch_region <- df_switch %>%
+  filter(hospitaldhhsregion_display == "Region 4")
+
+# Plot time series data
+df_switch_region %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(data = subset(df_switch_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_switch_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
+  geom_point(data = subset(df_switch_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
+  geom_point(data = subset(df_switch_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
+  theme_bw() +
+  labs(x = "Date", y = "Count")
+```
+
 
 ## Farrington Temporal Detector
 The Farrington algorithm is intended for weekly time series of counts spanning multiple years. 

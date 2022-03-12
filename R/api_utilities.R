@@ -21,7 +21,7 @@
 #' csv_url <- "<csv type ESSENCE_url>"
 #' api_data_csv <- get_api_data(csv_url, fromCSV = TRUE)
 #' }
-get_api_data <- function(url, fromCSV = FALSE, profile = myProfile,  ...) {
+get_api_data <- function(url, fromCSV = FALSE, profile = myProfile, ...) {
   profile$get_api_data(url = url, fromCSV = fromCSV, ...)
 }
 
@@ -61,7 +61,7 @@ get_api_response <- function(url, profile = myProfile) {
 #' @export
 #'
 #' @examples
-#'  \dontrun{
+#' \dontrun{
 #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
 #' url <- "<ESSENCE_url>"
 #'

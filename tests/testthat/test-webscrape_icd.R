@@ -12,5 +12,5 @@ test_that("webscrape_icd() function works!", {
   expect_error(webscrape_icd("icd10", quiet = TRUE), "ICD version argument")
   expect_error(webscrape_icd("ICD10", 2014, quiet = TRUE), "ICD-10 code sets prior to 2019 are not supported")
   expect_error(webscrape_icd("ICD9", 2020, quiet = TRUE), "only applies for ICD10")
-  expect_error( webscrape_icd("ICD10", 2023, quiet = TRUE), "cannot be in the future")
+  expect_error(webscrape_icd("ICD10", 2023, quiet = TRUE), "cannot be in the future")
 })

@@ -11,8 +11,7 @@
 #' @keywords internal
 #'
 #'
-farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
-
+farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
   t <- enquo(t)
   y <- enquo(y)
 
@@ -36,7 +35,6 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     pull(!!y)
 
   for (i in min_obs:N) {
-
     current_date <- dates[i]
 
     ref_dates <- seq(current_date, length = B + 1, by = "-1 year")[-1]
@@ -60,37 +58,27 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     )
 
     if (!mod$converged) {
-
       mod <- suppressWarnings(
         glm(base_counts ~ 1, family = quasipoisson(link = "log"))
       )
 
       include_time <- FALSE
-
-    } else{
-
+    } else {
       include_time <- TRUE
-
     }
 
     if (!mod$converged) {
-
       next
-
     }
 
     mod_formula <- mod$formula
 
     if (include_time) {
-
       time_coeff <- mod$coefficients[["base_dates"]]
       time_p_val <- summary(mod)$coefficients[2, 4]
-
     } else {
-
       time_coeff <- NA
       time_p_val <- NA
-
     }
 
     y_observed <- as.numeric(mod$y)
@@ -98,10 +86,10 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     phi <- max(summary(mod)$dispersion, 1)
     diag <- as.numeric(hatvalues(mod))
 
-    ambscombe_resid <- ((3 / 2) * (y_observed ^ (2 / 3) * (y_fit ^ (-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
-    scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid ^ 2), 1)
+    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+    scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid^2), 1)
     gamma <- length(ambscombe_resid) / sum(scaled)
-    omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid ^ 2), gamma)
+    omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid^2), gamma)
 
     mod_weighted <- suppressWarnings(
       glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
@@ -115,10 +103,8 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     mod_weighted$data_count <- base_counts
 
     if (include_time) {
-
       time_coeff_weighted <- mod_weighted$coefficients[["base_dates"]]
       time_pval_weighted <- summary(mod_weighted)$coefficients[2, 4]
-
     }
 
     pred_week_time <- as.numeric((current_date - min_date)) / 7
@@ -146,17 +132,13 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     trend <- include_time & time_significant & pred_ok
 
     if (!trend) {
-
       mod <- suppressWarnings(
         glm(base_counts ~ 1, family = quasipoisson(link = "log"))
       )
 
       if (!mod$converged) {
-
         next
-
       } else {
-
         mod_formula <- mod$formula
 
         y_observed <- as.numeric(mod$y)
@@ -164,10 +146,10 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
         phi <- max(summary(mod)$dispersion, 1)
         diag <- as.numeric(hatvalues(mod))
 
-        ambscombe_resid <- ((3 / 2) * (y_observed ^ (2 / 3) * (y_fit ^ (-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
-        scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid ^ 2), 1)
+        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+        scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid^2), 1)
         gamma <- length(ambscombe_resid) / sum(scaled)
-        omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid ^ 2), gamma)
+        omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid^2), gamma)
 
         mod_weighted <- suppressWarnings(
           glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
@@ -192,9 +174,7 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
         )
 
         include_time_term[i] <- FALSE
-
       }
-
     }
 
 
@@ -204,17 +184,16 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
 
     # Temporary result vectors
     se_fit <- pred$se.fit
-    tau <- phi_weighted + ((se_fit ^ 2) / predicted[i])
-    se_pred <- sqrt((4 / 9) * predicted[i] ^ (1 / 3) * tau)
+    tau <- phi_weighted + ((se_fit^2) / predicted[i])
+    se_pred <- sqrt((4 / 9) * predicted[i]^(1 / 3) * tau)
     # alert_p.value[i] <- pnorm(y_obs[i] ^ (2 / 3), mean = predicted[i] ^ (2 / 3), sd = se_pred, lower.tail = FALSE)
 
-    upper[i] <- max(0, (predicted[i] ^ (2 / 3) + qnorm(0.95) * se_pred) ^ (3 / 2), na.rm = TRUE)
+    upper[i] <- max(0, (predicted[i]^(2 / 3) + qnorm(0.95) * se_pred)^(3 / 2), na.rm = TRUE)
 
     alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
 
     recent_counts <- sum(y_obs[(i - 4):i])
     alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
-
   }
 
   tibble(
@@ -225,7 +204,6 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
     alert_score = alert_score,
     alert = alert
   )
-
 }
 
 #' Return 10-level seasonal factor vector
@@ -241,15 +219,13 @@ farrington_original <- function (df, t = date, y = count, B = 4, w = 3) {
 #'
 #' @keywords internal
 #'
-seasonal_groups <- function (B = 4, g = 27, w = 3, p = 10, base_length, base_weeks) {
-
+seasonal_groups <- function(B = 4, g = 27, w = 3, p = 10, base_length, base_weeks) {
   h <- c(1, diff(base_weeks))
   csum_h <- cumsum(h)
 
   fct_levels <- rep(0, base_length)
 
   for (i in 1:B) {
-
     fct_levels[csum_h[i]:(csum_h[i] + 2 * w)] <- p
 
     delta_weeks <- h[i + 1] - (2 * w + 1)
@@ -266,16 +242,12 @@ seasonal_groups <- function (B = 4, g = 27, w = 3, p = 10, base_length, base_wee
     cum_lengths <- cumsum(fct_lengths)
 
     for (j in 1:(p - 1)) {
-
       fct_levels[(csum_h[i] + 2 * w + 1 + cum_lengths[j]):(csum_h[i] + 2 * w + cum_lengths[j + 1])] <- j
-
     }
-
   }
 
   # Trim extra components outside of baseline
   fct_levels <- as.factor(fct_levels[1:(length(fct_levels) - (g - 1) + w)])
-
 }
 
 #' Modified Farrington Algorithm
@@ -292,8 +264,7 @@ seasonal_groups <- function (B = 4, g = 27, w = 3, p = 10, base_length, base_wee
 #'
 #' @keywords internal
 #'
-farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, p = 10) {
-
+farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p = 10) {
   t <- enquo(t)
   y <- enquo(y)
 
@@ -308,7 +279,7 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
   include_time_term <- rep(NA, N)
   upper <- rep(NA, N)
   alert_score <- rep(NA, N)
-  alert = rep(NA, N)
+  alert <- rep(NA, N)
 
   dates <- df %>%
     pull(!!t)
@@ -317,7 +288,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     pull(!!y)
 
   for (i in min_obs:N) {
-
     current_date <- dates[i]
 
     ref_dates <- seq(current_date, length = B + 1, by = "-1 year")
@@ -347,37 +317,27 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     )
 
     if (!mod$converged) {
-
       mod <- suppressWarnings(
         glm(base_counts ~ 1 + fct_levels, family = quasipoisson(link = "log"))
       )
 
       include_time <- FALSE
-
-    } else{
-
+    } else {
       include_time <- TRUE
-
     }
 
     if (!mod$converged) {
-
       next
-
     }
 
     mod_formula <- mod$formula
 
     if (include_time) {
-
       time_coeff <- mod$coefficients[["base_dates"]]
       time_p_val <- summary(mod)$coefficients[2, 4]
-
     } else {
-
       time_coeff <- NA
       time_p_val <- NA
-
     }
 
     y_observed <- as.numeric(mod$y)
@@ -385,10 +345,10 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     phi <- max(summary(mod)$dispersion, 1)
     diag <- as.numeric(hatvalues(mod))
 
-    ambscombe_resid <- ((3 / 2) * (y_observed ^ (2 / 3) * (y_fit ^ (-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
-    scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid ^ 2), 1)
+    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+    scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid^2), 1)
     gamma <- length(ambscombe_resid) / sum(scaled)
-    omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid ^ 2), gamma)
+    omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid^2), gamma)
 
     mod_weighted <- suppressWarnings(
       glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
@@ -402,10 +362,8 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     mod_weighted$data_count <- base_counts
 
     if (include_time) {
-
       time_coeff_weighted <- mod_weighted$coefficients[["base_dates"]]
       time_pval_weighted <- summary(mod_weighted)$coefficients[2, 4]
-
     }
 
     pred_week_time <- as.numeric((current_date - min_date)) / 7
@@ -434,17 +392,13 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     trend <- include_time & time_significant & pred_ok
 
     if (!trend) {
-
       mod <- suppressWarnings(
         glm(base_counts ~ 1 + fct_levels, family = quasipoisson(link = "log"))
       )
 
       if (!mod$converged) {
-
         next
-
       } else {
-
         mod_formula <- mod$formula
 
         y_observed <- as.numeric(mod$y)
@@ -452,10 +406,10 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
         phi <- max(summary(mod)$dispersion, 1)
         diag <- as.numeric(hatvalues(mod))
 
-        ambscombe_resid <- ((3 / 2) * (y_observed ^ (2 / 3) * (y_fit ^ (-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
-        scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid ^ 2), 1)
+        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+        scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid^2), 1)
         gamma <- length(ambscombe_resid) / sum(scaled)
-        omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid ^ 2), gamma)
+        omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid^2), gamma)
 
         mod_weighted <- suppressWarnings(
           glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
@@ -481,11 +435,8 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
         )
 
         include_time_term[i] <- FALSE
-
       }
-
     } else {
-
       pred <- predict.glm(
         mod_weighted,
         newdata = data.frame(
@@ -499,7 +450,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
       )
 
       include_time_term[i] <- TRUE
-
     }
 
     predicted[i] <- pred$fit
@@ -525,7 +475,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
     upper[i] <- if_else(recent_counts > 5, upper[i], NA_real_)
     predicted[i] <- exp(predicted[i])
-
   }
 
   tibble(
@@ -536,7 +485,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
     alert_score = alert_score,
     alert = alert
   )
-
 }
 
 
@@ -599,8 +547,8 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #' # Example 1
 #'
 #' df <- data.frame(
-#'  date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
-#'  count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
+#'   date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
+#'   count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
 #' )
 #'
 #' ## Original Farrington algorithm
@@ -611,8 +559,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #' ## Modified Farrington algorithm
 #'
 #' df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
-#'
-#'
 #' \dontrun{
 #' # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 #'
@@ -648,14 +594,22 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #' df_farr_modified %>%
 #'   ggplot() +
 #'   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-#'   geom_line(data = subset(df_farr_modified, alert != "grey"),
-#'                           aes(x = date, y = count), color = "navy") +
-#'   geom_point(data = subset(df_farr_modified, alert == "blue"),
-#'                            aes(x = date, y = count), color = "navy") +
-#'   geom_point(data = subset(df_farr_modified, alert == "yellow"),
-#'                            aes(x = date, y = count), color = "yellow") +
-#'   geom_point(data = subset(df_farr_modified, alert == "red"),
-#'                            aes(x = date, y = count), color = "red") +
+#'   geom_line(
+#'     data = subset(df_farr_modified, alert != "grey"),
+#'     aes(x = date, y = count), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_farr_modified, alert == "blue"),
+#'     aes(x = date, y = count), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_farr_modified, alert == "yellow"),
+#'     aes(x = date, y = count), color = "yellow"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_farr_modified, alert == "red"),
+#'     aes(x = date, y = count), color = "red"
+#'   ) +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
@@ -663,7 +617,6 @@ farrington_modified <- function (df, t = date, y = count, B = 4, g = 27, w = 3, 
 #'   )
 #' }
 #'
-
 alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "original") {
 
   # Ensure that df is a dataframe
@@ -714,55 +667,42 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
   y <- enquo(y)
 
   if (grouped_df) {
-
     groups <- group_vars(df)
 
     if (method == "modified") {
-
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
-
     } else if (method == "original") {
-
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
-
     } else {
       cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
     }
-
   } else {
-
     if (method == "modified") {
-
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
-
     } else if (method == "original") {
-
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
         mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
-
-    } else{
+    } else {
       cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
     }
-
   }
-
 }

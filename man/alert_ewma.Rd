@@ -97,15 +97,23 @@ df_ewma_region <- df_ewma \%>\%
 
 df_ewma_region \%>\%
   ggplot() +
-  geom_line(aes(x = t, y = dataCount), color = "grey70") +
-  geom_line(data = subset(df_ewma_region, alert != "grey"),
-                          aes(x = t, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_ewma_region, alert == "blue"),
-                           aes(x = t, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_ewma_region, alert == "yellow"),
-                           aes(x = t, y = dataCount), color = "yellow") +
-  geom_point(data = subset(df_ewma_region, alert == "red"),
-                           aes(x = t, y = dataCount), color = "red") +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(
+    data = subset(df_ewma_region, alert != "grey"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "blue"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "yellow"),
+    aes(x = date, y = dataCount), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "red"),
+    aes(x = date, y = dataCount), color = "red"
+  ) +
   theme_bw() +
   labs(
     x = "Date",

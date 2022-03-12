@@ -63,8 +63,8 @@ with plug-in estimates for mu and phi.
 # Example 1
 
 df <- data.frame(
- date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
- count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
+  date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
+  count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
 )
 
 ## Original Farrington algorithm
@@ -75,8 +75,6 @@ df_farr_original <- alert_farrington(df, t = date, y = count)
 ## Modified Farrington algorithm
 
 df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
-
-
 \dontrun{
 # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 
@@ -112,14 +110,22 @@ df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified
 df_farr_modified \%>\%
   ggplot() +
   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-  geom_line(data = subset(df_farr_modified, alert != "grey"),
-                          aes(x = date, y = count), color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert == "blue"),
-                           aes(x = date, y = count), color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert == "yellow"),
-                           aes(x = date, y = count), color = "yellow") +
-  geom_point(data = subset(df_farr_modified, alert == "red"),
-                           aes(x = date, y = count), color = "red") +
+  geom_line(
+    data = subset(df_farr_modified, alert != "grey"),
+    aes(x = date, y = count), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "blue"),
+    aes(x = date, y = count), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "yellow"),
+    aes(x = date, y = count), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "red"),
+    aes(x = date, y = count), color = "red"
+  ) +
   theme_bw() +
   labs(
     x = "Date",

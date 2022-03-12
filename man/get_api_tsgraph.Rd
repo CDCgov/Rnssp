@@ -18,7 +18,7 @@ An object of class \code{response}.
 A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
- \dontrun{
+\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
 url <- "<ESSENCE_url>"
 

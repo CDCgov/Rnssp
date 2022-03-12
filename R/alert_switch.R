@@ -1,64 +1,3 @@
-#' Fit linear regression model with time and day-of-week terms
-#'
-#' @param x Baselines of length B for each individual test date
-#'
-#' @param algorithm Specifies detection algorithm. Defaults to "regression".
-#'
-#' @param B Baseline parameter. The baseline length is the number of days to
-#'     which each linear model is fit. Defaults to 28 days.
-#'
-#' @param g Guardband parameter. Number of days in buffer period to separate
-#'     the test date from the baseline.
-#'
-#' @keywords internal
-#'
-#' @return
-#' \itemize{
-#'      \item If algorithm is "regression", numeric value of test statistic for
-#'      one-sided Student's t-test.
-#'
-#'      \item If algorithm is "switch", a character string specifying the fitted value,
-#'       test statistic, and adjusted R-squared value to determine if the switch
-#'       to EWMA is made.
-#' }
-
-detection_reg <- function(x, algorithm = "regression", B, g) {
-  .matrix <- as.matrix(cbind(time = 1:B, x[1:B, c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat")]))
-
-  .model <- lm.fit(x = cbind(1, .matrix), y = x[1:B, ]$observed)
-  .resid <- .model$residuals
-  .mse <- (1 / (B - 7 - 1)) * sum(.resid^2)
-  .sigma <- sqrt(.mse) * sqrt(((B + 7) * (B - 4)) / (B * (B - 7)))
-  .beta <- .model$coefficients
-
-  .dow <- as.numeric(format(as.Date(last(x$base_date)), "%u"))
-
-  .fit <- if (.dow < 7) {
-    .beta[[1]] + (B + 2 + 1) * .beta[[2]] + .beta[[.dow + 2]]
-  } else {
-    .beta[[1]] + (B + 2 + 1) * .beta[[2]]
-  }
-
-  .test_statistic <- (last(x$observed) - .fit) / .sigma
-
-  if (algorithm == "switch") {
-    .f <- .model$fitted.values
-    .mss <- sum((.f - mean(.f))^2)
-    .rss <- sum(.resid^2)
-    .r_sqrd <- (.mss / (.rss + .mss))
-    .r_sqrd_adj <- 1 - (1 - .r_sqrd) * ((nrow(.matrix) - 1) / .model$df.residual)
-    .r_sqrd_adj <- if (is.nan(.r_sqrd_adj)) {
-      0
-    } else {
-      .r_sqrd_adj
-    }
-
-    return(paste0("Fitted: ", .fit, "|TestStatistic: ", .test_statistic, "|AdjustedRSqrd: ", .r_sqrd_adj))
-  } else {
-    return(.test_statistic)
-  }
-}
-
 #' Regression/EWMA Switch
 #'
 #' The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and
@@ -71,14 +10,19 @@ detection_reg <- function(x, algorithm = "regression", B, g) {
 #' coefficient for the EWMA algorithm is fixed to 0.4.
 #'
 #' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame.
-#' @param t Name of the column of type Date containing the dates.
-#' @param y Name of the column of type Numeric containing counts or percentages.
+#' @param t Name of the column of type Date containing the dates
+#' @param y Name of the column of type Numeric containing counts or percentages
 #' @param B Baseline parameter. The baseline length is the number of days to which
-#' each liner model is fit (default is 28).
+#' each liner model is fit (default is 28)
 #' @param g Guardband paramter. The guardband length is the number of days separating
-#'     the baseline from the current date in consideration for alerting (default is 2).
-#'
-#' @return A data frame with detection results.
+#'     the baseline from the current date in consideration for alerting (default is 2)
+#' @param w1 Smoothing coefficient for sensitivity to gradual events. Must be between
+#'     0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
+#'     effects. Defaults to 0.4 to match ESSENCE implementation.
+#' @param w2 Smoothed coefficient for sensitivity to sudden events. Must be between
+#'     0 and 1 and is recommended to be above 0.7 to account for sudden events.
+#'     Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.
+#' @return A data frame
 #' @export
 #'
 #' @examples
@@ -117,121 +61,107 @@ detection_reg <- function(x, algorithm = "regression", B, g) {
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
-#' api_data <-get_api_data(url)
+#' api_data <- get_api_data(url)
 #'
 #' df <- api_data$timeSeriesData
 #'
-#' df_switch <- alert_switch(df, t = date, y = dataCount)
+#' df_switch <- df %>%
+#'   group_by(hospitaldhhsregion_display) %>%
+#'   alert_switch(t = date, y = dataCount)
 #'
-#' # Visualize alert for South Dakota
+#' # Visualize alert for HHS Region 4
 #' df_switch_region <- df_switch %>%
 #'   filter(hospitaldhhsregion_display == "Region 4")
 #'
 #' df_switch_region %>%
-#'   ggplot(aes(x = date, y = dataCount)) +
-#'   geom_line(color = "blue") +
-#'   geom_point(data = subset(df_switch_region, alert == "alert"), color = "red") +
-#'   geom_point(data = subset(df_switch_region, alert == "warning"), color = "yellow") +
+#'   ggplot() +
+#'   geom_line(aes(x = date, y = dataCount), color = "grey70") +
+#'   geom_line(
+#'     data = subset(df_switch_region, alert != "grey"),
+#'     aes(x = date, y = dataCount), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_switch_region, alert == "blue"),
+#'     aes(x = date, y = dataCount), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_switch_region, alert == "yellow"),
+#'     aes(x = date, y = dataCount), color = "yellow"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_switch_region, alert == "red"),
+#'     aes(x = date, y = dataCount), color = "red"
+#'   ) +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
-#'     y = "Percent"
+#'     y = "Count"
 #'   )
 #' }
 #'
-alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w = 0.4) {
-  grouping <- group_vars(df)
+alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
 
-  col_names <- setdiff(names(df), c(ensym(t), ensym(y), grouping))
-
-  tph <- quo_name(enquo(t))
-  yph <- quo_name(enquo(y))
-
-  t <- substitute(t)
-  y <- substitute(y)
-
-  reg_out <- df %>%
-    as.data.table() %>%
-    .[, t := as.Date(eval(t))] %>%
-    .[, y := as.numeric(eval(y))] %>%
-    .[, paste0("lag", 0:(B + g)) := shift(y, n = 0:(B + g)), by = grouping] %>%
-    na.omit() %>%
-    melt(measure.vars = paste0("lag", 0:(B + g)), variable.name = "var", value.name = "observed") %>%
-    setorderv(c(grouping, "t", "var")) %>%
-    .[, !"var"] %>%
-    .[, base_date := seq_len(.N), by = c(grouping, "t")] %>%
-    .[, base_date := t - base_date + 1] %>%
-    .[, dow := weekdays(base_date, abbreviate = TRUE)] %>%
-    .[, var := 1] %>%
-    dcast(... ~ dow, value.var = "var", fill = 0) %>%
-    setorderv(c(grouping, "t", "base_date")) %>%
-    .[, .(.(.SD)), by = c(grouping, "t", "y", col_names)] %>%
-    setnames(old = "V1", new = "baseline") %>%
-    .[, detection_out := lapply(baseline, detection_reg, algorithm = "switch", B, g)] %>%
-    .[, !"baseline"] %>%
-    .[, c("expected_switch", "test_statistic", "r_sqrd_adj") := tstrsplit(detection_out, "|", fixed = TRUE)] %>%
-    .[, !"detection_out"] %>%
-    .[, c("expected_switch", "test_statistic", "r_sqrd_adj") := lapply(.SD, gsub, pattern = "[a-zA-Z]*\\: ", replacement = "", perl = TRUE), .SDcols = c("expected_switch", "test_statistic", "r_sqrd_adj")] %>%
-    .[, c("expected_switch", "test_statistic", "r_sqrd_adj") := lapply(.SD, as.numeric), .SDcols = c("expected_switch", "test_statistic", "r_sqrd_adj")] %>%
-    .[, p.value := pt(-abs(test_statistic), df = B - 7 - 1)] %>%
-    .[, p.value := fifelse(is.infinite(test_statistic) | is.nan(test_statistic), 0.5, p.value)] %>%
-    .[, alert := fcase(test_statistic > 0 & p.value < 0.01, "alert",
-      test_statistic > 0 & p.value >= 0.01 & p.value < 0.05, "warning",
-      p.value == 0.5 & (is.infinite(test_statistic) | is.nan(test_statistic)), "none",
-      default = "none"
-    )] %>%
-    as.data.frame() %>%
-    mutate(detector = "Multiple Adaptive Regression") %>%
-    rename(
-      !!tph := t,
-      !!yph := y
-    )
-
-  sigma_min <- 0.5
-  sigma_correction <- sqrt((w / (2 - w)) + (1 / B) - 2 * (1 - w)^(g + 1) * ((((1 - w)^B) - 1) / B))
-
-  ewma_out <- df %>%
-    as.data.table() %>%
-    .[, t := as.Date(eval(t))] %>%
-    .[, y := as.numeric(eval(y))] %>%
-    .[, mu := lag(frollmean(y, n = B, align = "right"), g + 1), by = grouping] %>%
-    .[, s := lag(frollapply(y, n = B, FUN = sd, align = "right"), g + 1), by = grouping] %>%
-    .[, s := max(0.5, s), by = c(grouping, "t")] %>%
-    .[, z := accumulate(.x = y, ~ w * .y + (1 - w) * .x, init = first(y)), by = grouping] %>%
-    .[, test_statistic := (z - mu) / (s * sigma_correction)] %>%
-    .[, p.value := pt(-abs(test_statistic), df = B - 1)] %>%
-    .[, alert := fcase(
-      p.value < 0.01 & test_statistic > 0, "alert",
-      p.value >= 0.01 & p.value < 0.05 & test_statistic > 0, "warning",
-      default = "none"
-    )] %>%
-    .[!is.na(mu), ] %>%
-    as.data.frame() %>%
-    mutate(!!tph := t) %>%
-    select(-c(t, y, s, z)) %>%
-    rename(expected_switch = mu) %>%
-    mutate(detector = "EWMA")
-
-  join_cols <- setdiff(names(ewma_out), c("expected_switch", "test_statistic", "r_sqrd_adj", "p.value", "alert", "detector"))
-
-  replace_dates <- reg_out %>%
-    filter(r_sqrd_adj < 0.60) %>%
-    select(-c(expected_switch, test_statistic, r_sqrd_adj, p.value, alert, detector)) %>%
-    inner_join(ewma_out, by = join_cols)
-
-  if (rlang::is_empty(grouping)) {
-    combined_out <- reg_out %>%
-      filter(r_sqrd_adj >= 0.60) %>%
-      select(-r_sqrd_adj) %>%
-      bind_rows(replace_dates) %>%
-      arrange(!!enquo(t))
-  } else {
-    combined_out <- reg_out %>%
-      filter(r_sqrd_adj >= 0.60) %>%
-      select(-r_sqrd_adj) %>%
-      bind_rows(replace_dates) %>%
-      arrange(!!ensym(grouping), !!enquo(t))
+  # Check baseline length argument
+  if (B < 7) {
+    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be greater than or equal to 7")
   }
 
-  combined_out
+  if (B %% 7 != 0) {
+    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be a multiple of 7")
+  }
+
+  # Check guardband length argument
+  if (g < 0) {
+    cli::cli_abort("Error in {.fn alert_regression}: guardband length argument {.var g} cannot be negative")
+  }
+
+  # Check for sufficient baseline data
+  if (nrow(df) < B + g + 1) {
+    cli::cli_abort("Error in {.fn alert_regression}: not enough historical data")
+  }
+
+  # Check for grouping variables
+  grouped_df <- is.grouped_df(df)
+
+  t <- enquo(t)
+  y <- enquo(y)
+
+  base_tbl <- df %>%
+    mutate({{ t }} := as.Date(!!t))
+
+  alert_tbl_reg <- base_tbl %>%
+    alert_regression(t = !!t, y = !!y, B = B, g = g) %>%
+    select(-sigma) %>%
+    mutate(detector = "Adaptive Multiple Regression")
+
+  alert_tbl_ewma <- base_tbl %>%
+    alert_ewma(t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2) %>%
+    mutate(detector = "EWMA")
+
+  join_cols <- setdiff(names(alert_tbl_reg), c("baseline_expected", "test_statistic", "p.value", "adjusted_r_squared", "alert", "detector"))
+
+  replace_dates <- alert_tbl_reg %>%
+    filter(is.na(adjusted_r_squared) | adjusted_r_squared < 0.60) %>%
+    select(-c(baseline_expected, test_statistic, p.value, adjusted_r_squared, alert, detector)) %>%
+    inner_join(alert_tbl_ewma, by = join_cols)
+
+  if (grouped_df) {
+    groups <- group_vars(base_tbl)
+
+    combined_out <- alert_tbl_reg %>%
+      filter(adjusted_r_squared >= 0.60) %>%
+      select(-adjusted_r_squared) %>%
+      bind_rows(replace_dates) %>%
+      arrange(!!sym(groups), !!enquo(t)) %>%
+      mutate(detector = ifelse(is.na(test_statistic), NA, detector))
+  } else {
+    combined_out <- alert_tbl_reg %>%
+      filter(adjusted_r_squared >= 0.60) %>%
+      select(-adjusted_r_squared) %>%
+      bind_rows(replace_dates) %>%
+      arrange(!!enquo(t)) %>%
+      mutate(detector = ifelse(is.na(test_statistic), NA, detector))
+  }
+
+  return(combined_out)
 }

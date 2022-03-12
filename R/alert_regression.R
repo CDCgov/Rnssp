@@ -15,7 +15,6 @@
 #' @keywords internal
 #'
 adaptive_regression <- function(df, t, y, B, g) {
-
   t <- enquo(t)
   y <- enquo(y)
 
@@ -24,7 +23,7 @@ adaptive_regression <- function(df, t, y, B, g) {
   # Populate algorithm parameters
   min_df <- 3
   min_baseline <- 11
-  max_baseline <- 28
+  max_baseline <- B
   df_range <- 1:(B - min_df)
 
   ucl_alert <- round(qt(1 - 0.01, df = df_range), 5)
@@ -38,6 +37,7 @@ adaptive_regression <- function(df, t, y, B, g) {
   p_val <- rep(NA, N)
   expected <- rep(NA, N)
   sigma <- rep(NA, N)
+  r_sqrd_adj <- rep(NA, N)
 
   # Vector of dates
   dates <- df %>%
@@ -67,7 +67,7 @@ adaptive_regression <- function(df, t, y, B, g) {
       ndx_test <- last(ndx_baseline) + g + 1
     } else {
       ndx_time <- 1:B
-      ndx_test <- 31
+      ndx_test <- (B + g + 1)
     }
 
     # Set number of degrees of freedom
@@ -93,6 +93,14 @@ adaptive_regression <- function(df, t, y, B, g) {
     res <- lm_fit$residuals
     mse <- (1 / (n_df)) * sum(res^2)
 
+    # Compute adjusted R-squared value
+    fit_vals <- lm_fit$fitted.values
+    mss <- sum((fit_vals - mean(fit_vals))^2)
+    rss <- sum(res^2)
+    r2 <- (mss / (rss + mss))
+    r2_adj <- 1 - (1 - r2) * ((nrow(X) - 1) / lm_fit$df.residual)
+    r_sqrd_adj[i] <- if_else(is.nan(r2_adj), 0, r2_adj)
+
     # Calculate bounded standard error of regression with derived formula for efficiency
     sigma[i] <- max(sqrt(mse) * sqrt(((B_length + 7) * (B_length - 4)) / (B_length * (B_length - 7))), min_sigma[n_df])
 
@@ -114,10 +122,11 @@ adaptive_regression <- function(df, t, y, B, g) {
   }
 
   tibble::tibble(
-    predicted = expected,
+    baseline_expected = expected,
     test_statistic = test_stat,
     p.value = p_val,
-    sigma = sigma
+    sigma = sigma,
+    adjusted_r_squared = r_sqrd_adj
   )
 }
 
@@ -158,24 +167,22 @@ adaptive_regression <- function(df, t, y, B, g) {
 #'
 #' # Example 1
 #' df <- data.frame(
-#'  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'  count = floor(runif(366, min = 0, max = 101))
+#'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   count = floor(runif(366, min = 0, max = 101))
 #' )
 #' df_regression <- alert_regression(df)
 #'
 #' head(df)
 #' head(df_regression)
 #'
-# Example 2
 #' df <- data.frame(
-#'  Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
-#'  percent = runif(366)
+#'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+#'   percent = runif(366)
 #' )
 #' df_regression <- alert_regression(df, t = Date, y = percent)
 #'
 #' head(df)
 #' head(df_regression)
-#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
 #' library(ggplot2)
@@ -207,14 +214,22 @@ adaptive_regression <- function(df, t, y, B, g) {
 #' df_regression_region %>%
 #'   ggplot() +
 #'   geom_line(aes(x = date, y = dataCount), color = "grey70") +
-#'   geom_line(data = subset(df_regression_region, alert != "grey"),
-#'                           aes(x = date, y = dataCount), color = "navy") +
-#'   geom_point(data = subset(df_regression_region, alert == "blue"),
-#'                            aes(x = date, y = dataCount), color = "navy") +
-#'   geom_point(data = subset(df_regression_region, alert == "yellow"),
-#'                            aes(x = date, y = dataCount), color = "yellow") +
-#'   geom_point(data = subset(df_regression_region, alert == "red"),
-#'                            aes(x = date, y = dataCount), color = "red") +
+#'   geom_line(
+#'     data = subset(df_regression_region, alert != "grey"),
+#'     aes(x = date, y = dataCount), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_regression_region, alert == "blue"),
+#'     aes(x = date, y = dataCount), color = "navy"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_regression_region, alert == "yellow"),
+#'     aes(x = date, y = dataCount), color = "yellow"
+#'   ) +
+#'   geom_point(
+#'     data = subset(df_regression_region, alert == "red"),
+#'     aes(x = date, y = dataCount), color = "red"
+#'   ) +
 #'   theme_bw() +
 #'   labs(
 #'     x = "Date",
@@ -258,10 +273,9 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
     pivot_wider(names_from = dow, values_from = dummy, values_fill = 0)
 
   if (grouped_df) {
-
     groups <- group_vars(base_tbl)
 
-    alert_tbl <- base_tbl %>%
+    base_tbl %>%
       nest(data_split = -all_of(groups)) %>%
       mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)) %>%
       unnest(c(data_split, anomalies)) %>%
@@ -274,10 +288,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
         )
       ) %>%
       select(-c(Mon, Tue, Wed, Thu, Fri, Sat, Sun))
-
-    return(alert_tbl)
   } else {
-
     unique_dates <- base_tbl %>%
       pull(!!t) %>%
       unique()
@@ -288,7 +299,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
 
     base_tbl %>%
       nest(data_split = everything()) %>%
-      mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = 28, g = 2)) %>%
+      mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(

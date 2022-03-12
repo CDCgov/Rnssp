@@ -4,27 +4,35 @@
 \alias{ewma_loop}
 \title{Loop for EWMA}
 \usage{
-ewma_loop(y, mu, sigma1, sigma2, B, g, w, alert_thresh)
+ewma_loop(df, t, y, B, g, w1, w2)
 }
 \arguments{
+\item{df}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame}
+
+\item{t}{Name of the column of type Date containing the dates}
+
 \item{y}{Numeric vector of counts or percentages}
 
+\item{B}{Baseline parameter. The baseline length is the number of days used to
+calculate rolling averages, standard deviations, and exponentially weighted
+moving averages. Defaults to 28 days to match ESSENCE implementation.}
+
+\item{g}{Guardband parameter. The guardband length is the number of days separating
+the baseline from the current test date. Defaults to 2 days to match ESSENCE
+implementation.}
+
+\item{w1}{Smoothing coefficient for sensitivity to gradual events. Must be between
+0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
+effects. Defaults to 0.4 to match ESSENCE implementation.}
+
+\item{w2}{Smoothed coefficient for sensitivity to sudden events. Must be between
+0 and 1 and is recommended to be above 0.7 to account for sudden events.
+Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.}
+
 \item{mu}{Numeric vector of baseline averages}
-
-\item{sigma1}{Adjusted standard deviation for baselines and
-first weighting for sensitivity to gradual events}
-
-\item{sigma2}{Adjusted standard deviation for baselines and
-second weighting for sensitivity to sudden events}
-
-\item{w}{Vector of length 2 with smoothing coefficients for
-gradual and sudden events}
-
-\item{alert_thresh}{Alert threshold value}
 }
 \value{
-List of output p-values, test statistics, and Exponentially
-    Weighted Moving Averages (EWMAs)
+A data frame with p-values and test statistics
 }
 \description{
 Loop for EWMA and adjustment of outlying smoothed values

@@ -4,23 +4,31 @@
 \alias{alert_switch}
 \title{Regression/EWMA Switch}
 \usage{
-alert_switch(df, t = date, y = count, B = 28, g = 2, w = 0.4)
+alert_switch(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9)
 }
 \arguments{
 \item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
 
-\item{t}{Name of the column of type Date containing the dates.}
+\item{t}{Name of the column of type Date containing the dates}
 
-\item{y}{Name of the column of type Numeric containing counts or percentages.}
+\item{y}{Name of the column of type Numeric containing counts or percentages}
 
 \item{B}{Baseline parameter. The baseline length is the number of days to which
-each liner model is fit (default is 28).}
+each liner model is fit (default is 28)}
 
 \item{g}{Guardband paramter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting (default is 2).}
+the baseline from the current date in consideration for alerting (default is 2)}
+
+\item{w1}{Smoothing coefficient for sensitivity to gradual events. Must be between
+0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
+effects. Defaults to 0.4 to match ESSENCE implementation.}
+
+\item{w2}{Smoothed coefficient for sensitivity to sudden events. Must be between
+0 and 1 and is recommended to be above 0.7 to account for sudden events.
+Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.}
 }
 \value{
-A data frame with detection results.
+A data frame
 }
 \description{
 The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and
@@ -68,25 +76,41 @@ url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?e
 
 url <- url \%>\% gsub("\n", "", .)
 
-api_data <-get_api_data(url)
+api_data <- get_api_data(url)
 
 df <- api_data$timeSeriesData
 
-df_switch <- alert_switch(df, t = date, y = dataCount)
+df_switch <- df \%>\%
+  group_by(hospitaldhhsregion_display) \%>\%
+  alert_switch(t = date, y = dataCount)
 
-# Visualize alert for South Dakota
+# Visualize alert for HHS Region 4
 df_switch_region <- df_switch \%>\%
   filter(hospitaldhhsregion_display == "Region 4")
 
 df_switch_region \%>\%
-  ggplot(aes(x = date, y = dataCount)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_switch_region, alert == "alert"), color = "red") +
-  geom_point(data = subset(df_switch_region, alert == "warning"), color = "yellow") +
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(
+    data = subset(df_switch_region, alert != "grey"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_switch_region, alert == "blue"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_switch_region, alert == "yellow"),
+    aes(x = date, y = dataCount), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_switch_region, alert == "red"),
+    aes(x = date, y = dataCount), color = "red"
+  ) +
   theme_bw() +
   labs(
     x = "Date",
-    y = "Percent"
+    y = "Count"
   )
 }
 

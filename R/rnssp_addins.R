@@ -180,9 +180,9 @@ remove_rmd_template_gui <- function() {
     ),
     miniUI::miniContentPanel(
       shiny::checkboxGroupInput("templ",
-                                label = "Existing templates",
-                                inline = TRUE,
-                                choices = templates
+        label = "Existing templates",
+        inline = TRUE,
+        choices = templates
       )
     )
   )
@@ -236,12 +236,11 @@ myProfile <- Credentials$new(
 #' @keywords internal
 #'
 create_user_profile_gui <- function() {
-
-  alert_msg <- function(x, y){
-    if(class(x) == "try-error"){
+  alert_msg <- function(x, y) {
+    if (class(x) == "try-error") {
       cli::cli_alert_danger("Failed to save {.file {y}}")
       shiny::stopApp()
-    } else{
+    } else {
       cli::cli_alert_success(paste("User Profile saved to", "{.file {y}}"))
     }
   }
@@ -275,7 +274,7 @@ create_user_profile_gui <- function() {
       if (any(length(input$username) == 0, length(input$password) == 0)) {
         shiny::stopApp()
       }
-      if(grepl('[[:punct:][:space:]]', filename)){
+      if (grepl("[[:punct:][:space:]]", filename)) {
         cli::cli_abort("Variable name {.var {filename}} is invalid! Try again!")
       } else {
         myProfile <- Rnssp::Credentials$new(input$username, input$password)
@@ -288,7 +287,7 @@ create_user_profile_gui <- function() {
 
       if (input$saveProfile) {
         target <- file.path(Sys.getenv("HOME"), paste0(filename, input$format))
-        if (input$format == ".rda"){
+        if (input$format == ".rda") {
           saveFile <- try(save(myProfile, file = target), silent = TRUE)
           alert_msg(saveFile, target)
         } else {
