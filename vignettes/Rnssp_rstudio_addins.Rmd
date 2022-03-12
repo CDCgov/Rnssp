@@ -1,5 +1,5 @@
 ---
-title: "Using Rnssp addins"
+title: "Using Rnssp RStudio Addins"
 author:
 output:
    rmarkdown::html_document:
@@ -10,7 +10,7 @@ output:
      number_sections: true
      theme: readable
 vignette: >
-  %\VignetteIndexEntry{Using Rnssp addins}
+  %\VignetteIndexEntry{Using Rnssp RStudio Addins}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

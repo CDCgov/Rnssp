@@ -582,33 +582,33 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 #'
 #' ## Original Farrington algorithm
 #'
-#' df_farr_original <- alert_farrington(df, t = date, y = count)
+#' df_farr_original <- alert_farrington(df, t = date, y = dataCount)
 #'
 #'
 #' ## Modified Farrington algorithm
 #'
-#' df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+#' df_farr_modified <- alert_farrington(df, t = date, y = dataCount, method = "modified")
 #'
 #'
 #' ### Visualize alert
 #' df_farr_modified %>%
 #'   ggplot() +
-#'   geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
+#'   geom_line(aes(x = date, y = dataCount), size = 0.4, color = "grey70") +
 #'   geom_line(
 #'     data = subset(df_farr_modified, alert != "grey"),
-#'     aes(x = date, y = count), color = "navy"
+#'     aes(x = date, y = dataCount), color = "navy"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "blue"),
-#'     aes(x = date, y = count), color = "navy"
+#'     aes(x = date, y = dataCount), color = "navy"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "yellow"),
-#'     aes(x = date, y = count), color = "yellow"
+#'     aes(x = date, y = dataCount), color = "yellow"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "red"),
-#'     aes(x = date, y = count), color = "red"
+#'     aes(x = date, y = dataCount), color = "red"
 #'   ) +
 #'   theme_bw() +
 #'   labs(

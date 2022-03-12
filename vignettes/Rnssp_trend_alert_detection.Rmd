@@ -63,14 +63,15 @@ url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?e
 
 # Data Pull from NSSP-ESSENCE
 api_data <- myProfile$get_api_data(url)
-df <- api_data$timeSeriesData
+df <- api_data %>% 
+  pluck("timeSeriesData")
 
 # glimpse(df)
 
 ```
 
 First, let's group the data by HHS regions
-```{r national}
+```{r hhs}
 # Aggregating data to national level
 df_hhs <- df %>%
   group_by(hospitaldhhsregion_display)
@@ -141,7 +142,7 @@ The Regression/EWMA algorithm can be performed with the `alert_switch()` functio
 
 
 ```{r alert_switch}
-df_switch <- alert_switch(df_national, t = date, y = dataCount)
+df_switch <- alert_switch(df_hhs, t = date, y = dataCount)
 ```
 
 Let's visualize the time series with the anomalies for Region 4:
@@ -176,11 +177,12 @@ Both the Original and the Modified Farrington algorithm can be performed with th
 Let's pull in more historical data:
 
 ```{r alert_farrington_data}
-url2 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20&percentParam=ccddCategory&datasource=va_hosp&startDate=22Aug20&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&geographySystem=hospitalstate&detector=probregv2&timeResolution=daily&hasBeenE=1&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&sigDigits=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+url2 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=29Dec2013&timeResolution=weekly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries"
 
 api_data2 <- get_api_data(url2)
 
-df2 <- api_data$timeSeriesData
+df2 <- api_data2 %>% 
+  pluck("timeSeriesData")
 ```
 
 The Original Farrington temporal detector can be applied as below:
@@ -192,7 +194,7 @@ df_farr_original <- alert_farrington(df2, t = date, y = count)
 Similarly, the Modified Farrington temporal detector can be applied as below:
 
 ```{r alert_farrington_modified}
-df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+df_farr_modified <- alert_farrington(df2, t = date, y = count, method = "modified")
 ```
 
 Let's visualize the time series with the detected anomalies:
@@ -200,10 +202,10 @@ Let's visualize the time series with the detected anomalies:
 ```{r alert_farrington_modified_viz}
 df_farr_modified %>%
   ggplot() +
-  geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
-  geom_line(data = subset(df_farr_modified, !is.na(alert)), aes(x = date, y = count), size = 0.4, color = "navy") +
-  geom_point(data = subset(df_farr_modified, !alert), aes(x = date, y = count), size = 1.5, color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert), aes(x = date, y = count), color = "red", size = 1.5) +
+  geom_line(aes(x = date, y = count), color = "grey70") +
+  geom_line(data = subset(df_farr_modified, alert != "grey"), aes(x = date, y = count), color = "navy") +
+  geom_point(data = subset(df_farr_modified, alert == "blue"), aes(x = date, y = count), color = "navy") +
+  geom_point(data = subset(df_farr_modified, alert == "red"), aes(x = date, y = count), color = "red") +
   theme_bw() +
   labs(
     x = "Date",
@@ -221,17 +223,22 @@ The trend classification fits rolling binomial models to a daily time series of 
 If there are fewer than 10 encounters/counts in the baseline period, a model is not fit and a value of NA is returned for the test statistic and p-value
 
 ```{r classify_trend}
-data_trend <- classify_trend(df_national, data_count = count, all_count = allCount)
+# Detecting trends in HHS region 4
+data_trend <- classify_trend(df_hhs, data_count = dataCount, all_count = allCount)
 ```
 
-Let's visualize the National trends with the color bar at the bottom representing the trend classification of each day over time:
+Let's visualize HHS region 4 trends with the color bar at the bottom representing the trend classification of each day over time:
 
 ```{r classify_trend_viz}
+# Filter the dataset
+df_trend_region <- data_trend %>%
+  filter(hospitaldhhsregion_display == "Region 4")
+
 # Defining a color palette
 pal <- c("#FF0000", "#1D8AFF", "#FFF70E", "grey90")
 
 # Plot trend
-data_trend %>%
+df_trend_region %>%
   mutate(percent = data_count/all_count * 100) %>%
   ggplot(., aes(x = t, y = percent)) +
   geom_line(color = "blue") +

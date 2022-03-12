@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -122,6 +122,9 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
+    </li>
+    <li>
+      <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
@@ -165,12 +168,78 @@
       <small>Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rnssp-002" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.2">
-<a href="#rnssp-002" class="anchor"></a>Rnssp 0.0.2</h1>
+    <div id="rnssp-003" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.3">
+<a href="#rnssp-003" class="anchor"></a>Rnssp 0.0.3</h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features</h2>
+<ul>
+<li>New function <code><a href="../reference/get_api_data.html">get_api_data()</a></code> added as a wrapper to the <code>$get_api_response()</code> method defined in the <code>Credentials</code> class.</li>
+<li>New function <code><a href="../reference/get_api_response.html">get_api_response()</a></code> added as a wrapper to the <code>$get_api_data()</code> method defined in the <code>Credentials</code> class.</li>
+<li>New function <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> added as a wrapper to the <code>$get_api_tsgraph()</code> method defined in the <code>Credentials</code> class.</li>
+<li>Regression/EWMA Switch algorithm <code><a href="../reference/alert_switch.html">alert_switch()</a></code> added for anomaly detection.</li>
+<li>Adaptive Multiple Regression algorithm <code><a href="../reference/alert_regression.html">alert_regression()</a></code> added for anomaly detection.</li>
+<li>Farrington Temporal Detector algorithm <code><a href="../reference/alert_farrington.html">alert_farrington()</a></code> added for weekly time series of counts spanning multiple years.</li>
+<li>ICD Code Web Scraper function <code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code> added to web scrape ICD discharge diagnosis code sets from the CDC FTP server (for ICD-10) or CMS website (for ICD-9).</li>
+<li>The following Addins have been added for RStudio users:
+<ul>
+<li>Create User Profile via a Graphical User Interface (<code>Rnssp:::create_user_profile_gui()</code>)</li>
+<li>Create a User Profile with a script skeleton (<code>Rnssp:::create_user_profile()</code>)</li>
+<li>List available Rnssp templates (<code><a href="../reference/list_templates.html">list_templates()</a></code>)</li>
+<li>Add or Update Rnssp templates (<code>Rnssp:::add_rmd_template_gui()</code>)</li>
+<li>Remove Rnssp templates (<code>Rnssp:::remove_rmd_template_gui()</code>)</li>
+<li>Open Rnssp templates online documentation (<code>Rnssp:::rnssp_templates_manual()</code>)</li>
+<li>Open Rnssp package online documentation (<code>Rnssp:::rnssp_manual()</code>)</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="updates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#updates" class="anchor"></a>Updates</h2>
+<ul>
+<li>
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> no longer has a <code>template_name</code> argument. The argument <code>template_name</code> has been replaced by <code>template</code> which is the first argument in the function call.</li>
+<li>New test <code>test-alert_farrington.R</code> added for <code><a href="../reference/alert_farrington.html">alert_farrington()</a></code>.</li>
+<li>New test <code>test-alert_regression.R</code> added for <code><a href="../reference/alert_regression.html">alert_regression()</a></code>.</li>
+<li>New test <code>test-alert_switch.R</code> added for <code><a href="../reference/alert_switch.html">alert_switch()</a></code>.</li>
+<li>New test <code>test-add_rmd_template.R</code> added for <code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code>.</li>
+<li>New test <code>test-remove_rmd_template.R</code> added for <code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code>.</li>
+<li>New test <code>test-get_api_data.R</code> added for the <code><a href="../reference/get_api_data.html">get_api_data()</a></code> function.</li>
+<li>New test <code>test-get_api_response.R</code> added for the <code><a href="../reference/get_api_response.html">get_api_response()</a></code> function.</li>
+<li>New test <code>test-get_api_tsgraph.R</code> added for the <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> function.</li>
+<li>New test <code>test-get_api_data_method.R</code> added for the <code>$get_api_data()</code> method.</li>
+<li>New test <code>test-get_api_response_method.R</code> added for the <code>$get_api_response()</code> method.</li>
+<li>New test <code>test-get_api_tsgraph_method.R</code> added for the <code>$get_api_tsgraph()</code> method.</li>
+<li>New test <code>test-webscrape_icd.R</code> added for <code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code>
+</li>
+<li>Added shapefile for US Hospital Service Area (HSA) Shapefile (<code>hsa_sf</code>)</li>
+<li>Added Rnssp stopwords (<code>rnssp_stopwords</code>)</li>
+<li>
+<code><a href="../reference/alert_mar.html">alert_mar()</a></code> is depecrated. Use <code>alert_regression</code> instead.</li>
+<li>Test <code>test_alert_mar.R</code> has been removed for <code><a href="../reference/alert_mar.html">alert_mar()</a></code>.</li>
+<li>Regression models in <code><a href="../reference/alert_regression.html">alert_regression()</a></code> are fit using <code><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit()</a></code> instead of <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> to reduce computation time associated with extraneous computations made by <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>.</li>
+<li>New vignette added to demonstrate the use of Rnssp addins.</li>
+</ul>
+</div>
+<div id="other-news" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-news" class="anchor"></a>Other News</h2>
+<ul>
+<li>
+<code>slider</code> package dependency no longer needed.</li>
+<li>
+<code>cli</code> package is now a dependency for attractive Command Line Interfaces (CLIs)</li>
+</ul>
+</div>
+</div>
+    <div id="rnssp-002" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.2">
+<a href="#rnssp-002" class="anchor"></a>Rnssp 0.0.2</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
 <ul>
 <li>All vignettes can be browsed with the <code><a href="../reference/Rnssp_vignettes.html">Rnssp_vignettes()</a></code> function</li>
 <li>
@@ -193,9 +262,9 @@
 <li>The <code>$get_api_data()</code> method has been extended to accept further arguments to parse CSV files.</li>
 </ul>
 </div>
-<div id="other-news" class="section level2">
+<div id="other-news-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#other-news" class="anchor"></a>Other News</h2>
+<a href="#other-news-1" class="anchor"></a>Other News</h2>
 <ul>
 <li>Added CI/CD pipeline</li>
 <li>Updated all <code>Rnssp</code> vignettes.</li>
@@ -209,9 +278,9 @@
     <div id="rnssp-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
 <a href="#rnssp-001" class="anchor"></a>Rnssp 0.0.1</h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<a href="#new-features-2" class="anchor"></a>New Features</h2>
 <ul>
 <li>
 <code><a href="../reference/alert_ewma.html">alert_ewma()</a></code> implements EWMA time series anomaly detection algorithm</li>
@@ -241,7 +310,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/rosericazondekon'>Gbedegnon Roseric Azondekon</a>.</p>
+  <p>Developed by <a href='https://rosericazondekon.github.io'>Gbedegnon Roseric Azondekon</a>, <a href='https://github.com/Michael-Sheppard'>Michael Sheppard</a>.</p>
 </div>
 
 <div class="pkgdown">

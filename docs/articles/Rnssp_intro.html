@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -73,6 +73,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
+    </li>
+    <li>
+      <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
@@ -126,7 +129,7 @@
 <div id="introduction" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>The goal of <code>Rnssp</code> package is to facilitate the access to the <code>ESSENCE</code> system via a secure and simple interface. In addition, <code>Rnssp</code> provides methods that streamline the data pull by abstracting the complexity of the R codes from the users.</p>
+<p>The goal of <code>Rnssp</code> package is to facilitate the access to the Electronic Surveillance System for the Early Notification of Community-based Epidemics (<code>ESSENCE</code>) via a secure and simplified interface. In addition, <code>Rnssp</code> provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.</p>
 <p>In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:</p>
 <ol style="list-style-type: decimal">
 <li>Time series data table,</li>
@@ -188,7 +191,8 @@
 <span class="co">#&gt;     ..__: NSSPContainer, R6</span>
 <span class="co">#&gt;     ..password: NSSPContainer, R6</span>
 <span class="co">#&gt;     ..username: NSSPContainer, R6</span></code></pre></div>
-<p>The created <code>myProfile</code> object comes with the <code>$get_api_response()</code>, the <code>$get_api_data()</code>, and the <code>$get_api_tsgraph()</code> methods with various parameters to pull ESSENCE data. For a full documentation on all the methods available, execute the <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in the R console.</p>
+<p>The created <code>myProfile</code> object comes with the <code>$get_api_response()</code>, <code>$get_api_data()</code>, and <code>$get_api_tsgraph()</code> methods with various parameters to pull ESSENCE data. Alternatively, the <code><a href="../reference/get_api_response.html">get_api_response()</a></code>, <code><a href="../reference/get_api_data.html">get_api_data()</a></code>, and <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> functions serve as wrappers to their respective methods.</p>
+<p>For a full documentation on all the methods available, execute the <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in the R console. Similarly, execute <code>?get_api_response()</code>, <code>?get_api_data()</code>, or <code>?get_api_tsgraph()</code> for a full documentation on each function.</p>
 <p>In the following sections, we show how to pull data from ESSENCE using the seven APIs listed above.</p>
 </div>
 <div id="time-series-data-table" class="section level1">
@@ -199,7 +203,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
 
 <span class="co"># pull time series data</span>
-<span class="va">api_data_ts</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data_ts &lt;- myProfile$get_api_data(url)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -212,7 +216,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
 
 <span class="co"># pull time series data</span>
-<span class="va">api_response</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_response</span><span class="op">(</span><span class="va">url</span><span class="op">)</span> 
+<span class="va">api_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_response.html">get_api_response</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> 
 
 <span class="va">api_response_content</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html">content</a></span><span class="op">(</span><span class="va">api_response</span>, as <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
 <span class="va">api_data_ts2</span> <span class="op">&lt;-</span> <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="va">api_response_content</span><span class="op">)</span>
@@ -235,7 +239,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span>
 
 <span class="co"># Data pull from ESSENCE</span>
-<span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_tsgraph</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_tsgraph.html">get_api_tsgraph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="co"># Inspecting api_data_graph object</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span>
@@ -258,7 +262,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># Inspecting api_data_graph object</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> 
@@ -274,7 +278,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tb_json</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_tb_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span>
 <span class="co">#&gt; [1] "data.frame"</span>
@@ -297,7 +301,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;startDate=31Jan2021&amp;endDate=31Jan2021"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_dd_csv</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">api_data_dd_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_csv</span><span class="op">)</span>  
 <span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span>
@@ -312,7 +316,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?endDate=31Jan2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=31Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=DataDetails"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_dd_json</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_dd_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -330,7 +334,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/summaryData?endDate=31Jan2021&amp;medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hosp&amp;detector=probrepswitch&amp;startDate=29Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_ss</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -351,7 +355,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_alr</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_alr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -368,7 +372,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/hospitalSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_alh</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_alh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -381,13 +385,13 @@
 <div id="time-series-data-table-with-stratified-historical-alerts-from-essence2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from ESSENCE2)</h1>
-<p>This functionality as of October 01, 2021 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
+<p>This functionality as of March 12, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span>
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tssh</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data_tssh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span>
 <span class="co">#&gt; [1] "list"</span>
@@ -409,7 +413,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://github.com/rosericazondekon">Gbedegnon Roseric Azondekon</a>.</p>
+  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
 </div>
 
 <div class="pkgdown">

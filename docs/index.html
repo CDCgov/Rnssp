@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -74,6 +74,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
+    </li>
+    <li>
+      <a href="articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
       <a href="articles/Rnssp_text_mining.html">Text Mining Example</a>
@@ -129,7 +132,7 @@
 <p>You can install the development version of <code>Rnssp</code> from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install the Rnssp package</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"cdcgov/Rnssp"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"cdcgov/Rnssp@dev"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -155,7 +158,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 
 <span class="co">## Pull Time Series Data from ESSENCE</span>
-<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data &lt;- myProfile$get_api_data(url)</span>
 
 <span class="co">## Inspect data object structure</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data</span><span class="op">)</span>
@@ -243,8 +246,9 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://github.com/rosericazondekon">Gbedegnon Roseric Azondekon</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9155-4153" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9155-4153" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://github.com/Michael-Sheppard">Michael Sheppard</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-3660-575X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -263,7 +267,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://github.com/rosericazondekon">Gbedegnon Roseric Azondekon</a>.</p>
+  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
 </div>
 
 <div class="pkgdown">
