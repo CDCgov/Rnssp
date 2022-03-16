@@ -2,7 +2,7 @@
 "_PACKAGE"
 #' Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data via NSSP ESSENCE
 #'
-#' The National Syndromic and Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
+#' The National Syndromic Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
 #' including state and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
 #' analytic tools, and assisted with scripts to interface with ESSENCE. The \code{Rnssp} R package is built in an attempt to
 #' improve reusability, reproducibility, and distribution of the analytical resources developed at the CDC NSSP.
@@ -28,7 +28,7 @@
 #'
 #' @docType package
 #' @name Rnssp
-#' @author Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
+#' @author Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov}) and Michael Sheppard (\email{msheppard@cdc.gov})
 #' @import dplyr, readr, magrittr, R6, stringi, assertive.types, safer, jsonlite, httr, askpass, yaml
 #' @import sf, shiny (>= 0.13), miniUI (>= 0.1.1), rstudioapi (>= 0.5)
 NULL

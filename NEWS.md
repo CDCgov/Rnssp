@@ -1,4 +1,4 @@
-# Rnssp 0.0.3
+# Rnssp 0.1.0
 
 ## New Features
 * New function `get_api_data()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.

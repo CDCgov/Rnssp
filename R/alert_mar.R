@@ -54,13 +54,15 @@
 #'
 #' myProfile <- Credentials$new(askme("Enter your username:"), askme())
 #'
-#' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
-#' &ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory
-#' &geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20
-#' &timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries
-#' &stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
-#' &nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true
-#' &numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+#' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
+#' endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
+#' &percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg
+#' &detector=probrepswitch&startDate=22Aug20&timeResolution=daily&hasBeenE=1
+#' &medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=
+#' &multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall
+#' &seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January
+#' &stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall
+#' &seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
