@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -262,7 +262,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span>
 
 <span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># Inspecting api_data_graph object</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> 
@@ -385,7 +385,7 @@
 <div id="time-series-data-table-with-stratified-historical-alerts-from-essence2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from ESSENCE2)</h1>
-<p>This functionality as of March 12, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
+<p>This functionality as of March 16, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span>
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span>

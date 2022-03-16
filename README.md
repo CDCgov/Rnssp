@@ -20,7 +20,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # install the Rnssp package
-devtools::install_github("cdcgov/Rnssp@dev")
+devtools::install_github("cdcgov/Rnssp")
 ```
 
 
