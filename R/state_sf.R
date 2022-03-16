@@ -1,6 +1,10 @@
 #' US States Shapefile
 #'
+<<<<<<< HEAD
 #' Useful \code{sf}` object shapefile for US States.
+=======
+#' Useful \code{sf} object shapefile for US States.
+>>>>>>> master
 #'
 #' \preformatted{
 #' Rows: 51

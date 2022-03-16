@@ -127,12 +127,20 @@ Get ESSENCE API data
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
 
+<<<<<<< HEAD
 \item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
+=======
+\item{\code{...}}{Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
+>>>>>>> master
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
+<<<<<<< HEAD
 a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+=======
+A dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+>>>>>>> master
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
