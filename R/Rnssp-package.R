@@ -33,7 +33,11 @@
 #' @docType package
 #' @name Rnssp
 <<<<<<< HEAD
+<<<<<<< HEAD
 #' @author Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
+=======
+#' @author Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov}) and Michael Sheppard (\email{msheppard@cdc.gov})
+>>>>>>> parent of 734f29c (Migrating to version 0.1.0)
 #' @import dplyr, readr, magrittr, R6, stringi, assertive.types, safer, jsonlite, httr, askpass, yaml
 #' @import sf, shiny (>= 0.13), miniUI (>= 0.1.1), rstudioapi (>= 0.5)
 =======

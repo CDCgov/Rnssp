@@ -159,7 +159,7 @@ The CSV option of the Table Builder Results API pulls in data in the tabular for
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
 
 # Data Pull from ESSENCE
-api_data_tb_csv <- get_api_data(url, fromCSV = TRUE)
+api_data_tb_csv <-get_api_data(url, fromCSV = TRUE)
 
 # Inspecting api_data_graph object
 class(api_data_tb_csv) 
