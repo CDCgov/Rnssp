@@ -46,11 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
->>>>>>> master
       </span>
     </div>
 
@@ -79,12 +75,9 @@
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
     </li>
     <li>
-<<<<<<< HEAD
       <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
-=======
->>>>>>> master
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
     </li>
     <li>
@@ -136,11 +129,7 @@
 <div id="introduction" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<<<<<<< HEAD
 <p>The goal of <code>Rnssp</code> package is to facilitate the access to the Electronic Surveillance System for the Early Notification of Community-based Epidemics (<code>ESSENCE</code>) via a secure and simplified interface. In addition, <code>Rnssp</code> provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.</p>
-=======
-<p>The goal of <code>Rnssp</code> package is to facilitate the access to the <code>ESSENCE</code> system via a secure and simple interface. In addition, <code>Rnssp</code> provides methods that streamline the data pull by abstracting the complexity of the R codes from the users.</p>
->>>>>>> master
 <p>In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:</p>
 <ol style="list-style-type: decimal">
 <li>Time series data table,</li>
@@ -202,12 +191,8 @@
 <span class="co">#&gt;     ..__: NSSPContainer, R6</span>
 <span class="co">#&gt;     ..password: NSSPContainer, R6</span>
 <span class="co">#&gt;     ..username: NSSPContainer, R6</span></code></pre></div>
-<<<<<<< HEAD
 <p>The created <code>myProfile</code> object comes with the <code>$get_api_response()</code>, <code>$get_api_data()</code>, and <code>$get_api_tsgraph()</code> methods with various parameters to pull ESSENCE data. Alternatively, the <code><a href="../reference/get_api_response.html">get_api_response()</a></code>, <code><a href="../reference/get_api_data.html">get_api_data()</a></code>, and <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> functions serve as wrappers to their respective methods.</p>
 <p>For a full documentation on all the methods available, execute the <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in the R console. Similarly, execute <code>?get_api_response()</code>, <code>?get_api_data()</code>, or <code>?get_api_tsgraph()</code> for a full documentation on each function.</p>
-=======
-<p>The created <code>myProfile</code> object comes with the <code>$get_api_response()</code>, the <code>$get_api_data()</code>, and the <code>$get_api_tsgraph()</code> methods with various parameters to pull ESSENCE data. For a full documentation on all the methods available, execute the <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in the R console.</p>
->>>>>>> master
 <p>In the following sections, we show how to pull data from ESSENCE using the seven APIs listed above.</p>
 </div>
 <div id="time-series-data-table" class="section level1">
@@ -400,11 +385,7 @@
 <div id="time-series-data-table-with-stratified-historical-alerts-from-essence2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from ESSENCE2)</h1>
-<<<<<<< HEAD
 <p>This functionality as of March 16, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
-=======
-<p>This functionality as of January 11, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
->>>>>>> master
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span>
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span>
@@ -432,11 +413,7 @@
 
 
       <footer><div class="copyright">
-<<<<<<< HEAD
   <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
-=======
-  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>.</p>
->>>>>>> master
 </div>
 
 <div class="pkgdown">

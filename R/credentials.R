@@ -35,11 +35,7 @@ Credentials <- R6::R6Class(
     #' @description
     #' Get ESSENCE API response
     #' @param url a character of ESSENCE API URL
-<<<<<<< HEAD
     #' @return An object of class \code{response}
-=======
-    #' @return An object of class response
->>>>>>> master
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
@@ -65,13 +61,8 @@ Credentials <- R6::R6Class(
     #' Get ESSENCE API data
     #' @param url a character of ESSENCE API URL
     #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format
-<<<<<<< HEAD
     #' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
     #' @return a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
-=======
-    #' @param ... Further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
-    #' @return A dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
->>>>>>> master
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
@@ -93,11 +84,7 @@ Credentials <- R6::R6Class(
     },
 
     #' @description
-<<<<<<< HEAD
     #' Get ESSENCE API Time Series Graph
-=======
-    #' Get ESSENCE API data
->>>>>>> master
     #' @param url a character of ESSENCE API URL
     #' @return A list containing an api_response object and a path to a time series graph in .png format
     #' @examples

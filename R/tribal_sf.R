@@ -1,10 +1,6 @@
 #' US Native American Lands Shapefile
 #'
-<<<<<<< HEAD
-#' Useful \code{sf}` object shapefile for US Native American Lands.
-=======
 #' Useful \code{sf} object shapefile for US Native American Lands.
->>>>>>> master
 #'
 #' \preformatted{
 #' Rows: 770

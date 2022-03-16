@@ -1,10 +1,6 @@
 #' US Counties Shapefile
 #'
-<<<<<<< HEAD
-#' Useful \code{sf}` object shapefile for US Counties.
-=======
 #' Useful \code{sf} object shapefile for US Counties.
->>>>>>> master
 #'
 #' \preformatted{
 #' Rows: 3,142

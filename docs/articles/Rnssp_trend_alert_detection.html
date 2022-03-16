@@ -46,11 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-<<<<<<< HEAD
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
-=======
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
->>>>>>> master
       </span>
     </div>
 
@@ -79,12 +75,9 @@
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
     </li>
     <li>
-<<<<<<< HEAD
       <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
-=======
->>>>>>> master
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
     </li>
     <li>
@@ -168,41 +161,23 @@
   <span class="fu">pluck</span><span class="op">(</span><span class="st">"timeSeriesData"</span><span class="op">)</span>
 
 <span class="co"># glimpse(df)</span></code></pre></div>
-<<<<<<< HEAD
 <p>First, let’s group the data by HHS regions</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Aggregating data to national level</span>
 <span class="va">df_hhs</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">hospitaldhhsregion_display</span><span class="op">)</span></code></pre></div>
-=======
-<p>In this tutorial, we will only show national level trends.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Aggregating data to national level</span>
-<span class="va">df_national</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">summarise</span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dataCount</span><span class="op">)</span>, allCount <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">allCount</span><span class="op">)</span><span class="op">)</span></code></pre></div>
->>>>>>> master
 </div>
 <div id="anomaly-detection" class="section level1">
 <h1 class="hasAnchor">
 <a href="#anomaly-detection" class="anchor"></a>Anomaly Detection</h1>
-<<<<<<< HEAD
 <p>As of March 16, 2022, the <code>Rnssp</code> package implements two anomaly detection algorithms:</p>
-=======
-<p>As of January 11, 2022, the <code>Rnssp</code> package implements two anomaly detection algorithms:</p>
->>>>>>> master
 <div id="exponentially-weighted-moving-average-ewma" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exponentially-weighted-moving-average-ewma" class="anchor"></a>Exponentially Weighted Moving Average (EWMA)</h2>
 <p>The Exponentially Weighted Moving Average (EWMA) compares a weighted average of the most recent visit counts to a baseline expectation. For the weighted average to be tested, an exponential weighting gives the most influence to the most recent observations. This algorithm is appropriate for daily counts that do not have the characteristic features modeled in the regression algorithm. It is more applicable for Emergency Department data from certain hospital groups and for time series with small counts (daily average below 10) because of the limited case definition or chosen geographic region. The EWMA detection algorithm can be performed with <code><a href="../reference/alert_ewma.html">alert_ewma()</a></code> function (run <code><a href="../reference/alert_ewma.html">help(alert_ewma)</a></code> or <code><a href="../reference/alert_ewma.html">?alert_ewma</a></code> in the R console for more).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<<<<<<< HEAD
 <code class="sourceCode R"><span class="va">df_ewma</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alert_ewma.html">alert_ewma</a></span><span class="op">(</span><span class="va">df_hhs</span>, t <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span></code></pre></div>
 <p>Let’s visualize the time series with the anomalies for Region 4:</p>
-=======
-<code class="sourceCode R"><span class="va">df_ewma</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alert_ewma.html">alert_ewma</a></span><span class="op">(</span><span class="va">df_national</span>, t <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">count</span><span class="op">)</span></code></pre></div>
-<p>Let’s visualize the National level time series with the anomalies:</p>
->>>>>>> master
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Filter the dataset</span>
 <span class="va">df_ewma_region</span> <span class="op">&lt;-</span> <span class="va">df_ewma</span> <span class="op">%&gt;%</span>
@@ -217,28 +192,16 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df_ewma_region</span>, <span class="va">alert</span> <span class="op">==</span> <span class="st">"yellow"</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df_ewma_region</span>, <span class="va">alert</span> <span class="op">==</span> <span class="st">"red"</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-<<<<<<< HEAD
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Date"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span></code></pre></div>
-=======
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Date"</span>,
-       y <span class="op">=</span> <span class="st">"Percent"</span><span class="op">)</span></code></pre></div>
->>>>>>> master
 <p><img src="Rnssp_trend_alert_detection_files/figure-html/alert_ewma_viz-1.png" width="700"></p>
 </div>
 <div id="multiple-adaptive-regression-mar" class="section level2">
 <h2 class="hasAnchor">
 <a href="#multiple-adaptive-regression-mar" class="anchor"></a>Multiple Adaptive Regression (MAR)</h2>
-<<<<<<< HEAD
 <p>The Multiple Adaptive Regression (MAR) algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value som predefined days later. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE. The EWMA detection algorithm can be performed with the <code><a href="../reference/alert_regression.html">alert_regression()</a></code> function (run <code><a href="../reference/alert_regression.html">help(alert_regression)</a></code> or <code><a href="../reference/alert_regression.html">?alert_regression</a></code> in the R console for more).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df_regression</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alert_regression.html">alert_regression</a></span><span class="op">(</span><span class="va">df_hhs</span>, t <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span></code></pre></div>
 <p>Let’s visualize the time series with the anomalies for Region 4:</p>
-=======
-<p>The Multiple Adaptive Regression (MAR) algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value som predefined days later. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE. The EWMA detection algorithm can be performed with <code><a href="../reference/alert_mar.html">alert_mar()</a></code> function (run <code><a href="../reference/alert_mar.html">help(alert_mar)</a></code> or <code><a href="../reference/alert_mar.html">?alert_mar</a></code> in the R console for more).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df_mar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alert_mar.html">alert_mar</a></span><span class="op">(</span><span class="va">df_national</span>, t <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">count</span><span class="op">)</span></code></pre></div>
-<p>Let’s visualize the National level time series with the anomalies:</p>
->>>>>>> master
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Filter the dataset</span>
 <span class="va">df_regression_region</span> <span class="op">&lt;-</span> <span class="va">df_regression</span> <span class="op">%&gt;%</span>
@@ -253,7 +216,6 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df_regression_region</span>, <span class="va">alert</span> <span class="op">==</span> <span class="st">"yellow"</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">df_regression_region</span>, <span class="va">alert</span> <span class="op">==</span> <span class="st">"red"</span><span class="op">)</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dataCount</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-<<<<<<< HEAD
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Date"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span></code></pre></div>
 <p><img src="Rnssp_trend_alert_detection_files/figure-html/alert_regression_viz-1.png" width="700"></p>
 </div>
@@ -317,11 +279,6 @@
     y <span class="op">=</span> <span class="st">"Weekly ED Visits"</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="Rnssp_trend_alert_detection_files/figure-html/alert_farrington_modified_viz-1.png" width="700"></p>
-=======
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Date"</span>,
-       y <span class="op">=</span> <span class="st">"Percent"</span><span class="op">)</span></code></pre></div>
-<p><img src="Rnssp_trend_alert_detection_files/figure-html/alert_mar_viz-1.png" width="700"></p>
->>>>>>> master
 </div>
 </div>
 <div id="trend-classification" class="section level1">
@@ -334,7 +291,6 @@
 <li>p-value &gt;= 0.01 ~ “Stable”</li>
 </ul>
 <p>If there are fewer than 10 encounters/counts in the baseline period, a model is not fit and a value of NA is returned for the test statistic and p-value</p>
-<<<<<<< HEAD
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Detecting trends in HHS region 4</span>
 <span class="va">data_trend</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_trend.html">classify_trend</a></span><span class="op">(</span><span class="va">df_hhs</span>, data_count <span class="op">=</span> <span class="va">dataCount</span>, all_count <span class="op">=</span> <span class="va">allCount</span><span class="op">)</span></code></pre></div>
@@ -345,13 +301,6 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">hospitaldhhsregion_display</span> <span class="op">==</span> <span class="st">"Region 4"</span><span class="op">)</span>
 
 <span class="co"># Defining a color palette</span>
-=======
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_trend</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_trend.html">classify_trend</a></span><span class="op">(</span><span class="va">df_national</span>, data_count <span class="op">=</span> <span class="va">count</span>, all_count <span class="op">=</span> <span class="va">allCount</span><span class="op">)</span></code></pre></div>
-<p>Let’s visualize the National trends with the color bar at the bottom representing the trend classification of each day over time:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Defining a color palette</span>
->>>>>>> master
 <span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#FF0000"</span>, <span class="st">"#1D8AFF"</span>, <span class="st">"#FFF70E"</span>, <span class="st">"grey90"</span><span class="op">)</span>
 
 <span class="co"># Plot trend</span>
@@ -383,11 +332,7 @@
 
 
       <footer><div class="copyright">
-<<<<<<< HEAD
   <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
-=======
-  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>.</p>
->>>>>>> master
 </div>
 
 <div class="pkgdown">

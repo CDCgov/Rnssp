@@ -1,10 +1,6 @@
 #' US Territories Shapefile
 #'
-<<<<<<< HEAD
-#' Useful \code{sf}` object shapefile for US Territories.
-=======
 #' Useful\code{sf} object shapefile for US Territories.
->>>>>>> master
 #'
 #' \preformatted{
 #' Rows: 9

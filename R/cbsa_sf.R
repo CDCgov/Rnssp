@@ -1,10 +1,6 @@
 #' US Core-Based Statistical Area Shapefile
 #'
-<<<<<<< HEAD
-#' Useful \code{sf}` object shapefile for US Core-Based Statistical Area.
-=======
 #' Useful \code{sf} object shapefile for US Core-Based Statistical Area.
->>>>>>> master
 #'
 #' \preformatted{
 #' Rows: 933
