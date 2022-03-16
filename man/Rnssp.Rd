@@ -36,5 +36,9 @@ the Rnssp R markdown template Github repository at
 }
 
 \author{
+<<<<<<< HEAD
+Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
+=======
 Gbedegnon Roseric Azondekon (\href{mailto:gazondekon@cdc.gov}{gazondekon@cdc.gov})
+>>>>>>> master
 }

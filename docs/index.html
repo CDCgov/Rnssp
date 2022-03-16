@@ -21,7 +21,7 @@
 <link href="docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="A Signature R package for the National Syndromic and Surveillance Program (NSSP)">
 <meta property="og:description" content="A collection of tools, functions, and Rmarkdown templates 
-    that supports the National Syndromic and Surveillance Program Community of Practice.">
+    that supports the National Syndromic Surveillance Program Community of Practice.">
 <meta property="og:image" content="https://cdcgov.github.io/Rnssp/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -74,6 +74,9 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
+    </li>
+    <li>
+      <a href="articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
     </li>
     <li>
       <a href="articles/Rnssp_text_mining.html">Text Mining Example</a>
@@ -155,7 +158,7 @@
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 
 <span class="co">## Pull Time Series Data from ESSENCE</span>
-<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data &lt;- myProfile$get_api_data(url)</span>
 
 <span class="co">## Inspect data object structure</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data</span><span class="op">)</span>
@@ -244,7 +247,12 @@
 <ul class="list-unstyled">
 <li>
 <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9155-4153" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<<<<<<< HEAD
+<li>
+<a href="https://github.com/Michael-Sheppard">Michael Sheppard</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-3660-575X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+=======
 <li><a href="authors.html">All authors...</a></li>
+>>>>>>> master
 </ul>
 </div>
 
@@ -263,7 +271,11 @@
 
 
       <footer><div class="copyright">
+<<<<<<< HEAD
+  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
+=======
   <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>.</p>
+>>>>>>> master
 </div>
 
 <div class="pkgdown">

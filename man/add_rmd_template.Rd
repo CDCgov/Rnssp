@@ -4,15 +4,22 @@
 \alias{add_rmd_template}
 \title{Utility to Add a New RMarkdown Template}
 \usage{
-add_rmd_template(pkg = "Rnssp", template_name = NULL)
+add_rmd_template(template = NULL, pkg = "Rnssp")
 }
 \arguments{
+\item{template}{a character string with the name of a single template name.
+The template name must be one of the elements of the vector returned
+by \code{\link[Rnssp]{list_templates}}.}
+
 \item{pkg}{a character string with the name of a single package.
 An error occurs if more than one package name is given.}
+<<<<<<< HEAD
+=======
 
 \item{template_name}{a character string with the name of a single template name.
 The template name must be one of the elements of the vector returned
 by \code{\link[Rnssp]{list_templates()}}.}
+>>>>>>> master
 }
 \value{
 a character string
@@ -23,6 +30,16 @@ extend an existing installation of the Rnssp package.
 }
 \details{
 In interactive mode, this utility function prompts the user to select an
+<<<<<<< HEAD
+Rmarkdown template .zip file when the \code{template} argument is not
+specified or set to \code{NULL}.
+
+In non-interactive mode, this utility function prompts the user to specify a
+path to an Rmarkdown template .zip file when the \code{template} argument
+is not specified or set to \code{NULL}.
+
+When the \code{template} is specified, regardless of the \code{pkg} argument,
+=======
 Rmarkdown template .zip file when the \code{template_name} argument is not
 specified or set to \code{NULL}.
 
@@ -31,6 +48,7 @@ path to an Rmarkdown template .zip file when the \code{template_name} argument
 is not specified or set to \code{NULL}.
 
 When the \code{template_name} is specified, regardless of the \code{pkg} argument,
+>>>>>>> master
 this utility function download the specified template from the
 Rnssp-rmd-templates Github repository.
 When the specified template name is not available, it throws an error.
@@ -38,8 +56,8 @@ When the specified template name is not available, it throws an error.
 \examples{
 \dontrun{
 add_rmd_template() # Add a new Rmd template to the 'Rnssp' package
-add_rmd_template("rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
-add_rmd_template(template_name = "text_mining") # Add the 'text_mining' template report to the Rnssp package
+add_rmd_template(pkg = "rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
+add_rmd_template("text_mining") # Add the 'text_mining' template report to the Rnssp package
 }
 }
 \seealso{

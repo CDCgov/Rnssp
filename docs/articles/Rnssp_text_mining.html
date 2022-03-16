@@ -46,7 +46,11 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
+<<<<<<< HEAD
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+=======
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+>>>>>>> master
       </span>
     </div>
 
@@ -75,6 +79,12 @@
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
     </li>
     <li>
+<<<<<<< HEAD
+      <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
+    </li>
+    <li>
+=======
+>>>>>>> master
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
     </li>
     <li>
@@ -163,7 +173,7 @@
 <code class="sourceCode R"><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;timeResolution=weekly&amp;hasBeenE=1&amp;percentParam=noPercent&amp;userId=2362&amp;datasource=va_erccdd&amp;aqtTarget=DataDetails&amp;detector=nodetectordetector&amp;startDate=30Dec2020"</span>
 
 <span class="co"># Data Pull from NSSP-ESSENCE</span>
-<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="va">myProfile</span><span class="op">$</span><span class="fu">get_api_data</span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># or myProfile$get_api_data(url, fromCSV = TRUE)</span>
 
 <span class="co"># glimpse(api_data)</span></code></pre></div>
 <p>The <code><a href="../reference/clean_text.html">Rnssp::clean_text()</a></code> function performs a standard series of text cleansing and pre-processing operations to remove meaningless patterns, common stop words, standardize free-text, and returns a clean version of the original dataframe that is ideal for summarizing a large corpus.</p>
@@ -330,7 +340,11 @@
 
 
       <footer><div class="copyright">
+<<<<<<< HEAD
+  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
+=======
   <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>.</p>
+>>>>>>> master
 </div>
 
 <div class="pkgdown">

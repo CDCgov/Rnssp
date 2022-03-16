@@ -1,0 +1,34 @@
+Name: Create User Profile (GUI)
+Description: Create and/or save a user profile to the home directory.
+Binding: create_user_profile_gui
+Interactive: true
+
+Name: Create User Profile (code skeleton)
+Description: Generate a user profile skeleton script into the console
+Binding: create_user_profile
+Interactive: true
+
+Name: List Rnssp Templates
+Description: List available NSSP report templates from the Rnssp templates Github repository
+Binding: list_templates
+Interactive: true
+
+Name: Add/Update Rnssp Templates
+Description: Add available NSSP report templates from the Rnssp templates Github repository
+Binding: add_rmd_template_gui
+Interactive: true
+
+Name: Remove Rnssp Templates
+Description: Remove Existing NSSP RMarkdown report Templates
+Binding: remove_rmd_template_gui
+Interactive: true
+
+Name: Rnssp Templates Documentation
+Description: Browse the Rnssp R Markdown online documentation
+Binding: rnssp_templates_manual
+Interactive: true
+
+Name: Rnssp Documentation
+Description: Browse the Rnssp online documentation
+Binding: rnssp_manual
+Interactive: true

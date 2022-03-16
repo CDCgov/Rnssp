@@ -22,7 +22,7 @@ Useful links:
 \author{
 \strong{Maintainer}: Gbedegnon Roseric Azondekon \email{gazondekon@cdc.gov} (\href{https://orcid.org/0000-0001-9155-4153}{ORCID})
 
-Other contributors:
+Authors:
 \itemize{
   \item Michael Sheppard \email{msheppard@cdc.gov} (\href{https://orcid.org/0000-0003-3660-575X}{ORCID}) [contributor]
 }

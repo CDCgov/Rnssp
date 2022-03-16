@@ -26,7 +26,6 @@ template:
 news:
   strip_header: true
 
-
 home:
   title: A Signature R package for the National Syndromic and Surveillance Program (NSSP)
   links:
@@ -43,21 +42,29 @@ reference:
     contents:
       - add_rmd_template
       - alert_ewma
+      - alert_farrington
       - alert_mar
+      - alert_regression
+      - alert_switch
       - askme
       - change_dates
       - classify_trend
       - clean_text
       - Credentials
+      - get_api_data
+      - get_api_response
+      - get_api_tsgraph
       - list_templates
       - NSSPContainer
       - remove_rmd_template
       - Rnssp
       - Rnssp_vignettes
+      - webscrape_icd
   - title: Available Datasets
     desc: Datasets contained in the Rnssp package
     contents:
       - ends_with("_sf", internal = TRUE)
+      - rnssp_stopwords
 
 authors:
   Gbedegnon Roseric Azondekon:

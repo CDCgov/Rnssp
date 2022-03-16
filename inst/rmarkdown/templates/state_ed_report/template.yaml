@@ -5,4 +5,4 @@ description: >
   Adapted to the Rnssp Package by: Gbedegnon Roseric Azondekon.
   National Syndromic and Surveillance Program.
   Centers for Disease Control and Prevention (CDC).
-create_dir: false
+create_dir: true

@@ -1,3 +1,47 @@
+# Rnssp 0.1.0
+
+## New Features
+* New function `get_api_data()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
+* New function `get_api_response()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
+* New function `get_api_tsgraph()` added as a wrapper to the `$get_api_tsgraph()` method defined in the `Credentials` class.
+* Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
+* Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.
+* Farrington Temporal Detector algorithm `alert_farrington()` added for weekly time series of counts spanning multiple years.
+* ICD Code Web Scraper function `webscrape_icd()` added to web scrape ICD discharge diagnosis code sets from the CDC FTP server (for ICD-10) or CMS website (for ICD-9).
+* The following Addins have been added for RStudio users:
+  - Create User Profile via a Graphical User Interface (`Rnssp:::create_user_profile_gui()`)
+  - Create a User Profile with a script skeleton (`Rnssp:::create_user_profile()`)
+  - List available Rnssp templates (`list_templates()`)
+  - Add or Update Rnssp templates (`Rnssp:::add_rmd_template_gui()`)
+  - Remove Rnssp templates (`Rnssp:::remove_rmd_template_gui()`)
+  - Open Rnssp templates online documentation (`Rnssp:::rnssp_templates_manual()`)
+  - Open Rnssp package online documentation (`Rnssp:::rnssp_manual()`)
+
+## Updates
+* `add_rmd_template()` no longer has a `template_name` argument. The argument `template_name` has been replaced by `template` which is the first argument in the function call.
+* New test `test-alert_farrington.R` added for `alert_farrington()`.
+* New test `test-alert_regression.R` added for `alert_regression()`.
+* New test `test-alert_switch.R` added for `alert_switch()`.
+* New test `test-add_rmd_template.R` added for `add_rmd_template()`.
+* New test `test-remove_rmd_template.R` added for `remove_rmd_template()`.
+* New test `test-get_api_data.R` added for the `get_api_data()` function.
+* New test `test-get_api_response.R` added for the `get_api_response()` function.
+* New test `test-get_api_tsgraph.R` added for the `get_api_tsgraph()` function.
+* New test `test-get_api_data_method.R` added for the `$get_api_data()` method.
+* New test `test-get_api_response_method.R` added for the `$get_api_response()` method.
+* New test `test-get_api_tsgraph_method.R` added for the `$get_api_tsgraph()` method.
+* New test `test-webscrape_icd.R` added for `webscrape_icd()`
+* Added shapefile for US Hospital Service Area (HSA) Shapefile (`hsa_sf`)
+* Added Rnssp stopwords (`rnssp_stopwords`)
+* `alert_mar()` is depecrated. Use `alert_regression` instead.
+* Test `test_alert_mar.R` has been removed for `alert_mar()`.
+* Regression models in `alert_regression()` are fit using `lm.fit()` instead of `lm()` to reduce computation time associated with extraneous computations made by `lm()`.
+* New vignette added to demonstrate the use of Rnssp addins.
+
+## Other News
+* `slider` package dependency no longer needed.
+* `cli` package is now a dependency for attractive Command Line Interfaces (CLIs)
+
 # Rnssp 0.0.2
 
 ## New Features

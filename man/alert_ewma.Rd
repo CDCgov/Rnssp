@@ -4,26 +4,33 @@
 \alias{alert_ewma}
 \title{Exponentially Weighted Moving Average (EWMA)}
 \usage{
-alert_ewma(df, t = date, y = count, B = 28, g = 2, w = 0.4)
+alert_ewma(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9)
 }
 \arguments{
-\item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
+\item{df}{A data frame, data frame extension (e.g., a tibble), or a lazy data frame}
 
 \item{t}{Name of the column of type Date containing the dates}
 
 \item{y}{Name of the column of type Numeric containing counts or percentages}
 
-\item{B}{Baseline parameter. The baseline length is the number of days from which to
-compute the EWMA and compare to in order to form the test statistic (default is 28)}
+\item{B}{Baseline parameter. The baseline length is the number of days used to
+calculate rolling averages, standard deviations, and exponentially weighted
+moving averages. Defaults to 28 days to match ESSENCE implementation.}
 
 \item{g}{Guardband parameter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting (default is 2)}
+the baseline from the current test date. Defaults to 2 days to match ESSENCE
+implementation.}
 
-\item{w}{Smoothing parameter. The smoothing parameter controls the amount of
-smoothing in the exponentially weighted moving average (default is 0.4)}
+\item{w1}{Smoothing coefficient for sensitivity to gradual events. Must be between
+0 and 1 and is recommended to be between 0.3 and 0.5 to account for gradual
+effects. Defaults to 0.4 to match ESSENCE implementation.}
+
+\item{w2}{Smoothed coefficient for sensitivity to sudden events. Must be between
+0 and 1 and is recommended to be above 0.7 to account for sudden events.
+Defaults to 0.9 to match ESSENCE implementation and approximate the C2 algorithm.}
 }
 \value{
-A data frame
+Original data frame with detection results.
 }
 \description{
 The EWMA compares a weighted average of the most recent visit counts
@@ -33,7 +40,12 @@ This algorithm is appropriate for daily counts that do not have the
 characteristic features modeled in the regression algorithm. It is more applicable
 for Emergency Department data from certain hospital groups and for time series with
 small counts (daily average below 10) because of the limited case definition or
-chosen geographic region.
+chosen geographic region. An alert (red value) is signaled if the statistical test
+(student's t-test) applied to the test statistic yields a p-value less than 0.01.
+If the p-value is greater than or equal to 0.01 and strictly less than 0.05, a warning
+(yellow value) is signaled. Blue values are returned if an alert or warning does not
+occur. Grey values represent instances where anomaly detection did not apply
+(i.e., observations for which baseline data were unavailable).
 }
 \examples{
 # Example 1
@@ -62,34 +74,50 @@ library(ggplot2)
 myProfile <- Credentials$new(askme("Enter your username:"), askme())
 
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
-&percentParam=ccddCategory&datasource=va_hosp&startDate=22Aug20&medicalGroupingSystem=essencesyndromes
-&userId=2362&aqtTarget=TimeSeries&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2
-&geographySystem=hospitalstate&detector=probregv2&timeResolution=daily&hasBeenE=1&stratVal=
-&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
-&nonZeroComposite=false&removeZeroSeries=true&sigDigits=true&startMonth=January&stratVal=&multiStratVal=geography
-&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2&percentParam=ccddCategory
+&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20
+&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries
+&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false
+&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true
+&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 url <- url \%>\% gsub("\n", "", .)
 
-api_data <- myProfile$get_api_data(url)
+api_data <- get_api_data(url)
 
 df <- api_data$timeSeriesData
 
-df_ewma <- alert_ewma(df, t = date, y = count)
+df_ewma <- df \%>\%
+  group_by(hospitaldhhsregion_display) \%>\%
+  alert_ewma(t = date, y = dataCount)
 
-# Visualize alert for South Dakota
-df_ewma_state <- df_ewma \%>\%
-  filter(hospitalstate_display == "South Dakota")
+# Visualize alert for HHS Region 4
+df_ewma_region <- df_ewma \%>\%
+  filter(hospitaldhhsregion_display == "Region 4")
 
-df_ewma_state \%>\%
-  ggplot(aes(x = t, y = count)) +
-  geom_line(color = "blue") +
-  geom_point(data = subset(df_ewma_state, alert == "red"), color = "red") +
-  geom_point(data = subset(df_ewma_state, alert == "yellow"), color = "yellow") +
+df_ewma_region \%>\%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(
+    data = subset(df_ewma_region, alert != "grey"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "blue"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "yellow"),
+    aes(x = date, y = dataCount), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "red"),
+    aes(x = date, y = dataCount), color = "red"
+  ) +
   theme_bw() +
   labs(
     x = "Date",
-    y = "Percent"
+    y = "Count"
   )
 }
 

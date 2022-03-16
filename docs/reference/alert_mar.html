@@ -6,7 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<<<<<<< HEAD
+<title>Adaptive Multiple Regression (DEPRECATED!) — alert_mar • Rnssp</title>
+=======
 <title>Multiple Adaptive Regression — alert_mar • Rnssp</title>
+>>>>>>> master
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +56,13 @@
 
 
 
+<<<<<<< HEAD
+<meta property="og:title" content="Adaptive Multiple Regression (DEPRECATED!) — alert_mar" />
+<meta property="og:description" content="The adaptive multiple regression algorithm fits a linear model to a baseline
+=======
 <meta property="og:title" content="Multiple Adaptive Regression — alert_mar" />
 <meta property="og:description" content="The multiple adaptive regression algorithm fits a linear model to a baseline
+>>>>>>> master
 of counts or percentages of length B, and forecasts a predicted value g + 1
 days later (guard-band). This value is compared to the current observed value and
 divided by the standard error of prediction in the test-statistic. The model includes
@@ -104,7 +113,11 @@ to 0.01 and strictly less than 0.05, a warning is signaled." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
+<<<<<<< HEAD
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+=======
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+>>>>>>> master
       </span>
     </div>
 
@@ -133,6 +146,12 @@ to 0.01 and strictly less than 0.05, a warning is signaled." />
       <a href="../articles/Rnssp_intro.html">Introduction to the Rnssp package</a>
     </li>
     <li>
+<<<<<<< HEAD
+      <a href="../articles/Rnssp_rstudio_addins.html">Using Rnssp RStudio Addins</a>
+    </li>
+    <li>
+=======
+>>>>>>> master
       <a href="../articles/Rnssp_text_mining.html">Text Mining Example</a>
     </li>
     <li>
@@ -170,13 +189,21 @@ to 0.01 and strictly less than 0.05, a warning is signaled." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
+<<<<<<< HEAD
+    <h1>Adaptive Multiple Regression (DEPRECATED!)</h1>
+=======
     <h1>Multiple Adaptive Regression</h1>
+>>>>>>> master
     <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/R/alert_mar.R'><code>R/alert_mar.R</code></a></small>
     <div class="hidden name"><code>alert_mar.Rd</code></div>
     </div>
 
     <div class="ref-description">
+<<<<<<< HEAD
+    <p>The adaptive multiple regression algorithm fits a linear model to a baseline
+=======
     <p>The multiple adaptive regression algorithm fits a linear model to a baseline
+>>>>>>> master
 of counts or percentages of length B, and forecasts a predicted value g + 1
 days later (guard-band). This value is compared to the current observed value and
 divided by the standard error of prediction in the test-statistic. The model includes
@@ -218,10 +245,26 @@ the baseline from the current date in consideration for alerting (default is 2)<
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+<<<<<<< HEAD
+    <p>A data frame with test statistic, p.value, and alert indicator</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+<ul>
+<li><p><a href='https://www.cambridge.org/core/books/introduction-to-statistical-methods-for-biosurveillance/370B0E8DC0C1DE12FCE2027CE653F332'>Statistical Methods for Biosurveillance, Fricker (2013)</a></p></li>
+<li><p><a href='https://www.jhuapl.edu/content/techdigest/pdf/V27-N04/27-04-BurkomDevelopments.pdf'>Developments in the Roles, Features, and Evaluation of Alerting Algorithms for Disease Outbreak Monitoring</a></p></li>
+</ul>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples">
+<span class='co'># Example 1</span>
+=======
     <p>A data frame</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># Example 1</span>
+>>>>>>> master
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
   date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-12-31"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
   count <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>floor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span>, min <span class='op'>=</span> <span class='fl'>0</span>, max <span class='op'>=</span> <span class='fl'>101</span><span class='op'>)</span><span class='op'>)</span>
@@ -231,7 +274,10 @@ the baseline from the current date in consideration for alerting (default is 2)<
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_mar</span><span class='op'>)</span>
 
+<<<<<<< HEAD
+=======
 <span class='co'># Example 2</span>
+>>>>>>> master
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
   Date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-01-01"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2020-12-31"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>,
   percent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>366</span><span class='op'>)</span>
@@ -247,6 +293,52 @@ the baseline from the current date in consideration for alerting (default is 2)<
 <span class='va'>myProfile</span> <span class='op'>&lt;-</span> <span class='va'><a href='Credentials.html'>Credentials</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fu'><a href='askme.html'>askme</a></span><span class='op'>(</span><span class='st'>"Enter your username:"</span><span class='op'>)</span>, <span class='fu'><a href='askme.html'>askme</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>url</span> <span class='op'>&lt;-</span> <span class='st'>"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20
+<<<<<<< HEAD
+&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory
+&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=22Aug20
+&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries
+&amp;stratVal=&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=0&amp;graphOptions=multipleSmall&amp;seriesPerYear=false
+&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=&amp;multiStratVal=geography&amp;graphOnly=true
+&amp;numSeries=0&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span>
+
+<span class='va'>url</span> <span class='op'>&lt;-</span> <span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"\n"</span>, <span class='st'>""</span>, <span class='va'>.</span><span class='op'>)</span>
+
+<span class='va'>api_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_api_data.html'>get_api_data</a></span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span>
+
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>api_data</span><span class='op'>$</span><span class='va'>timeSeriesData</span>
+
+<span class='va'>df_mar</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>hospitaldhhsregion_display</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>alert_mar</span><span class='op'>(</span>t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>
+
+<span class='co'># Visualize alert for HHS Region 4</span>
+<span class='va'>df_mar_region</span> <span class='op'>&lt;-</span> <span class='va'>df_mar</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>hospitaldhhsregion_display</span> <span class='op'>==</span> <span class='st'>"Region 4"</span><span class='op'>)</span>
+
+<span class='va'>df_mar_region</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"grey70"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_mar_region</span>, <span class='va'>alert</span> <span class='op'>!=</span> <span class='st'>"grey"</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_mar_region</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"blue"</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_mar_region</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"yellow"</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"yellow"</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_mar_region</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"red"</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
+    x <span class='op'>=</span> <span class='st'>"Date"</span>,
+    y <span class='op'>=</span> <span class='st'>"Count"</span>
+=======
 &amp;percentParam=ccddCategory&amp;datasource=va_hosp&amp;startDate=22Aug20&amp;medicalGroupingSystem=essencesyndromes
 &amp;userId=2362&amp;aqtTarget=TimeSeries&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
 &amp;geographySystem=hospitalstate&amp;detector=probregv2&amp;timeResolution=daily&amp;hasBeenE=1&amp;stratVal=
@@ -275,6 +367,7 @@ the baseline from the current date in consideration for alerting (default is 2)<
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
     x <span class='op'>=</span> <span class='st'>"Date"</span>,
     y <span class='op'>=</span> <span class='st'>"Percent"</span>
+>>>>>>> master
   <span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -290,7 +383,11 @@ the baseline from the current date in consideration for alerting (default is 2)<
 
       <footer>
       <div class="copyright">
+<<<<<<< HEAD
+  <p>Developed by <a href='https://rosericazondekon.github.io'>Gbedegnon Roseric Azondekon</a>, <a href='https://github.com/Michael-Sheppard'>Michael Sheppard</a>.</p>
+=======
   <p>Developed by <a href='https://rosericazondekon.github.io'>Gbedegnon Roseric Azondekon</a>.</p>
+>>>>>>> master
 </div>
 
 <div class="pkgdown">
