@@ -4,7 +4,7 @@
 \name{Rnssp-package}
 \alias{Rnssp}
 \alias{Rnssp-package}
-\title{Rnssp: A Signature R package for the National Syndromic and Surveillance Program (NSSP)}
+\title{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 

@@ -5,7 +5,7 @@
 \alias{Rnssp}
 \title{Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data via NSSP ESSENCE}
 \description{
-The National Syndromic and Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
+The National Syndromic Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
 including state and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
 analytic tools, and assisted with scripts to interface with ESSENCE. The \code{Rnssp} R package is built in an attempt to
 improve reusability, reproducibility, and distribution of the analytical resources developed at the CDC NSSP.
