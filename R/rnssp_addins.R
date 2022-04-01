@@ -252,7 +252,7 @@ create_user_profile_gui <- function() {
     ),
     miniUI::miniContentPanel(
       shiny::textInput("username", "Username", placeholder = "Enter your username!"),
-      shiny::passwordInput("password", "Password", placeholder = "Enter your passeword!"),
+      shiny::passwordInput("password", "Password", placeholder = "Enter your password!"),
       shiny::tags$details(
         shiny::tags$summary("Change user profile variable name"),
         shiny::textInput("filename", "Filename", "myProfile")
