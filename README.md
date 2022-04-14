@@ -48,7 +48,7 @@ myProfile
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&start_date=29Jan2021"
 
 ## Update Start and End dates in ESSENCE API URL
-url <- change_dates(url, start_date = Sys.Date() - 30, Sys.Date())
+url <- change_dates(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
 
 ## Pull Time Series Data from ESSENCE
 api_data <- get_api_data(url) # or api_data <- myProfile$get_api_data(url)
