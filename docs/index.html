@@ -157,6 +157,9 @@
 <span class="co">## JSON URL from ESSENCE API</span>
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 
+<span class="co">## Update Start and End dates in ESSENCE API URL</span>
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/change_dates.html">change_dates</a></span><span class="op">(</span><span class="va">url</span>, start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>, <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
 <span class="co">## Pull Time Series Data from ESSENCE</span>
 <span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data &lt;- myProfile$get_api_data(url)</span>
 
