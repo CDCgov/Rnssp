@@ -28,14 +28,14 @@ end_date=31Jan2021&start_date=29Jan2021"
 url <- url \%>\% gsub("\n", "", .)
 
 # Change start date to January 15, 2021
-url \%>\% change_dates(start = "2021-01-15")
+url \%>\% change_dates(start_date = "2021-01-15")
 
 # Change end date to February 15, 2021
-url \%>\% change_dates(end = "2021-02-15")
+url \%>\% change_dates(end_date = "2021-02-15")
 
 # Change start date to January 15, 2021 and end date to February 15, 2021
-url \%>\% change_dates(start = "2021-01-15", end = "2021-02-15")
+url \%>\% change_dates(start_date = "2021-01-15", end_date = "2021-02-15")
 
 # Change end and start dates to respectively "current" and "current - 7 days"
-url \%>\% change_dates(start = Sys.Date() - 7, end = Sys.Date())
+url \%>\% change_dates(start_date = Sys.Date() - 7, end_date = Sys.Date())
 }

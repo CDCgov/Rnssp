@@ -206,16 +206,16 @@ end_date=31Jan2021&amp;start_date=29Jan2021"</span>
 <span class='va'>url</span> <span class='op'>&lt;-</span> <span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"\n"</span>, <span class='st'>""</span>, <span class='va'>.</span><span class='op'>)</span>
 
 <span class='co'># Change start date to January 15, 2021</span>
-<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start <span class='op'>=</span> <span class='st'>"2021-01-15"</span><span class='op'>)</span>
+<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start_date <span class='op'>=</span> <span class='st'>"2021-01-15"</span><span class='op'>)</span>
 
 <span class='co'># Change end date to February 15, 2021</span>
-<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>end <span class='op'>=</span> <span class='st'>"2021-02-15"</span><span class='op'>)</span>
+<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>end_date <span class='op'>=</span> <span class='st'>"2021-02-15"</span><span class='op'>)</span>
 
 <span class='co'># Change start date to January 15, 2021 and end date to February 15, 2021</span>
-<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start <span class='op'>=</span> <span class='st'>"2021-01-15"</span>, end <span class='op'>=</span> <span class='st'>"2021-02-15"</span><span class='op'>)</span>
+<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start_date <span class='op'>=</span> <span class='st'>"2021-01-15"</span>, end_date <span class='op'>=</span> <span class='st'>"2021-02-15"</span><span class='op'>)</span>
 
 <span class='co'># Change end and start dates to respectively "current" and "current - 7 days"</span>
-<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>7</span>, end <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'>change_dates</span><span class='op'>(</span>start_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>7</span>, end_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
