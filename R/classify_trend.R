@@ -106,7 +106,7 @@ classify_trend <- function(df, t = date, data_count = dataCount, all_count = all
             data.frame(statistic = NA, p.value = NA)
           }
         },
-        .before = 12,
+        .before = B - 1,
         .complete = TRUE
       )
     ) %>%

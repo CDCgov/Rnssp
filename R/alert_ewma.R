@@ -31,7 +31,7 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
   # Populate algorithm parameters
   min_df <- 3
   min_baseline <- 11
-  max_baseline <- 28
+  max_baseline <- B
   length_baseline <- min_baseline:max_baseline
 
   # Vector of observations
