@@ -216,15 +216,9 @@ remove_rmd_template_gui <- function() {
 #'
 create_user_profile <- function() {
   skeleton <- 'library("Rnssp")
-myProfile <- Credentials$new(
-  username = askme("Enter your username: "),
-  password = askme()
-)'
+myProfile <- create_profile()'
   if (any((.packages()) == "Rnssp")) {
-    skeleton <- 'myProfile <- Credentials$new(
-    username = askme("Enter your username: "),
-    password = askme()
-  )'
+    skeleton <- 'myProfile <- create_profile()'
   }
   rstudioapi::sendToConsole(skeleton, execute = FALSE)
 }
@@ -277,7 +271,7 @@ create_user_profile_gui <- function() {
       if (grepl("[[:punct:][:space:]]", filename)) {
         cli::cli_abort("Variable name {.var {filename}} is invalid! Try again!")
       } else {
-        myProfile <- Rnssp::Credentials$new(input$username, input$password)
+        myProfile <- Rnssp::create_profile(input$username, input$password)
         assign(
           filename,
           value = myProfile,

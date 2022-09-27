@@ -1,3 +1,19 @@
+#' A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#'
+#' @param username a character of ESSENCE username
+#' @param password a character of ESSENCE password
+#'
+#' @return an object of class NSSPCredentials and R6
+#' @export
+#'
+#' @examples
+create_profile <- function(
+  username = askme("Please enter your username: "),
+  password = askme()
+){
+  Credentials$new(username = username, password = password)
+}
+
 #' Get ESSENCE API data
 #'
 #' A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.

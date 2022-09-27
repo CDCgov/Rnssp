@@ -1,3 +1,11 @@
+# Rnssp 0.1.1
+
+## New Features
+* New function `create_profile()` added as a wrapper to the `$new()` method defined in the `Credentials` class.
+
+## Updates
+* New test `test-create_profile.R` added for `create_profile()`.
+
 # Rnssp 0.1.0
 
 ## New Features
