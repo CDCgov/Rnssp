@@ -90,3 +90,48 @@ get_api_response <- function(url, profile = myProfile) {
 get_api_tsgraph <- function(url, profile = myProfile) {
   profile$get_api_response(url = url)
 }
+
+#' Get ESSENCE data
+#'
+#' Get ESSENCE API data.
+#'
+#' @param url a character of ESSENCE API URL.
+#' @param start_date a date object or a character string in date format (e.g. "2019-08-01")
+#' @param end_date a date object or a character string in date format (e.g. "2020-08-01")
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
+#'
+#' @return a dataframe or a character string.
+#' @seealso \code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_tsgraph}}
+#' @export
+#'
+#' @examples
+#'
+get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = myProfile, ...) {
+  api_type <- str_extract(url, "(?<=api/).+(?=\\?)")
+
+  url_new <- try(change_dates(url, start_date, end_date), silent = TRUE)
+
+  if(any(class(url_new) == "try-error")){
+    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use {.fn get_api_data} instead!")
+  }
+
+  switch(
+    api_type,
+    "timeSeries" = profile$get_api_data(url_new) %>%
+      extract2("timeSeriesData"),
+    "timeSeries/graph" = profile$get_api_tsgraph(url_new) %>%
+      extract2("tsgraph"),
+    "tableBuilder/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
+    "dataDetails" = profile$get_api_data(url_new) %>%
+      extract2("dataDetails"),
+    "dataDetails/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
+    "summaryData" = profile$get_api_data(url_new) %>%
+      extract2("summaryData"),
+    "alerts/regionSyndromeAlerts" = myProfile$get_api_data(url_new) %>%
+      extract2("regionSyndromeAlerts"),
+    "alerts/hospitalSyndromeAlerts" = profile$get_api_data(url_new) %>%
+      extract2("hospitalSyndromeAlerts"),
+    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use {.fn get_api_data} instead!")
+  )
+}
