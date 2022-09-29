@@ -107,6 +107,33 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #'
 #' @examples
 #'
+#' \dontrun{
+#' myProfile <- create_profile(askme("Enter your username:"), askme())
+#'
+#' # Example 1
+#' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
+#' endDate=20Sep22&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
+#' &percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg
+#' &detector=probrepswitch&startDate=22Jun22&timeResolution=daily&hasBeenE=1
+#' &medicalGroupingSystem=essencesyndromes"
+#'
+#' url <- url %>% gsub("\n", "", .)
+#'
+#' api_data <- get_essence_data(url)
+#' glimpse(api_data)
+#'
+#'
+#' # Example 2
+#' url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?
+#' end_date=31Jan2021&start_date=29Jan2021"
+#'
+#' url <- url %>% gsub("\n", "", .)
+#'
+#' ## Pull last 30 days of syndrome alerts
+#' api_data <-  <- get_essence_data(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
+#'
+#' }
+#'
 get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = myProfile, ...) {
   api_type <- str_extract(url, "(?<=api/).+(?=\\?)")
 
