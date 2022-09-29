@@ -138,6 +138,21 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #' ## Inspect data
 #' glimpse(api_data)
 #'
+#'
+#' # Example 3
+#' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?
+#' endDate=25Jun2022&geography=&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021
+#' &medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory=
+#' &geographySystem=hospitalregion&detector=probrepswitch&timeResolution=daily"
+#'
+#' url <- url %>% gsub("\n", "", .)
+#'
+#' ## Pull Time series graph
+#' api_tsgraph <- get_essence_data(url)
+#'
+#' ## Preview time series graph
+#' graph <- imager::load.image(api_tsgraph)
+#' plot(graph)
 #' }
 #'
 get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = myProfile, ...) {
