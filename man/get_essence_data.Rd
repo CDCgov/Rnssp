@@ -43,7 +43,10 @@ endDate=20Sep22&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronaviru
 
 url <- url \%>\% gsub("\n", "", .)
 
+## Pull ESSENCE data
 api_data <- get_essence_data(url)
+
+## Inspect data
 glimpse(api_data)
 
 
@@ -53,8 +56,11 @@ end_date=31Jan2021&start_date=29Jan2021"
 
 url <- url \%>\% gsub("\n", "", .)
 
-## Pull last 30 days of syndrome alerts
-api_data <-  <- get_essence_data(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
+## Pull last 30 days of ESSENCE data
+api_data <- get_essence_data(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
+
+## Inspect data
+glimpse(api_data)
 
 }
 

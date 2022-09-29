@@ -119,7 +119,10 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
+#' ## Pull ESSENCE data
 #' api_data <- get_essence_data(url)
+#'
+#' ## Inspect data
 #' glimpse(api_data)
 #'
 #'
@@ -129,8 +132,11 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #'
 #' url <- url %>% gsub("\n", "", .)
 #'
-#' ## Pull last 30 days of syndrome alerts
-#' api_data <-  <- get_essence_data(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
+#' ## Pull last 30 days of ESSENCE data
+#' api_data <- get_essence_data(url, start_date = Sys.Date() - 30, end_date = Sys.Date())
+#'
+#' ## Inspect data
+#' glimpse(api_data)
 #'
 #' }
 #'
