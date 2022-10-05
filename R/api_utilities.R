@@ -88,7 +88,7 @@ get_api_response <- function(url, profile = myProfile) {
 #' grid::grid.raster(img)
 #' }
 get_api_tsgraph <- function(url, profile = myProfile) {
-  profile$get_api_response(url = url)
+  profile$get_api_tsgraph(url = url)
 }
 
 #' Get ESSENCE data

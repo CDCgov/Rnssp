@@ -103,6 +103,7 @@ Credentials <- R6::R6Class(
           private$..username$value %>% safer::decrypt_string(., private$..__$value),
           private$..password$value %>% safer::decrypt_string(., private$..__$value)
         ), httr::write_disk(tsgraph, overwrite = TRUE))
+      apir$request$options$userpwd <- ""
       list("api_response" = apir, "tsgraph" = tsgraph)
     }
   )
