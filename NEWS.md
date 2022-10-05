@@ -6,6 +6,10 @@
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
 
+## Bug Fixes
+* Abstracted critical user credentials from the `$get_api_ts_graph()` method.
+* Fix the `get_api_tsgraph()` function which was previously returning an API response object.
+
 # Rnssp 0.1.0
 
 ## New Features
