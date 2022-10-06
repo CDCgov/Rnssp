@@ -50,16 +50,16 @@ grid::grid.raster(img)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Credentials$new()}}
-\item \href{#method-get_api_response}{\code{Credentials$get_api_response()}}
-\item \href{#method-get_api_data}{\code{Credentials$get_api_data()}}
-\item \href{#method-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
-\item \href{#method-clone}{\code{Credentials$clone()}}
+\item \href{#method-NSSPCredentials-new}{\code{Credentials$new()}}
+\item \href{#method-NSSPCredentials-get_api_response}{\code{Credentials$get_api_response()}}
+\item \href{#method-NSSPCredentials-get_api_data}{\code{Credentials$get_api_data()}}
+\item \href{#method-NSSPCredentials-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
+\item \href{#method-NSSPCredentials-clone}{\code{Credentials$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-new"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes a new Credentials object.
 \subsection{Usage}{
@@ -80,8 +80,8 @@ A new \code{Credentials} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_response"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_response}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_response"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_response}{}}}
 \subsection{Method \code{get_api_response()}}{
 Get ESSENCE API response
 \subsection{Usage}{
@@ -112,8 +112,8 @@ api_response <- myProfile$get_api_response(url)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_data"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_data}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_data"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_data}{}}}
 \subsection{Method \code{get_api_data()}}{
 Get ESSENCE API data
 \subsection{Usage}{
@@ -151,8 +151,8 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_tsgraph"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_tsgraph}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_tsgraph"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_tsgraph}{}}}
 \subsection{Method \code{get_api_tsgraph()}}{
 Get ESSENCE API Time Series Graph
 \subsection{Usage}{
@@ -186,8 +186,8 @@ grid::grid.raster(img)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -12,13 +12,13 @@ A \code{NSSPCredentials} object can be used to retrieve a value
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{NSSPContainer$new()}}
-\item \href{#method-clone}{\code{NSSPContainer$clone()}}
+\item \href{#method-NSSPContainer-new}{\code{NSSPContainer$new()}}
+\item \href{#method-NSSPContainer-clone}{\code{NSSPContainer$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-NSSPContainer-new"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPContainer-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes a new NSSPContainer object.
 \subsection{Usage}{
@@ -37,8 +37,8 @@ A new \code{NSSPCredentials} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-NSSPContainer-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPContainer-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

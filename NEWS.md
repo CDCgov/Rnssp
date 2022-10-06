@@ -5,6 +5,7 @@
 
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
+* Deprecated `alert_mar()` function has been removed.
 
 ## Bug Fixes
 * Abstracted critical user credentials from the `$get_api_ts_graph()` method.
