@@ -67,14 +67,21 @@ df <- data.frame(
   count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
 )
 
+head(df)
+
 ## Original Farrington algorithm
 
 df_farr_original <- alert_farrington(df, t = date, y = count)
+
+head(df_farr_original)
 
 
 ## Modified Farrington algorithm
 
 df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+
+head(df_farr_modified)
+
 \dontrun{
 # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 

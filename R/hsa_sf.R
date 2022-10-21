@@ -16,5 +16,5 @@
 #' library(Rnssp)
 #' data("hsa_sf")
 #'
-#' plot(hsa_sf)
+#' plot(hsa_sf$geometry)
 "hsa_sf"
