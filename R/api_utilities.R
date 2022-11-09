@@ -91,11 +91,11 @@ get_api_tsgraph <- function(url, profile = myProfile) {
   profile$get_api_tsgraph(url = url)
 }
 
-#' Get API data
+#' Get ESSENCE data
 #'
-#' Get API data.
+#' Get ESSENCE API data.
 #'
-#' @param url a character of API URL.
+#' @param url a character of ESSENCE API URL.
 #' @param start_date a date object or a character string in date format (e.g. "2019-08-01")
 #' @param end_date a date object or a character string in date format (e.g. "2020-08-01")
 #' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
