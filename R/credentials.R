@@ -17,8 +17,8 @@ Credentials <- R6::R6Class(
 
     #' @description
     #' Initializes a new Credentials object.
-    #' @param username a character of ESSENCE username
-    #' @param password a character of ESSENCE password
+    #' @param username a string for username
+    #' @param password a string for password
     #' @return A new \code{Credentials} object
     initialize = function(username, password) {
       if (!missing(username)) {
@@ -33,8 +33,8 @@ Credentials <- R6::R6Class(
     },
 
     #' @description
-    #' Get ESSENCE API response
-    #' @param url a character of ESSENCE API URL
+    #' Get API response
+    #' @param url a character of API URL
     #' @return An object of class \code{response}
     #' @examples
     #' \dontrun{
@@ -44,7 +44,7 @@ Credentials <- R6::R6Class(
     #' }
     get_api_response = function(url) {
       if (is.null(private$..username$value) | is.null(private$..password$value)) {
-        message("Please, set your ESSENCE credentials (username and password)!")
+        message("Please, set your credentials (username and password)!")
       } else {
         assertive.types::assert_is_a_string(url)
         res <- url %>%
@@ -58,8 +58,8 @@ Credentials <- R6::R6Class(
     },
 
     #' @description
-    #' Get ESSENCE API data
-    #' @param url a character of ESSENCE API URL
+    #' Get API data
+    #' @param url a character ofAPI URL
     #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format
     #' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
     #' @return a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
@@ -84,8 +84,8 @@ Credentials <- R6::R6Class(
     },
 
     #' @description
-    #' Get ESSENCE API Time Series Graph
-    #' @param url a character of ESSENCE API URL
+    #' Get  API Time Series Graph
+    #' @param url a character of API URL
     #' @return A list containing an api_response object and a path to a time series graph in .png format
     #' @examples
     #' \dontrun{
