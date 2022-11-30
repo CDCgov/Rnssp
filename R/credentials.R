@@ -84,7 +84,7 @@ Credentials <- R6::R6Class(
     },
 
     #' @description
-    #' Get  API Time Series Graph
+    #' Get API graph
     #' @param url a character of API URL
     #' @return A list containing an api_response object and a path to a time series graph in .png format
     #' @examples
@@ -97,6 +97,7 @@ Credentials <- R6::R6Class(
     #' grid::grid.raster(img)
     #' }
     get_api_tsgraph = function(url) {
+      .Deprecated("get_api_graph")
       tsgraph <- tempfile(fileext = ".png")
       apir <- url %>%
         httr::GET(., httr::authenticate(
@@ -105,6 +106,31 @@ Credentials <- R6::R6Class(
         ), httr::write_disk(tsgraph, overwrite = TRUE))
       apir$request$options$userpwd <- ""
       list("api_response" = apir, "tsgraph" = tsgraph)
+    },
+
+    #' @description
+    #' Get API graph
+    #' @param url a character of API URL
+    #' @param file_ext a non-empty character vector giving the file extension. Default is \code{.png}.
+    #' @return A list containing an api_response object and a path to a time series graph in .png format
+    #' @examples
+    #' \dontrun{
+    #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
+    #' url <- "<url>"
+    #' api_data_graph <- myProfile$get_api_graph(url)
+    #' names(api_data_graph)
+    #' img <- png::readPNG(api_data_graph$graph)
+    #' grid::grid.raster(img)
+    #' }
+    get_api_graph = function(url, file_ext = ".png") {
+      graph <- tempfile(fileext = file_ext)
+      apir <- url %>%
+        httr::GET(., httr::authenticate(
+          private$..username$value %>% safer::decrypt_string(., private$..__$value),
+          private$..password$value %>% safer::decrypt_string(., private$..__$value)
+        ), httr::write_disk(graph, overwrite = TRUE))
+      apir$request$options$userpwd <- ""
+      list("api_response" = apir, "graph" = graph)
     }
   )
 )

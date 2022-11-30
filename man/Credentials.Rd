@@ -46,6 +46,19 @@ names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)
 grid::grid.raster(img)
 }
+
+## ------------------------------------------------
+## Method `Credentials$get_api_graph`
+## ------------------------------------------------
+
+\dontrun{
+myProfile <- Credentials$new(askme("Enter my username: "), askme())
+url <- "<url>"
+api_data_graph <- myProfile$get_api_graph(url)
+names(api_data_graph)
+img <- png::readPNG(api_data_graph$graph)
+grid::grid.raster(img)
+}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -54,6 +67,7 @@ grid::grid.raster(img)
 \item \href{#method-get_api_response}{\code{Credentials$get_api_response()}}
 \item \href{#method-get_api_data}{\code{Credentials$get_api_data()}}
 \item \href{#method-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
+\item \href{#method-get_api_graph}{\code{Credentials$get_api_graph()}}
 \item \href{#method-clone}{\code{Credentials$clone()}}
 }
 }
@@ -69,9 +83,9 @@ Initializes a new Credentials object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{username}}{a character of ESSENCE username}
+\item{\code{username}}{a string for username}
 
-\item{\code{password}}{a character of ESSENCE password}
+\item{\code{password}}{a string for password}
 }
 \if{html}{\out{</div>}}
 }
@@ -83,7 +97,7 @@ A new \code{Credentials} object
 \if{html}{\out{<a id="method-get_api_response"></a>}}
 \if{latex}{\out{\hypertarget{method-get_api_response}{}}}
 \subsection{Method \code{get_api_response()}}{
-Get ESSENCE API response
+Get API response
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_response(url)}\if{html}{\out{</div>}}
 }
@@ -91,7 +105,7 @@ Get ESSENCE API response
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character of API URL}
 }
 \if{html}{\out{</div>}}
 }
@@ -115,7 +129,7 @@ api_response <- myProfile$get_api_response(url)
 \if{html}{\out{<a id="method-get_api_data"></a>}}
 \if{latex}{\out{\hypertarget{method-get_api_data}{}}}
 \subsection{Method \code{get_api_data()}}{
-Get ESSENCE API data
+Get API data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
 }
@@ -123,7 +137,7 @@ Get ESSENCE API data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character ofAPI URL}
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
 
@@ -154,7 +168,7 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 \if{html}{\out{<a id="method-get_api_tsgraph"></a>}}
 \if{latex}{\out{\hypertarget{method-get_api_tsgraph}{}}}
 \subsection{Method \code{get_api_tsgraph()}}{
-Get ESSENCE API Time Series Graph
+Get API graph
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_tsgraph(url)}\if{html}{\out{</div>}}
 }
@@ -162,7 +176,7 @@ Get ESSENCE API Time Series Graph
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character of API URL}
 }
 \if{html}{\out{</div>}}
 }
@@ -177,6 +191,43 @@ url <- "<ESSENCE_url>"
 api_data_tsgraph <- myProfile$get_api_tsgraph(url)
 names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)
+grid::grid.raster(img)
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_api_graph"></a>}}
+\if{latex}{\out{\hypertarget{method-get_api_graph}{}}}
+\subsection{Method \code{get_api_graph()}}{
+Get API graph
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_graph(url, file_ext = ".png")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{url}}{a character of API URL}
+
+\item{\code{file_ext}}{a non-empty character vector giving the file extension. Default is \code{.png}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A list containing an api_response object and a path to a time series graph in .png format
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+myProfile <- Credentials$new(askme("Enter my username: "), askme())
+url <- "<url>"
+api_data_graph <- myProfile$get_api_graph(url)
+names(api_data_graph)
+img <- png::readPNG(api_data_graph$graph)
 grid::grid.raster(img)
 }
 }

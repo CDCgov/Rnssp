@@ -2,12 +2,12 @@
 % Please edit documentation in R/api_utilities.R
 \name{get_api_response}
 \alias{get_api_response}
-\title{Get ESSENCE API response}
+\title{Get API response}
 \usage{
 get_api_response(url, profile = myProfile)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL}
+\item{url}{a character of API URL}
 
 \item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
 }

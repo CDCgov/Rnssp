@@ -10,9 +10,9 @@ create_profile(
 )
 }
 \arguments{
-\item{username}{a character of ESSENCE username}
+\item{username}{a string for username}
 
-\item{password}{a character of ESSENCE password}
+\item{password}{a string for password}
 }
 \value{
 an object of class NSSPCredentials and R6

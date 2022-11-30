@@ -2,12 +2,12 @@
 % Please edit documentation in R/api_utilities.R
 \name{get_api_data}
 \alias{get_api_data}
-\title{Get ESSENCE API data}
+\title{Get API data}
 \usage{
 get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL.}
+\item{url}{a character of API URL.}
 
 \item{fromCSV}{a logical, defines whether data are returned in .csv format or .json format.}
 

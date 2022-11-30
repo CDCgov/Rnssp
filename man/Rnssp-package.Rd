@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Gbedegnon Roseric Azondekon \email{gazondekon@cdc.gov} (\href{https://orcid.org/0000-0001-9155-4153}{ORCID})
+\strong{Maintainer}: Gbedegnon Roseric Azondekon \email{gazondekon@cdc.gov} (\href{https://orcid.org/0000-0001-9155-4153}{ORCID}) [contributor]
 
 Authors:
 \itemize{

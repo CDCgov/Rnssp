@@ -65,7 +65,7 @@ get_api_response <- function(url, profile = myProfile) {
 }
 
 
-#' Get API Time Series Graph
+#' Get an API graph
 #'
 #' A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.
 #'
@@ -89,6 +89,33 @@ get_api_response <- function(url, profile = myProfile) {
 #' }
 get_api_tsgraph <- function(url, profile = myProfile) {
   profile$get_api_tsgraph(url = url)
+}
+
+#' Get an API graph
+#'
+#' A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#'
+#' @param url a character of API URL.
+#' @param file_ext a non-empty character vector giving the file extension. Default is \code{.png}.
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#'
+#' @seealso \code{\link[Rnssp]{Credentials}}
+#' @return An object of class \code{response}.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' myProfile <- Credentials$new(askme("Enter my username: "), askme())
+#' url <- "<url>"
+#'
+#' api_data_graph <- get_api_graph(url)
+#'
+#' names(api_data_graph)
+#' img <- png::readPNG(api_data_graph$graph)
+#' grid::grid.raster(img)
+#' }
+get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
+  profile$get_api_graph(url = url, file_ext = file_ext)
 }
 
 #' Get ESSENCE data
