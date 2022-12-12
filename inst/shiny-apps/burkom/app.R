@@ -17,16 +17,59 @@ if (length(setdiff("Rnssp", rownames(installed.packages()))) > 0) {
 }
 lapply("Rnssp", library, character.only = TRUE)
 
+load_profile <- rstudioapi::showQuestion(
+  "Load profile file?",
+  "Would you like to load a profile file?"
+)
+
+myProfile <- NULL
+prof_file <- NULL
+
+if(load_profile){
+  filtres = matrix(c("R images (*.RData,*.rda)", "Binary R files (*.rds)",
+                     "*.RData;*.rda", "*.rds"), 2, 2)
+  if (interactive() && .Platform$OS.type == "windows") {
+    prof_file <- choose.files(filters = filtres)
+  } else if (interactive() && .Platform$OS.type == "unix") {
+    prof_file <- file.choose()
+  } else if (!interactive()) {
+    prof_file <- readline("Enter full path to the profile file: ")
+  }
+  if (!any(endsWith(prof_file, c(".rda", ".rds")))) {
+    cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rda} file")
+  }
+
+  if(all(endsWith(prof_file, ".rda"))){
+    myProfile <- try(get(load(prof_file)), silent = TRUE)
+  } else {
+    myProfile <- try(readRDS(prof_file), silent = TRUE)
+  }
+  if(all(class(myProfile) == "try-error")){
+    cli::cli_alert_danger("No or corrupt file loaded!")
+    myProfile <- create_profile()
+  }
+} else {
+  myProfile <- create_profile()
+}
 # Creating credential object
 # if (file.exists("~/myProfile.rda")) {
 #   myProfile <- get(load("~/myProfile.rda"))
 # } else if (file.exists("~/myProfile.rds")) {
 #   myProfile <- readRDS("~/myProfile.rds")
 # } else {
-  myProfile <- Rnssp::create_profile()
+# myProfile <- Rnssp::create_profile()
 # }
 
-ccdd_cats <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/datasources/va_hosp/fields/ccddCategory" %>%
+check_connection <- "https://essence.syndromicsurveillance.org/nssp_essence/api/datasources/va_hosp/fields/ccddCategory" %>%
+  get_api_response(profile = myProfile)
+
+if(check_connection$status_code != 200){
+  # cli::cli_alert_info(httr::http_status(check_connection$status_code)$message)
+  cli::cli_abort("App failed to establish connection with ESSENCE server!
+                 Check your credentials and try again")
+}
+
+ccdd_cats <- "https://essence.syndromicsurveillance.org/nssp_essence/api/datasources/va_hosp/fields/ccddCategory" %>%
   get_api_data(profile = myProfile) %>%
   pluck("values") %>%
   pull("value")
@@ -47,7 +90,7 @@ county_info <- state_sf %>%
   rename(STATE = NAME.x, COUNTY = NAME.y)
 
 
-url1 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
+url1 <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
 url2 <- "&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021&medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory="
 url3 <- "&geographySystem=hospitalregion&detector=probrepswitch&timeResolution=daily&sigDigits=TRUE"
 
