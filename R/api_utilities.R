@@ -115,6 +115,10 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #' grid::grid.raster(img)
 #' }
 get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
+  if(!"get_api_graph" %in% names(profile)){
+    cli::cli_alert_info("Outdated profile detected!")
+    cli::cli_abort("Please create a new profile or use {.fn get_api_tsgraph} instead!")
+  }
   profile$get_api_graph(url = url, file_ext = file_ext)
 }
 
