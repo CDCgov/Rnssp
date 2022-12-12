@@ -53,6 +53,7 @@ Credentials <- R6::R6Class(
             private$..password$value %>% safer::decrypt_string(., private$..__$value)
           ))
         res$request$options$userpwd <- ""
+        cli::cli_alert_info(httr::http_status(res$status_code)$message)
         return(res)
       }
     },
@@ -74,11 +75,14 @@ Credentials <- R6::R6Class(
     #' }
     get_api_data = function(url, fromCSV = FALSE, ...) {
       assertive.types::assert_is_a_string(url)
-      self$get_api_response(url) %>% {
-        if (fromCSV) {
-          httr::content(., by = "text/csv") %>% readr::read_csv(...)
-        } else {
-          httr::content(., as = "text") %>% jsonlite::fromJSON()
+      apir <- self$get_api_response(url)
+      if(apir$status_code == 200){
+        apir %>% {
+          if (fromCSV) {
+            httr::content(., by = "text/csv") %>% readr::read_csv(...)
+          } else {
+            httr::content(., as = "text") %>% jsonlite::fromJSON()
+          }
         }
       }
     },
@@ -105,6 +109,7 @@ Credentials <- R6::R6Class(
           private$..password$value %>% safer::decrypt_string(., private$..__$value)
         ), httr::write_disk(tsgraph, overwrite = TRUE))
       apir$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(apir$status_code)$message)
       list("api_response" = apir, "tsgraph" = tsgraph)
     },
 
@@ -130,6 +135,7 @@ Credentials <- R6::R6Class(
           private$..password$value %>% safer::decrypt_string(., private$..__$value)
         ), httr::write_disk(graph, overwrite = TRUE))
       apir$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(apir$status_code)$message)
       list("api_response" = apir, "graph" = graph)
     }
   )
