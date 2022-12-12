@@ -4,7 +4,13 @@
 \alias{remove_rmd_template}
 \title{Utility to Remove an Existing RMarkdown Template}
 \usage{
-remove_rmd_template(template, pkg = "Rnssp", recursive = TRUE, force = TRUE)
+remove_rmd_template(
+  template,
+  pkg = "Rnssp",
+  recursive = TRUE,
+  force = TRUE,
+  restart = TRUE
+)
 }
 \arguments{
 \item{template}{a character string with the name of the template to delete}
@@ -16,6 +22,11 @@ An error occurs if more than one package name is given.}
 
 \item{force}{logical. Should permissions be changed (if possible) to allow the file
 or directory to be removed? (Default is TRUE)}
+
+\item{restart}{logical. Should R session be restarted after template
+removal? (default is TRUE)}
+
+\item{verbose}{logical. Should alert session restart message be printed?}
 }
 \value{
 a character string

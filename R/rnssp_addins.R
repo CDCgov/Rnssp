@@ -141,8 +141,9 @@ add_rmd_template_gui <- function() {
         shiny::stopApp()
       }
       for (templ in input$checked_rows) {
-        Rnssp::add_rmd_template(templ)
+        Rnssp::add_rmd_template(templ, restart = FALSE, verbose = FALSE)
       }
+      rstudioapi::restartSession()
       shiny::stopApp()
     })
 
@@ -193,8 +194,9 @@ remove_rmd_template_gui <- function() {
         shiny::stopApp()
       }
       for (templ in input$templ) {
-        Rnssp::remove_rmd_template(templ)
+        Rnssp::remove_rmd_template(templ, restart = FALSE, verbose = FALSE)
       }
+      rstudioapi::restartSession()
       shiny::stopApp()
     })
 

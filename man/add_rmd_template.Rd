@@ -4,7 +4,12 @@
 \alias{add_rmd_template}
 \title{Utility to Add a New RMarkdown Template}
 \usage{
-add_rmd_template(template = NULL, pkg = "Rnssp")
+add_rmd_template(
+  template = NULL,
+  pkg = "Rnssp",
+  restart = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{template}{a character string with the name of a single template name.
@@ -13,6 +18,11 @@ by \code{\link[Rnssp]{list_templates}}.}
 
 \item{pkg}{a character string with the name of a single package.
 An error occurs if more than one package name is given.}
+
+\item{restart}{logical. Should R session be restarted after template
+installation? (default is TRUE)}
+
+\item{verbose}{logical. Should alert session restart message be printed?}
 }
 \value{
 a character string
