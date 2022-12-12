@@ -6,6 +6,15 @@
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
 * Deprecated `alert_mar()` function has been removed.
+* `add_rmd_template()` has been improved with additional arguments and better error handling.
+* `remove_rmd_template()` has been improved with additional arguments and better error handling.
+* `Rnssp:::add_rmd_template_gui()` has been improved with additional arguments and better error handling.
+* `Rnssp:::remove_rmd_template_gui()` has been improved with additional arguments and better error handling.
+* `$get_api_response()` has been improved and now prints HTTP status code.
+* `$get_api_tsgraph()` has been improved with additional arguments and now prints HTTP status code.
+* The `$get_api_tsgraph()` method has been deprecated and will be removed in the next release of `Rnssp`.
+* New method `$get_api_graph()` has been added as a replacement to the `$get_api_tsgraph()`.
+* `run_app()` has been added as a utility to run embedded shiny apps.
 
 ## Bug Fixes
 * Abstracted critical user credentials from the `$get_api_ts_graph()` method.
