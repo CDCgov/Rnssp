@@ -18,7 +18,7 @@ if (length(setdiff("Rnssp", rownames(installed.packages()))) > 0) {
 lapply("Rnssp", library, character.only = TRUE)
 
 load_profile <- rstudioapi::showQuestion(
-  "Load profile file?",
+  "NSSP-ESSENCE credentials required!",
   "Would you like to load a profile file?"
 )
 
@@ -40,39 +40,55 @@ if(load_profile){
   }
 
   if(all(endsWith(prof_file, ".rda"))){
-    myProfile <- try(get(load(prof_file)), silent = TRUE)
+    myProfile <- prof_file %>%
+      load() %>%
+      get() %>%
+      try(silent = TRUE)
   } else {
-    myProfile <- try(readRDS(prof_file), silent = TRUE)
+    myProfile <- prof_file %>%
+      readRDS() %>%
+      try(silent = TRUE)
   }
   if(all(class(myProfile) == "try-error")){
     cli::cli_alert_danger("No or corrupt file loaded!")
-    myProfile <- create_profile()
+    myProfile <- create_profile() %>%
+      try(silent = TRUE)
+    if(all(class(myProfile) == "try-error")){
+      cli::cli_abort("App stopped. No credentials provided!")
+    }
   }
 } else {
-  myProfile <- create_profile()
-}
-# Creating credential object
-# if (file.exists("~/myProfile.rda")) {
-#   myProfile <- get(load("~/myProfile.rda"))
-# } else if (file.exists("~/myProfile.rds")) {
-#   myProfile <- readRDS("~/myProfile.rds")
-# } else {
-# myProfile <- Rnssp::create_profile()
-# }
-
-check_connection <- "https://essence.syndromicsurveillance.org/nssp_essence/api/datasources/va_hosp/fields/ccddCategory" %>%
-  get_api_response(profile = myProfile)
-
-if(check_connection$status_code != 200){
-  # cli::cli_alert_info(httr::http_status(check_connection$status_code)$message)
-  cli::cli_abort("App failed to establish connection with ESSENCE server!
-                 Check your credentials and try again")
+  myProfile <- create_profile() %>%
+    try(silent = TRUE)
+  if(all(class(myProfile) == "try-error")){
+    cli::cli_abort("App stopped. No credentials provided!")
+  }
 }
 
 ccdd_cats <- "https://essence.syndromicsurveillance.org/nssp_essence/api/datasources/va_hosp/fields/ccddCategory" %>%
   get_api_data(profile = myProfile) %>%
   pluck("values") %>%
-  pull("value")
+  pull("value") %>%
+  try(silent = TRUE)
+
+if(any(class(ccdd_cats) == "try-error")){
+  cli::cli_abort("App failed to establish connection with ESSENCE server!
+                 Check your credentials and try again")
+}
+
+detectors <- "https://essence.syndromicsurveillance.org/nssp_essence/api/detectors" %>%
+  get_api_data(profile = myProfile) %>%
+  pluck("detectors") %>%
+  filter(supportsDaily) %>%
+  select(id, label)
+
+detector_choices <- setNames(detectors$id, detectors$label)
+
+# asPercent_choices <- setNames(
+#   c("noPercent", "geography", "site", "ccddCategory"),
+#   c("No Percent Query", "Hospital State", "Site", "CC and DD category")
+# )
+
 
 county_info <- state_sf %>%
   sf::st_drop_geometry() %>%
@@ -90,9 +106,16 @@ county_info <- state_sf %>%
   rename(STATE = NAME.x, COUNTY = NAME.y)
 
 
+# url1 <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
+# url2 <- "&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021&medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory="
+# url3 <- "&geographySystem=hospitalregion&detector=probrepswitch&timeResolution=daily&sigDigits=TRUE"
+
 url1 <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
+# url2 <- "&percentParam="
 url2 <- "&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021&medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory="
-url3 <- "&geographySystem=hospitalregion&detector=probrepswitch&timeResolution=daily&sigDigits=TRUE"
+url3 <- "&geographySystem=hospitalregion&detector="
+url4 <- "&timeResolution=daily&sigDigits=TRUE"
+
 
 pRed <- 0.01
 pYellow <- 0.05
@@ -149,6 +172,17 @@ ui <- tagList(
             )
           ),
           selectInput("CCDD", "CCDD", ccdd_cats, ccdd_cats[which(grepl("COVID-Specific",ccdd_cats))]),
+          selectInput("Detector", "Detector", detector_choices, "probrepswitch"),
+          # fluidRow(
+          #   column(
+          #     6,
+          #     selectInput("Detector", "Detector", detector_choices, "probrepswitch")
+          #   ),
+          #   column(
+          #     6,
+          #     selectInput("AsPercent", "As Percent Query", asPercent_choices, "noPercent")
+          #   )
+          # ),
           fluidRow(
             column(
               6,
@@ -283,7 +317,10 @@ server <- function(input, output, session) {
     input$County %>%
       tolower() %>%
       gsub(" ", "%20", .) %>%
-      paste0(url1, tolower(input$State2), "_", ., url2, gsub(" ", "%20", input$CCDD), url3) %>%
+      paste0(url1, tolower(input$State2), "_", .,
+             # url2, input$asPercent,
+             url2, gsub(" ", "%20", input$CCDD),
+             url3, input$Detector, url4) %>%
       change_dates(input$StartDate, input$EndDate)
   })
 
@@ -364,8 +401,8 @@ server <- function(input, output, session) {
           title = "ED Encounters",
           showline = TRUE
         )
-      ) %>%
-      config(displayModeBar = FALSE)
+      ) #%>%
+      # config(displayModeBar = FALSE)
 
     if ("RedYel" %in% input$markers) {
       plt <- plt %>%
@@ -414,7 +451,8 @@ server <- function(input, output, session) {
 
     }
 
-    plt
+    plt %>%
+      config(modeBarButtons = list(list("toImage"), list("autoScale2d")))
 
 
   })
