@@ -3,7 +3,7 @@
 #
 # Authors:
 #   - Howard Burkom,
-#   - Michael Sheppard &
+#   - Michael Sheppard
 #   - Gbedegnon Roseric Azondekon
 #
 #----------------------------------------------------
