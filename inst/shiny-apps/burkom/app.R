@@ -1,9 +1,12 @@
-#-------------------------------------------------------------
+#----------------------------------------------------
 # Algorithm Rule Evaluation App
 #
-# By: Howard Burkom, Michael Sheppard & G. Roseric Azondekon
+# Authors:
+#   - Howard Burkom,
+#   - Michael Sheppard &
+#   - Gbedegnon Roseric Azondekon
 #
-#-------------------------------------------------------------
+#----------------------------------------------------
 
 # load libraries
 suppressPackageStartupMessages({
