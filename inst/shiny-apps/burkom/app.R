@@ -1,3 +1,10 @@
+#-------------------------------------------------------------
+# Algorithm Rule Evaluation App
+#
+# By: Howard Burkom, Michael Sheppard & G. Roseric Azondekon
+#
+#-------------------------------------------------------------
+
 # load libraries
 suppressPackageStartupMessages({
   packages <- c(
