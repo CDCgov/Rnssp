@@ -18,8 +18,10 @@ if (length(setdiff("Rnssp", rownames(installed.packages()))) > 0) {
 lapply("Rnssp", library, character.only = TRUE)
 
 load_profile <- rstudioapi::showQuestion(
-  "NSSP-ESSENCE credentials required!",
-  "Would you like to load a profile file?"
+  "Algorithm Rule Evaluation App",
+  "NSSP-ESSENCE Credentials are required to use this app!",
+  "Load a profile File",
+  "Supply User Credentials"
 )
 
 myProfile <- NULL
@@ -84,11 +86,6 @@ detectors <- "https://essence.syndromicsurveillance.org/nssp_essence/api/detecto
 
 detector_choices <- setNames(detectors$id, detectors$label)
 
-# asPercent_choices <- setNames(
-#   c("noPercent", "geography", "site", "ccddCategory"),
-#   c("No Percent Query", "Hospital State", "Site", "CC and DD category")
-# )
-
 
 county_info <- state_sf %>%
   sf::st_drop_geometry() %>%
@@ -105,13 +102,7 @@ county_info <- state_sf %>%
   ) %>%
   rename(STATE = NAME.x, COUNTY = NAME.y)
 
-
-# url1 <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
-# url2 <- "&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021&medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory="
-# url3 <- "&geographySystem=hospitalregion&detector=probrepswitch&timeResolution=daily&sigDigits=TRUE"
-
 url1 <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=25Jun2022&geography="
-# url2 <- "&percentParam="
 url2 <- "&percentParam=noPercent&datasource=va_hosp&startDate=25Jun2021&medicalGroupingSystem=essencesyndromes&userId=3751&aqtTarget=TimeSeries&ccddCategory="
 url3 <- "&geographySystem=hospitalregion&detector="
 url4 <- "&timeResolution=daily&sigDigits=TRUE"
@@ -173,16 +164,6 @@ ui <- tagList(
           ),
           selectInput("CCDD", "CCDD", ccdd_cats, ccdd_cats[which(grepl("COVID-Specific",ccdd_cats))]),
           selectInput("Detector", "Detector", detector_choices, "probrepswitch"),
-          # fluidRow(
-          #   column(
-          #     6,
-          #     selectInput("Detector", "Detector", detector_choices, "probrepswitch")
-          #   ),
-          #   column(
-          #     6,
-          #     selectInput("AsPercent", "As Percent Query", asPercent_choices, "noPercent")
-          #   )
-          # ),
           fluidRow(
             column(
               6,
@@ -299,13 +280,12 @@ server <- function(input, output, session) {
     )
   })
 
-  # To avoid RStudio timeouts -- server code ##########################
+  # To avoid RStudio timeouts -- server code
   output$keepAlive <- renderText({
     req(input$count)
     paste("keep alive ", input$count)
   })
 
-  #####################################################################
   output$summary <- renderPrint(
     {
       summary(df1()$count)
