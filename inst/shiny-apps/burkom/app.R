@@ -28,7 +28,7 @@ if (length(setdiff("Rnssp", rownames(installed.packages()))) > 0) {
 lapply("Rnssp", library, character.only = TRUE)
 
 load_profile <- rstudioapi::showQuestion(
-  "Algorithm Rule Evaluation App",
+  "Alerting Rule Evaluation App",
   "NSSP-ESSENCE Credentials are required to use this app!",
   "Load a profile File",
   "Supply User Credentials"
@@ -155,7 +155,7 @@ ui <- tagList(
   ),
   theme = shinytheme("cosmo"),
   navbarPage(
-    title = "Algorithm Rule Evaluation",
+    title = "Alerting Rule Evaluation",
     theme = shinytheme("cosmo"),
     id = "nav",
     tabPanel(

@@ -5,6 +5,7 @@
 
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
+* New function `get_essence_data()` added to specifically pull data using the NSSP-ESSENCE API.
 * Deprecated `alert_mar()` function has been removed.
 * `add_rmd_template()` has been improved with additional arguments and better error handling.
 * `remove_rmd_template()` has been improved with additional arguments and better error handling.
