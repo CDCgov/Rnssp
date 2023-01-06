@@ -131,7 +131,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #'
 #' library(Rnssp)
 #'
-#' myProfile <- Credentials$new(askme("Enter your username:"), askme())
+#' myProfile <- create_profile()
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
 #' Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent
@@ -147,7 +147,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #' df <- api_data$timeSeriesData
 #'
 #'
-#' df_nbinom <- alert_nbinom(df, t = date, y = dataCount, baseline_end = as.Date("2020-03-01"))
+#' df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
 #'
 #'
 #' ### Visualize alert

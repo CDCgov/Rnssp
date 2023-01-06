@@ -59,7 +59,7 @@ head(df_regression)
 # Example 3: Data from NSSP-ESSENCE
 library(ggplot2)
 
-myProfile <- Credentials$new(askme("Enter your username:"), askme())
+myProfile <- create_profile()
 
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
 endDate=20Nov20&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2
