@@ -14,6 +14,7 @@
 #'
 #' @keywords internal
 #'
+#'
 nb_model <- function(df, t, y, baseline_end) {
   t <- enquo(t)
   y <- enquo(y)
@@ -84,6 +85,7 @@ nb_model <- function(df, t, y, baseline_end) {
     select(-(t:sin), -fit_link, -se_link, -lower_ci, -upper_ci)
 }
 
+
 #' Negative binomial detection algorithm for weekly counts
 #'
 #' The negative binomial regression algorithm fits a negative binomial
@@ -93,24 +95,25 @@ nb_model <- function(df, t, y, baseline_end) {
 #' series of counts. Order 1 sine and cosine terms are included to account for
 #' annual seasonality that is common to syndromes and diseases such as influenza,
 #' RSV, and norovirus. Each baseline model is used to make weekly forecasts
-#' for all weeks following the baseline period. Upper and lower 95% prediction
+#' for all weeks following the baseline period. Upper and lower 95\% prediction
 #' interval bounds are computed for each week in the prediction period.
 #' Alarms are signaled for any week during for which
 #' weekly counts fall above the upper bound of the prediction interval.
 #'
 #' @param df A data frame, data frame extension (e.g. a tibble), or a
-#' lazy data frame.
+#'      lazy data frame.
 #' @param t Name of the column of type Date containing the dates
 #' @param y Name of the column of type Numeric containing counts
 #' @param baseline_end Object of type Date defining the end of the
-#' baseline/training period
+#'      baseline/training period
 #'
 #' @return A data frame with model estimates, lower and upper prediction
-#' interval bounds, and a binary alarm indicator field
+#'      interval bounds, and a binary alarm indicator field
 #'
 #' @export
 #'
 #' @examples
+#'
 #' # Example 1
 #'
 #' df <- data.frame(
@@ -191,6 +194,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #'     y = Inf, label = "End of baseline\nMarch 1, 2020",
 #'     family = "Candara", vjust = 1.7, size = 3
 #'   )
+#' }
 #'
 alert_nbinom <- function(df, t = date, y = count, baseline_end) {
   t <- enquo(t)

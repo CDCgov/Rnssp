@@ -19,7 +19,7 @@ baseline/training period}
 }
 \value{
 A data frame with model estimates, lower and upper prediction
-interval bounds, and a binary alarm indicator field
+     interval bounds, and a binary alarm indicator field
 }
 \description{
 The negative binomial regression algorithm fits a negative binomial
@@ -29,8 +29,93 @@ is intended to account for seasonality common in multi-year weekly time
 series of counts. Order 1 sine and cosine terms are included to account for
 annual seasonality that is common to syndromes and diseases such as influenza,
 RSV, and norovirus. Each baseline model is used to make weekly forecasts
-for all weeks following the baseline period. Upper and lower 95% prediction
+for all weeks following the baseline period. Upper and lower 95\% prediction
 interval bounds are computed for each week in the prediction period.
 Alarms are signaled for any week during for which
 weekly counts fall above the upper bound of the prediction interval.
+}
+\examples{
+
+# Example 1
+
+df <- data.frame(
+  date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
+  count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
+)
+
+head(df)
+
+df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
+
+head(df_nbinom)
+
+
+
+\dontrun{
+# Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
+
+library(Rnssp)
+
+myProfile <- create_profile()
+
+url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
+Feb2022&ccddCategory=cdc\%20respiratory\%20syncytial\%20virus\%20v1&percentParam=noPercent
+&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector
+&startDate=29Dec2013&timeResolution=weekly&hasBeenE=1&medicalGroupingSystem=essencesyndromes
+&userId=2362&aqtTarget=TimeSeries"
+
+
+url <- url \%>\% gsub("\n", "", .)
+
+api_data <- get_api_data(url)
+
+df <- api_data$timeSeriesData
+
+
+df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
+
+
+### Visualize alert
+df_nbinom \%>\%
+  ggplot() +
+  geom_line(aes(x = date, y = count), linewidth = 0.3) +
+  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+  geom_ribbon(
+    aes(x = date, ymin = lower_pi, ymax = upper_pi),
+    fill = "blue", alpha = 0.25, color = "grey70", linewidth = 0.2
+  ) +
+  geom_point(data = subset(df_nbinom, alarm),
+             aes(x = date, y = count), color = "red", size = 0.7) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_text(size = 10),
+    panel.grid = element_blank(),
+    axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+    text = element_text(family = "Candara"),
+    axis.ticks.length = unit(0.25, "cm"),
+    plot.title = element_text(size = 16),
+    plot.subtitle = element_text(size = 14)
+  ) +
+  scale_x_date(
+    date_breaks = "6 month",
+    date_labels = "\%b-\%Y"
+  ) +
+  scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 5),
+    labels = scales::comma
+  ) +
+  labs(
+    x = "Date",
+    y = "Weekly ED Encounters",
+    subtitle = "Negative binomial regression algorithm with order-1 Fourier terms"
+  ) +
+  geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dotted", linewidth = 0.5) +
+  annotate(
+    geom = "text",
+    x = as.Date("2020-03-01") - 270,
+    y = Inf, label = "End of baseline\nMarch 1, 2020",
+    family = "Candara", vjust = 1.7, size = 3
+  )
+}
+
 }
