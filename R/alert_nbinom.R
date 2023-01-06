@@ -77,7 +77,6 @@ nb_model <- function(df, t, y, baseline_end) {
   bind_rows(baseline_fit, predict_fit) %>%
     arrange(!!t) %>%
     `rownames<-`( NULL ) %>%
-    # remove_rownames() %>%
     mutate(
       split = factor(split, levels = c("Baseline Period", "Prediction Period")),
       alarm = ifelse(!!y > upper_pi, TRUE, FALSE)
