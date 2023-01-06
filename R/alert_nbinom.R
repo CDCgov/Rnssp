@@ -113,7 +113,6 @@ nb_model <- function(df, t, y, baseline_end) {
 #' @export
 #'
 #' @examples
-#'
 #' # Example 1
 #'
 #' df <- data.frame(

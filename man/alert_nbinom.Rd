@@ -35,7 +35,6 @@ Alarms are signaled for any week during for which
 weekly counts fall above the upper bound of the prediction interval.
 }
 \examples{
-
 # Example 1
 
 df <- data.frame(
