@@ -76,7 +76,8 @@ nb_model <- function(df, t, y, baseline_end) {
 
   bind_rows(baseline_fit, predict_fit) %>%
     arrange(!!t) %>%
-    remove_rownames() %>%
+    `rownames<-`( NULL ) %>%
+    # remove_rownames() %>%
     mutate(
       split = factor(split, levels = c("Baseline Period", "Prediction Period")),
       alarm = ifelse(!!y > upper_pi, TRUE, FALSE)
@@ -120,7 +121,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #'
 #' head(df)
 #'
-#' df_nbinom <- alert_nbinom(df, t = date, y = count)
+#' df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
 #'
 #' head(df_nbinom)
 #'
@@ -147,40 +148,60 @@ nb_model <- function(df, t, y, baseline_end) {
 #' df <- api_data$timeSeriesData
 #'
 #'
-#' df_nbinom <- alert_nbinom(df, t = date, y = dataCount)
-#'
+#' df_nbinom <- alert_nbinom(df, t = date, y = dataCount, baseline_end = as.Date("2020-03-01"))
 #'
 #'
 #' ### Visualize alert
 #' df_nbinom %>%
 #'   ggplot() +
-#'   geom_line(aes(x = date, y = dataCount), size = 0.4, color = "grey70") +
-#'   geom_line(
-#'     data = subset(df_farr_modified, alert != "grey"),
-#'     aes(x = date, y = dataCount), color = "navy"
+#'   geom_line(aes(x = date, y = count), linewidth = 0.3) +
+#'   geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+#'   geom_ribbon(
+#'     aes(x = date, ymin = lower_pi, ymax = upper_pi),
+#'     fill = "blue", alpha = 0.25, color = "grey70", linewidth = 0.2
 #'   ) +
-#'   geom_point(
-#'     data = subset(df_farr_modified, alert == "blue"),
-#'     aes(x = date, y = dataCount), color = "navy"
+#'   geom_point(data = subset(df_nbinom, alarm),
+#'              aes(x = date, y = count), color = "red", size = 0.7) +
+#'   theme(
+#'     strip.background = element_blank(),
+#'     strip.text = element_text(size = 10),
+#'     panel.grid = element_blank(),
+#'     axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
+#'     text = element_text(family = "Candara"),
+#'     axis.ticks.length = unit(0.25, "cm"),
+#'     plot.title = element_text(size = 16),
+#'     plot.subtitle = element_text(size = 14)
 #'   ) +
-#'   geom_point(
-#'     data = subset(df_farr_modified, alert == "yellow"),
-#'     aes(x = date, y = dataCount), color = "yellow"
+#'   scale_x_date(
+#'     date_breaks = "6 month",
+#'     date_labels = "%b-%Y"
 #'   ) +
-#'   geom_point(
-#'     data = subset(df_farr_modified, alert == "red"),
-#'     aes(x = date, y = dataCount), color = "red"
+#'   scale_y_continuous(
+#'     breaks = scales::pretty_breaks(n = 5),
+#'     labels = scales::comma
 #'   ) +
-#'   theme_bw() +
 #'   labs(
 #'     x = "Date",
-#'     y = "Weekly ED Visits"
+#'     y = "Weekly ED Encounters",
+#'     subtitle = "Negative binomial regression algorithm with order-1 Fourier terms"
+#'   ) +
+#'   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dotted", linewidth = 0.5) +
+#'   annotate(
+#'     geom = "text",
+#'     x = as.Date("2020-03-01") - 270,
+#'     y = Inf, label = "End of baseline\nMarch 1, 2020",
+#'     family = "Candara", vjust = 1.7, size = 3
 #'   )
-#' }
 #'
 alert_nbinom <- function(df, t = date, y = count, baseline_end) {
   t <- enquo(t)
   y <- enquo(y)
+
+  df <- df %>%
+    mutate(
+      {{ t }} := as.Date(!!t),
+      {{ y }} := as.numeric(!!y)
+    )
 
   # Check baseline length and for sufficient historical data
   baseline_n_wks <- df %>%
@@ -223,11 +244,7 @@ alert_nbinom <- function(df, t = date, y = count, baseline_end) {
   # Check for grouping variables
   grouped_df <- is.grouped_df(df)
 
-  base_tbl <- df %>%
-    mutate(
-      {{ t }} := as.Date(!!t),
-      {{ y }} := as.numeric(!!y)
-    )
+  base_tbl <- df
 
   if (grouped_df) {
     groups <- group_vars(base_tbl)
