@@ -105,21 +105,21 @@ alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 
 
   # Check baseline length argument
   if (B < 7) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be greater than or equal to 7")
+    cli::cli_abort("Error in {.fn alert_switch}: baseline length argument {.var B} must be greater than or equal to 7")
   }
 
   if (B %% 7 != 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be a multiple of 7")
+    cli::cli_abort("Error in {.fn alert_switch}: baseline length argument {.var B} must be a multiple of 7")
   }
 
   # Check guardband length argument
   if (g < 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: guardband length argument {.var g} cannot be negative")
+    cli::cli_abort("Error in {.fn alert_switch}: guardband length argument {.var g} cannot be negative")
   }
 
   # Check for sufficient baseline data
   if (nrow(df) < B + g + 1) {
-    cli::cli_abort("Error in {.fn alert_regression}: not enough historical data")
+    cli::cli_abort("Error in {.fn alert_switch}: not enough historical data")
   }
 
   # Check for grouping variables

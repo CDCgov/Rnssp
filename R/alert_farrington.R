@@ -680,14 +680,14 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
+        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = B, g = 27, w = w, p = 10)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else if (method == "original") {
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
+        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = B, w = w)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else {
@@ -698,14 +698,14 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
+        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = B, g = 27, w = w, p = 10)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else if (method == "original") {
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
+        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = B, w = w)) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else {
