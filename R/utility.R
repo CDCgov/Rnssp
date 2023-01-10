@@ -148,7 +148,8 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp", restart = TRUE, ver
 #' \dontrun{
 #' remove_rmd_template("text_mining") # Remove the Existing Rnssp 'text_mining' template
 #' }
-remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force = TRUE, restart = TRUE) {
+remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE,
+                                force = TRUE, restart = TRUE, verbose = TRUE) {
   if (!dir.exists(system.file(package = pkg))) {
     cli::cli_abort("The package {.pkg {pkg}} is not installed!")
   }
