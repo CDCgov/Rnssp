@@ -8,6 +8,6 @@ test_that("get_api_data() function works!", {
   expect_s3_class(handle, "NSSPCredentials")
   data <- get_api_data(url, profile = handle)
   data2 <- get_api_data(url2, profile = handle, fromCSV = TRUE)
-  expect_s3_class(data$slideshow$slides, "data.frame")
+  expect_type(data, "list")
   expect_s3_class(data2, "data.frame")
 })

@@ -5,4 +5,5 @@ test_that("get_api_graph() function works!", {
   handle <- Credentials$new("", "")
   graph <- get_api_graph(url, profile = handle)
   expect_s3_class(graph$api_response, "response")
+  expect_error(expect_message(get_api_graph(url, profile = list())))
 })

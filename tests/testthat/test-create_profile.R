@@ -5,4 +5,5 @@ test_that("create_profile() works!", {
   testthat::expect_type(myProfile, "environment")
   testthat::expect_s3_class(myProfile, "R6")
   testthat::expect_s3_class(myProfile, "NSSPCredentials")
+  testthat::expect_type(NSSPContainer$new(), "environment")
 })

@@ -1,6 +1,6 @@
 context("test-get_api_response")
 
-test_that("$get_api_response() function works!", {
+test_that("get_api_response() function works!", {
   url <- "https://api.spacexdata.com/v3/capsules"
   handle <- Credentials$new("", "")
   expect_s3_class(handle, "R6")
