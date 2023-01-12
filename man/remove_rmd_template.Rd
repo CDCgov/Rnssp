@@ -9,7 +9,8 @@ remove_rmd_template(
   pkg = "Rnssp",
   recursive = TRUE,
   force = TRUE,
-  restart = TRUE
+  restart = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{

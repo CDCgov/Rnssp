@@ -4,7 +4,16 @@
 \alias{alert_farrington}
 \title{Farrington Temporal Detector}
 \usage{
-alert_farrington(df, t = date, y = count, B = 4, w = 3, method = "original")
+alert_farrington(
+  df,
+  t = date,
+  y = count,
+  B = 4,
+  g = 27,
+  w = 3,
+  p = 10,
+  method = "original"
+)
 }
 \arguments{
 \item{df}{A dataframe, dataframe extension (e.g., a \code{tibble}), or a lazy dataframe}
@@ -13,10 +22,13 @@ alert_farrington(df, t = date, y = count, B = 4, w = 3, method = "original")
 
 \item{y}{A column containing time series counts}
 
-\item{B}{An integer specifying the number of baseline years (default is 4)}
+\item{B}{Number of years to include in baseline (default is 4)}
 
-\item{w}{An integer specifying the number of weeks to include before and after the
-reference date (default is 3)}
+\item{g}{Number of guardband weeks to separate the test date from the baseline (default is 27)}
+
+\item{w}{Half the number of weeks included in reference window, before and after each reference date (default is 3)}
+
+\item{p}{Number of seasonal periods for each year in baseline}
 
 \item{method}{A string of either "\code{original}" (default) or "\code{modified}" to
 specify the version of the Farrington algorithm (original vs modified).}

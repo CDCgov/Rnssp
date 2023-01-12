@@ -4,7 +4,7 @@
 \alias{nb_model}
 \title{Negative binomial regression model for weekly counts}
 \usage{
-nb_model(df, t, y, baseline_end)
+nb_model(df, t, y, baseline_end, include_time)
 }
 \arguments{
 \item{df}{A data frame, data frame extension (e.g. a tibble),
@@ -16,6 +16,9 @@ or a lazy data frame}
 
 \item{baseline_end}{Object of type Date defining the end of the
 baseline/training period}
+
+\item{include_time}{Logical indicating whether or not to include time term
+in regression model}
 }
 \value{
 A data frame.

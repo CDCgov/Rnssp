@@ -4,25 +4,29 @@
 #' count time series with seasonality
 #'
 #' @param df A data frame, data frame extension (e.g. a tibble),
-#' or a lazy data frame
+#'     or a lazy data frame
 #' @param t Name of the column of type Date containing the dates
 #' @param y Name of the column of type Numeric containing counts
 #' @param baseline_end Object of type Date defining the end of the
-#' baseline/training period
+#'     baseline/training period
+#' @param include_time Logical indicating whether or not to include time term
+#'     in regression model
 #'
 #' @return A data frame.
 #'
 #' @keywords internal
 #'
-#'
-nb_model <- function(df, t, y, baseline_end) {
+nb_model <- function(df, t, y, baseline_end, include_time) {
+
   t <- enquo(t)
   y <- enquo(y)
 
+  time_included <- TRUE
+
   input_data <- df %>%
     mutate(
-      t = as.Date(!!t),
-      y = as.numeric(!!y),
+      t  = as.Date(!!t),
+      y  = as.numeric(!!y),
       obs = row_number(),
       cos = cos((2 * pi * obs) / 52.18),
       sin = sin((2 * pi * obs) / 52.18),
@@ -51,10 +55,8 @@ nb_model <- function(df, t, y, baseline_end) {
       ) %>%
       mutate(
         estimate = inv_link(fit_link),
-        lower_ci = inv_link(fit_link + qt(0.05 / 2, df_residual) * se_link),
-        upper_ci = inv_link(fit_link + qt(1 - 0.05 / 2, df_residual) * se_link),
-        lower_pi = qnbinom(0.05 / 2, mu = lower_ci, size = theta),
-        upper_pi = qnbinom(1 - 0.05 / 2, mu = upper_ci, size = theta)
+        upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
+        threshold = qnbinom(1 - 0.05, mu = upper_ci, size = theta)
       )
   )
 
@@ -68,47 +70,97 @@ nb_model <- function(df, t, y, baseline_end) {
       ) %>%
       mutate(
         estimate = inv_link(fit_link),
-        lower_ci = inv_link(fit_link + qt(0.05 / 2, df_residual) * se_link),
-        upper_ci = inv_link(fit_link + qt(1 - 0.05 / 2, df_residual) * se_link),
-        lower_pi = qnbinom(0.05 / 2, mu = lower_ci, size = theta),
-        upper_pi = qnbinom(1 - 0.05 / 2, mu = upper_ci, size = theta)
+        upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
+        threshold = qnbinom(1 - 0.05, mu = upper_ci, size = theta)
       )
   )
 
+  if (!include_time) {
+
+    time_included <- FALSE
+
+    baseline_model <- MASS::glm.nb(y ~ cos + sin, data = baseline_data)
+
+    inv_link <- baseline_model$family$linkinv
+    df_residual <- baseline_model$df.residual
+    theta <- baseline_model$theta
+
+    baseline_fit <- bind_cols(
+      baseline_data,
+      predict(baseline_model, simulate_pi = FALSE, se.fit = TRUE) %>%
+        as.data.frame() %>%
+        dplyr::select(
+          fit_link = fit,
+          se_link = se.fit
+        ) %>%
+        mutate(
+          estimate = inv_link(fit_link),
+          upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
+          threshold = qnbinom(1 - 0.05, mu = upper_ci, size = theta)
+        )
+    )
+
+    predict_fit <- bind_cols(
+      predict_data,
+      predict(baseline_model, newdata = predict_data, simulate_pi = FALSE, se.fit = TRUE, type = "link") %>%
+        as.data.frame() %>%
+        dplyr::select(
+          fit_link = fit,
+          se_link = se.fit
+        ) %>%
+        mutate(
+          estimate = inv_link(fit_link),
+          upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
+          threshold = qnbinom(1 - 0.05, mu = upper_ci, size = theta)
+        )
+    )
+
+  }
+
   bind_rows(baseline_fit, predict_fit) %>%
     arrange(!!t) %>%
-    `rownames<-`( NULL ) %>%
+    remove_rownames() %>%
     mutate(
       split = factor(split, levels = c("Baseline Period", "Prediction Period")),
-      alarm = ifelse(!!y > upper_pi, TRUE, FALSE)
+      alarm = ifelse(!!y > threshold, TRUE, FALSE),
+      time_term = time_included
     ) %>%
-    select(-(t:sin), -fit_link, -se_link, -lower_ci, -upper_ci)
+    select(
+      -(t:sin),
+      -fit_link,
+      -se_link,
+      -upper_ci
+    )
+
 }
 
 
 #' Negative binomial detection algorithm for weekly counts
 #'
-#' The negative binomial regression algorithm fits a negative binomial
-#' regression model with a time term and order 1 Fourier terms to a baseline
-#' period that spans 2 or more years. Inclusion of Fourier terms in the model
-#' is intended to account for seasonality common in multi-year weekly time
-#' series of counts. Order 1 sine and cosine terms are included to account for
-#' annual seasonality that is common to syndromes and diseases such as influenza,
-#' RSV, and norovirus. Each baseline model is used to make weekly forecasts
-#' for all weeks following the baseline period. Upper and lower 95\% prediction
-#' interval bounds are computed for each week in the prediction period.
-#' Alarms are signaled for any week during for which
-#' weekly counts fall above the upper bound of the prediction interval.
+#' The negative binomial regression algorithm fits a negative binomial regression
+#' model with a time term and order 1 Fourier terms to a baseline period that
+#' spans 2 or more years. Inclusion of Fourier terms in the model is intended
+#' to account for seasonality common in multi-year weekly time series of counts.
+#' Order 1 sine and cosine terms are included to account for annual seasonality
+#' that is common to syndromes and diseases such as influenza, RSV, and norovirus.
+#' Each baseline model is used to make weekly forecasts for all weeks following
+#' the baseline period. One-sided upper 95% prediction interval bounds are
+#' computed for each week in the prediction period. Alarms are signaled for
+#' any week during for which weekly counts fall above the upper bound of
+#' the prediction interval.
 #'
-#' @param df A data frame, data frame extension (e.g. a tibble), or a
-#'      lazy data frame.
+#' @param df A data frame, data frame extension (e.g. a tibble), or
+#'     a lazy data frame.
 #' @param t Name of the column of type Date containing the dates
 #' @param y Name of the column of type Numeric containing counts
 #' @param baseline_end Object of type Date defining the end of the
-#'      baseline/training period
+#'     baseline/training period
+#' @param include_time Logical indicating whether or not to include time term
+#'     in regression model
 #'
-#' @return A data frame with model estimates, lower and upper prediction
-#'      interval bounds, and a binary alarm indicator field
+#' @return A data frame with model estimates, upper prediction interval bounds,
+#'     a binary alarm indicator field, and a binary indicator field of
+#'     whether or not a time term was included.
 #'
 #' @export
 #'
@@ -127,11 +179,49 @@ nb_model <- function(df, t, y, baseline_end) {
 #' head(df_nbinom)
 #'
 #'
+#' Example 2
+#' library(ggplot2)
+#'
+#' simulated_ts <- simulated_data
+#'
+#' ## Time series with seasonality, moderate counts
+#' ts1 <- subset(simulated_ts, id == "Scenario #1")
+#'
+#' df_nb1 <- alert_nbinom(ts1, t = date, y = cases, baseline_end = as.Date("2021-12-26"))
+#'
+#'
+#' ## Visualize alert
+#' df_nb1 %>%
+#'  ggplot() +
+#'  theme_classic() +
+#'  geom_line(aes(x = date, y = cases), linewidth = 0.3) +
+#'  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+#'  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3, linetype = "dashed") +
+#'  geom_point(data = subset(df_nb1, alarm), aes(x = date, y = cases), color = "red", shape = 21, size = 2.5) +
+#'  scale_y_continuous(
+#'    limits = c(0, 80),
+#'    expand = c(0, 0),
+#'    name = "Weekly Count"
+#'  ) +
+#'  scale_x_date(
+#'    breaks = seq.Date(from = min(ts1$date), to = max(ts1$date), by = "4 month"),
+#'    name = "MMWR Week Date"
+#'  ) +
+#'  theme(
+#'    axis.text.x = element_text(angle = 90, vjust = 0.5),
+#'    axis.ticks.length = unit(0.25, "cm")
+#'  ) +
+#'  labs(
+#'    title = "Negative Binomial Regression Algorithm Results for Simulated Time Series #1",
+#'    subtitle = "Annual seasonality with moderate counts"
+#'  )
+#'
 #'
 #' \dontrun{
-#' # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
+#' # Example 3: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 #'
 #' library(Rnssp)
+#' library(ggplot2)
 #'
 #' myProfile <- create_profile()
 #'
@@ -149,7 +239,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #' df <- api_data$timeSeriesData
 #'
 #'
-#' df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
+#' df_nbinom <- alert_nbinom(df, baseline_end = as.Date("2020-03-01"))
 #'
 #'
 #' ### Visualize alert
@@ -163,16 +253,7 @@ nb_model <- function(df, t, y, baseline_end) {
 #'   ) +
 #'   geom_point(data = subset(df_nbinom, alarm),
 #'              aes(x = date, y = count), color = "red", size = 0.7) +
-#'   theme(
-#'     strip.background = element_blank(),
-#'     strip.text = element_text(size = 10),
-#'     panel.grid = element_blank(),
-#'     axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
-#'     text = element_text(family = "Candara"),
-#'     axis.ticks.length = unit(0.25, "cm"),
-#'     plot.title = element_text(size = 16),
-#'     plot.subtitle = element_text(size = 14)
-#'   ) +
+#'   theme_classic() +
 #'   scale_x_date(
 #'     date_breaks = "6 month",
 #'     date_labels = "%b-%Y"
@@ -193,17 +274,13 @@ nb_model <- function(df, t, y, baseline_end) {
 #'     y = Inf, label = "End of baseline\nMarch 1, 2020",
 #'     family = "Candara", vjust = 1.7, size = 3
 #'   )
+#'
 #' }
 #'
-alert_nbinom <- function(df, t = date, y = count, baseline_end) {
+alert_nbinom <- function(df, t = date, y = count, baseline_end, include_time = TRUE) {
+
   t <- enquo(t)
   y <- enquo(y)
-
-  df <- df %>%
-    mutate(
-      {{ t }} := as.Date(!!t),
-      {{ y }} := as.numeric(!!y)
-    )
 
   # Check baseline length and for sufficient historical data
   baseline_n_wks <- df %>%
@@ -225,9 +302,10 @@ alert_nbinom <- function(df, t = date, y = count, baseline_end) {
   baseline_dates <- baseline %>%
     pull(!!t)
 
-  if (length(unique(seq.Date(min(baseline_dates), max(baseline_dates), by = "1 week"))) != baseline_n_wks) {
-    cli::cli_abort("Error in {.fn alert_nbinom}: not all weeks in
-                   intended baseline date range were found")
+  if (length(unique(seq.Date(min(baseline_dates), max(baseline_dates),
+                             by = "1 week"))) != baseline_n_wks) {
+    cli::cli_abort("Error in {.fn alert_nbinom}: not all weeks in intended
+                   baseline date range were found")
   }
 
   # Check that time series observations are non-negative integer counts
@@ -246,7 +324,11 @@ alert_nbinom <- function(df, t = date, y = count, baseline_end) {
   # Check for grouping variables
   grouped_df <- is.grouped_df(df)
 
-  base_tbl <- df
+  base_tbl <- df %>%
+    mutate(
+      {{ t }} := as.Date(!!t),
+      {{ y }} := as.numeric(!!y)
+    )
 
   if (grouped_df) {
     groups <- group_vars(base_tbl)
@@ -255,27 +337,30 @@ alert_nbinom <- function(df, t = date, y = count, baseline_end) {
       nest(data_split = -all_of(groups)) %>%
       mutate(
         detection = map(.x = data_split, .f = nb_model, t = !!t, y = !!y,
-                        baseline_end = baseline_end)
-        ) %>%
+                        baseline_end = baseline_end, time_included = include_time)
+      ) %>%
       select(-data_split) %>%
       unnest(detection)
+
   } else {
     unique_dates <- base_tbl %>%
       pull(!!t) %>%
       unique()
 
     if (length(unique_dates) != nrow(base_tbl)) {
-      cli::cli_abort("Error in {.fn alert_nbinom}: Number of unique dates does not
-                     equal the number of rows. Should your dataframe be grouped?")
+      cli::cli_abort("Error in {.fn alert_nbinom}: Number of unique dates does
+                     not equal the number of rows.
+                     Should your dataframe be grouped?")
     }
 
     base_tbl %>%
       nest(data_split = everything()) %>%
       mutate(
         detection = map(.x = data_split, .f = nb_model, t = !!t, y = !!y,
-                        baseline_end = baseline_end)
-        ) %>%
+                        baseline_end = baseline_end, include_time = include_time)
+      ) %>%
       select(-data_split) %>%
       unnest(detection)
+
   }
 }

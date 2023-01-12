@@ -45,8 +45,11 @@
 #'
 #' head(df)
 #' head(df_switch)
+#'
+#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
+#' library(Rnssp)
 #' library(ggplot2)
 #'
 #' myProfile <- create_profile()
@@ -101,7 +104,8 @@
 #'   )
 #' }
 #'
-alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
+alert_switch <- function(df, t = date, y = count, B = 28,
+                         g = 2, w1 = 0.4, w2 = 0.9) {
 
   # Check baseline length argument
   if (B < 7) {

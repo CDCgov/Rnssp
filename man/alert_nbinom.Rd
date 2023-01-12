@@ -4,11 +4,11 @@
 \alias{alert_nbinom}
 \title{Negative binomial detection algorithm for weekly counts}
 \usage{
-alert_nbinom(df, t = date, y = count, baseline_end)
+alert_nbinom(df, t = date, y = count, baseline_end, include_time = TRUE)
 }
 \arguments{
-\item{df}{A data frame, data frame extension (e.g. a tibble), or a
-lazy data frame.}
+\item{df}{A data frame, data frame extension (e.g. a tibble), or
+a lazy data frame.}
 
 \item{t}{Name of the column of type Date containing the dates}
 
@@ -16,23 +16,27 @@ lazy data frame.}
 
 \item{baseline_end}{Object of type Date defining the end of the
 baseline/training period}
+
+\item{include_time}{Logical indicating whether or not to include time term
+in regression model}
 }
 \value{
-A data frame with model estimates, lower and upper prediction
-     interval bounds, and a binary alarm indicator field
+A data frame with model estimates, upper prediction interval bounds,
+    a binary alarm indicator field, and a binary indicator field of
+    whether or not a time term was included.
 }
 \description{
-The negative binomial regression algorithm fits a negative binomial
-regression model with a time term and order 1 Fourier terms to a baseline
-period that spans 2 or more years. Inclusion of Fourier terms in the model
-is intended to account for seasonality common in multi-year weekly time
-series of counts. Order 1 sine and cosine terms are included to account for
-annual seasonality that is common to syndromes and diseases such as influenza,
-RSV, and norovirus. Each baseline model is used to make weekly forecasts
-for all weeks following the baseline period. Upper and lower 95\% prediction
-interval bounds are computed for each week in the prediction period.
-Alarms are signaled for any week during for which
-weekly counts fall above the upper bound of the prediction interval.
+The negative binomial regression algorithm fits a negative binomial regression
+model with a time term and order 1 Fourier terms to a baseline period that
+spans 2 or more years. Inclusion of Fourier terms in the model is intended
+to account for seasonality common in multi-year weekly time series of counts.
+Order 1 sine and cosine terms are included to account for annual seasonality
+that is common to syndromes and diseases such as influenza, RSV, and norovirus.
+Each baseline model is used to make weekly forecasts for all weeks following
+the baseline period. One-sided upper 95% prediction interval bounds are
+computed for each week in the prediction period. Alarms are signaled for
+any week during for which weekly counts fall above the upper bound of
+the prediction interval.
 }
 \examples{
 # Example 1
@@ -49,9 +53,41 @@ df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-
 head(df_nbinom)
 
 
+Example 2
+simulated_ts <- simulated_data
+
+## Time series with seasonality, moderate counts
+ts1 <- subset(simulated_ts, id == "Scenario #1")
+
+df_nb1 <- alert_nbinom(ts1, t = date, y = cases, baseline_end = as.Date("2021-12-26"))
+
+ggplot(data = df_nb1) +
+theme_classic() +
+ geom_line(aes(x = date, y = cases), linewidth = 0.3) +
+ geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+ geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3, linetype = "dashed") +
+ geom_point(data = subset(df_nb1, alarm), aes(x = date, y = cases), color = "red", shape = 21, size = 2.5) +
+ scale_y_continuous(
+   limits = c(0, 80),
+   expand = c(0, 0),
+   name = "Weekly Count"
+ ) +
+ scale_x_date(
+   breaks = seq.Date(from = min(ts1$date), to = max(ts1$date), by = "4 month"),
+   name = "MMWR Week Date"
+ ) +
+ theme(
+   axis.text.x = element_text(angle = 90, vjust = 0.5),
+   axis.ticks.length = unit(0.25, "cm")
+ ) +
+ labs(
+   title = "Negative Binomial Regression Algorithm Results for Simulated Time Series #1",
+   subtitle = "Annual seasonality with moderate counts"
+ )
+
 
 \dontrun{
-# Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
+# Example 3: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 
 library(Rnssp)
 
@@ -71,7 +107,7 @@ api_data <- get_api_data(url)
 df <- api_data$timeSeriesData
 
 
-df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
+df_nbinom <- alert_nbinom(df, baseline_end = as.Date("2020-03-01"))
 
 
 ### Visualize alert
@@ -85,16 +121,7 @@ df_nbinom \%>\%
   ) +
   geom_point(data = subset(df_nbinom, alarm),
              aes(x = date, y = count), color = "red", size = 0.7) +
-  theme(
-    strip.background = element_blank(),
-    strip.text = element_text(size = 10),
-    panel.grid = element_blank(),
-    axis.text.x = element_text(angle = 90, vjust = 0.5, size = 9),
-    text = element_text(family = "Candara"),
-    axis.ticks.length = unit(0.25, "cm"),
-    plot.title = element_text(size = 16),
-    plot.subtitle = element_text(size = 14)
-  ) +
+  theme_classic() +
   scale_x_date(
     date_breaks = "6 month",
     date_labels = "\%b-\%Y"
@@ -115,6 +142,7 @@ df_nbinom \%>\%
     y = Inf, label = "End of baseline\nMarch 1, 2020",
     family = "Candara", vjust = 1.7, size = 3
   )
+
 }
 
 }
