@@ -54,6 +54,8 @@ head(df_nbinom)
 
 
 Example 2
+library(ggplot2)
+
 simulated_ts <- simulated_data
 
 ## Time series with seasonality, moderate counts
@@ -61,8 +63,11 @@ ts1 <- subset(simulated_ts, id == "Scenario #1")
 
 df_nb1 <- alert_nbinom(ts1, t = date, y = cases, baseline_end = as.Date("2021-12-26"))
 
-ggplot(data = df_nb1) +
-theme_classic() +
+
+## Visualize alert
+df_nb1 \%>\%
+ ggplot() +
+ theme_classic() +
  geom_line(aes(x = date, y = cases), linewidth = 0.3) +
  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3, linetype = "dashed") +
@@ -90,6 +95,7 @@ theme_classic() +
 # Example 3: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 
 library(Rnssp)
+library(ggplot2)
 
 myProfile <- create_profile()
 

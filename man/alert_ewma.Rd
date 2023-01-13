@@ -67,8 +67,11 @@ df_ewma <- alert_ewma(df, t = Date, y = percent)
 
 head(df)
 head(df_ewma)
+
+
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
+library(Rnssp)
 library(ggplot2)
 
 myProfile <- create_profile()

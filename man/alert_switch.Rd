@@ -60,8 +60,11 @@ df_switch <- alert_switch(df, t = Date, y = percent)
 
 head(df)
 head(df_switch)
+
+
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
+library(Rnssp)
 library(ggplot2)
 
 myProfile <- create_profile()

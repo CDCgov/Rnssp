@@ -98,8 +98,9 @@ head(df_farr_modified)
 # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 
 library(Rnssp)
+library(ggplot2)
 
-myProfile <- myProfile <- create_profile()
+myProfile <- create_profile()
 
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
 Feb2022&ccddCategory=cdc\%20respiratory\%20syncytial\%20virus\%20v1&percentParam=noPercent
