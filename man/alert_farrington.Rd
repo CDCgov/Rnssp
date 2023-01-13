@@ -129,7 +129,7 @@ df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified
 ### Visualize alert
 df_farr_modified \%>\%
   ggplot() +
-  geom_line(aes(x = date, y = count), size = 0.4, color = "grey70") +
+  geom_line(aes(x = date, y = count), linewidth = 0.4, color = "grey70") +
   geom_line(
     data = subset(df_farr_modified, alert != "grey"),
     aes(x = date, y = count), color = "navy"
