@@ -321,9 +321,9 @@ farrington_modified <- function(df, t = date, y = count,
       as.numeric(format(current_date, "%w"))
 
     ref_dates_shifted <- ref_dates - wday_gaps
-    floor_ceiling_dates <- if_else(
-      ref_dates_shifted > ref_dates, ref_dates_shifted - 7, ref_dates_shifted + 7
-    )
+    floor_ceiling_dates <- if_else(ref_dates_shifted > ref_dates,
+                                   ref_dates_shifted - 7, ref_dates_shifted + 7)
+
     center_dates <- sort(
       if_else(
         abs(ref_dates - floor_ceiling_dates) < abs(ref_dates - ref_dates_shifted),
@@ -444,13 +444,19 @@ farrington_modified <- function(df, t = date, y = count,
         phi <- max(summary(mod)$dispersion, 1)
         diag <- as.numeric(hatvalues(mod))
 
-        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+        ambscombe_resid <- (
+          (3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) /
+          (sqrt(phi * (1 - diag))
+          )
+
         scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid^2), 1)
         gamma <- length(ambscombe_resid) / sum(scaled)
-        omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid^2), gamma)
+        omega <- if_else(ambscombe_resid > 2.58,
+                         gamma / (ambscombe_resid^2), gamma)
 
         mod_weighted <- suppressWarnings(
-          glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
+          glm(as.formula(mod_formula), family = quasipoisson(link = "log"),
+              weights = omega)
         )
 
         phi_weighted <- max(summary(mod_weighted)$dispersion, 1)
@@ -507,7 +513,10 @@ farrington_modified <- function(df, t = date, y = count,
       qpois(0.95, mu_q)
     }
 
-    alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
+    alert_score[i] <- if_else(
+      !is.na(upper[i]),
+      (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_
+    )
 
     recent_counts <- sum(y_obs[(i - 4):i])
     alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
