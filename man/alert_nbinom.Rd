@@ -4,7 +4,7 @@
 \alias{alert_nbinom}
 \title{Negative binomial detection algorithm for weekly counts}
 \usage{
-alert_nbinom(df, t = date, y = count, baseline_end, include_time = TRUE)
+alert_nbinom(df, t = date, y = count, include_time = TRUE, baseline_end)
 }
 \arguments{
 \item{df}{A data frame, data frame extension (e.g. a tibble), or
@@ -14,11 +14,11 @@ a lazy data frame.}
 
 \item{y}{Name of the column of type Numeric containing counts}
 
+\item{include_time}{Logical indicating whether or not to include time term
+in regression model (default is \code{TRUE})}
+
 \item{baseline_end}{Object of type Date defining the end of the
 baseline/training period}
-
-\item{include_time}{Logical indicating whether or not to include time term
-in regression model}
 }
 \value{
 A data frame with model estimates, upper prediction interval bounds,
