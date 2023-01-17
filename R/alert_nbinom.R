@@ -119,7 +119,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 
   bind_rows(baseline_fit, predict_fit) %>%
     arrange(!!t) %>%
-    remove_rownames() %>%
+    `rownames<-`( NULL ) %>%
     mutate(
       split = factor(split, levels = c("Baseline Period", "Prediction Period")),
       alarm = ifelse(!!y > threshold, TRUE, FALSE),
@@ -156,7 +156,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #' @param baseline_end Object of type Date defining the end of the
 #'     baseline/training period
 #' @param include_time Logical indicating whether or not to include time term
-#'     in regression model
+#'     in regression model (default is \code{TRUE})
 #'
 #' @return A data frame with model estimates, upper prediction interval bounds,
 #'     a binary alarm indicator field, and a binary indicator field of
@@ -277,7 +277,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #'
 #' }
 #'
-alert_nbinom <- function(df, t = date, y = count, baseline_end, include_time = TRUE) {
+alert_nbinom <- function(df, t = date, y = count, include_time = TRUE, baseline_end) {
 
   t <- enquo(t)
   y <- enquo(y)
@@ -337,7 +337,7 @@ alert_nbinom <- function(df, t = date, y = count, baseline_end, include_time = T
       nest(data_split = -all_of(groups)) %>%
       mutate(
         detection = map(.x = data_split, .f = nb_model, t = !!t, y = !!y,
-                        baseline_end = baseline_end, time_included = include_time)
+                        baseline_end = baseline_end, include_time = include_time)
       ) %>%
       select(-data_split) %>%
       unnest(detection)

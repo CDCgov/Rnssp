@@ -540,45 +540,51 @@ farrington_modified <- function(df, t = date, y = count,
 #' The Farrington algorithm is intended for weekly time series of counts
 #' spanning multiple years.
 #'
-#' Original Farrington Algorithm: Quasi-Poisson generalized linear regression models
-#' are fit to baseline counts associated with reference dates in the B previous
-#' years, including w weeks before and after each reference date. The algorithm
-#' checks for convergence with a time term and refits a model with only an
-#' intercept term in the scenario the model does not converge. The inclusion of
-#' high baseline counts associated with past outbreaks or public health events is
-#' known to result in alerting thresholds that are too high and a reduction in
-#' sensitivity. An empirically derived weighting function is used to calculate
-#' weights from Anscombe residuals that assign low weight to baseline observations
-#' with large residuals. A 2/3rds transformation is applied to account for
-#' skewness common to time series with lower counts, after which expected value
-#' and variance estimates are used to derive upper and lower bounds for the
-#' prediction interval. The alert score is defined as the current observation minus
-#' the forecast value divided by the upper prediction interval bound minus the
-#' forecast value. If this score exceeds 1, an alert (red value) is raised given that the
-#' number of counts in the last 4 days is above 5. This algorithm requires that the number
-#' of years included in the baseline is 3 or higher. Blue values are returned if an alert
-#' does not occur. Grey values represent instances where anomaly detection did not apply
-#' (i.e., observations for which baseline data were unavailable).
+#' Original Farrington Algorithm: Quasi-Poisson generalized linear regression
+#' models are fit to baseline counts associated with reference dates in
+#' the B previous years, including w weeks before and after each reference date.
+#' The algorithm checks for convergence with a time term and refits a model with
+#' only an intercept term in the scenario the model does not converge.
+#' The inclusion of high baseline counts associated with past outbreaks or
+#' public health events is known to result in alerting thresholds that are too
+#' high and a reduction in sensitivity. An empirically derived weighting
+#' function is used to calculate weights from Anscombe residuals that assign
+#' low weight to baseline observations with large residuals.
+#' A 2/3rds transformation is applied to account for skewness common to
+#' time series with lower counts, after which expected value and variance
+#' estimates are used to derive upper and lower bounds for the prediction interval.
+#' The alert score is defined as the current observation minus the forecast value
+#' divided by the upper prediction interval bound minus the forecast value.
+#' If this score exceeds 1, an alert (red value) is raised given that the number
+#' of counts in the last 4 days is above 5. This algorithm requires that
+#' the number of years included in the baseline is 3 or higher.
+#' Blue values are returned if an alert does not occur. Grey values represent
+#' instances where anomaly detection did not apply (i.e., observations for which
+#' baseline data were unavailable).
 #'
 #' Modified Farrington Algorithm: In 2012, Angela Noufaily developed a modified
-#' implementation of the original Farrington algorithm that improved performance by
-#' including more historical data in the baseline. The modified algorithm includes
-#' all weeks from the beginning of the first reference window to the last week proceeding
-#' a 27-week guardband period used to separate the test week from the baseline. A 10-level
-#' factor is used to account for seasonality throughout the baseline. Additionally, the
-#' modified algorithm assumes a negative binomial distribution on the weekly time series
-#' counts, where thresholds are computed as quantiles of the negative binomial distribution
+#' implementation of the original Farrington algorithm that improved performance
+#' by including more historical data in the baseline. The modified algorithm
+#' includes all weeks from the beginning of the first reference window to the
+#' last week proceeding a 27-week guardband period used to separate the test week
+#' from the baseline. A 10-level factor is used to account for seasonality
+#' throughout the baseline. Additionally, the modified algorithm assumes a
+#' negative binomial distribution on the weekly time series counts, where
+#' thresholds are computed as quantiles of the negative binomial distribution
 #' with plug-in estimates for mu and phi.
 #'
-#' @param df A dataframe, dataframe extension (e.g., a \code{tibble}), or a lazy dataframe
+#' @param df A dataframe, dataframe extension (e.g., a \code{tibble}), or
+#'     a lazy dataframe
 #' @param t A column containing date values
 #' @param y A column containing time series counts
 #' @param B Number of years to include in baseline (default is 4)
-#' @param g Number of guardband weeks to separate the test date from the baseline (default is 27)
-#' @param w Half the number of weeks included in reference window, before and after each reference date (default is 3)
+#' @param g Number of guardband weeks to separate the test date from the
+#'     baseline (default is 27)
+#' @param w Half the number of weeks included in reference window, before and
+#'     after each reference date (default is 3)
 #' @param p Number of seasonal periods for each year in baseline
-#' @param method A string of either "\code{original}" (default) or "\code{modified}" to
-#'     specify the version of the Farrington algorithm (original vs modified).
+#' @param method A string of either "\code{original}" (default) or "\code{modified}"
+#'     to specify the version of the Farrington algorithm (original vs modified).
 #'
 #' @return A dataframe
 #'

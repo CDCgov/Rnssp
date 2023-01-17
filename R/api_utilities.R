@@ -199,8 +199,8 @@ get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = 
     api_type,
     "timeSeries" = profile$get_api_data(url_new) %>%
       extract2("timeSeriesData"),
-    "timeSeries/graph" = profile$get_api_tsgraph(url_new) %>%
-      extract2("tsgraph"),
+    "timeSeries/graph" = profile$get_api_graph(url_new) %>%
+      extract2("graph"),
     "tableBuilder/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
     "dataDetails" = profile$get_api_data(url_new) %>%
       extract2("dataDetails"),
