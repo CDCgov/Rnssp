@@ -46,9 +46,11 @@ df <- data.frame(
   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   count = floor(runif(366, min = 0, max = 101))
 )
-df_switch <- alert_switch(df)
 
 head(df)
+
+df_switch <- alert_switch(df)
+
 head(df_switch)
 
 # Example 2
@@ -56,9 +58,11 @@ df <- data.frame(
   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   percent = runif(366)
 )
-df_switch <- alert_switch(df, t = Date, y = percent)
 
 head(df)
+
+df_switch <- alert_switch(df, t = Date, y = percent)
+
 head(df_switch)
 
 

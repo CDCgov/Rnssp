@@ -59,25 +59,25 @@ library(ggplot2)
 simulated_ts <- simulated_data
 
 ## Time series with seasonality, moderate counts
-ts1 <- subset(simulated_ts, id == "Scenario #1")
+ts <- subset(simulated_ts, id == "Scenario #1")
 
-head(ts1)
+head(ts)
 
-df_nb1 <- alert_nbinom(ts1, t = date, y = cases,
+df_nbinom <- alert_nbinom(ts, t = date, y = cases,
                        baseline_end = as.Date("2021-12-26"))
 
-head(df1_nb1)
+head(df_nbinom)
 
 
 ## Visualize alert
-df_nb1 \%>\%
+df_nbinom \%>\%
  ggplot() +
  theme_classic() +
  geom_line(aes(x = date, y = cases), linewidth = 0.3) +
  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
             linetype = "dashed") +
- geom_point(data = subset(df_nb1, alarm), aes(x = date, y = cases),
+ geom_point(data = subset(df_nbinom, alarm), aes(x = date, y = cases),
             color = "red", shape = 21, size = 2.5) +
  scale_y_continuous(
    limits = c(0, 80),
@@ -85,7 +85,7 @@ df_nb1 \%>\%
    name = "Weekly Count"
  ) +
  scale_x_date(
-   breaks = seq.Date(from = min(ts1$date), to = max(ts1$date), by = "4 month"),
+   breaks = seq.Date(from = min(ts$date), to = max(ts$date), by = "4 month"),
    name = "MMWR Week Date"
  ) +
  theme(
