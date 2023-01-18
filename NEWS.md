@@ -12,6 +12,8 @@
 * New test `test-get_essence_data.R` added for `get_essence_data()`.
 * New test `test-get_api_graph.R` added for `get_api_graph()`.
 * New test `test-get_api_tsgraph.R` added for `get_api_tsgraph()`.
+* `slider` package added as a dependency.
+* `lubridate` package added as a dependency.
 * Deprecated `alert_mar()` function has been removed.
 * `add_rmd_template()` has been improved with additional arguments and better error handling.
 * `remove_rmd_template()` has been improved with additional arguments and better error handling.
