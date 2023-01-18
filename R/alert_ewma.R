@@ -188,9 +188,11 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   count = floor(runif(366, min = 0, max = 101))
 #' )
-#' df_ewma <- alert_ewma(df)
 #'
 #' head(df)
+#'
+#' df_ewma <- alert_ewma(df)
+#'
 #' head(df_ewma)
 #'
 #' # Example 2
@@ -198,9 +200,11 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   percent = runif(366)
 #' )
-#' df_ewma <- alert_ewma(df, t = Date, y = percent)
 #'
 #' head(df)
+#'
+#' df_ewma <- alert_ewma(df, t = Date, y = percent)
+#'
 #' head(df_ewma)
 #'
 #'

@@ -88,10 +88,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
       baseline_data,
       predict(baseline_model, simulate_pi = FALSE, se.fit = TRUE) %>%
         as.data.frame() %>%
-        dplyr::select(
-          fit_link = fit,
-          se_link = se.fit
-        ) %>%
+        dplyr::select(fit_link = fit, se_link = se.fit) %>%
         mutate(
           estimate = inv_link(fit_link),
           upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
@@ -179,8 +176,12 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #' ## Time series with seasonality, moderate counts
 #' ts1 <- subset(simulated_ts, id == "Scenario #1")
 #'
+#' head(ts1)
+#'
 #' df_nb1 <- alert_nbinom(ts1, t = date, y = cases,
 #'                        baseline_end = as.Date("2021-12-26"))
+#'
+#' head(df1_nb1)
 #'
 #'
 #' ## Visualize alert
@@ -242,10 +243,8 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #'   ggplot() +
 #'   geom_line(aes(x = date, y = count), linewidth = 0.3) +
 #'   geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
-#'   geom_ribbon(
-#'     aes(x = date, ymin = lower_pi, ymax = upper_pi),
-#'     fill = "blue", alpha = 0.25, color = "grey70", linewidth = 0.2
-#'   ) +
+#'   geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
+#'             linetype = "dashed") +
 #'   geom_point(data = subset(df_nbinom, alarm),
 #'              aes(x = date, y = count), color = "red", size = 0.7) +
 #'   theme_classic() +

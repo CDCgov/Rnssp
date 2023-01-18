@@ -42,19 +42,24 @@ df <- data.frame(
   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   count = floor(runif(366, min = 0, max = 101))
 )
-df_regression <- alert_regression(df)
 
 head(df)
+
+df_regression <- alert_regression(df)
+
 head(df_regression)
 
 df <- data.frame(
   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   percent = runif(366)
 )
-df_regression <- alert_regression(df, t = Date, y = percent)
 
 head(df)
+
+df_regression <- alert_regression(df, t = Date, y = percent)
+
 head(df_regression)
+
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
 library(ggplot2)

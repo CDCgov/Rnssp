@@ -61,8 +61,12 @@ simulated_ts <- simulated_data
 ## Time series with seasonality, moderate counts
 ts1 <- subset(simulated_ts, id == "Scenario #1")
 
+head(ts1)
+
 df_nb1 <- alert_nbinom(ts1, t = date, y = cases,
                        baseline_end = as.Date("2021-12-26"))
+
+head(df1_nb1)
 
 
 ## Visualize alert
@@ -124,10 +128,8 @@ df_nbinom \%>\%
   ggplot() +
   geom_line(aes(x = date, y = count), linewidth = 0.3) +
   geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
-  geom_ribbon(
-    aes(x = date, ymin = lower_pi, ymax = upper_pi),
-    fill = "blue", alpha = 0.25, color = "grey70", linewidth = 0.2
-  ) +
+  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
+            linetype = "dashed") +
   geom_point(data = subset(df_nbinom, alarm),
              aes(x = date, y = count), color = "red", size = 0.7) +
   theme_classic() +

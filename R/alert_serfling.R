@@ -99,9 +99,14 @@ serfling_model <- function(df, t, y, baseline_end) {
 #' ## Time series with seasonality, moderate counts
 #' ts1 <- subset(simulated_ts, id == "Scenario #1")
 #'
+#' head(ts1)
+#'
 #' df_serfling <- alert_serfling(ts1, t = date, y = cases,
 #'                             baseline_end = as.Date("2021-12-26"))
 #'
+#' head(df_serfling)
+#'
+#' ### Visualize alert
 #' df_serfling %>%
 #'  ggplot() +
 #'  theme_classic() +
