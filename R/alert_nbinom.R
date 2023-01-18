@@ -21,12 +21,16 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
   t <- enquo(t)
   y <- enquo(y)
 
+  df <- df %>%
+    mutate(
+      t  = as.Date(!!t),
+      y  = as.numeric(!!y)
+    )
+
   time_included <- TRUE
 
   input_data <- df %>%
     mutate(
-      t  = as.Date(!!t),
-      y  = as.numeric(!!y),
       obs = row_number(),
       cos = cos((2 * pi * obs) / 52.18),
       sin = sin((2 * pi * obs) / 52.18),
@@ -49,10 +53,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
     baseline_data,
     predict(baseline_model, simulate_pi = FALSE, se.fit = TRUE) %>%
       as.data.frame() %>%
-      dplyr::select(
-        fit_link = fit,
-        se_link = se.fit
-      ) %>%
+      dplyr::select(fit_link = fit, se_link = se.fit) %>%
       mutate(
         estimate = inv_link(fit_link),
         upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
@@ -62,12 +63,10 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 
   predict_fit <- bind_cols(
     predict_data,
-    predict(baseline_model, newdata = predict_data, simulate_pi = FALSE, se.fit = TRUE, type = "link") %>%
+    predict(baseline_model, newdata = predict_data, simulate_pi = FALSE,
+            se.fit = TRUE, type = "link") %>%
       as.data.frame() %>%
-      dplyr::select(
-        fit_link = fit,
-        se_link = se.fit
-      ) %>%
+      dplyr::select(fit_link = fit, se_link = se.fit) %>%
       mutate(
         estimate = inv_link(fit_link),
         upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
@@ -102,12 +101,10 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 
     predict_fit <- bind_cols(
       predict_data,
-      predict(baseline_model, newdata = predict_data, simulate_pi = FALSE, se.fit = TRUE, type = "link") %>%
+      predict(baseline_model, newdata = predict_data, simulate_pi = FALSE,
+              se.fit = TRUE, type = "link") %>%
         as.data.frame() %>%
-        dplyr::select(
-          fit_link = fit,
-          se_link = se.fit
-        ) %>%
+        dplyr::select(fit_link = fit, se_link = se.fit) %>%
         mutate(
           estimate = inv_link(fit_link),
           upper_ci = inv_link(fit_link + qt(1 - 0.05, df_residual) * se_link),
@@ -125,12 +122,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
       alarm = ifelse(!!y > threshold, TRUE, FALSE),
       time_term = time_included
     ) %>%
-    select(
-      -(t:sin),
-      -fit_link,
-      -se_link,
-      -upper_ci
-    )
+    select(-(t:sin), -fit_link, -se_link, -upper_ci)
 
 }
 
@@ -174,12 +166,12 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #'
 #' head(df)
 #'
-#' df_nbinom <- alert_nbinom(df, t = date, y = count, baseline_end = as.Date("2020-03-01"))
+#' df_nbinom <- alert_nbinom(df, baseline_end = as.Date("2020-03-01"))
 #'
 #' head(df_nbinom)
 #'
 #'
-#' Example 2
+#' # Example 2
 #' library(ggplot2)
 #'
 #' simulated_ts <- simulated_data
@@ -187,7 +179,8 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #' ## Time series with seasonality, moderate counts
 #' ts1 <- subset(simulated_ts, id == "Scenario #1")
 #'
-#' df_nb1 <- alert_nbinom(ts1, t = date, y = cases, baseline_end = as.Date("2021-12-26"))
+#' df_nb1 <- alert_nbinom(ts1, t = date, y = cases,
+#'                        baseline_end = as.Date("2021-12-26"))
 #'
 #'
 #' ## Visualize alert
@@ -196,8 +189,10 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 #'  theme_classic() +
 #'  geom_line(aes(x = date, y = cases), linewidth = 0.3) +
 #'  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
-#'  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3, linetype = "dashed") +
-#'  geom_point(data = subset(df_nb1, alarm), aes(x = date, y = cases), color = "red", shape = 21, size = 2.5) +
+#'  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
+#'             linetype = "dashed") +
+#'  geom_point(data = subset(df_nb1, alarm), aes(x = date, y = cases),
+#'             color = "red", shape = 21, size = 2.5) +
 #'  scale_y_continuous(
 #'    limits = c(0, 80),
 #'    expand = c(0, 0),
@@ -282,6 +277,12 @@ alert_nbinom <- function(df, t = date, y = count, include_time = TRUE, baseline_
   t <- enquo(t)
   y <- enquo(y)
 
+  df <- df %>%
+    mutate(
+      {{ t }} := as.Date(!!t),
+      {{ y }} := as.numeric(!!y)
+    )
+
   # Check baseline length and for sufficient historical data
   baseline_n_wks <- df %>%
     filter(!!t <= baseline_end) %>%
@@ -324,16 +325,10 @@ alert_nbinom <- function(df, t = date, y = count, include_time = TRUE, baseline_
   # Check for grouping variables
   grouped_df <- is.grouped_df(df)
 
-  base_tbl <- df %>%
-    mutate(
-      {{ t }} := as.Date(!!t),
-      {{ y }} := as.numeric(!!y)
-    )
-
   if (grouped_df) {
-    groups <- group_vars(base_tbl)
+    groups <- group_vars(df)
 
-    base_tbl %>%
+    df %>%
       nest(data_split = -all_of(groups)) %>%
       mutate(
         detection = map(.x = data_split, .f = nb_model, t = !!t, y = !!y,
@@ -343,17 +338,17 @@ alert_nbinom <- function(df, t = date, y = count, include_time = TRUE, baseline_
       unnest(detection)
 
   } else {
-    unique_dates <- base_tbl %>%
+    unique_dates <- df %>%
       pull(!!t) %>%
       unique()
 
-    if (length(unique_dates) != nrow(base_tbl)) {
+    if (length(unique_dates) != nrow(df)) {
       cli::cli_abort("Error in {.fn alert_nbinom}: Number of unique dates does
                      not equal the number of rows.
                      Should your dataframe be grouped?")
     }
 
-    base_tbl %>%
+    df %>%
       nest(data_split = everything()) %>%
       mutate(
         detection = map(.x = data_split, .f = nb_model, t = !!t, y = !!y,

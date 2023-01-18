@@ -19,7 +19,8 @@ test_that("alert_nbinom functions as expected!", {
   )
 
   df_nbinom <- alert_nbinom(df, baseline_end = as.Date("2020-03-01"))
-  df2_nbinom <- alert_nbinom(group_by(df2, regions), baseline_end = as.Date("2020-03-01"))
+  df2_nbinom <- alert_nbinom(group_by(df2, regions),
+                             baseline_end = as.Date("2020-03-01"), include_time = FALSE)
 
   expect(is.data.frame(df_nbinom), failure_message = "alert_nbinom test fails!")
   expect_equal(length(df_nbinom), length(df) + 5)
