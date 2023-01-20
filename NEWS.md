@@ -31,8 +31,8 @@
 # Rnssp 0.1.0
 
 ## New Features
-* New function `get_api_data()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
-* New function `get_api_response()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
+* New function `get_api_response()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
+* New function `get_api_data()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
 * New function `get_api_tsgraph()` added as a wrapper to the `$get_api_tsgraph()` method defined in the `Credentials` class.
 * Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
 * Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.
