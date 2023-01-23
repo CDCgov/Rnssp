@@ -20,3 +20,7 @@ an object of class NSSPCredentials and R6
 \description{
 A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials}} class.
 }
+\examples{
+myProfile <- create_profile()
+
+}
