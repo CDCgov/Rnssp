@@ -2,12 +2,12 @@
 % Please edit documentation in R/credentials.R
 \name{Credentials}
 \alias{Credentials}
-\title{A \code{NSSPCredentials} Class Representing a Credentials object}
+\title{A \code{Credentials} Class Representing a Credentials object}
 \description{
 A \code{Credentials} object has a username, a password and a key.
 }
 \details{
-A \code{Credentials} object can get ESSENCE API data via an API URL.
+A \code{Credentials} object can get API data via an API URL.
 }
 \examples{
 
@@ -17,7 +17,7 @@ A \code{Credentials} object can get ESSENCE API data via an API URL.
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
 }
 
@@ -27,10 +27,10 @@ api_response <- myProfile$get_api_response(url)
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "<json type ESSENCE_url>"
+json_url <- "https://httpbin.org/json"
 api_data_json <- myProfile$get_api_data(json_url)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "https://httpbin.org/robots.txt"
 api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 
@@ -40,7 +40,7 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/image/png"
 api_data_tsgraph <- myProfile$get_api_tsgraph(url)
 names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)
@@ -116,7 +116,7 @@ An object of class \code{response}
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
 }
 }
@@ -152,10 +152,10 @@ a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its met
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "<json type ESSENCE_url>"
+json_url <- "https://httpbin.org/json"
 api_data_json <- myProfile$get_api_data(json_url)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "https://httpbin.org/robots.txt"
 api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 }
@@ -187,7 +187,7 @@ A list containing an api_response object and a path to a time series graph in .p
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/image/png"
 api_data_tsgraph <- myProfile$get_api_tsgraph(url)
 names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)

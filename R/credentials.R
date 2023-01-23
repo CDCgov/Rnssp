@@ -1,10 +1,10 @@
-#' A \code{NSSPCredentials} Class Representing a Credentials object
+#' A \code{Credentials} Class Representing a Credentials object
 #'
 #' @description
 #' A \code{Credentials} object has a username, a password and a key.
 #'
 #' @details
-#' A \code{Credentials} object can get ESSENCE API data via an API URL.
+#' A \code{Credentials} object can get API data via an API URL.
 
 Credentials <- R6::R6Class(
   "NSSPCredentials",
@@ -27,9 +27,6 @@ Credentials <- R6::R6Class(
       if (!missing(password)) {
         private$..password <- NSSPContainer$new(safer::encrypt_string(password, key = private$..__$value, ascii = FALSE))
       }
-      # if (!missing(key)) {
-      #   private$..__ <- NSSPContainer$new(key)
-      # }
     },
 
     #' @description
@@ -39,7 +36,7 @@ Credentials <- R6::R6Class(
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-    #' url <- "<ESSENCE_url>"
+    #' url <- "https://httpbin.org/json"
     #' api_response <- myProfile$get_api_response(url)
     #' }
     get_api_response = function(url) {
@@ -67,10 +64,10 @@ Credentials <- R6::R6Class(
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-    #' json_url <- "<json type ESSENCE_url>"
+    #' json_url <- "https://httpbin.org/json"
     #' api_data_json <- myProfile$get_api_data(json_url)
     #'
-    #' csv_url <- "<csv type ESSENCE_url>"
+    #' csv_url <- "https://httpbin.org/robots.txt"
     #' api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
     #' }
     get_api_data = function(url, fromCSV = FALSE, ...) {
@@ -94,7 +91,7 @@ Credentials <- R6::R6Class(
     #' @examples
     #' \dontrun{
     #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-    #' url <- "<ESSENCE_url>"
+    #' url <- "https://httpbin.org/image/png"
     #' api_data_tsgraph <- myProfile$get_api_tsgraph(url)
     #' names(api_data_tsgraph)
     #' img <- png::readPNG(api_data_tsgraph$tsgraph)
