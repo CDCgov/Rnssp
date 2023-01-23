@@ -8,6 +8,7 @@
 #'
 #' @examples
 #' myProfile <- create_profile()
+#' myProfile
 #'
 create_profile <- function(
   username = askme("Please enter your username: "),
@@ -29,9 +30,11 @@ create_profile <- function(
 #' @examples
 #' # Create a profile with "Bearer" authentication type
 #' myProfile <- create_token_profile()
+#' myProfile
 #'
 #' # Create a profile with a "Basic" authentication type
-#' myProfile <- create_token_profile(auth_type = "Basic")
+#' myProfile2 <- create_token_profile(auth_type = "Basic")
+#' myProfile2
 #'
 create_token_profile <- function(
     token = askpass:::readline_silent("Enter/Paste a token: "),
