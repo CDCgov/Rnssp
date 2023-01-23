@@ -9,7 +9,7 @@ test_that("get_api_response() function works!", {
   expect_s3_class(handle, "NSSPCredentials")
 
   expect_s3_class(handle2, "R6")
-  expect_s3_class(handle2, "NSSPCredentials")
+  expect_s3_class(handle2, "NSSPToken")
 
   response <- get_api_response(url, profile = handle)
   response2 <- get_api_response(url, profile = handle2)
