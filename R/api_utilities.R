@@ -7,11 +7,37 @@
 #' @export
 #'
 #' @examples
+#' myProfile <- create_profile()
+#'
 create_profile <- function(
   username = askme("Please enter your username: "),
   password = askme()
 ){
   Credentials$new(username = username, password = password)
+}
+
+
+#' A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Token}} class.
+#'
+#' @param token a string for token
+#' @param auth_type type of HTTP authentication.
+#'        Should be \code{Bearer} or \code{Basic}. Default is \code{Bearer}
+#'
+#' @return An object of class \code{Token}
+#' @export
+#'
+#' @examples
+#' # Create a profile with "Bearer" authentication type
+#' myProfile <- create_token_profile()
+#'
+#' # Create a profile with a "Basic" authentication type
+#' myProfile <- create_token_profile(auth_type = "Basic")
+#'
+create_token_profile <- function(
+    token = askpass:::readline_silent("Enter/Paste a token: "),
+    auth_type = "Bearer"
+){
+  Token$new(token = token, auth_type = auth_type)
 }
 
 #' Get API data
