@@ -12,6 +12,7 @@
 * New test `test-create_profile.R` added for `create_profile()`.
 * New test `test-create_token_profile.R` added for `create_token_profile()`.
 * New test `test-alert_nbinom.R` added for `alert_nbinom()`.
+* New test `test-alert_serfling.R` added for `alert_serfling()`.
 * New test `test-get_essence_data.R` added for `get_essence_data()`.
 * New test `test-get_api_graph.R` added for `get_api_graph()`.
 * New test `test-get_api_tsgraph.R` added for `get_api_tsgraph()`.
