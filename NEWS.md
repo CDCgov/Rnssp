@@ -5,9 +5,12 @@
 * New function `get_essence_data()` added to specifically pull data using the NSSP-ESSENCE API.
 * Negative binomial detection algorithm `alert_nbinom()` added for weekly time series of counts spanning multiple years.
 * `run_app()` has been added as a utility to run embedded shiny apps.
+* New `Token` class added for API services token use. The `Token` class has the same methods as the `Credentials` class.
+* New function `create_token_profile()` added as a wrapper to the `$new()` method defined in the `Token` class.
 
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
+* New test `test-create_token_profile.R` added for `create_token_profile()`.
 * New test `test-alert_nbinom.R` added for `alert_nbinom()`.
 * New test `test-get_essence_data.R` added for `get_essence_data()`.
 * New test `test-get_api_graph.R` added for `get_api_graph()`.
