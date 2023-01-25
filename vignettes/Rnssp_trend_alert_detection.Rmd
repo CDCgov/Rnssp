@@ -45,10 +45,7 @@ myProfile <- readRDS("../myProfile.rds")
 
 ```{r create_profile, eval=FALSE}
 # Creating an ESSENCE user profile
-myProfile <- Credentials$new(
-  username = askme("Enter your username: "), 
-  password = askme()
-)
+myProfile <- create_profile()
 
 # save profile object to file for future use
 # save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
@@ -62,7 +59,7 @@ With the NSSP `myProfile` object, we authenticate to NSSP-ESSENCE and pull in th
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 # Data Pull from NSSP-ESSENCE
-api_data <- myProfile$get_api_data(url)
+api_data <- get_api_data(url, profile = myProfile)
 df <- api_data %>% 
   pluck("timeSeriesData")
 
@@ -107,8 +104,8 @@ df_ewma_region %>%
 ```
 
 
-## Multiple Adaptive Regression (MAR)
-The Multiple Adaptive Regression (MAR) algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value som predefined days later. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE. The EWMA detection algorithm can be performed with the `alert_regression()` function (run `help(alert_regression)` or `?alert_regression` in the R console for more).
+## Multiple Adaptive Regression
+The Multiple Adaptive Regression algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value som predefined days later. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE. The EWMA detection algorithm can be performed with the `alert_regression()` function (run `help(alert_regression)` or `?alert_regression` in the R console for more).
 
 
 ```{r alert_regression}
@@ -179,7 +176,7 @@ Let's pull in more historical data:
 ```{r alert_farrington_data}
 url2 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=29Dec2013&timeResolution=weekly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries"
 
-api_data2 <- get_api_data(url2)
+api_data2 <- get_api_data(url2, profile = myProfile)
 
 df2 <- api_data2 %>% 
   pluck("timeSeriesData")
@@ -194,7 +191,12 @@ df_farr_original <- alert_farrington(df2, t = date, y = count)
 Similarly, the Modified Farrington temporal detector can be applied as below:
 
 ```{r alert_farrington_modified}
-df_farr_modified <- alert_farrington(df2, t = date, y = count, method = "modified")
+df_farr_modified <- alert_farrington(
+  df2, 
+  t = date, 
+  y = count, 
+  method = "modified"
+)
 ```
 
 Let's visualize the time series with the detected anomalies:
@@ -210,6 +212,119 @@ df_farr_modified %>%
   labs(
     x = "Date",
     y = "Weekly ED Visits"
+  )
+```
+
+## Negative Binomial Regression
+The Negative Binomial Regression algorithm is intended for weekly time series spanning multiple years.
+
+It fits a negative binomial regression model with a time term and order 1 Fourier terms to a baseline period that spans 2 or more years.
+
+Inclusion of Fourier terms in the model is intended to account for seasonality common in multi-year weekly time series of counts. Order 1 sine and cosine terms are included to account for annual seasonality that is common to syndromes and diseases such as influenza, RSV, and norovirus. 
+
+Each baseline model is used to make weekly forecasts for all weeks following the baseline period. One-sided upper 95 computed for each week in the prediction period. 
+
+Alarms are signaled for any week during for which weekly counts fall above the upper bound of the prediction interval.
+
+The Negative Binomial Regression detector can be applied with the `alert_nbinom()` function (run `help(alert_nbinom)` or `?alert_nbinom` in the R console for more).
+
+With the historical data pulled in the previous section, the Negative Binomial Regression detector can be applied as below:
+
+```{r alert_negative_binomial_regression}
+df_nbinom <- alert_nbinom(
+  df2, 
+  t = date, 
+  y = count, 
+  baseline_end = as.Date("2020-03-01")
+)
+```
+
+Let's visualize the time series with the detected anomalies:
+
+```{r alert_negative_binomial_regression_viz}
+df_nbinom %>%
+  ggplot() +
+  theme_classic() +
+  geom_line(aes(x = date, y = count), linewidth = 0.3) +
+  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
+            linetype = "dashed") +
+  geom_point(data = subset(df_nbinom, alarm),
+             aes(x = date, y = count), color = "red", size = 0.7) +
+  theme(
+   axis.text.x = element_text(angle = 90, vjust = 0.5),
+   axis.ticks.length = unit(0.25, "cm")
+ ) +
+  scale_x_date(
+    date_breaks = "6 month",
+    date_labels = "%b-%Y"
+  ) +
+  scale_y_continuous(
+    breaks = scales::pretty_breaks(n = 5),
+    labels = scales::comma
+  ) +
+  labs(
+    x = "Date",
+    y = "Weekly ED Encounters",
+    subtitle = "Negative binomial regression algorithm with order-1 Fourier terms"
+  ) +
+  geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dotted", linewidth = 0.5) +
+  annotate(
+    geom = "text",
+    x = as.Date("2020-03-01") - 270,
+    y = Inf, label = "End of baseline\nMarch 1, 2020",
+    family = "Candara", vjust = 1.7, size = 3
+  )
+```
+
+## Original Serfling detector
+The Original Serfling detector is intended for weekly time series spanning multiple years.
+
+It fits a linear regression model with a time term and order 1 Fourier terms to a baseline period that ideally spans 5 or more years. 
+
+Inclusion of Fourier terms in the model is intended to account for seasonality common in multi-year weekly time series. Order 1 sine and cosine terms are included to account for annual seasonality that is common to syndromes and diseases such as influenza, RSV, and norovirus. Each baseline model is used to make weekly forecasts for all weeks following the baseline period. One-sided upper 95 for each week in the prediction period. 
+
+Alarms are signaled for any week during for which weekly observations fall above the upper bound of the prediction interval. 
+
+This implementation follows the approach of the original Serfling method in which weeks between October of the starting year of a season and May of the ending year of a season are considered to be in the epidemic period. Weeks in the epidemic period are removed from the baseline prior to fitting the regression model.
+
+The  Original Serfling detector can be applied with the `alert_serfling()` function (run `help(alert_serfling)` or `?alert_serfling` in the R console for more).
+
+With the historical data pulled in the previous section, the Negative Binomial Regression detector can be applied as below:
+
+```{r alert_serfling_detector}
+df_serfling <- alert_serfling(
+  df2, 
+  t = date, 
+  y = count, 
+  baseline_end = as.Date("2020-03-01")
+)
+```
+
+Let's visualize the time series with the detected anomalies:
+
+```{r alert_serfling_detector_viz}
+df_serfling %>%
+  ggplot() +
+  theme_classic() +
+  geom_line(aes(x = date, y = count), linewidth = 0.3) +
+  geom_line(aes(x = date, y = estimate), color = "blue", linewidth = 0.3) +
+  geom_line(aes(x = date, y = threshold), color = "red", linewidth = 0.3,
+            linetype = "dashed") +
+  geom_point(data = subset(df_serfling, alarm), aes(x = date, y = count),
+             color = "red", shape = 21, size = 2.5) +
+  scale_x_date(
+    breaks = seq.Date(from = min(df_serfling$date),
+                      to = max(df_serfling$date), by = "4 month"),
+    name = "MMWR Week Date"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    axis.ticks.length = unit(0.25, "cm")
+  ) +
+  labs(
+    title = "Original Serfling Method Results for Weekly ED Encounters",
+    subtitle = "Annual seasonality with moderate counts"
   )
 ```
 
