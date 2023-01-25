@@ -24,8 +24,10 @@ A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Token}} cla
 \examples{
 # Create a profile with "Bearer" authentication type
 myProfile <- create_token_profile()
+myProfile
 
 # Create a profile with a "Basic" authentication type
-myProfile <- create_token_profile(auth_type = "Basic")
+myProfile2 <- create_token_profile(auth_type = "Basic")
+myProfile2
 
 }

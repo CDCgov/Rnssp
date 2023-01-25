@@ -22,5 +22,6 @@ A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials
 }
 \examples{
 myProfile <- create_profile()
+myProfile
 
 }
