@@ -1,3 +1,5 @@
+#' Create a profile with a username and password
+#'
 #' A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials}} class.
 #'
 #' @param username a string for username
@@ -20,6 +22,8 @@ create_profile <- function(
 }
 
 
+#' Create a profile with an API token
+#'
 #' A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Token}} class.
 #'
 #' @param token a string for token
