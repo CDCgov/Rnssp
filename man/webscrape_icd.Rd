@@ -36,12 +36,15 @@ space removed to enable successful joining.
 
 # Example 1
 icd10_2022 <- webscrape_icd(icd_version = "ICD9")
+head(icd10_2022)
 
 # Example 2
 icd10_2021 <- webscrape_icd(icd_version = "ICD10", year = 2021)
+head(icd10_2021)
 
 # Example 3
 icd10_2020 <- webscrape_icd(icd_version = "ICD10", year = 2020)
+head(icd10_2020)
 
 }
 \references{
