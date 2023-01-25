@@ -23,13 +23,15 @@ A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Cr
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
+myProfile <- create_profile("", "")
 
-json_url <- "<json type ESSENCE_url>"
+json_url <- "http://httpbin.org/json"
 api_data_json <- get_api_data(json_url)
+head(api_data_json$slideshow$slides)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "http://httpbin.org/robots.txt"
 api_data_csv <- get_api_data(csv_url, fromCSV = TRUE)
+head(api_data_csv)
 }
 }
 \seealso{

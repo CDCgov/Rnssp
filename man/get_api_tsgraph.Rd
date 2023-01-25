@@ -19,8 +19,8 @@ A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+myProfile <- create_profile("", "")
+url <- "http://httpbin.org/image/png"
 
 api_data_tsgraph <- get_api_tsgraph(url)
 

@@ -66,13 +66,15 @@ create_token_profile <- function(
 #'
 #' @examples
 #' \dontrun{
-#' myProfile <- Credentials$new(askme("Enter my username: "), askme())
+#' myProfile <- create_profile("", "")
 #'
-#' json_url <- "<json type ESSENCE_url>"
+#' json_url <- "http://httpbin.org/json"
 #' api_data_json <- get_api_data(json_url)
+#' head(api_data_json$slideshow$slides)
 #'
-#' csv_url <- "<csv type ESSENCE_url>"
+#' csv_url <- "http://httpbin.org/robots.txt"
 #' api_data_csv <- get_api_data(csv_url, fromCSV = TRUE)
+#' head(api_data_csv)
 #' }
 get_api_data <- function(url, fromCSV = FALSE, profile = myProfile, ...) {
   profile$get_api_data(url = url, fromCSV = fromCSV, ...)
@@ -92,10 +94,11 @@ get_api_data <- function(url, fromCSV = FALSE, profile = myProfile, ...) {
 #'
 #' @examples
 #' \dontrun{
-#' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-#' url <- "<ESSENCE_url>"
+#' myProfile <- create_profile("", "")
+#' url <- "http://httpbin.org/json"
 #'
 #' api_response <- get_api_response(url)
+#' names(api_response)
 #' }
 get_api_response <- function(url, profile = myProfile) {
   profile$get_api_response(url = url)
@@ -115,8 +118,8 @@ get_api_response <- function(url, profile = myProfile) {
 #'
 #' @examples
 #' \dontrun{
-#' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-#' url <- "<ESSENCE_url>"
+#' myProfile <- create_profile("", "")
+#' url <- "http://httpbin.org/image/png"
 #'
 #' api_data_tsgraph <- get_api_tsgraph(url)
 #'
@@ -142,8 +145,8 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 #'
 #' @examples
 #' \dontrun{
-#' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-#' url <- "<url>"
+#' myProfile <- create_profile("", "")
+#' url <- "http://httpbin.org/image/png"
 #'
 #' api_data_graph <- get_api_graph(url)
 #'

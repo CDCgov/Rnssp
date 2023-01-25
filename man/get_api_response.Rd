@@ -19,10 +19,11 @@ A wrapper to the \code{get_api_response} method defined in the \code{\link[Rnssp
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+myProfile <- create_profile("", "")
+url <- "http://httpbin.org/json"
 
 api_response <- get_api_response(url)
+names(api_response)
 }
 }
 \seealso{

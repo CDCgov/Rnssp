@@ -21,8 +21,8 @@ A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{C
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<url>"
+myProfile <- create_profile("", "")
+url <- "http://httpbin.org/image/png"
 
 api_data_graph <- get_api_graph(url)
 
