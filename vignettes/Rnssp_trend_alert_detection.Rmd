@@ -251,10 +251,6 @@ df_nbinom %>%
             linetype = "dashed") +
   geom_point(data = subset(df_nbinom, alarm),
              aes(x = date, y = count), color = "red", size = 0.7) +
-  theme(
-   axis.text.x = element_text(angle = 90, vjust = 0.5),
-   axis.ticks.length = unit(0.25, "cm")
- ) +
   scale_x_date(
     date_breaks = "6 month",
     date_labels = "%b-%Y"
@@ -263,6 +259,10 @@ df_nbinom %>%
     breaks = scales::pretty_breaks(n = 5),
     labels = scales::comma
   ) +
+  theme(
+   axis.text.x = element_text(angle = 90, vjust = 0.5),
+   axis.ticks.length = unit(0.25, "cm")
+ ) +
   labs(
     x = "Date",
     y = "Weekly ED Encounters",
