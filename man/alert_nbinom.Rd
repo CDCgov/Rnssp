@@ -141,6 +141,10 @@ df_nbinom \%>\%
     breaks = scales::pretty_breaks(n = 5),
     labels = scales::comma
   ) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    axis.ticks.length = unit(0.25, "cm")
+  ) +
   labs(
     x = "Date",
     y = "Weekly ED Encounters",
