@@ -2,7 +2,7 @@
 % Please edit documentation in R/api_utilities.R
 \name{create_profile}
 \alias{create_profile}
-\title{A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials}} class.}
+\title{Create a profile with a username and password}
 \usage{
 create_profile(
   username = askme("Please enter your username: "),

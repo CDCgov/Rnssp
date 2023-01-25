@@ -2,7 +2,7 @@
 % Please edit documentation in R/api_utilities.R
 \name{create_token_profile}
 \alias{create_token_profile}
-\title{A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Token}} class.}
+\title{Create a profile with an API token}
 \usage{
 create_token_profile(
   token = askpass:::readline_silent("Enter/Paste a token: "),
