@@ -21,7 +21,9 @@ an object of class NSSPCredentials and R6
 A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
+\dontrun{
 myProfile <- create_profile()
 myProfile
+}
 
 }

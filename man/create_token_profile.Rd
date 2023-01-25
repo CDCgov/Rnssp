@@ -22,6 +22,7 @@ An object of class \code{Token}
 A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Token}} class.
 }
 \examples{
+\dontrun{
 # Create a profile with "Bearer" authentication type
 myProfile <- create_token_profile()
 myProfile
@@ -29,5 +30,6 @@ myProfile
 # Create a profile with a "Basic" authentication type
 myProfile2 <- create_token_profile(auth_type = "Basic")
 myProfile2
+}
 
 }
