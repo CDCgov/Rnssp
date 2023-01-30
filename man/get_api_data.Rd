@@ -19,7 +19,8 @@ get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 }
 \description{
-A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_data} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{

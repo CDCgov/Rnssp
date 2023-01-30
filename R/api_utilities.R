@@ -53,7 +53,8 @@ create_token_profile <- function(
 
 #' Get API data
 #'
-#' A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_data} method defined in the
+#' \code{\link[Rnssp]{Credentials}} class.
 #'
 #' @param url a character of API URL.
 #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format.
@@ -83,10 +84,12 @@ get_api_data <- function(url, fromCSV = FALSE, profile = myProfile, ...) {
 
 #' Get API response
 #'
-#' A wrapper to the \code{get_api_response} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_response} method defined in the
+#' \code{\link[Rnssp]{Credentials}} class.
 #'
 #' @param url a character of API URL
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#'     Default is \code{myProfile}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
 #' @return An object of class \code{response}.
@@ -107,10 +110,12 @@ get_api_response <- function(url, profile = myProfile) {
 
 #' Get an API graph
 #'
-#' A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_tsgraph} method defined in the
+#' \code{\link[Rnssp]{Credentials}} class.
 #'
 #' @param url a character of API URL.
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#'     Default is \code{myProfile}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
 #' @return An object of class \code{response}.
@@ -133,11 +138,14 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 
 #' Get an API graph
 #'
-#' A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_graph} method defined in the
+#' \code{\link[Rnssp]{Credentials}} class.
 #'
 #' @param url a character of API URL.
-#' @param file_ext a non-empty character vector giving the file extension. Default is \code{.png}.
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#' @param file_ext a non-empty character vector giving the file extension.
+#'     Default is \code{.png}.
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#'     Default is \code{myProfile}.
 #'
 #' @seealso \code{\link[Rnssp]{Credentials}}
 #' @return An object of class \code{response}.
@@ -157,7 +165,8 @@ get_api_tsgraph <- function(url, profile = myProfile) {
 get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
   if(!"get_api_graph" %in% names(profile)){
     cli::cli_alert_info("Outdated profile detected!")
-    cli::cli_abort("Please create a new profile or use {.fn get_api_tsgraph} instead!")
+    cli::cli_abort("Please create a new profile or use
+                   {.fn get_api_tsgraph} instead!")
   }
   profile$get_api_graph(url = url, file_ext = file_ext)
 }
@@ -167,10 +176,14 @@ get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
 #' Get ESSENCE API data.
 #'
 #' @param url a character of ESSENCE API URL.
-#' @param start_date a date object or a character string in date format (e.g. "2019-08-01")
-#' @param end_date a date object or a character string in date format (e.g. "2020-08-01")
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
-#' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
+#' @param start_date a date object or a character string in date
+#'     format (e.g. "2019-08-01")
+#' @param end_date a date object or a character string in date format
+#'     (e.g. "2020-08-01")
+#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#'     Default is \code{myProfile}.
+#' @param ... further arguments and CSV parsing parameters to be passed to
+#'     \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
 #'
 #' @return a dataframe or a character string.
 #' @seealso \code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_tsgraph}}
@@ -226,13 +239,15 @@ get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
 #' plot(graph)
 #' }
 #'
-get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = myProfile, ...) {
+get_essence_data <- function(url, start_date = NULL,
+                             end_date = NULL, profile = myProfile, ...) {
   api_type <- str_extract(url, "(?<=api/).+(?=\\?)")
 
   url_new <- try(change_dates(url, start_date, end_date), silent = TRUE)
 
   if(any(class(url_new) == "try-error")){
-    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use {.fn get_api_data} instead!")
+    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use
+                   {.fn get_api_data} instead!")
   }
 
   switch(
@@ -251,6 +266,7 @@ get_essence_data <- function(url, start_date = NULL, end_date = NULL, profile = 
       extract2("regionSyndromeAlerts"),
     "alerts/hospitalSyndromeAlerts" = profile$get_api_data(url_new) %>%
       extract2("hospitalSyndromeAlerts"),
-    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use {.fn get_api_data} instead!")
+    cli::cli_abort("URL is not of ESSENCE type. Check your URL or use
+                   {.fn get_api_data} instead!")
   )
 }

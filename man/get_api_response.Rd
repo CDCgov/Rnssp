@@ -9,13 +9,15 @@ get_api_response(url, profile = myProfile)
 \arguments{
 \item{url}{a character of API URL}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+Default is \code{myProfile}.}
 }
 \value{
 An object of class \code{response}.
 }
 \description{
-A wrapper to the \code{get_api_response} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_response} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{

@@ -15,13 +15,17 @@ get_essence_data(
 \arguments{
 \item{url}{a character of ESSENCE API URL.}
 
-\item{start_date}{a date object or a character string in date format (e.g. "2019-08-01")}
+\item{start_date}{a date object or a character string in date
+format (e.g. "2019-08-01")}
 
-\item{end_date}{a date object or a character string in date format (e.g. "2020-08-01")}
+\item{end_date}{a date object or a character string in date format
+(e.g. "2020-08-01")}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+Default is \code{myProfile}.}
 
-\item{...}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
+\item{...}{further arguments and CSV parsing parameters to be passed to
+\code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
 }
 \value{
 a dataframe or a character string.

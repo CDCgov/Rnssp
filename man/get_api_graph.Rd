@@ -9,15 +9,18 @@ get_api_graph(url, file_ext = ".png", profile = myProfile)
 \arguments{
 \item{url}{a character of API URL.}
 
-\item{file_ext}{a non-empty character vector giving the file extension. Default is \code{.png}.}
+\item{file_ext}{a non-empty character vector giving the file extension.
+Default is \code{.png}.}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+Default is \code{myProfile}.}
 }
 \value{
 An object of class \code{response}.
 }
 \description{
-A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_graph} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{
