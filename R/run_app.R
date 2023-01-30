@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' run_app("burkom")
+#' run_app("rule_eval")
 run_app <- function(app, launch_browser = TRUE) {
   available_apps <- list.files(system.file("shiny-apps", package = "Rnssp"))
 

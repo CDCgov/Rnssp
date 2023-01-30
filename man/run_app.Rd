@@ -16,5 +16,5 @@ default browser? (default is TRUE)}
 Run embedded shiny applications
 }
 \examples{
-run_app("burkom")
+run_app("rule_eval")
 }
