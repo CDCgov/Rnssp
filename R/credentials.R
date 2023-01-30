@@ -11,7 +11,7 @@ Credentials <- R6::R6Class(
   private = list(
     ..username = NSSPContainer$new(NULL),
     ..password = NSSPContainer$new(NULL),
-    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9]"))
+    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"))
   ),
   public = list(
 
