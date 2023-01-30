@@ -1,10 +1,10 @@
-#' A \code{NSSPContainer} Class to store a value in a container object
+#' A \code{NSSPContainer} Class to store a value or an object
 #'
 #' @description
-#' A \code{NSSPContainer} object stores a value
+#' An object of class \code{NSSPContainer} stores a value
 #'
 #' @details
-#' A \code{NSSPContainer} object can be used to retrieve a value
+#' The \code{NSSPContainer} class is used to encapsulate a value or an object
 NSSPContainer <- R6::R6Class(
   "NSSPContainer",
   private = list(
