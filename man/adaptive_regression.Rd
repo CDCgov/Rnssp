@@ -7,17 +7,18 @@
 adaptive_regression(df, t, y, B, g)
 }
 \arguments{
-\item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame}
+\item{df}{A data frame, data frame extension (e.g. a tibble), or a
+lazy data frame}
 
 \item{t}{Name of the column of type Date containing the dates}
 
 \item{y}{Name of the column of type Numeric containing counts or percentages}
 
-\item{B}{Baseline parameter. The baseline length is the number of days to which
-each liner model is fit.}
+\item{B}{Baseline parameter. The baseline length is the number of days to
+which each liner model is fit.}
 
-\item{g}{Guardband parameter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting.}
+\item{g}{Guardband parameter. The guardband length is the number of days
+separating the baseline from the current date in consideration for alerting.}
 }
 \value{
 A data frame.

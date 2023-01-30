@@ -7,17 +7,19 @@
 alert_regression(df, t = date, y = count, B = 28, g = 2)
 }
 \arguments{
-\item{df}{A data frame, data frame extension (e.g. a tibble), or a lazy data frame.}
+\item{df}{A data frame, data frame extension (e.g. a tibble), or a
+lazy data frame.}
 
 \item{t}{Name of the column of type Date containing the dates}
 
 \item{y}{Name of the column of type Numeric containing counts or percentages}
 
-\item{B}{Baseline parameter. The baseline length is the number of days to which
-each liner model is fit (default is 28)}
+\item{B}{Baseline parameter. The baseline length is the number of days to
+which each liner model is fit (default is 28)}
 
-\item{g}{Guardband parameter. The guardband length is the number of days separating
-the baseline from the current date in consideration for alerting (default is 2)}
+\item{g}{Guardband parameter. The guardband length is the number of days
+separating the baseline from the current date in consideration for
+alerting (default is 2)}
 }
 \value{
 A data frame with test statistic, p.value, and alert indicator
@@ -25,15 +27,17 @@ A data frame with test statistic, p.value, and alert indicator
 \description{
 The adaptive multiple regression algorithm fits a linear model to a baseline
 of counts or percentages of length B, and forecasts a predicted value g + 1
-days later (guard-band). This value is compared to the current observed value and
-divided by the standard error of prediction in the test-statistic. The model includes
-terms to account for linear trends and day-of-week effects. Note that this implementation
-does NOT account for federal holidays as in the Regression 1.2 algorithm in ESSENCE.
-An alert (red value) is signaled if the statistical test (student's t-test) applied to the
-test statistic yields a p-value less than 0.01. If the p-value is greater than or equal
-to 0.01 and strictly less than 0.05, a warning (yellow value) is signaled. Blue values
-are returned if an alert or warning does not occur. Grey values represent instances where
-anomaly detection did not apply (i.e., observations for which baseline data were unavailable).
+days later (guard-band). This value is compared to the current observed value
+and divided by the standard error of prediction in the test-statistic.
+The model includes terms to account for linear trends and day-of-week effects.
+Note that this implementation does NOT account for federal holidays as in the
+Regression 1.2 algorithm in ESSENCE. An alert (red value) is signaled if
+the statistical test (student's t-test) applied to the test statistic yields
+a p-value less than 0.01. If the p-value is greater than or equal to 0.01
+and strictly less than 0.05, a warning (yellow value) is signaled.
+Blue values are returned if an alert or warning does not occur.
+Grey values represent instances where anomaly detection did not apply
+(i.e., observations for which baseline data were unavailable).
 }
 \examples{
 
