@@ -128,11 +128,9 @@ nYel <- 3
 minCountYel <- 4
 
 StartDate_0 <- Sys.Date() %m-%
-  months(12) %>%
-  format("%d%b%Y")
+  months(12)
 
-EndDate_0 <- Sys.Date() %>%
-  format("%d%b%Y")
+EndDate_0 <- Sys.Date()
 
 ui <- tagList(
   useShinyjs(),
@@ -308,7 +306,6 @@ server <- function(input, output, session) {
       tolower() %>%
       gsub(" ", "%20", .) %>%
       paste0(url1, tolower(input$State2), "_", .,
-             # url2, input$asPercent,
              url2, gsub(" ", "%20", input$CCDD),
              url3, input$Detector, url4) %>%
       change_dates(input$StartDate, input$EndDate)
@@ -335,7 +332,7 @@ server <- function(input, output, session) {
   })
 
   output$table <- renderTable({
-    nrCriteria <- sum(df1()$criterion > 0, na.rm = T)
+    nrCriteria <- sum(df1()$criterion > 0, na.rm = TRUE)
     nrRed <- sum(!is.na(df1()$redCounts))
     nrYellow <- sum(!is.na(df1()$yellowCounts))
     nrZeros <- sum(df1()$count == 0)
