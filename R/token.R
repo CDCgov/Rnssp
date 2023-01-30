@@ -10,7 +10,7 @@ Token <- R6::R6Class(
   "NSSPToken",
   private = list(
     ..token = NSSPContainer$new(NULL),
-    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9]")),
+    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']")),
     ..auth_type = NULL
   ),
   public = list(
