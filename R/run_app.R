@@ -22,5 +22,6 @@ run_app <- function(app, launch_browser = TRUE) {
   }
 
   app_dir <- system.file("shiny-apps", app, package = "Rnssp")
-  shiny::runApp(app_dir, display.mode = "normal", launch.browser = launch_browser)
+  shiny::runApp(app_dir, display.mode = "normal", launch.browser = launch_browser) %>%
+    suppressWarnings()
 }
