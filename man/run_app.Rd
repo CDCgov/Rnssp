@@ -15,3 +15,6 @@ default browser? (default is TRUE)}
 \description{
 Run embedded shiny applications
 }
+\examples{
+run_app("burkom")
+}

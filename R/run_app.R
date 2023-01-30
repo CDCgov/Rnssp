@@ -2,12 +2,12 @@
 #'
 #' @param app A string representing the name of the application to run
 #' @param launch_browser logical. Should the app be launch in the system's
-#' default browser? (default is TRUE)
+#'     default browser? (default is TRUE)
 #'
-#' @return
 #' @export
 #'
 #' @examples
+#' run_app("burkom")
 run_app <- function(app, launch_browser = TRUE) {
   available_apps <- list.files(system.file("shiny-apps", package = "Rnssp"))
 
