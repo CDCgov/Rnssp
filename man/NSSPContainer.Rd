@@ -2,12 +2,12 @@
 % Please edit documentation in R/container.R
 \name{NSSPContainer}
 \alias{NSSPContainer}
-\title{A \code{NSSPCredentials} Class to store a value in a container object}
+\title{A \code{NSSPContainer} Class to store a value in a container object}
 \description{
-A \code{NSSPCredentials} object stores a value
+A \code{NSSPContainer} object stores a value
 }
 \details{
-A \code{NSSPCredentials} object can be used to retrieve a value
+A \code{NSSPContainer} object can be used to retrieve a value
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -33,7 +33,7 @@ Initializes a new NSSPContainer object.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new \code{NSSPCredentials} object
+A new \code{NSSPContainer} object
 }
 }
 \if{html}{\out{<hr>}}
