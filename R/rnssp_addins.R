@@ -95,10 +95,10 @@ add_rmd_template_gui <- function() {
           var td = $(this), row = table.row(td.closest('tr'));
           if (row.child.isShown()) {
             row.child.hide();
-            td.html('&oplus;');
+            td.html('&#x25B6;');
           } else {
           row.child(format(row.data())).show();
-          td.html('&ominus;');
+          td.html('&#9660;');
         }
       });"
 
