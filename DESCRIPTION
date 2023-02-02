@@ -5,7 +5,7 @@ Version: 0.1.1
 Date: 2021-01-27
 Authors@R: c(
     person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
-                  role = c("aut", "cre", "ctb"), comment = c(ORCID = "0000-0001-9155-4153")),
+                  role = c("aut", "cre", "ccp", "ctb"), comment = c(ORCID = "0000-0001-9155-4153")),
     person("Michael", "Sheppard", email = "msheppard@cdc.gov",
                   role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-3660-575X")))
 Maintainer: Gbedegnon Roseric Azondekon <gazondekon@cdc.gov>
