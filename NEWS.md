@@ -1,4 +1,4 @@
-# Rnssp 0.1.1
+# Rnssp 0.2.0
 
 ## New Features
 * New function `create_profile()` added as a wrapper to the `$new()` method defined in the `Credentials` class.
