@@ -11,7 +11,7 @@
 # load libraries
 suppressPackageStartupMessages({
   packages <- c(
-    "shiny", "shinyhelper", "shinyjs", "dplyr", "Rnssp", "purrr",
+    "shiny", "shinyjs", "dplyr", "Rnssp", "purrr",
     "data.table", "lubridate", "shinycssloaders",
     "plotly", "shinyWidgets", "sf", "shinythemes"
   )
@@ -357,7 +357,6 @@ ui <- tagList(
 
 
 server <- function(input, output, session) {
-  observe_helpers()
   observe({
     updateSelectizeInput(
       session,
