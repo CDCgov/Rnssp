@@ -21,13 +21,13 @@ Run 'Rnssp_vignettes()' to browse all Rnssp vignettes.
   installed_version <- tryCatch(packageVersion(gsub(".*/", "", "Rnssp")), error=function(e) NA)
 
   if (all(remote_version > installed_version, class(x) != "try-error")) {
-    message(
+    cli::cli_alert(
       paste0(
-        '## Rnssp v',
+        'Rnssp v',
         installed_version,
         ' is outdated!\n## Please upgrade to latest Rnssp v',
         remote_version,
-        ': devtools::install_github("cdcgov/Rnssp")')
+        ': {.code devtools::install_github("cdcgov/Rnssp")}')
     )
   }
 }
