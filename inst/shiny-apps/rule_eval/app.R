@@ -219,7 +219,7 @@ ui <- tagList(
                 "ReqNumberOfAlerts_R",
                 helpPopup(
                   id = "mRed", title = "Minimum of red alerts",
-                  content = "Mark a criterion red alert for a specific day", "top", "focus"
+                  content = "For your alerting rule on a given day, the minimum number of red alerts to mark a criterion alert for that day.", "top", "focus"
                 ),
                 min = 0, max = 7, value = 2
               )
@@ -244,7 +244,7 @@ ui <- tagList(
                 inputId = "MinCaseCount_R",
                 helpPopup(
                   id = "MinCountRed", title = "Total number of records",
-                  content = "Optional. Total number of records required for your alerting rule (mRed = 3 and nRed = 4 means 3 red alerts within the last 4 days if there are at least 6 records in the 4 days) – leave blank to skip this option",
+                  content = "Optional. Total number of records required for your alerting rule (mRed = 3 and nRed = 4 and minCountRed = 6 means 3 red alerts within the last 4 days if there are at least 6 records in the 4 days) – leave blank to skip this option",
                   "top", "focus"
                 ),
                 value = minCountRed
@@ -256,7 +256,7 @@ ui <- tagList(
                 inputId = "Pval_R",
                 helpPopup(
                   id = "Pvalue_Red", title = "Maximum p-value",
-                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  content = "p-value threshold required for a red alert for your alerting rule (widely used default = 0.01)",
                   "top", "focus"
                 ),
                 value = pRed
@@ -270,7 +270,7 @@ ui <- tagList(
                 "ReqNumberOfAlerts_Y",
                 helpPopup(
                   id = "mYellow", title = "Minimum of yellow alerts",
-                  content = "Mark a criterion yellow alert for a specific day",
+                  content = "For your alerting rule on a given day, the minimum number of yellow alerts to mark a criterion alert for that day.",
                   "top", "focus"
                 ),
                 min = 0, max = 7, value = 2
@@ -296,7 +296,7 @@ ui <- tagList(
                 inputId = "MinCaseCount_Y",
                 helpPopup(
                   id = "MinCountYellow", title = "Total number of records",
-                  content = "Optional. Total number of records required for your alerting rule (mYellow = 3 and nYellow = 4 means 3 yellow alerts within the last 4 days if there are at least 6 records in the 4 days)",
+                  content = "Optional. Total number of records required for your alerting rule (mYellow = 3 and nYellow = 4 and minCountYellow = 6 means 3 yellow alerts within the last 4 days if there are at least 6 records in the 4 days)",
                   "top", "focus"
                 ),
                 value = minCountYel
@@ -308,7 +308,7 @@ ui <- tagList(
                 inputId = "Pval_Y",
                 helpPopup(
                   id = "PValueYellow", title = "Maximum p-value",
-                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  content = "p-value threshold required for a yellow alert for your alerting rule (widely used default = 0.05)",
                   "top", "focus"
                 ),
                 value = pYellow
