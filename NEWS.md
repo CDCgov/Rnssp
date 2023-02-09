@@ -7,6 +7,7 @@
 * `run_app()` has been added as a utility to run embedded shiny apps.
 * New `Token` class added for API services token use. The `Token` class has the same methods as the `Credentials` class.
 * New function `create_token_profile()` added as a wrapper to the `$new()` method defined in the `Token` class.
+* `Rnssp` detects new version and suggests package upgrade.
 
 ## Updates
 * New test `test-create_profile.R` added for `create_profile()`.
