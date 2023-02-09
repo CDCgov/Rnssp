@@ -51,7 +51,7 @@ helpPopup <- function(
       `data-animation` = TRUE,
       `data-placement` = match.arg(placement, several.ok=TRUE)[1],
       `data-trigger` = match.arg(trigger, several.ok=TRUE)[1],
-
+      
       shiny::icon(name = "question-circle", class = "shinyhelper-icon", style="color:red")
     )
   )
@@ -80,7 +80,7 @@ if(load_profile){
   if (!any(endsWith(prof_file, c(".rda", ".rds")))) {
     cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rds} file")
   }
-
+  
   if(all(endsWith(tolower(prof_file), ".rda"))){
     myProfile <- get(load(prof_file))
   } else {
@@ -219,7 +219,7 @@ ui <- tagList(
                 "ReqNumberOfAlerts_R",
                 helpPopup(
                   id = "mRed", title = "Minimum of red alerts",
-                  content = "Mark a criterion red alert for a specific day", "top", "focus"
+                  content = "For your alerting rule on a given day, the minimum number of red alerts to mark a criterion alert for that day.", "top", "focus"
                 ),
                 min = 0, max = 7, value = 2
               )
@@ -244,7 +244,7 @@ ui <- tagList(
                 inputId = "MinCaseCount_R",
                 helpPopup(
                   id = "MinCountRed", title = "Total number of records",
-                  content = "Optional. Total number of records required for your alerting rule (mRed = 3 and nRed = 4 means 3 red alerts within the last 4 days if there are at least 6 records in the 4 days) – leave blank to skip this option",
+                  content = "Optional. Total number of records required for your alerting rule (mRed = 3 and nRed = 4 and minCountRed = 6 means 3 red alerts within the last 4 days if there are at least 6 records in the 4 days) – leave blank to skip this option",
                   "top", "focus"
                 ),
                 value = minCountRed
@@ -256,7 +256,7 @@ ui <- tagList(
                 inputId = "Pval_R",
                 helpPopup(
                   id = "Pvalue_Red", title = "Maximum p-value",
-                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  content = "p-value threshold required for a red alert for your alerting rule (widely used default = 0.01)",
                   "top", "focus"
                 ),
                 value = pRed
@@ -270,7 +270,7 @@ ui <- tagList(
                 "ReqNumberOfAlerts_Y",
                 helpPopup(
                   id = "mYellow", title = "Minimum of yellow alerts",
-                  content = "Mark a criterion yellow alert for a specific day",
+                  content = "For your alerting rule on a given day, the minimum number of yellow alerts to mark a criterion alert for that day.",
                   "top", "focus"
                 ),
                 min = 0, max = 7, value = 2
@@ -296,7 +296,7 @@ ui <- tagList(
                 inputId = "MinCaseCount_Y",
                 helpPopup(
                   id = "MinCountYellow", title = "Total number of records",
-                  content = "Optional. Total number of records required for your alerting rule (mYellow = 3 and nYellow = 4 means 3 yellow alerts within the last 4 days if there are at least 6 records in the 4 days)",
+                  content = "Optional. Total number of records required for your alerting rule (mYellow = 3 and nYellow = 4 and minCountYellow = 6 means 3 yellow alerts within the last 4 days if there are at least 6 records in the 4 days)",
                   "top", "focus"
                 ),
                 value = minCountYel
@@ -308,7 +308,7 @@ ui <- tagList(
                 inputId = "Pval_Y",
                 helpPopup(
                   id = "PValueYellow", title = "Maximum p-value",
-                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  content = "p-value threshold required for a yellow alert for your alerting rule (widely used default = 0.05)",
                   "top", "focus"
                 ),
                 value = pYellow
@@ -369,7 +369,7 @@ server <- function(input, output, session) {
       server = TRUE
     )
   })
-
+  
   observeEvent(input$State2, {
     updateSelectizeInput(
       session,
@@ -381,20 +381,20 @@ server <- function(input, output, session) {
       server = TRUE
     )
   })
-
+  
   # To avoid RStudio timeouts -- server code
   output$keepAlive <- renderText({
     req(input$count)
     paste("keep alive ", input$count)
   })
-
+  
   output$summary <- renderPrint(
     {
       summary(df1()$count)
     },
     width = 10
   )
-
+  
   url <- eventReactive(input$go, {
     input$County %>%
       tolower() %>%
@@ -404,7 +404,7 @@ server <- function(input, output, session) {
              url3, input$Detector, url4) %>%
       change_dates(input$StartDate, input$EndDate)
   })
-
+  
   df1 <- reactive({
     api_data <- myProfile$get_api_data(url())
     df <- api_data$timeSeriesData
@@ -413,9 +413,9 @@ server <- function(input, output, session) {
         date = as.Date(date),
         redCounts = ifelse(levels <= input$Pval_R, count, NA),
         yellowCounts = ifelse(levels <= input$Pval_Y & levels > input$Pval_R, count, NA),
-        alertRollSumR = frollsum(x = levels <= input$Pval_R, n = input$AlertingInterval_R, fill = NA),
+        alertRollSumR = frollsum(x = levels < input$Pval_R, n = input$AlertingInterval_R, fill = NA),
         countRollSumR = frollsum(x = count, n = input$AlertingInterval_R, fill = NA),
-        alertRollSumY = frollsum(x = levels <= input$Pval_Y, n = input$AlertingInterval_R, fill = NA),
+        alertRollSumY = frollsum(x = levels < input$Pval_Y, n = input$AlertingInterval_Y, fill = NA),
         countRollSumY = frollsum(x = count, n = input$AlertingInterval_Y, fill = NA),
         criterion = ifelse((((alertRollSumR >= input$ReqNumberOfAlerts_R) & (countRollSumR >= input$MinCaseCount_R)) |
                               ((alertRollSumY >= input$ReqNumberOfAlerts_Y) & (countRollSumY >= input$MinCaseCount_Y))) &
@@ -424,7 +424,7 @@ server <- function(input, output, session) {
         blueCounts = ifelse(is.na(redCounts) & is.na(yellowCounts), count, NA)
       )
   })
-
+  
   output$table <- renderTable({
     nrCriteria <- sum(df1()$criterion > 0, na.rm = TRUE)
     nrRed <- sum(!is.na(df1()$redCounts))
@@ -440,11 +440,11 @@ server <- function(input, output, session) {
     names(df_table) <- tableNames
     df_table
   })
-
+  
   oPlot <- reactive({
     input$go
     df1()
-
+    
     plt <- plot_ly(data = df1()) %>%
       add_trace(
         x = ~date,
@@ -476,15 +476,20 @@ server <- function(input, output, session) {
         xaxis = list(
           title = "Date",
           showspikes = TRUE,
-          spikemode = "across"
+          spikemode = "across",
+          ticks = "outside",
+          spikedash = "dot", 
+          spikecolor = "black", 
+          spikethickness = -2
         ),
         yaxis = list(
           title = "ED Encounters",
-          showline = TRUE
+          showline = TRUE,
+          rangemode = "tozero",
+          ticks = "outside"
         )
-      ) #%>%
-    # config(displayModeBar = FALSE)
-
+      ) 
+    
     if ("RedYel" %in% input$markers) {
       plt <- plt %>%
         add_markers(
@@ -511,16 +516,16 @@ server <- function(input, output, session) {
           ),
           name = "Alert"
         )
-
+      
     }
-
+    
     if ("Crit" %in% input$markers) {
       plt <- plt %>%
         add_markers(
           x = ~date,
           y = ~criterion,
           mode = "markers",
-          marker = list(symbol = "x-thin-open", size = 9, color = "black"),
+          marker = list(symbol = "diamond-open", size = 10, color = "black"),
           hoverinfo = "text",
           text = ~paste(
             "<br>Date:</b>", date,
@@ -529,15 +534,15 @@ server <- function(input, output, session) {
           ),
           name = "Criterion Met"
         )
-
+      
     }
-
+    
     plt %>%
       config(modeBarButtons = list(list("toImage"), list("autoScale2d")))
-
-
+    
+    
   })
-
+  
   output$tsPlotly <- renderPlotly({
     oPlot()
   })
