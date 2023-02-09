@@ -11,7 +11,7 @@
 # load libraries
 suppressPackageStartupMessages({
   packages <- c(
-    "shiny", "shinyjs", "dplyr", "Rnssp", "purrr",
+    "shiny", "shinyhelper", "shinyjs", "dplyr", "Rnssp", "purrr",
     "data.table", "lubridate", "shinycssloaders",
     "plotly", "shinyWidgets", "sf", "shinythemes"
   )
@@ -26,6 +26,36 @@ if (length(setdiff("Rnssp", rownames(installed.packages()))) > 0) {
   devtools::install_github("cdcgov/Rnssp", upgrade = "never")
 }
 lapply("Rnssp", library, character.only = TRUE)
+
+# Help Popup
+helpPopup <- function(
+    id,
+    title,
+    content,
+    placement=c('right', 'top', 'left', 'bottom'),
+    trigger=c('click', 'hover', 'focus', 'manual')
+) {
+  tagList(
+    singleton(
+      tags$head(
+        tags$script("$(function() { $(\"[data-toggle='popover']\").popover(); })")
+      )
+    ),
+    HTML(id),
+    tags$a(
+      href = "#",
+      style="margin-left:10px;",
+      `data-toggle` = "popover",
+      title = title,
+      `data-content` = content,
+      `data-animation` = TRUE,
+      `data-placement` = match.arg(placement, several.ok=TRUE)[1],
+      `data-trigger` = match.arg(trigger, several.ok=TRUE)[1],
+
+      shiny::icon(name = "question-circle", class = "shinyhelper-icon", style="color:red")
+    )
+  )
+}
 
 load_profile <- rstudioapi::showQuestion(
   "Alerting Rule Evaluation App",
@@ -175,61 +205,125 @@ ui <- tagList(
           fluidRow(
             column(
               6,
-              dateInput(inputId = "StartDate", label = "Date1", value = StartDate_0)
+              dateInput(inputId = "StartDate", label = "Start Date", value = StartDate_0)
             ),
             column(
               6,
-              dateInput(inputId = "EndDate", label = "Date2", value = EndDate_0)
+              dateInput(inputId = "EndDate", label = "End Date", value = EndDate_0)
             )
           ),
           fluidRow(
             column(
               6,
-              sliderInput("ReqNumberOfAlerts_R", "mRed", min = 0, max = 7, value = 2)
+              sliderInput(
+                "ReqNumberOfAlerts_R",
+                helpPopup(
+                  id = "mRed", title = "Minimum of red alerts",
+                  content = "Mark a criterion red alert for a specific day", "top", "click"
+                ),
+                min = 0, max = 7, value = 2
+              )
             ),
             column(
               6,
-              sliderInput("AlertingInterval_R", "nRed", min = 0, max = 7, value = 2)
+              sliderInput(
+                "AlertingInterval_R",
+                helpPopup(
+                  id = "nRed", title = "Time window in days",
+                  content = "Including today, for counting ‘mRed’ red alerts to activate your rule and alert you (mRed = 3 and nRed = 4 means 3 red alerts within the last 4 days)",
+                  "top", "click"
+                ),
+                min = 0, max = 7, value = 2
+              )
             )
           ),
           fluidRow(
             column(
               6,
-              numericInput(inputId = "MinCaseCount_R", label = "MinCountRed", value = minCountRed)
+              numericInput(
+                inputId = "MinCaseCount_R",
+                helpPopup(
+                  id = "MinCountRed", title = "Total number of records",
+                  content = "Optional. Total number of records required for your alerting rule (mRed = 3 and nRed = 4 means 3 red alerts within the last 4 days if there are at least 6 records in the 4 days) – leave blank to skip this option",
+                  "top", "click"
+                ),
+                value = minCountRed
+              )
             ),
             column(
               6,
-              numericInput(inputId = "Pval_R", label = "Pvalue_Red", value = pRed)
+              numericInput(
+                inputId = "Pval_R",
+                helpPopup(
+                  id = "Pvalue_Red", title = "Maximum p-value",
+                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  "top", "click"
+                ),
+                value = pRed
+              )
             )
           ),
           fluidRow(
             column(
               6,
-              sliderInput("ReqNumberOfAlerts_Y", "mYellow", min = 0, max = 7, value = 2)
+              sliderInput(
+                "ReqNumberOfAlerts_Y",
+                helpPopup(
+                  id = "mYellow", title = "Minimum of yellow alerts",
+                  content = "Mark a criterion yellow alert for a specific day",
+                  "top", "click"
+                ),
+                min = 0, max = 7, value = 2
+              )
             ),
             column(
               6,
-              sliderInput("AlertingInterval_Y", "nYellow", min = 0, max = 7, value = 2)
+              sliderInput(
+                "AlertingInterval_Y",
+                helpPopup(
+                  id = "nYellow", title = "Time window in days",
+                  content = "Including today, for counting ‘mYellow’ yellow alerts to activate your rule and alert you (mYellow = 3 and nYellow = 4 means 3 yellow alerts within the last 4 days)",
+                  "top", "click"
+                ),
+                min = 0, max = 7, value = 2
+              )
             )
           ),
           fluidRow(
             column(
               6,
-              numericInput(inputId = "MinCaseCount_Y", label = "MinCountYellow", value = minCountYel)
+              numericInput(
+                inputId = "MinCaseCount_Y",
+                helpPopup(
+                  id = "MinCountYellow", title = "Total number of records",
+                  content = "Optional. Total number of records required for your alerting rule (mYellow = 3 and nYellow = 4 means 3 yellow alerts within the last 4 days if there are at least 6 records in the 4 days)",
+                  "top", "click"
+                ),
+                value = minCountYel
+              )
             ),
             column(
               6,
-              numericInput(inputId = "Pval_Y", label = "Pvalue_Yellow", value = pYellow)
+              numericInput(
+                inputId = "Pval_Y",
+                helpPopup(
+                  id = "PValueYellow", title = "Maximum p-value",
+                  content = "Maximum p-value required for a red alert for your alerting rule (widely used default = 0.01)",
+                  "top", "click"
+                ),
+                value = pYellow
+              )
             )
           ),
           br(),
           fluidRow(
             column(
               width=4,
-              checkboxGroupInput("markers", "Markers to show:",
-                                 choices = c("Red/Yellow" = "RedYel",
-                                             "Criterion" = "Crit"),
-                                 selected = c("RedYel"))
+              checkboxGroupInput(
+                "markers", "Markers to show:",
+                choices = c("Red/Yellow" = "RedYel", "Criterion" = "Crit"),
+                selected = c("RedYel")
+              )
             ),
           ),
           hr(),
@@ -263,6 +357,7 @@ ui <- tagList(
 
 
 server <- function(input, output, session) {
+  observe_helpers()
   observe({
     updateSelectizeInput(
       session,
