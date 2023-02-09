@@ -48,14 +48,11 @@ if(load_profile){
     prof_file <- readline("Enter full path to the profile file: ")
   }
   if (!any(endsWith(prof_file, c(".rda", ".rds")))) {
-    cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rda} file")
+    cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rds} file")
   }
 
-  if(all(endsWith(prof_file, ".rda"))){
-    myProfile <- prof_file %>%
-      load() %>%
-      get() %>%
-      try(silent = TRUE)
+  if(all(endsWith(tolower(prof_file), ".rda"))){
+    myProfile <- get(load(prof_file))
   } else {
     myProfile <- prof_file %>%
       readRDS() %>%
