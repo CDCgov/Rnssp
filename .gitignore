@@ -8,3 +8,4 @@
 *.rds
 *.rda
 *.Rcheck/
+.Rproj.user
