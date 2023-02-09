@@ -21,7 +21,7 @@ Run 'Rnssp_vignettes()' to browse all Rnssp vignettes.
   installed_version <- tryCatch(packageVersion(gsub(".*/", "", "Rnssp")), error=function(e) NA)
 
   if (all(remote_version > installed_version, class(x) != "try-error")) {
-    cli::cli_alert(
+    cli::cli_alert_info(
       paste0(
         'Rnssp v',
         installed_version,
