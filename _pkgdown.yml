@@ -27,7 +27,7 @@ news:
   strip_header: true
 
 home:
-  title: A Signature R package for the National Syndromic and Surveillance Program (NSSP)
+  title: A Signature R package for the National Syndromic Surveillance Program (NSSP)
   links:
   - text: Download build release
     href: https://github.com/CDCgov/Rnssp/releases/
@@ -37,33 +37,44 @@ home:
     href: https://cdcgov.github.io/Rnssp-rmd-templates
 
 reference:
-  - title: Exported Functions and Classes
-    desc: Functions and classes exported by the Rnssp package
+  - title: Exported Functions
+    desc: Functions exported by the Rnssp package
     contents:
       - add_rmd_template
       - alert_ewma
       - alert_farrington
-      - alert_mar
+      - alert_nbinom
       - alert_regression
+      - alert_serfling
       - alert_switch
       - askme
       - change_dates
       - classify_trend
       - clean_text
-      - Credentials
+      - create_profile
+      - create_token_profile
       - get_api_data
+      - get_api_graph
       - get_api_response
       - get_api_tsgraph
+      - get_essence_data
       - list_templates
-      - NSSPContainer
       - remove_rmd_template
       - Rnssp
       - Rnssp_vignettes
+      - run_app
       - webscrape_icd
+  - title: Exported Classes
+    desc: Classes exported by the Rnssp package
+    contents:
+      - Credentials
+      - NSSPContainer
+      - Token
   - title: Available Datasets
     desc: Datasets contained in the Rnssp package
     contents:
       - ends_with("_sf", internal = TRUE)
+      - simulated_data
       - rnssp_stopwords
 
 authors:
