@@ -2,27 +2,30 @@
 % Please edit documentation in R/api_utilities.R
 \name{get_api_response}
 \alias{get_api_response}
-\title{Get ESSENCE API response}
+\title{Get API response}
 \usage{
 get_api_response(url, profile = myProfile)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL}
+\item{url}{a character of API URL}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+Default is \code{myProfile}.}
 }
 \value{
 An object of class \code{response}.
 }
 \description{
-A wrapper to the \code{get_api_response} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_response} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+myProfile <- create_profile("", "")
+url <- "http://httpbin.org/json"
 
 api_response <- get_api_response(url)
+names(api_response)
 }
 }
 \seealso{

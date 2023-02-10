@@ -2,13 +2,14 @@
 #'
 #' Adaptive Regression helper function for Adaptive Multiple Regression.
 #'
-#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame
+#' @param df A data frame, data frame extension (e.g. a tibble), or a
+#'     lazy data frame
 #' @param t Name of the column of type Date containing the dates
 #' @param y Name of the column of type Numeric containing counts or percentages
-#' @param B Baseline parameter. The baseline length is the number of days to which
-#' each liner model is fit.
-#' @param g Guardband parameter. The guardband length is the number of days separating
-#'     the baseline from the current date in consideration for alerting.
+#' @param B Baseline parameter. The baseline length is the number of days to
+#'     which each liner model is fit.
+#' @param g Guardband parameter. The guardband length is the number of days
+#'     separating the baseline from the current date in consideration for alerting.
 #'
 #' @return A data frame.
 #'
@@ -83,7 +84,10 @@ adaptive_regression <- function(df, t, y, B, g) {
       pull(!!y)
 
     # Form regression matrix
-    X <- as.matrix(cbind(ndx_time, baseline_data[, c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat")]))
+    X <- as.matrix(
+      cbind(ndx_time,
+            baseline_data[, c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat")])
+    )
 
     # Fit regression model with lm.fit() for efficiency
     lm_fit <- lm.fit(x = cbind(1, X), y = baseline_obs)
@@ -102,7 +106,10 @@ adaptive_regression <- function(df, t, y, B, g) {
     r_sqrd_adj[i] <- if_else(is.nan(r2_adj), 0, r2_adj)
 
     # Calculate bounded standard error of regression with derived formula for efficiency
-    sigma[i] <- max(sqrt(mse) * sqrt(((B_length + 7) * (B_length - 4)) / (B_length * (B_length - 7))), min_sigma[n_df])
+    sigma[i] <- max(
+      sqrt(mse) * sqrt(((B_length + 7) * (B_length - 4)) /
+                         (B_length * (B_length - 7))), min_sigma[n_df]
+    )
 
     # Day of week for test date
     dow_test <- as.numeric(format(dates[i], "%u"))
@@ -135,23 +142,27 @@ adaptive_regression <- function(df, t, y, B, g) {
 #'
 #' The adaptive multiple regression algorithm fits a linear model to a baseline
 #' of counts or percentages of length B, and forecasts a predicted value g + 1
-#' days later (guard-band). This value is compared to the current observed value and
-#' divided by the standard error of prediction in the test-statistic. The model includes
-#' terms to account for linear trends and day-of-week effects. Note that this implementation
-#' does NOT account for federal holidays as in the Regression 1.2 algorithm in ESSENCE.
-#' An alert (red value) is signaled if the statistical test (student's t-test) applied to the
-#' test statistic yields a p-value less than 0.01. If the p-value is greater than or equal
-#' to 0.01 and strictly less than 0.05, a warning (yellow value) is signaled. Blue values
-#' are returned if an alert or warning does not occur. Grey values represent instances where
-#' anomaly detection did not apply (i.e., observations for which baseline data were unavailable).
+#' days later (guard-band). This value is compared to the current observed value
+#' and divided by the standard error of prediction in the test-statistic.
+#' The model includes terms to account for linear trends and day-of-week effects.
+#' Note that this implementation does NOT account for federal holidays as in the
+#' Regression 1.2 algorithm in ESSENCE. An alert (red value) is signaled if
+#' the statistical test (student's t-test) applied to the test statistic yields
+#' a p-value less than 0.01. If the p-value is greater than or equal to 0.01
+#' and strictly less than 0.05, a warning (yellow value) is signaled.
+#' Blue values are returned if an alert or warning does not occur.
+#' Grey values represent instances where anomaly detection did not apply
+#' (i.e., observations for which baseline data were unavailable).
 #'
-#' @param df A data frame, data frame extension (e.g. a tibble), or a lazy data frame.
+#' @param df A data frame, data frame extension (e.g. a tibble), or a
+#'     lazy data frame.
 #' @param t Name of the column of type Date containing the dates
 #' @param y Name of the column of type Numeric containing counts or percentages
-#' @param B Baseline parameter. The baseline length is the number of days to which
-#' each liner model is fit (default is 28)
-#' @param g Guardband parameter. The guardband length is the number of days separating
-#'     the baseline from the current date in consideration for alerting (default is 2)
+#' @param B Baseline parameter. The baseline length is the number of days to
+#'     which each liner model is fit (default is 28)
+#' @param g Guardband parameter. The guardband length is the number of days
+#'     separating the baseline from the current date in consideration for
+#'     alerting (default is 2)
 #'
 #' @return A data frame with test statistic, p.value, and alert indicator
 #' @references
@@ -170,24 +181,29 @@ adaptive_regression <- function(df, t, y, B, g) {
 #'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   count = floor(runif(366, min = 0, max = 101))
 #' )
-#' df_regression <- alert_regression(df)
 #'
 #' head(df)
+#'
+#' df_regression <- alert_regression(df)
+#'
 #' head(df_regression)
 #'
 #' df <- data.frame(
 #'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   percent = runif(366)
 #' )
-#' df_regression <- alert_regression(df, t = Date, y = percent)
 #'
 #' head(df)
+#'
+#' df_regression <- alert_regression(df, t = Date, y = percent)
+#'
 #' head(df_regression)
+#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
 #' library(ggplot2)
 #'
-#' myProfile <- Credentials$new(askme("Enter your username:"), askme())
+#' myProfile <- create_profile()
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
 #' endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
@@ -243,16 +259,19 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
 
   # Check baseline length argument
   if (B < 7) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be greater than or equal to 7")
+    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument
+                   {.var B} must be greater than or equal to 7")
   }
 
   if (B %% 7 != 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be a multiple of 7")
+    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument
+                   {.var B} must be a multiple of 7")
   }
 
   # Check guardband length argument
   if (g < 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: guardband length argument {.var g} cannot be negative")
+    cli::cli_abort("Error in {.fn alert_regression}: guardband length argument
+                   {.var g} cannot be negative")
   }
 
   # Check for sufficient baseline data
@@ -279,7 +298,10 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
 
     base_tbl %>%
       nest(data_split = -all_of(groups)) %>%
-      mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)) %>%
+      mutate(anomalies = map(
+        .x = data_split,
+        .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)
+      ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(
@@ -296,12 +318,16 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       unique()
 
     if (length(unique_dates) != nrow(base_tbl)) {
-      cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates does not equal the number of rows. Should your dataframe be grouped?")
+      cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates does
+                     not equal the number of rows. Should your dataframe be grouped?")
     }
 
     base_tbl %>%
       nest(data_split = everything()) %>%
-      mutate(anomalies = map(.x = data_split, .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)) %>%
+      mutate(anomalies = map(
+        .x = data_split,
+        .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)
+      ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(

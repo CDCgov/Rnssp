@@ -20,7 +20,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # install the Rnssp package
-devtools::install_github("cdcgov/Rnssp")
+devtools::install_github("cdcgov/Rnssp@dev")
 ```
 
 
@@ -36,10 +36,7 @@ This is a basic example which shows you how to:
 library(Rnssp)
 
 ## Creating an NSSP user profile
-myProfile <- Credentials$new(
-  username = askme("Enter your username: "), 
-  password = askme()
-)
+myProfile <- create_profile()
 
 ## Inspect your `myProfile` confirming that username and password are completely hidden
 myProfile

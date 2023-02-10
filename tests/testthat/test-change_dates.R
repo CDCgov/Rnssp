@@ -9,4 +9,5 @@ test_that("change_dates functions as expected!", {
   expect_equal(url1, change_dates(url, start_date = "2021-01-15"))
   expect_equal(url2, change_dates(url, end_date = "2021-02-15"))
   expect_equal(url3, change_dates(url, start_date = "2021-01-15", end_date = "2021-02-15"))
+  expect_error(change_dates(url, start_date = "2021-02-15", end_date = "2021-01-15"))
 })

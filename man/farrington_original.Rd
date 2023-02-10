@@ -15,7 +15,8 @@ farrington_original(df, t = date, y = count, B = 4, w = 3)
 
 \item{B}{Number of years to include in baseline (default is 4)}
 
-\item{w}{Half the number of weeks included in reference window, before and after each reference date (default is 3)}
+\item{w}{Half the number of weeks included in reference window,
+before and after each reference date (default is 3)}
 }
 \value{
 A tibble

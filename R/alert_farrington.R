@@ -4,12 +4,12 @@
 #' @param t A column containing date values
 #' @param y A column containing time series counts
 #' @param B Number of years to include in baseline (default is 4)
-#' @param w Half the number of weeks included in reference window, before and after each reference date (default is 3)
+#' @param w Half the number of weeks included in reference window,
+#'     before and after each reference date (default is 3)
 #'
 #' @return A tibble
 #'
 #' @keywords internal
-#'
 #'
 farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
   t <- enquo(t)
@@ -39,10 +39,18 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
 
     ref_dates <- seq(current_date, length = B + 1, by = "-1 year")[-1]
 
-    wday_gaps <- as.numeric(format(ref_dates, "%w")) - as.numeric(format(current_date, "%w"))
+    wday_gaps <- as.numeric(format(ref_dates, "%w")) -
+      as.numeric(format(current_date, "%w"))
+
     ref_dates_shifted <- ref_dates - wday_gaps
-    floor_ceiling_dates <- if_else(ref_dates_shifted > ref_dates, ref_dates_shifted - 7, ref_dates_shifted + 7)
-    center_dates <- sort(if_else(abs(ref_dates - floor_ceiling_dates) < abs(ref_dates - ref_dates_shifted), floor_ceiling_dates, ref_dates_shifted))
+
+    floor_ceiling_dates <- if_else(ref_dates_shifted > ref_dates,
+                                   ref_dates_shifted - 7,
+                                   ref_dates_shifted + 7)
+
+    center_dates <- sort(if_else(abs(ref_dates - floor_ceiling_dates) <
+                                   abs(ref_dates - ref_dates_shifted),
+                                 floor_ceiling_dates, ref_dates_shifted))
 
     base_start <- sort((center_dates - 7 * w))[1:B]
 
@@ -86,13 +94,16 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
     phi <- max(summary(mod)$dispersion, 1)
     diag <- as.numeric(hatvalues(mod))
 
-    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) -
+                                     sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+
     scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid^2), 1)
     gamma <- length(ambscombe_resid) / sum(scaled)
     omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid^2), gamma)
 
     mod_weighted <- suppressWarnings(
-      glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
+      glm(as.formula(mod_formula), family = quasipoisson(link = "log"),
+          weights = omega)
     )
 
     phi_weighted <- max(summary(mod_weighted)$dispersion, 1)
@@ -119,7 +130,8 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
       type = "response"
     )
 
-    time_significant <- (pred$fit <= max(base_counts, na.rm = TRUE) & time_pval_weighted < 0.05)
+    time_significant <- (pred$fit <= max(base_counts, na.rm = TRUE) &
+                           time_pval_weighted < 0.05)
 
     # Check 2 conditions
 
@@ -146,13 +158,16 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
         phi <- max(summary(mod)$dispersion, 1)
         diag <- as.numeric(hatvalues(mod))
 
-        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) -
+                                         sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+
         scaled <- if_else(ambscombe_resid > 1, 1 / (ambscombe_resid^2), 1)
         gamma <- length(ambscombe_resid) / sum(scaled)
         omega <- if_else(ambscombe_resid > 1, gamma / (ambscombe_resid^2), gamma)
 
         mod_weighted <- suppressWarnings(
-          glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
+          glm(as.formula(mod_formula), family = quasipoisson(link = "log"),
+              weights = omega)
         )
 
         phi_weighted <- max(summary(mod_weighted)$dispersion, 1)
@@ -186,11 +201,14 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
     se_fit <- pred$se.fit
     tau <- phi_weighted + ((se_fit^2) / predicted[i])
     se_pred <- sqrt((4 / 9) * predicted[i]^(1 / 3) * tau)
-    # alert_p.value[i] <- pnorm(y_obs[i] ^ (2 / 3), mean = predicted[i] ^ (2 / 3), sd = se_pred, lower.tail = FALSE)
 
-    upper[i] <- max(0, (predicted[i]^(2 / 3) + qnorm(0.95) * se_pred)^(3 / 2), na.rm = TRUE)
+    upper[i] <- max(0, (predicted[i]^(2 / 3) + qnorm(0.95) *
+                          se_pred)^(3 / 2), na.rm = TRUE)
 
-    alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
+    alert_score[i] <- if_else(
+      !is.na(upper[i]),
+      (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_
+    )
 
     recent_counts <- sum(y_obs[(i - 4):i])
     alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
@@ -209,8 +227,10 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
 #' Return 10-level seasonal factor vector
 #'
 #' @param B Number of years to include in baseline (default is 4)
-#' @param g Number of guardband weeks to separate the test week from the baseline (default is 27)
-#' @param w Half the number of weeks included in reference window, before and after each reference date (default is 3)
+#' @param g Number of guardband weeks to separate the test week from the
+#'     baseline (default is 27)
+#' @param w Half the number of weeks included in reference window,
+#'     before and after each reference date (default is 3)
 #' @param p Number of seasonal periods for each year in baseline (default is 10)
 #' @param base_length Total number of weeks included in baseline
 #' @param base_weeks Indices of baseline weeks
@@ -219,7 +239,8 @@ farrington_original <- function(df, t = date, y = count, B = 4, w = 3) {
 #'
 #' @keywords internal
 #'
-seasonal_groups <- function(B = 4, g = 27, w = 3, p = 10, base_length, base_weeks) {
+seasonal_groups <- function(B = 4, g = 27, w = 3, p = 10,
+                            base_length, base_weeks) {
   h <- c(1, diff(base_weeks))
   csum_h <- cumsum(h)
 
@@ -242,7 +263,8 @@ seasonal_groups <- function(B = 4, g = 27, w = 3, p = 10, base_length, base_week
     cum_lengths <- cumsum(fct_lengths)
 
     for (j in 1:(p - 1)) {
-      fct_levels[(csum_h[i] + 2 * w + 1 + cum_lengths[j]):(csum_h[i] + 2 * w + cum_lengths[j + 1])] <- j
+      fct_levels[(csum_h[i] + 2 * w + 1 + cum_lengths[j]):
+                   (csum_h[i] + 2 * w + cum_lengths[j + 1])] <- j
     }
   }
 
@@ -256,15 +278,18 @@ seasonal_groups <- function(B = 4, g = 27, w = 3, p = 10, base_length, base_week
 #' @param t A column containing date values
 #' @param y A column containing time series counts
 #' @param B Number of years to include in baseline (default is 4)
-#' @param g Number of guardband weeks to separate the test date from the baseline (default is 27)
-#' @param w Half the number of weeks included in reference window, before and after each reference date (default is 3)
+#' @param g Number of guardband weeks to separate the test date from the
+#'     baseline (default is 27)
+#' @param w Half the number of weeks included in reference window,
+#'     before and after each reference date (default is 3)
 #' @param p Number of seasonal periods for each year in baseline
 #'
 #' @return A tibble
 #'
 #' @keywords internal
 #'
-farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p = 10) {
+farrington_modified <- function(df, t = date, y = count,
+                                B = 4, g = 27, w = 3, p = 10) {
   t <- enquo(t)
   y <- enquo(y)
 
@@ -292,10 +317,18 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 
     ref_dates <- seq(current_date, length = B + 1, by = "-1 year")
 
-    wday_gaps <- as.numeric(format(ref_dates, "%w")) - as.numeric(format(current_date, "%w"))
+    wday_gaps <- as.numeric(format(ref_dates, "%w")) -
+      as.numeric(format(current_date, "%w"))
+
     ref_dates_shifted <- ref_dates - wday_gaps
-    floor_ceiling_dates <- if_else(ref_dates_shifted > ref_dates, ref_dates_shifted - 7, ref_dates_shifted + 7)
-    center_dates <- sort(if_else(abs(ref_dates - floor_ceiling_dates) < abs(ref_dates - ref_dates_shifted), floor_ceiling_dates, ref_dates_shifted))
+    floor_ceiling_dates <- if_else(ref_dates_shifted > ref_dates,
+                                   ref_dates_shifted - 7, ref_dates_shifted + 7)
+
+    center_dates <- sort(
+      if_else(
+        abs(ref_dates - floor_ceiling_dates) < abs(ref_dates - ref_dates_shifted),
+        floor_ceiling_dates, ref_dates_shifted)
+    )
 
     base_start <- sort((center_dates - 7 * w))[1:B]
     base_end <- c(sort(center_dates - 7 * B)[2:B], max(center_dates) - 7 * g)
@@ -313,7 +346,8 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
     base_counts <- y_obs[idx]
 
     mod <- suppressWarnings(
-      glm(base_counts ~ 1 + base_dates + fct_levels, family = quasipoisson(link = "log"))
+      glm(base_counts ~ 1 + base_dates + fct_levels,
+          family = quasipoisson(link = "log"))
     )
 
     if (!mod$converged) {
@@ -345,13 +379,16 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
     phi <- max(summary(mod)$dispersion, 1)
     diag <- as.numeric(hatvalues(mod))
 
-    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+    ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) -
+                                     sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+
     scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid^2), 1)
     gamma <- length(ambscombe_resid) / sum(scaled)
     omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid^2), gamma)
 
     mod_weighted <- suppressWarnings(
-      glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
+      glm(as.formula(mod_formula), family = quasipoisson(link = "log"),
+          weights = omega)
     )
 
     phi_weighted <- max(summary(mod_weighted)$dispersion, 1)
@@ -379,7 +416,8 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
       type = "response"
     )
 
-    time_significant <- (pred$fit <= max(base_counts, na.rm = TRUE) & time_pval_weighted < 0.05)
+    time_significant <- (pred$fit <= max(base_counts, na.rm = TRUE) &
+                           time_pval_weighted < 0.05)
 
     # Check 2 conditions
 
@@ -406,13 +444,19 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
         phi <- max(summary(mod)$dispersion, 1)
         diag <- as.numeric(hatvalues(mod))
 
-        ambscombe_resid <- ((3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) / (sqrt(phi * (1 - diag)))
+        ambscombe_resid <- (
+          (3 / 2) * (y_observed^(2 / 3) * (y_fit^(-1 / 6)) - sqrt(y_fit))) /
+          (sqrt(phi * (1 - diag))
+          )
+
         scaled <- if_else(ambscombe_resid > 2.58, 1 / (ambscombe_resid^2), 1)
         gamma <- length(ambscombe_resid) / sum(scaled)
-        omega <- if_else(ambscombe_resid > 2.58, gamma / (ambscombe_resid^2), gamma)
+        omega <- if_else(ambscombe_resid > 2.58,
+                         gamma / (ambscombe_resid^2), gamma)
 
         mod_weighted <- suppressWarnings(
-          glm(as.formula(mod_formula), family = quasipoisson(link = "log"), weights = omega)
+          glm(as.formula(mod_formula), family = quasipoisson(link = "log"),
+              weights = omega)
         )
 
         phi_weighted <- max(summary(mod_weighted)$dispersion, 1)
@@ -469,7 +513,10 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
       qpois(0.95, mu_q)
     }
 
-    alert_score[i] <- if_else(!is.na(upper[i]), (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_)
+    alert_score[i] <- if_else(
+      !is.na(upper[i]),
+      (y_obs[i] - predicted[i]) / (upper[i] - predicted[i]), NA_real_
+    )
 
     recent_counts <- sum(y_obs[(i - 4):i])
     alert[i] <- if_else(alert_score[i] > 1 & recent_counts > 5, "red", "blue")
@@ -493,44 +540,51 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 #' The Farrington algorithm is intended for weekly time series of counts
 #' spanning multiple years.
 #'
-#' Original Farrington Algorithm: Quasi-Poisson generalized linear regression models
-#' are fit to baseline counts associated with reference dates in the B previous
-#' years, including w weeks before and after each reference date. The algorithm
-#' checks for convergence with a time term and refits a model with only an
-#' intercept term in the scenario the model does not converge. The inclusion of
-#' high baseline counts associated with past outbreaks or public health events is
-#' known to result in alerting thresholds that are too high and a reduction in
-#' sensitivity. An empirically derived weighting function is used to calculate
-#' weights from Anscombe residuals that assign low weight to baseline observations
-#' with large residuals. A 2/3rds transformation is applied to account for
-#' skewness common to time series with lower counts, after which expected value
-#' and variance estimates are used to derive upper and lower bounds for the
-#' prediction interval. The alert score is defined as the current observation minus
-#' the forecast value divided by the upper prediction interval bound minus the
-#' forecast value. If this score exceeds 1, an alert (red value) is raised given that the
-#' number of counts in the last 4 days is above 5. This algorithm requires that the number
-#' of years included in the baseline is 3 or higher. Blue values are returned if an alert
-#' does not occur. Grey values represent instances where anomaly detection did not apply
-#' (i.e., observations for which baseline data were unavailable).
+#' Original Farrington Algorithm: Quasi-Poisson generalized linear regression
+#' models are fit to baseline counts associated with reference dates in
+#' the B previous years, including w weeks before and after each reference date.
+#' The algorithm checks for convergence with a time term and refits a model with
+#' only an intercept term in the scenario the model does not converge.
+#' The inclusion of high baseline counts associated with past outbreaks or
+#' public health events is known to result in alerting thresholds that are too
+#' high and a reduction in sensitivity. An empirically derived weighting
+#' function is used to calculate weights from Anscombe residuals that assign
+#' low weight to baseline observations with large residuals.
+#' A 2/3rds transformation is applied to account for skewness common to
+#' time series with lower counts, after which expected value and variance
+#' estimates are used to derive upper and lower bounds for the prediction interval.
+#' The alert score is defined as the current observation minus the forecast value
+#' divided by the upper prediction interval bound minus the forecast value.
+#' If this score exceeds 1, an alert (red value) is raised given that the number
+#' of counts in the last 4 days is above 5. This algorithm requires that
+#' the number of years included in the baseline is 3 or higher.
+#' Blue values are returned if an alert does not occur. Grey values represent
+#' instances where anomaly detection did not apply (i.e., observations for which
+#' baseline data were unavailable).
 #'
 #' Modified Farrington Algorithm: In 2012, Angela Noufaily developed a modified
-#' implementation of the original Farrington algorithm that improved performance by
-#' including more historical data in the baseline. The modified algorithm includes
-#' all weeks from the beginning of the first reference window to the last week proceeding
-#' a 27-week guardband period used to separate the test week from the baseline. A 10-level
-#' factor is used to account for seasonality throughout the baseline. Additionally, the
-#' modified algorithm assumes a negative binomial distribution on the weekly time series
-#' counts, where thresholds are computed as quantiles of the negative binomial distribution
+#' implementation of the original Farrington algorithm that improved performance
+#' by including more historical data in the baseline. The modified algorithm
+#' includes all weeks from the beginning of the first reference window to the
+#' last week proceeding a 27-week guardband period used to separate the test week
+#' from the baseline. A 10-level factor is used to account for seasonality
+#' throughout the baseline. Additionally, the modified algorithm assumes a
+#' negative binomial distribution on the weekly time series counts, where
+#' thresholds are computed as quantiles of the negative binomial distribution
 #' with plug-in estimates for mu and phi.
 #'
-#' @param df A dataframe, dataframe extension (e.g., a \code{tibble}), or a lazy dataframe
+#' @param df A dataframe, dataframe extension (e.g., a \code{tibble}), or
+#'     a lazy dataframe
 #' @param t A column containing date values
 #' @param y A column containing time series counts
-#' @param B An integer specifying the number of baseline years (default is 4)
-#' @param w An integer specifying the number of weeks to include before and after the
-#'     reference date (default is 3)
-#' @param method A string of either "\code{original}" (default) or "\code{modified}" to
-#'     specify the version of the Farrington algorithm (original vs modified).
+#' @param B Number of years to include in baseline (default is 4)
+#' @param g Number of guardband weeks to separate the test date from the
+#'     baseline (default is 27)
+#' @param w Half the number of weeks included in reference window, before and
+#'     after each reference date (default is 3)
+#' @param p Number of seasonal periods for each year in baseline
+#' @param method A string of either "\code{original}" (default) or "\code{modified}"
+#'     to specify the version of the Farrington algorithm (original vs modified).
 #'
 #' @return A dataframe
 #'
@@ -551,20 +605,28 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 #'   count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
 #' )
 #'
+#' head(df)
+#'
 #' ## Original Farrington algorithm
 #'
 #' df_farr_original <- alert_farrington(df, t = date, y = count)
+#'
+#' head(df_farr_original)
 #'
 #'
 #' ## Modified Farrington algorithm
 #'
 #' df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+#'
+#' head(df_farr_modified)
+#'
 #' \dontrun{
 #' # Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
 #'
 #' library(Rnssp)
+#' library(ggplot2)
 #'
-#' myProfile <- Credentials$new(askme("Enter your username:"), askme())
+#' myProfile <- create_profile()
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
 #' Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent
@@ -582,33 +644,33 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 #'
 #' ## Original Farrington algorithm
 #'
-#' df_farr_original <- alert_farrington(df, t = date, y = dataCount)
+#' df_farr_original <- alert_farrington(df, t = date, y = count)
 #'
 #'
 #' ## Modified Farrington algorithm
 #'
-#' df_farr_modified <- alert_farrington(df, t = date, y = dataCount, method = "modified")
+#' df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
 #'
 #'
 #' ### Visualize alert
 #' df_farr_modified %>%
 #'   ggplot() +
-#'   geom_line(aes(x = date, y = dataCount), size = 0.4, color = "grey70") +
+#'   geom_line(aes(x = date, y = count), linewidth = 0.4, color = "grey70") +
 #'   geom_line(
 #'     data = subset(df_farr_modified, alert != "grey"),
-#'     aes(x = date, y = dataCount), color = "navy"
+#'     aes(x = date, y = count), color = "navy"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "blue"),
-#'     aes(x = date, y = dataCount), color = "navy"
+#'     aes(x = date, y = count), color = "navy"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "yellow"),
-#'     aes(x = date, y = dataCount), color = "yellow"
+#'     aes(x = date, y = count), color = "yellow"
 #'   ) +
 #'   geom_point(
 #'     data = subset(df_farr_modified, alert == "red"),
-#'     aes(x = date, y = dataCount), color = "red"
+#'     aes(x = date, y = count), color = "red"
 #'   ) +
 #'   theme_bw() +
 #'   labs(
@@ -617,7 +679,8 @@ farrington_modified <- function(df, t = date, y = count, B = 4, g = 27, w = 3, p
 #'   )
 #' }
 #'
-alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "original") {
+alert_farrington <- function(df, t = date, y = count, B = 4, g = 27,
+                             w = 3, p = 10, method = "original") {
 
   # Ensure that df is a dataframe
   if (!is.data.frame(df)) {
@@ -626,12 +689,26 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
 
   # Check baseline length argument
   if (B < 4) {
-    cli::cli_abort("Baseline length argument {.var B} must be greater than or equal to 4. Farrington algorithm requires a baseline of four or more years.")
+    cli::cli_abort("Baseline length argument {.var B} must be greater than or
+                   equal to 4. Farrington algorithm requires a baseline of four
+                   or more years.")
+  }
+
+  # Check guardband length argument
+  if (g < 0) {
+    cli::cli_abort("Error in {.fn alert_farrington}: guardband length
+                   argument {.var g} cannot be negative")
   }
 
   # Check half-week baseline argument
   if (w < 0) {
     cli::cli_abort("Half-week baseline argument {.var w} cannot be negative")
+  }
+
+  # Check seasonal periods baseline argument
+  if (p < 2) {
+    cli::cli_abort("seasonal periods baseline argument {.var p}
+                   cannot be less than 2")
   }
 
   # Check for sufficient baseline data:
@@ -651,7 +728,8 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
   format_dates <- try(as.Date(date_check), silent = TRUE)
 
   if (class(format_dates) == "try-error") {
-    cli::cli_abort("Date argument {.var t} is not in a standard unambiguous format. Dates must be in {.code %Y-%m-%d} format.")
+    cli::cli_abort("Date argument {.var t} is not in a standard unambiguous format.
+                   Dates must be in {.code %Y-%m-%d} format.")
   }
 
   # Check if time series data is on a time resolution other than weekly
@@ -673,36 +751,50 @@ alert_farrington <- function(df, t = date, y = count, B = 4, w = 3, method = "or
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
+        mutate(
+          anomalies = map(.x = data_split, .f = farrington_modified,
+                          t = !!t, y = !!y, B = B, g = g, w = w, p = p)
+        ) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else if (method == "original") {
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = -all_of(groups)) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
+        mutate(
+          anomalies = map(.x = data_split, .f = farrington_original,
+                          t = !!t, y = !!y, B = B, w = w)
+        ) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else {
-      cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
+      cli::cli_abort("Argument {.code method} must be {.code original}
+                     or {.code modified}.")
     }
   } else {
     if (method == "modified") {
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_modified, t = !!t, y = !!y, B = 4, g = 27, w = 3, p = 10)) %>%
+        mutate(
+          anomalies = map(.x = data_split, .f = farrington_modified,
+                          t = !!t, y = !!y, B = B, g = g, w = w, p = p)
+        ) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else if (method == "original") {
       alert_tbl <- df %>%
         mutate({{ t }} := as.Date(!!t)) %>%
         nest(data_split = everything()) %>%
-        mutate(anomalies = map(.x = data_split, .f = farrington_original, t = !!t, y = !!y, B = 4, w = 3)) %>%
+        mutate(
+          anomalies = map(.x = data_split, .f = farrington_original,
+                          t = !!t, y = !!y, B = B, w = w)
+        ) %>%
         unnest(c(data_split, anomalies)) %>%
         mutate(alert = ifelse(is.na(alert), "grey", alert))
     } else {
-      cli::cli_abort("Argument {.code method} must be {.code original} or {.code modified}.")
+      cli::cli_abort("Argument {.code method} must be {.code original}
+                     or {.code modified}.")
     }
   }
 }

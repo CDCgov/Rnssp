@@ -2,12 +2,12 @@
 % Please edit documentation in R/api_utilities.R
 \name{get_api_data}
 \alias{get_api_data}
-\title{Get ESSENCE API data}
+\title{Get API data}
 \usage{
 get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL.}
+\item{url}{a character of API URL.}
 
 \item{fromCSV}{a logical, defines whether data are returned in .csv format or .json format.}
 
@@ -19,17 +19,20 @@ get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 }
 \description{
-A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_data} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
+myProfile <- create_profile("", "")
 
-json_url <- "<json type ESSENCE_url>"
+json_url <- "http://httpbin.org/json"
 api_data_json <- get_api_data(json_url)
+head(api_data_json$slideshow$slides)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "http://httpbin.org/robots.txt"
 api_data_csv <- get_api_data(csv_url, fromCSV = TRUE)
+head(api_data_csv)
 }
 }
 \seealso{

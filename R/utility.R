@@ -25,6 +25,9 @@ askme <- function(prompt = "Please enter your password: ") {
 #' @param template a character string with the name of a single template name.
 #' The template name must be one of the elements of the vector returned
 #' by \code{\link[Rnssp]{list_templates}}.
+#' @param restart logical. Should R session be restarted after template
+#' installation? (default is TRUE)
+#' @param verbose logical. Should alert session restart message be printed?
 #'
 #' @details
 #' In interactive mode, this utility function prompts the user to select an
@@ -50,7 +53,7 @@ askme <- function(prompt = "Please enter your password: ") {
 #' add_rmd_template(pkg = "rmarkdown") # Add a new Rmd template to the 'rmarkdown' package
 #' add_rmd_template("text_mining") # Add the 'text_mining' template report to the Rnssp package
 #' }
-add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
+add_rmd_template <- function(template = NULL, pkg = "Rnssp", restart = TRUE, verbose = TRUE) {
   if (is.null(template)) {
     if (!dir.exists(system.file(package = pkg))) {
       stop(paste0("The package '", pkg, "' is not installed!\n"))
@@ -114,8 +117,12 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
     unzip(zipfile, exdir = exDir)
     cli::cli({
       cli::cli_alert_success("Template {.field {template_folder}} has been successfully added in {.file {file.path(exDir, template_folder)}}.")
-      cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
     })
+    if(restart & "rstudioapi" %in% .packages(all.available = TRUE)){
+      rstudioapi::restartSession()
+    } else if(verbose) {
+      cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
+    }
   }
 }
 
@@ -130,6 +137,9 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
 #' @param recursive logical. Should directories be deleted recursively? (Default is TRUE)
 #' @param force logical. Should permissions be changed (if possible) to allow the file
 #' or directory to be removed? (Default is TRUE)
+#' @param restart logical. Should R session be restarted after template
+#' removal? (default is TRUE)
+#' @param verbose logical. Should alert session restart message be printed?
 #'
 #' @return a character string
 #' @export
@@ -138,7 +148,8 @@ add_rmd_template <- function(template = NULL, pkg = "Rnssp") {
 #' \dontrun{
 #' remove_rmd_template("text_mining") # Remove the Existing Rnssp 'text_mining' template
 #' }
-remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force = TRUE) {
+remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE,
+                                force = TRUE, restart = TRUE, verbose = TRUE) {
   if (!dir.exists(system.file(package = pkg))) {
     cli::cli_abort("The package {.pkg {pkg}} is not installed!")
   }
@@ -149,8 +160,12 @@ remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE, force
     if (!dir.exists(file.path(system.file(package = pkg), "rmarkdown/templates", template))) {
       cli::cli({
         cli::cli_alert_success("Template {.field {template}} has been successfully removed from package {.pkg {pkg}}.")
-        cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
       })
+    }
+    if(restart & "rstudioapi" %in% .packages(all.available = TRUE)){
+      rstudioapi::restartSession()
+    } else if(verbose) {
+      cli::cli_alert_info("Please, restart your R session ({.kbd CTRL+SHIFT+F10} or {.kbd CMD+SHIFT+F10}) to update the template list!")
     }
   }
 }

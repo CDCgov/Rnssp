@@ -6,10 +6,9 @@
 \alias{Rnssp-package}
 \title{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A collection of tools, functions, and Rmarkdown templates 
-    that supports the National Syndromic and Surveillance Program Community of Practice.
+A collection of tools, functions, and Rmarkdown templates that supports the National Syndromic and Surveillance Program Community of Practice.
 }
 \seealso{
 Useful links:
@@ -20,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Gbedegnon Roseric Azondekon \email{gazondekon@cdc.gov} (\href{https://orcid.org/0000-0001-9155-4153}{ORCID})
+\strong{Maintainer}: Gbedegnon Roseric Azondekon \email{gazondekon@cdc.gov} (\href{https://orcid.org/0000-0001-9155-4153}{ORCID}) [contributor]
 
 Authors:
 \itemize{

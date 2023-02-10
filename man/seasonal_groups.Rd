@@ -9,9 +9,11 @@ seasonal_groups(B = 4, g = 27, w = 3, p = 10, base_length, base_weeks)
 \arguments{
 \item{B}{Number of years to include in baseline (default is 4)}
 
-\item{g}{Number of guardband weeks to separate the test week from the baseline (default is 27)}
+\item{g}{Number of guardband weeks to separate the test week from the
+baseline (default is 27)}
 
-\item{w}{Half the number of weeks included in reference window, before and after each reference date (default is 3)}
+\item{w}{Half the number of weeks included in reference window,
+before and after each reference date (default is 3)}
 
 \item{p}{Number of seasonal periods for each year in baseline (default is 10)}
 

@@ -2,12 +2,12 @@
 % Please edit documentation in R/credentials.R
 \name{Credentials}
 \alias{Credentials}
-\title{A \code{NSSPCredentials} Class Representing a Credentials object}
+\title{A \code{Credentials} Class Representing a Credentials object}
 \description{
 A \code{Credentials} object has a username, a password and a key.
 }
 \details{
-A \code{Credentials} object can get ESSENCE API data via an API URL.
+A \code{Credentials} object can get API data via an API URL.
 }
 \examples{
 
@@ -17,7 +17,7 @@ A \code{Credentials} object can get ESSENCE API data via an API URL.
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
 }
 
@@ -27,10 +27,10 @@ api_response <- myProfile$get_api_response(url)
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "<json type ESSENCE_url>"
+json_url <- "https://httpbin.org/json"
 api_data_json <- myProfile$get_api_data(json_url)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "https://httpbin.org/robots.txt"
 api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 
@@ -40,26 +40,40 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 
 \dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/image/png"
 api_data_tsgraph <- myProfile$get_api_tsgraph(url)
 names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)
+grid::grid.raster(img)
+}
+
+## ------------------------------------------------
+## Method `Credentials$get_api_graph`
+## ------------------------------------------------
+
+\dontrun{
+myProfile <- Credentials$new(askme("Enter my username: "), askme())
+url <- "<url>"
+api_data_graph <- myProfile$get_api_graph(url)
+names(api_data_graph)
+img <- png::readPNG(api_data_graph$graph)
 grid::grid.raster(img)
 }
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Credentials$new()}}
-\item \href{#method-get_api_response}{\code{Credentials$get_api_response()}}
-\item \href{#method-get_api_data}{\code{Credentials$get_api_data()}}
-\item \href{#method-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
-\item \href{#method-clone}{\code{Credentials$clone()}}
+\item \href{#method-NSSPCredentials-new}{\code{Credentials$new()}}
+\item \href{#method-NSSPCredentials-get_api_response}{\code{Credentials$get_api_response()}}
+\item \href{#method-NSSPCredentials-get_api_data}{\code{Credentials$get_api_data()}}
+\item \href{#method-NSSPCredentials-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
+\item \href{#method-NSSPCredentials-get_api_graph}{\code{Credentials$get_api_graph()}}
+\item \href{#method-NSSPCredentials-clone}{\code{Credentials$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-new"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes a new Credentials object.
 \subsection{Usage}{
@@ -69,9 +83,9 @@ Initializes a new Credentials object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{username}}{a character of ESSENCE username}
+\item{\code{username}}{a string for username}
 
-\item{\code{password}}{a character of ESSENCE password}
+\item{\code{password}}{a string for password}
 }
 \if{html}{\out{</div>}}
 }
@@ -80,10 +94,10 @@ A new \code{Credentials} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_response"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_response}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_response"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_response}{}}}
 \subsection{Method \code{get_api_response()}}{
-Get ESSENCE API response
+Get API response
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_response(url)}\if{html}{\out{</div>}}
 }
@@ -91,7 +105,7 @@ Get ESSENCE API response
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character of API URL}
 }
 \if{html}{\out{</div>}}
 }
@@ -102,7 +116,7 @@ An object of class \code{response}
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
 }
 }
@@ -112,10 +126,10 @@ api_response <- myProfile$get_api_response(url)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_data"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_data}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_data"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_data}{}}}
 \subsection{Method \code{get_api_data()}}{
-Get ESSENCE API data
+Get API data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
 }
@@ -123,7 +137,7 @@ Get ESSENCE API data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character ofAPI URL}
 
 \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
 
@@ -138,10 +152,10 @@ a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its met
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "<json type ESSENCE_url>"
+json_url <- "https://httpbin.org/json"
 api_data_json <- myProfile$get_api_data(json_url)
 
-csv_url <- "<csv type ESSENCE_url>"
+csv_url <- "https://httpbin.org/robots.txt"
 api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 }
@@ -151,10 +165,10 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_tsgraph"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_tsgraph}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_tsgraph"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_tsgraph}{}}}
 \subsection{Method \code{get_api_tsgraph()}}{
-Get ESSENCE API Time Series Graph
+Get API graph
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_tsgraph(url)}\if{html}{\out{</div>}}
 }
@@ -162,7 +176,7 @@ Get ESSENCE API Time Series Graph
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{url}}{a character of ESSENCE API URL}
+\item{\code{url}}{a character of API URL}
 }
 \if{html}{\out{</div>}}
 }
@@ -173,7 +187,7 @@ A list containing an api_response object and a path to a time series graph in .p
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+url <- "https://httpbin.org/image/png"
 api_data_tsgraph <- myProfile$get_api_tsgraph(url)
 names(api_data_tsgraph)
 img <- png::readPNG(api_data_tsgraph$tsgraph)
@@ -186,8 +200,45 @@ grid::grid.raster(img)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-NSSPCredentials-get_api_graph"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_graph}{}}}
+\subsection{Method \code{get_api_graph()}}{
+Get API graph
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_graph(url, file_ext = ".png")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{url}}{a character of API URL}
+
+\item{\code{file_ext}}{a non-empty character vector giving the file extension. Default is \code{.png}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A list containing an api_response object and a path to a time series graph in .png format
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+myProfile <- Credentials$new(askme("Enter my username: "), askme())
+url <- "<url>"
+api_data_graph <- myProfile$get_api_graph(url)
+names(api_data_graph)
+img <- png::readPNG(api_data_graph$graph)
+grid::grid.raster(img)
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-NSSPCredentials-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPCredentials-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

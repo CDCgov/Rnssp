@@ -29,6 +29,6 @@ $ geometry   <MULTIPOLYGON [m]> MULTIPOLYGON (((827131.3 -4..., MULTIPOLYGON (((
 library(Rnssp)
 data("hsa_sf")
 
-plot(hsa_sf)
+plot(hsa_sf$geometry)
 }
 \keyword{datasets}

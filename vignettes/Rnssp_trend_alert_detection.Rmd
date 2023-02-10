@@ -34,21 +34,20 @@ We start this tutorial by loading the `Rnssp` package and all other necessary pa
 library(Rnssp)
 library(ggplot2)
 library(ggthemes)
+library(ggside)
 ```
 
 The next step is to create an NSSP user profile by creating an object of the class `Credentials`. 
 
 ```{r load, echo=FALSE, eval=TRUE}
-myProfile <- readRDS("../myProfile.rds")
+# myProfile <- readRDS("../myProfile.rds")
+load("~/myProfile.rda")
 ```
 
 
 ```{r create_profile, eval=FALSE}
 # Creating an ESSENCE user profile
-myProfile <- Credentials$new(
-  username = askme("Enter your username: "), 
-  password = askme()
-)
+myProfile <- create_profile()
 
 # save profile object to file for future use
 # save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
@@ -62,12 +61,11 @@ With the NSSP `myProfile` object, we authenticate to NSSP-ESSENCE and pull in th
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=22Aug20&timeResolution=daily&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
 
 # Data Pull from NSSP-ESSENCE
-api_data <- myProfile$get_api_data(url)
-df <- api_data %>% 
+api_data <- get_api_data(url, profile = myProfile)
+df <- api_data %>%
   pluck("timeSeriesData")
 
 # glimpse(df)
-
 ```
 
 First, let's group the data by HHS regions
@@ -92,23 +90,40 @@ Let's visualize the time series with the anomalies for Region 4:
 ```{r alert_ewma_viz}
 # Filter the dataset
 df_ewma_region <- df_ewma %>%
-  filter(hospitaldhhsregion_display == "Region 4")
+  filter(hospitaldhhsregion_display == "Region 4") %>%
+  mutate(alert = factor(alert, levels = c("blue", "red", "yellow", "grey")))
 
 # Plot time series data
-df_ewma_region %>%
-  ggplot() +
-  geom_line(aes(x = date, y = dataCount), color = "grey70") +
-  geom_line(data = subset(df_ewma_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_ewma_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_ewma_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
-  geom_point(data = subset(df_ewma_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
-  theme_bw() +
-  labs(x = "Date", y = "Count")
+ggplot(data = df_ewma_region) +
+  geom_line(aes(x = date, y = dataCount), color = "#254B73") +
+  geom_point(aes(x = date, y = dataCount, color = alert)) +
+  scale_color_manual(
+    values = c("#254B73", "#A50026", "#FDD081", "#DDDDDD"),
+    name = "Detection",
+    labels = c("None", "Alert", "Warning", "No Baseline Data")
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 week",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
 ```
 
 
-## Multiple Adaptive Regression (MAR)
-The Multiple Adaptive Regression (MAR) algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value som predefined days later. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.2 algorithm in ESSENCE. The EWMA detection algorithm can be performed with the `alert_regression()` function (run `help(alert_regression)` or `?alert_regression` in the R console for more).
+## Adaptive Multiple Regression
+The Adaptive Multiple Regression algorithm fits a linear model to a baseline of counts or percentages, and forecasts a predicted value for test dates following a pre-defined buffer period following the baseline. This model includes terms to account for linear trends and day-of-week effects. This implementation does NOT include holiday terms as in the Regression 1.4 algorithm in ESSENCE. The EWMA detection algorithm can be performed with the `alert_regression()` function (run `help(alert_regression)` or `?alert_regression` in the R console for more).
 
 
 ```{r alert_regression}
@@ -120,23 +135,40 @@ Let's visualize the time series with the anomalies for Region 4:
 ```{r alert_regression_viz}
 # Filter the dataset
 df_regression_region <- df_regression %>%
-  filter(hospitaldhhsregion_display == "Region 4")
+  filter(hospitaldhhsregion_display == "Region 4") %>%
+  mutate(alert = factor(alert, levels = c("blue", "red", "yellow", "grey")))
 
 # Plot time series data
-df_regression_region %>%
-  ggplot() +
-  geom_line(aes(x = date, y = dataCount), color = "grey70") +
-  geom_line(data = subset(df_regression_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_regression_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_regression_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
-  geom_point(data = subset(df_regression_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
-  theme_bw() +
-  labs(x = "Date", y = "Count")
+ggplot(data = df_regression_region) +
+  geom_line(aes(x = date, y = dataCount), color = "#254B73") +
+  geom_point(aes(x = date, y = dataCount, color = alert)) +
+  scale_color_manual(
+    values = c("#254B73", "#A50026", "#FDD081", "#DDDDDD"),
+    name = "Detection",
+    labels = c("None", "Alert", "Warning", "No Baseline Data")
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 week",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
 ```
 
 
 ## Regression/EWMA Switch
-The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and EWMA algorithms by applying the most appropriate algorithm for the data in the baseline. First, multiple adaptive regression is applied where the adjusted R squared value of the model is examined to see if it meets a threshold of 0.60. If this threshold is not met, then the model is considered to not explain the data well. In this case, the algorithm switches to the EWMA algorithm, which is more appropriate for sparser time series that are common with county level trends.
+The NSSP-ESSENCE Regression/EWMA Switch algorithm generalized the Regression and EWMA algorithms by applying the most appropriate algorithm for the data in the baseline. First, adaptive multiple regression is applied where the adjusted R-squared value of the model is examined to see if it meets a threshold of $>= 0.60$. If this threshold is not met, then the model is considered to not explain the data well. In this case, the algorithm switches to the EWMA algorithm, which is more appropriate for sparser time series that are common with granular geographic levels.
 
 The Regression/EWMA algorithm can be performed with the `alert_switch()` function (run `help(alert_switch)` or `?alert_switch` in the R console for more).
 
@@ -150,18 +182,35 @@ Let's visualize the time series with the anomalies for Region 4:
 ```{r alert_switch_viz}
 # Filter the dataset
 df_switch_region <- df_switch %>%
-  filter(hospitaldhhsregion_display == "Region 4")
+  filter(hospitaldhhsregion_display == "Region 4") %>%
+  mutate(alert = factor(alert, levels = c("blue", "red", "yellow", "grey")))
 
 # Plot time series data
-df_switch_region %>%
-  ggplot() +
-  geom_line(aes(x = date, y = dataCount), color = "grey70") +
-  geom_line(data = subset(df_switch_region, alert != "grey"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_switch_region, alert == "blue"), aes(x = date, y = dataCount), color = "navy") +
-  geom_point(data = subset(df_switch_region, alert == "yellow"), aes(x = date, y = dataCount), color = "yellow") +
-  geom_point(data = subset(df_switch_region, alert == "red"), aes(x = date, y = dataCount), color = "red") +
-  theme_bw() +
-  labs(x = "Date", y = "Count")
+ggplot(data = df_switch_region) +
+  geom_line(aes(x = date, y = dataCount), color = "#254B73") +
+  geom_point(aes(x = date, y = dataCount, color = alert)) +
+  scale_color_manual(
+    values = c("#254B73", "#A50026", "#FDD081", "#DDDDDD"),
+    name = "Detection",
+    labels = c("None", "Alert", "Warning", "No Baseline Data")
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 week",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
 ```
 
 
@@ -174,47 +223,196 @@ The Modified implementation of the original Farrington algorithm improves perfor
 
 Both the Original and the Modified Farrington algorithm can be performed with the `alert_farrington()` function. By default, `alert_farrington()` implements the original Farrington. Add `method = "modified"` to the function to apply the modified Farrington algorithm to your data (run `?alert_farrington` in the R console for more).
 
-Let's pull in more historical data:
-
-```{r alert_farrington_data}
-url2 <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=29Dec2013&timeResolution=weekly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries"
-
-api_data2 <- get_api_data(url2)
-
-df2 <- api_data2 %>% 
-  pluck("timeSeriesData")
-```
+The example below applies the Negative Binomial Regression detector to a synthetic time series prepackaged in `Rnssp`. The `simulated_data` dataset includes two simulated time series of weekly counts with annual seasonality. This example uses the Scenario #1 time series with moderate counts, 4 injected outbreaks over weeks 1-261, and 1 injected outbreak during weeks 262-313. The methods outlined in [*An Improved Algorithm for Outbreak Detection in Multiple Surveillance Systems*](https://onlinelibrary.wiley.com/doi/10.1002/sim.5595) (Angela Noufaily et al. [2012]) were used to generate these synthetic time series and inject outbreak cases.
 
 The Original Farrington temporal detector can be applied as below:
 
 ```{r alert_farrington_original}
-df_farr_original <- alert_farrington(df2, t = date, y = count)
+synth_ts1 <- simulated_data %>%
+  filter(id == "Scenario #1")
+
+df_farr_original <- alert_farrington(synth_ts1, t = date, y = cases)
 ```
 
 Similarly, the Modified Farrington temporal detector can be applied as below:
 
 ```{r alert_farrington_modified}
-df_farr_modified <- alert_farrington(df2, t = date, y = count, method = "modified")
+df_farr_modified <- alert_farrington(
+  synth_ts1,
+  t = date,
+  y = cases,
+  method = "modified"
+) %>%
+  mutate(alert = factor(alert, levels = c("blue", "red", "grey")))
 ```
 
 Let's visualize the time series with the detected anomalies:
 
 ```{r alert_farrington_modified_viz}
-df_farr_modified %>%
-  ggplot() +
-  geom_line(aes(x = date, y = count), color = "grey70") +
-  geom_line(data = subset(df_farr_modified, alert != "grey"), aes(x = date, y = count), color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert == "blue"), aes(x = date, y = count), color = "navy") +
-  geom_point(data = subset(df_farr_modified, alert == "red"), aes(x = date, y = count), color = "red") +
-  theme_bw() +
-  labs(
-    x = "Date",
-    y = "Weekly ED Visits"
+ggplot(data = df_farr_modified) +
+  geom_line(aes(x = date, y = cases), color = "#254B73") +
+  geom_point(aes(x = date, y = cases, color = alert), show.legend = FALSE) +
+  scale_color_manual(
+    values = c("transparent", "#A50026", "transparent", "transparent")
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "6 month",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
+
+ggplot(data = df_farr_modified) +
+  geom_line(aes(x = date, y = cases, color = "Observed")) +
+  geom_line(aes(x = date, y = upper, color = "Threshold"), linewidth = 0.3) +
+  geom_point(data = subset(df_farr_modified, alert == "red"), aes(x = date, y = cases), color = "#A50026") +
+  geom_vline(xintercept = as.Date("2021-01-17"), linewidth = 0.2) +
+  annotate(geom = "text", x = as.Date("2022-01-01"), y = 65, label = "Observations with\nSufficient Baseline Data") +
+  scale_color_manual(
+    values = c("#1A476F", "#A50026"),
+    name = "Series"
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 year",
+    date_labels = "%Y",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
+```
+
+## Negative Binomial Regression
+The Negative Binomial Regression algorithm is intended for weekly time series spanning multiple years and fits a negative binomial regression model with a time term and cyclic sine and cosine terms to a baseline period that spans 2 or more years.
+
+Inclusion of cyclic terms in the model is intended to account for seasonality common in multi-year weekly time series of counts for syndromes and diseases such as influenza, RSV, and norovirus. 
+
+Each baseline model is used to make weekly forecasts for all weeks following the baseline period. One-sided upper 95% prediction interval bounds are computed for each week in the prediction period. Alarms are signaled for any week during which the observed weekly count exceeds the upper bound of the prediction interval.
+
+The Negative Binomial Regression detector can be applied with the `alert_nbinom()` function (run `help(alert_nbinom)` or `?alert_nbinom` in the R console for more).
+
+The example below applies the Negative Binomial Regression detector to our synthetic time series for Scenario #1.
+
+```{r alert_negative_binomial_regression}
+synth_ts1 <- simulated_data %>%
+  filter(id == "Scenario #1")
+
+df_nbinom <- alert_nbinom(
+  synth_ts1,
+  t = date,
+  y = cases,
+  baseline_end = as.Date("2021-12-26")
+)
+```
+
+Let's visualize the time series with the detected anomalies:
+
+```{r alert_negative_binomial_regression_viz}
+ggplot(data = df_nbinom) +
+  geom_line(aes(x = date, y = cases, color = "Observed")) +
+  geom_line(aes(x = date, y = threshold, color = "Threshold"), linewidth = 0.3) +
+  geom_point(data = subset(df_nbinom, alarm), aes(x = date, y = cases), color = "#A50026") +
+  geom_vline(xintercept = as.Date("2021-12-26"), linewidth = 0.2) +
+  annotate(geom = "text", x = as.Date("2019-12-01"), y = 60, label = "Baseline Data") +
+  scale_color_manual(
+    values = c("#1A476F", "#A50026"),
+    name = "Series"
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 year",
+    date_labels = "%Y",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
+  )
+```
+
+## Original Serfling detector
+The Original Serfling detector is intended for weekly time series spanning multiple years.
+
+It fits a linear regression model with a time term and sine and cosine terms to a baseline period that ideally spans 5 or more years. 
+
+Inclusion of Fourier terms in the model is intended to account for seasonality common in multi-year weekly time series. This implementation follows the approach of the original Serfling method in which weeks between October of the starting year of a season and May of the ending year of a season are considered to be in the epidemic period. Weeks in the epidemic period are removed from the baseline prior to fitting the regression model. 
+
+Each baseline model is used to make weekly forecasts for all weeks following the baseline period. One-sided upper 95% prediction interval bounds are computed for each week in the prediction period. Alarms are signaled for any week during which the observed weekly count exceeds the upper bound of the prediction interval.
+
+The  Original Serfling detector can be applied with the `alert_serfling()` function (run `help(alert_serfling)` or `?alert_serfling` in the R console for more).
+
+Using the same simulated time series from the previous examples, the Negative Binomial Regression detector can be applied as below:
+
+```{r alert_serfling_detector}
+df_serfling <- alert_serfling(
+  synth_ts1,
+  t = date,
+  y = cases,
+  baseline_end = as.Date("2021-12-26")
+)
+```
+
+Let's visualize the time series with the detected anomalies:
+
+```{r alert_serfling_detector_viz}
+ggplot(data = df_serfling) +
+  geom_line(aes(x = date, y = cases, color = "Observed")) +
+  geom_line(aes(x = date, y = threshold, color = "Threshold"), linewidth = 0.3) +
+  geom_point(data = subset(df_nbinom, alarm), aes(x = date, y = cases), color = "#A50026") +
+  geom_vline(xintercept = as.Date("2021-12-26"), linewidth = 0.2) +
+  annotate(geom = "text", x = as.Date("2019-12-01"), y = 60, label = "Baseline Data") +
+  scale_color_manual(
+    values = c("#1A476F", "#A50026"),
+    name = "Series"
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::comma,
+    name = "Count"
+  ) +
+  scale_x_date(
+    date_breaks = "1 year",
+    date_labels = "%Y",
+    name = "Date"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1)
   )
 ```
 
 # Trend Classification
-The trend classification fits rolling binomial models to a daily time series of percentages or proportions in order to classify the overall trend during the baseline period as significantly increasing, significantly decreasing, or stable. The algorithm can be performed via the `classify_trend()` function (run `help(classify_trend)` or `?classify_trend` for more). The test statistic and p-value are extracted from each individual model and are used in the following classification scheme:
+The trend classification fits rolling binomial models to a daily time series of proportions in order to classify local trend during the baseline period as significantly increasing, significantly decreasing, or stable. The algorithm can be performed via the `classify_trend()` function (run `help(classify_trend)` or `?classify_trend` for more). The test statistic and p-value are extracted from each individual model and are used in the following classification scheme:
 
 - p-value < 0.01 and sign(test_statistic) > 0 ~ "Significant Increase" 
 - p-value < 0.01 and sign(test_statistic) < 0 ~ "Significant Decrease" 
@@ -232,24 +430,39 @@ Let's visualize HHS region 4 trends with the color bar at the bottom representin
 ```{r classify_trend_viz}
 # Filter the dataset
 df_trend_region <- data_trend %>%
-  filter(hospitaldhhsregion_display == "Region 4")
+  filter(hospitaldhhsregion_display == "Region 4") %>%
+  mutate(proportion = (data_count / all_count))
 
 # Defining a color palette
 pal <- c("#FF0000", "#1D8AFF", "#FFF70E", "grey90")
 
 # Plot trend
-df_trend_region %>%
-  mutate(percent = data_count/all_count * 100) %>%
-  ggplot(., aes(x = t, y = percent)) +
-  geom_line(color = "blue") +
-  geom_hline(yintercept = -0.4, size = 4.5, color = "white") +
-  geom_segment(aes(x = t, xend = max(t), y = -0.4, yend = -0.4, 
-                   color = trend_classification), size = 3) +
-  scale_color_manual(values = pal, name = "Trend Classification") +
-  theme_few() +
-  labs(title = "Percent of Emergency Department Visits with Diagnosed COVID-19",
-       subtitle = "August 22nd, 2020 to November 20th, 2020",
-       x = "Date",
-       y = "Percent")
+ggplot(data = df_trend_region) +
+  geom_line(aes(x = t, y = proportion), color = "#1A476F") +
+  geom_xsidetile(aes(xfill = trend_classification, x = t, y = "Trend")) +
+  scale_xfill_manual(
+    values = c("#D7191C", "#2C7BB6", "#FFFFBF", "#DDDDDD"),
+    drop = FALSE,
+    name = NULL
+  ) +
+  scale_xsidey_discrete() +
+  ggside(x.pos = "bottom") +
+  scale_x_date(
+    date_breaks = "1 week",
+    name = "Date"
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion(c(0, 0.2)),
+    labels = scales::percent,
+    name = "Percent"
+  ) +
+  theme_classic() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    legend.position = "bottom",
+    axis.ticks.length = unit(0.25, "cm"),
+    legend.background = element_rect(color = "black", linewidth = 0.1),
+    ggside.panel.scale.x = 0.05
+  )
 ```
-

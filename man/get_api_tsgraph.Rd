@@ -2,25 +2,27 @@
 % Please edit documentation in R/api_utilities.R
 \name{get_api_tsgraph}
 \alias{get_api_tsgraph}
-\title{Get ESSENCE API Time Series Graph}
+\title{Get an API graph}
 \usage{
 get_api_tsgraph(url, profile = myProfile)
 }
 \arguments{
-\item{url}{a character of ESSENCE API URL.}
+\item{url}{a character of API URL.}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+Default is \code{myProfile}.}
 }
 \value{
 An object of class \code{response}.
 }
 \description{
-A wrapper to the \code{get_api_tsgraph} method defined in the \code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_tsgraph} method defined in the
+\code{\link[Rnssp]{Credentials}} class.
 }
 \examples{
 \dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "<ESSENCE_url>"
+myProfile <- create_profile("", "")
+url <- "http://httpbin.org/image/png"
 
 api_data_tsgraph <- get_api_tsgraph(url)
 

@@ -7,12 +7,14 @@
 webscrape_icd(icd_version = "ICD10", year = NULL, quiet = FALSE)
 }
 \arguments{
-\item{icd_version}{A character value of either "ICD10" or "ICD9" to specify ICD version}
+\item{icd_version}{A character value of either "icd10", "ICD10", "icd9", or
+"ICD9" to specify ICD version}
 
-\item{year}{A numeric integer indicating the year of desired ICD-10 code set. Defaults to
-NULL to pull the most recent year's publication.}
+\item{year}{A numeric integer indicating the year of desired ICD-10 code set.
+Defaults to \code{NULL} to pull the most recent year's publication.}
 
-\item{quiet}{logical. If TRUE, suppress status messages (if any), and the progress bar.}
+\item{quiet}{logical. If \code{TRUE}, suppress status messages (if any),
+and the progress bar.}
 }
 \value{
 A dataframe
@@ -20,28 +22,30 @@ A dataframe
 \description{
 Function to web scrape ICD discharge diagnosis code sets from the CDC FTP server
 (for ICD-10) or CMS website (for ICD-9). If pulling ICD-10 codes, by default the
-function will search for the most recent year's code set publication by NCHS. Users
-can specify earlier publication years back to 2019 if needed. The ICD-9 option will
-only web scrape the most recent, final ICD-9 code set publication (2014) from the CMS
-website. This function will return an error message if the FTP server or CMS website is
- unresponsive or if a timeout of 60 seconds is reached. The result is a dataframe with 3 fields:
-code, description, and set (ICD version concatenated with year). Codes are standardized
-to upper case with punctuation and extra leading/tailing white space removed to enable
-successful joining.
+function will search for the most recent year's code set publication by NCHS.
+Users can specify earlier publication years back to 2019 if needed. The ICD-9
+option will only web scrape the most recent, final ICD-9 code set
+publication (2014) from the CMS website. This function will return an error
+message if the FTP server or CMS website is  unresponsive or if a timeout
+of 60 seconds is reached. The result is a dataframe with 3 fields: code,
+description, and set (ICD version concatenated with year). Codes are
+standardized to upper case with punctuation and extra leading/tailing white
+space removed to enable successful joining.
 }
 \examples{
 
 # Example 1
-icd10_2022 <- webscrape_icd(icd_version = "ICD10")
+icd10_2022 <- webscrape_icd(icd_version = "ICD9")
+head(icd10_2022)
 
 # Example 2
 icd10_2021 <- webscrape_icd(icd_version = "ICD10", year = 2021)
+head(icd10_2021)
 
 # Example 3
 icd10_2020 <- webscrape_icd(icd_version = "ICD10", year = 2020)
+head(icd10_2020)
 
-# Example 4
-icd9_2014 <- webscrape_icd(icd_version = "ICD9")
 }
 \references{
 \itemize{

@@ -31,9 +31,11 @@
 #'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   count = floor(runif(366, min = 0, max = 101))
 #' )
-#' df_switch <- alert_switch(df)
 #'
 #' head(df)
+#'
+#' df_switch <- alert_switch(df)
+#'
 #' head(df_switch)
 #'
 #' # Example 2
@@ -41,15 +43,20 @@
 #'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   percent = runif(366)
 #' )
-#' df_switch <- alert_switch(df, t = Date, y = percent)
 #'
 #' head(df)
+#'
+#' df_switch <- alert_switch(df, t = Date, y = percent)
+#'
 #' head(df_switch)
+#'
+#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
+#' library(Rnssp)
 #' library(ggplot2)
 #'
-#' myProfile <- Credentials$new(askme("Enter your username:"), askme())
+#' myProfile <- create_profile()
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
 #' endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
@@ -101,25 +108,26 @@
 #'   )
 #' }
 #'
-alert_switch <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
+alert_switch <- function(df, t = date, y = count, B = 28,
+                         g = 2, w1 = 0.4, w2 = 0.9) {
 
   # Check baseline length argument
   if (B < 7) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be greater than or equal to 7")
+    cli::cli_abort("Error in {.fn alert_switch}: baseline length argument {.var B} must be greater than or equal to 7")
   }
 
   if (B %% 7 != 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: baseline length argument {.var B} must be a multiple of 7")
+    cli::cli_abort("Error in {.fn alert_switch}: baseline length argument {.var B} must be a multiple of 7")
   }
 
   # Check guardband length argument
   if (g < 0) {
-    cli::cli_abort("Error in {.fn alert_regression}: guardband length argument {.var g} cannot be negative")
+    cli::cli_abort("Error in {.fn alert_switch}: guardband length argument {.var g} cannot be negative")
   }
 
   # Check for sufficient baseline data
   if (nrow(df) < B + g + 1) {
-    cli::cli_abort("Error in {.fn alert_regression}: not enough historical data")
+    cli::cli_abort("Error in {.fn alert_switch}: not enough historical data")
   }
 
   # Check for grouping variables

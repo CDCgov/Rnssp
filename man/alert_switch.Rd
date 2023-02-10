@@ -46,9 +46,11 @@ df <- data.frame(
   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   count = floor(runif(366, min = 0, max = 101))
 )
-df_switch <- alert_switch(df)
 
 head(df)
+
+df_switch <- alert_switch(df)
+
 head(df_switch)
 
 # Example 2
@@ -56,15 +58,20 @@ df <- data.frame(
   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
   percent = runif(366)
 )
-df_switch <- alert_switch(df, t = Date, y = percent)
 
 head(df)
+
+df_switch <- alert_switch(df, t = Date, y = percent)
+
 head(df_switch)
+
+
 \dontrun{
 # Example 3: Data from NSSP-ESSENCE
+library(Rnssp)
 library(ggplot2)
 
-myProfile <- Credentials$new(askme("Enter your username:"), askme())
+myProfile <- create_profile()
 
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
 endDate=20Nov20&ccddCategory=cli\%20cc\%20with\%20cli\%20dd\%20and\%20coronavirus\%20dd\%20v2

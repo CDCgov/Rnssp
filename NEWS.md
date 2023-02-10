@@ -1,8 +1,43 @@
+# Rnssp 0.2.0
+
+## New Features
+* New function `create_profile()` added as a wrapper to the `$new()` method defined in the `Credentials` class.
+* New function `get_essence_data()` added to specifically pull data using the NSSP-ESSENCE API.
+* Negative binomial detection algorithm `alert_nbinom()` added for weekly time series of counts spanning multiple years.
+* `run_app()` has been added as a utility to run embedded shiny apps.
+* New `Token` class added for API services token use. The `Token` class has the same methods as the `Credentials` class.
+* New function `create_token_profile()` added as a wrapper to the `$new()` method defined in the `Token` class.
+* `Rnssp` detects new version and suggests package upgrade.
+
+## Updates
+* New test `test-create_profile.R` added for `create_profile()`.
+* New test `test-create_token_profile.R` added for `create_token_profile()`.
+* New test `test-alert_nbinom.R` added for `alert_nbinom()`.
+* New test `test-alert_serfling.R` added for `alert_serfling()`.
+* New test `test-get_essence_data.R` added for `get_essence_data()`.
+* New test `test-get_api_graph.R` added for `get_api_graph()`.
+* New test `test-get_api_tsgraph.R` added for `get_api_tsgraph()`.
+* `slider` package added as a dependency.
+* `lubridate` package added as a dependency.
+* Deprecated `alert_mar()` function has been removed.
+* `add_rmd_template()` has been improved with additional arguments and better error handling.
+* `remove_rmd_template()` has been improved with additional arguments and better error handling.
+* `Rnssp:::add_rmd_template_gui()` has been improved with additional arguments and better error handling.
+* `Rnssp:::remove_rmd_template_gui()` has been improved with additional arguments and better error handling.
+* `$get_api_response()` has been improved and now prints HTTP status code.
+* `$get_api_tsgraph()` has been improved with additional arguments and now prints HTTP status code.
+* The `$get_api_tsgraph()` method has been deprecated and will be removed in the next release of `Rnssp`.
+* New method `$get_api_graph()` has been added as a replacement to the `$get_api_tsgraph()`.
+
+## Bug Fixes
+* Abstracted critical user credentials from the `$get_api_ts_graph()` method.
+* Fix the `get_api_tsgraph()` function which was previously returning an API response object.
+
 # Rnssp 0.1.0
 
 ## New Features
-* New function `get_api_data()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
-* New function `get_api_response()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
+* New function `get_api_response()` added as a wrapper to the `$get_api_response()` method defined in the `Credentials` class.
+* New function `get_api_data()` added as a wrapper to the `$get_api_data()` method defined in the `Credentials` class.
 * New function `get_api_tsgraph()` added as a wrapper to the `$get_api_tsgraph()` method defined in the `Credentials` class.
 * Regression/EWMA Switch algorithm `alert_switch()` added for anomaly detection.
 * Adaptive Multiple Regression algorithm `alert_regression()` added for anomaly detection.

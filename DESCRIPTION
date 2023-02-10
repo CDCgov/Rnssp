@@ -1,11 +1,11 @@
 Package: Rnssp
 Type: Package
 Title: A Signature R package for the National Syndromic Surveillance Program (NSSP)
-Version: 0.1.0
-Date: 2021-01-27
+Version: 0.2.0
+Date: 2023-02-10
 Authors@R: c(
     person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
-                  role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9155-4153")),
+                  role = c("aut", "cre", "ccp", "ctb"), comment = c(ORCID = "0000-0001-9155-4153")),
     person("Michael", "Sheppard", email = "msheppard@cdc.gov",
                   role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-3660-575X")))
 Maintainer: Gbedegnon Roseric Azondekon <gazondekon@cdc.gov>
@@ -19,12 +19,14 @@ Depends:
     data.table,
     stringr,
     tidyr,
+    slider,
+    lubridate,
     sf
 License: Apache License (>= 2)
-URL: https://github.com/CDCgov/Rnssp, https://cdcgov.github.io/Rnssp
+URL: https://cdcgov.github.io/Rnssp, https://github.com/CDCgov/Rnssp
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 Suggests: 
     testthat,
     knitr,
@@ -50,6 +52,7 @@ Imports:
     janitor,
     tibble,
     yaml,
+    DT,
     cli,
     shiny (>= 0.13),
     miniUI (>= 0.1.1),

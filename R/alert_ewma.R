@@ -85,8 +85,14 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
     expected[i] <- mean(y_baseline)
     sigma <- sd(y_baseline)
 
-    sigma_correction1 <- sqrt((w1 / (2 - w1)) + (1 / length(ndx_baseline)) - 2 * (1 - w1)^(g + 1) * ((1 - (1 - w1)^length(ndx_baseline)) / length(ndx_baseline)))
-    sigma_correction2 <- sqrt((w2 / (2 - w2)) + (1 / length(ndx_baseline)) - 2 * (1 - w2)^(g + 1) * ((1 - (1 - w2)^length(ndx_baseline)) / length(ndx_baseline)))
+    sigma_correction1 <- sqrt(
+      (w1 / (2 - w1)) + (1 / length(ndx_baseline)) - 2 * (1 - w1)^(g + 1) *
+        ((1 - (1 - w1)^length(ndx_baseline)) / length(ndx_baseline))
+      )
+    sigma_correction2 <- sqrt(
+      (w2 / (2 - w2)) + (1 / length(ndx_baseline)) - 2 * (1 - w2)^(g + 1) *
+        ((1 - (1 - w2)^length(ndx_baseline)) / length(ndx_baseline))
+      )
 
     ucl_alert <- round(qt(1 - 0.01, df = n_df), 5)
     ucl_warning <- round(qt(1 - 0.05, df = n_df), 5)
@@ -94,8 +100,10 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
     min_sigma1 <- (w1 / ucl_warning) * (1 + 0.5 * (1 - w1)^2)
     min_sigma2 <- (w2 / ucl_warning) * (1 + 0.5 * (1 - w2)^2)
 
-    constant1 <- (0.1289 - (0.2414 - 0.1826 * (1 - w1)^4) * log(10 * 0.05)) * (w1 / ucl_warning)
-    constant2 <- (0.1289 - (0.2414 - 0.1826 * (1 - w2)^4) * log(10 * 0.05)) * (w2 / ucl_warning)
+    constant1 <- (0.1289 - (0.2414 - 0.1826 * (1 - w1)^4) *
+                    log(10 * 0.05)) * (w1 / ucl_warning)
+    constant2 <- (0.1289 - (0.2414 - 0.1826 * (1 - w2)^4) *
+                    log(10 * 0.05)) * (w2 / ucl_warning)
 
     sigma1[i] <- max(min_sigma1, sigma * sigma_correction1 + constant1)
     sigma2[i] <- max(min_sigma2, sigma * sigma_correction2 + constant2)
@@ -180,9 +188,11 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #'   date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   count = floor(runif(366, min = 0, max = 101))
 #' )
-#' df_ewma <- alert_ewma(df)
 #'
 #' head(df)
+#'
+#' df_ewma <- alert_ewma(df)
+#'
 #' head(df_ewma)
 #'
 #' # Example 2
@@ -190,15 +200,20 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #'   Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
 #'   percent = runif(366)
 #' )
-#' df_ewma <- alert_ewma(df, t = Date, y = percent)
 #'
 #' head(df)
+#'
+#' df_ewma <- alert_ewma(df, t = Date, y = percent)
+#'
 #' head(df_ewma)
+#'
+#'
 #' \dontrun{
 #' # Example 3: Data from NSSP-ESSENCE
+#' library(Rnssp)
 #' library(ggplot2)
 #'
-#' myProfile <- Credentials$new(askme("Enter your username:"), askme())
+#' myProfile <- create_profile()
 #'
 #' url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
 #' endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
@@ -250,16 +265,19 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #'   )
 #' }
 #'
-alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
+alert_ewma <- function(df, t = date, y = count,
+                       B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
 
   # Check baseline length argument
   if (B < 7) {
-    cli::cli_abort("Error in {.fn alert_ewma}: baseline length argument {.var B} must be greater than or equal to 7")
+    cli::cli_abort("Error in {.fn alert_ewma}: baseline length argument {.var B}
+                   must be greater than or equal to 7")
   }
 
   # Check guardband length argument
   if (g < 0) {
-    cli::cli_abort("Error in {.fn alert_ewma}: guardband length argument {.var g} cannot be negative")
+    cli::cli_abort("Error in {.fn alert_ewma}: guardband length argument {.var g}
+                   cannot be negative")
   }
 
   # Check for sufficient baseline data
@@ -281,7 +299,10 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.
 
     alert_tbl <- base_tbl %>%
       nest(data_split = -all_of(groups)) %>%
-      mutate(anomalies = map(.x = data_split, .f = ewma_loop, t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)) %>%
+      mutate(
+        anomalies = map(.x = data_split, .f = ewma_loop,
+                        t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)
+        ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(
@@ -299,12 +320,17 @@ alert_ewma <- function(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.
       unique()
 
     if (length(unique_dates) != nrow(base_tbl)) {
-      cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates does not equal the number of rows. Should your dataframe be grouped?")
+      cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates
+                     does not equal the number of rows.
+                     Should your dataframe be grouped?")
     }
 
     alert_tbl <- base_tbl %>%
       nest(data_split = everything()) %>%
-      mutate(anomalies = map(.x = data_split, .f = ewma_loop, t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)) %>%
+      mutate(
+        anomalies = map(.x = data_split, .f = ewma_loop,
+                        t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)
+        ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(
