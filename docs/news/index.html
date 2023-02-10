@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -114,7 +114,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -165,61 +165,186 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/CDCgov/Rnssp/blob/HEAD/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="rnssp-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#rnssp-010" class="anchor"></a>Rnssp 0.1.0</h1>
+    <div id="rnssp-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#rnssp-020" class="anchor"></a>Rnssp 0.2.0</h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New Features</h2>
 <ul>
-<li>New function <code><a href="../reference/get_api_data.html">get_api_data()</a></code> added as a wrapper to the <code>$get_api_response()</code> method defined in the <code>Credentials</code> class.</li>
-<li>New function <code><a href="../reference/get_api_response.html">get_api_response()</a></code> added as a wrapper to the <code>$get_api_data()</code> method defined in the <code>Credentials</code> class.</li>
-<li>New function <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> added as a wrapper to the <code>$get_api_tsgraph()</code> method defined in the <code>Credentials</code> class.</li>
-<li>Regression/EWMA Switch algorithm <code><a href="../reference/alert_switch.html">alert_switch()</a></code> added for anomaly detection.</li>
-<li>Adaptive Multiple Regression algorithm <code><a href="../reference/alert_regression.html">alert_regression()</a></code> added for anomaly detection.</li>
-<li>Farrington Temporal Detector algorithm <code><a href="../reference/alert_farrington.html">alert_farrington()</a></code> added for weekly time series of counts spanning multiple years.</li>
-<li>ICD Code Web Scraper function <code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code> added to web scrape ICD discharge diagnosis code sets from the CDC FTP server (for ICD-10) or CMS website (for ICD-9).</li>
-<li>The following Addins have been added for RStudio users:
-<ul>
-<li>Create User Profile via a Graphical User Interface (<code>Rnssp:::create_user_profile_gui()</code>)</li>
-<li>Create a User Profile with a script skeleton (<code>Rnssp:::create_user_profile()</code>)</li>
-<li>List available Rnssp templates (<code><a href="../reference/list_templates.html">list_templates()</a></code>)</li>
-<li>Add or Update Rnssp templates (<code>Rnssp:::add_rmd_template_gui()</code>)</li>
-<li>Remove Rnssp templates (<code>Rnssp:::remove_rmd_template_gui()</code>)</li>
-<li>Open Rnssp templates online documentation (<code>Rnssp:::rnssp_templates_manual()</code>)</li>
-<li>Open Rnssp package online documentation (<code>Rnssp:::rnssp_manual()</code>)</li>
-</ul>
-</li>
+<li>New function <code><a href="../reference/create_profile.html">create_profile()</a></code> added as a wrapper to the
+<code>$new()</code> method defined in the <code>Credentials</code>
+class.</li>
+<li>New function <code><a href="../reference/get_essence_data.html">get_essence_data()</a></code> added to specifically
+pull data using the NSSP-ESSENCE API.</li>
+<li>Negative binomial detection algorithm <code><a href="../reference/alert_nbinom.html">alert_nbinom()</a></code>
+added for weekly time series of counts spanning multiple years.</li>
+<li>
+<code><a href="../reference/run_app.html">run_app()</a></code> has been added as a utility to run embedded
+shiny apps.</li>
+<li>New <code>Token</code> class added for API services token use. The
+<code>Token</code> class has the same methods as the
+<code>Credentials</code> class.</li>
+<li>New function <code><a href="../reference/create_token_profile.html">create_token_profile()</a></code> added as a wrapper
+to the <code>$new()</code> method defined in the <code>Token</code>
+class.</li>
+<li>
+<code>Rnssp</code> detects new version and suggests package
+upgrade.</li>
 </ul>
 </div>
 <div id="updates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#updates" class="anchor"></a>Updates</h2>
 <ul>
+<li>New test <code>test-create_profile.R</code> added for
+<code><a href="../reference/create_profile.html">create_profile()</a></code>.</li>
+<li>New test <code>test-create_token_profile.R</code> added for
+<code><a href="../reference/create_token_profile.html">create_token_profile()</a></code>.</li>
+<li>New test <code>test-alert_nbinom.R</code> added for
+<code><a href="../reference/alert_nbinom.html">alert_nbinom()</a></code>.</li>
+<li>New test <code>test-alert_serfling.R</code> added for
+<code><a href="../reference/alert_serfling.html">alert_serfling()</a></code>.</li>
+<li>New test <code>test-get_essence_data.R</code> added for
+<code><a href="../reference/get_essence_data.html">get_essence_data()</a></code>.</li>
+<li>New test <code>test-get_api_graph.R</code> added for
+<code><a href="../reference/get_api_graph.html">get_api_graph()</a></code>.</li>
+<li>New test <code>test-get_api_tsgraph.R</code> added for
+<code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code>.</li>
 <li>
-<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> no longer has a <code>template_name</code> argument. The argument <code>template_name</code> has been replaced by <code>template</code> which is the first argument in the function call.</li>
-<li>New test <code>test-alert_farrington.R</code> added for <code><a href="../reference/alert_farrington.html">alert_farrington()</a></code>.</li>
-<li>New test <code>test-alert_regression.R</code> added for <code><a href="../reference/alert_regression.html">alert_regression()</a></code>.</li>
-<li>New test <code>test-alert_switch.R</code> added for <code><a href="../reference/alert_switch.html">alert_switch()</a></code>.</li>
-<li>New test <code>test-add_rmd_template.R</code> added for <code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code>.</li>
-<li>New test <code>test-remove_rmd_template.R</code> added for <code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code>.</li>
-<li>New test <code>test-get_api_data.R</code> added for the <code><a href="../reference/get_api_data.html">get_api_data()</a></code> function.</li>
-<li>New test <code>test-get_api_response.R</code> added for the <code><a href="../reference/get_api_response.html">get_api_response()</a></code> function.</li>
-<li>New test <code>test-get_api_tsgraph.R</code> added for the <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> function.</li>
-<li>New test <code>test-get_api_data_method.R</code> added for the <code>$get_api_data()</code> method.</li>
-<li>New test <code>test-get_api_response_method.R</code> added for the <code>$get_api_response()</code> method.</li>
-<li>New test <code>test-get_api_tsgraph_method.R</code> added for the <code>$get_api_tsgraph()</code> method.</li>
-<li>New test <code>test-webscrape_icd.R</code> added for <code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code>
+<code>slider</code> package added as a dependency.</li>
+<li>
+<code>lubridate</code> package added as a dependency.</li>
+<li>Deprecated <code>alert_mar()</code> function has been removed.</li>
+<li>
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> has been improved with additional
+arguments and better error handling.</li>
+<li>
+<code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code> has been improved with additional
+arguments and better error handling.</li>
+<li>
+<code>Rnssp:::add_rmd_template_gui()</code> has been improved with
+additional arguments and better error handling.</li>
+<li>
+<code>Rnssp:::remove_rmd_template_gui()</code> has been improved
+with additional arguments and better error handling.</li>
+<li>
+<code>$get_api_response()</code> has been improved and now prints
+HTTP status code.</li>
+<li>
+<code>$get_api_tsgraph()</code> has been improved with additional
+arguments and now prints HTTP status code.</li>
+<li>The <code>$get_api_tsgraph()</code> method has been deprecated and
+will be removed in the next release of <code>Rnssp</code>.</li>
+<li>New method <code>$get_api_graph()</code> has been added as a
+replacement to the <code>$get_api_tsgraph()</code>.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>Abstracted critical user credentials from the
+<code>$get_api_ts_graph()</code> method.</li>
+<li>Fix the <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> function which was previously
+returning an API response object.</li>
+</ul>
+</div>
+</div>
+    <div id="rnssp-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#rnssp-010" class="anchor"></a>Rnssp 0.1.0</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<ul>
+<li>New function <code><a href="../reference/get_api_response.html">get_api_response()</a></code> added as a wrapper to
+the <code>$get_api_response()</code> method defined in the
+<code>Credentials</code> class.</li>
+<li>New function <code><a href="../reference/get_api_data.html">get_api_data()</a></code> added as a wrapper to the
+<code>$get_api_data()</code> method defined in the
+<code>Credentials</code> class.</li>
+<li>New function <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> added as a wrapper to
+the <code>$get_api_tsgraph()</code> method defined in the
+<code>Credentials</code> class.</li>
+<li>Regression/EWMA Switch algorithm <code><a href="../reference/alert_switch.html">alert_switch()</a></code> added
+for anomaly detection.</li>
+<li>Adaptive Multiple Regression algorithm
+<code><a href="../reference/alert_regression.html">alert_regression()</a></code> added for anomaly detection.</li>
+<li>Farrington Temporal Detector algorithm
+<code><a href="../reference/alert_farrington.html">alert_farrington()</a></code> added for weekly time series of counts
+spanning multiple years.</li>
+<li>ICD Code Web Scraper function <code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code> added to
+web scrape ICD discharge diagnosis code sets from the CDC FTP server
+(for ICD-10) or CMS website (for ICD-9).</li>
+<li>The following Addins have been added for RStudio users:
+<ul>
+<li>Create User Profile via a Graphical User Interface
+(<code>Rnssp:::create_user_profile_gui()</code>)</li>
+<li>Create a User Profile with a script skeleton
+(<code>Rnssp:::create_user_profile()</code>)</li>
+<li>List available Rnssp templates (<code><a href="../reference/list_templates.html">list_templates()</a></code>)</li>
+<li>Add or Update Rnssp templates
+(<code>Rnssp:::add_rmd_template_gui()</code>)</li>
+<li>Remove Rnssp templates
+(<code>Rnssp:::remove_rmd_template_gui()</code>)</li>
+<li>Open Rnssp templates online documentation
+(<code>Rnssp:::rnssp_templates_manual()</code>)</li>
+<li>Open Rnssp package online documentation
+(<code>Rnssp:::rnssp_manual()</code>)</li>
+</ul>
 </li>
-<li>Added shapefile for US Hospital Service Area (HSA) Shapefile (<code>hsa_sf</code>)</li>
+</ul>
+</div>
+<div id="updates-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#updates-1" class="anchor"></a>Updates</h2>
+<ul>
+<li>
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> no longer has a
+<code>template_name</code> argument. The argument
+<code>template_name</code> has been replaced by <code>template</code>
+which is the first argument in the function call.</li>
+<li>New test <code>test-alert_farrington.R</code> added for
+<code><a href="../reference/alert_farrington.html">alert_farrington()</a></code>.</li>
+<li>New test <code>test-alert_regression.R</code> added for
+<code><a href="../reference/alert_regression.html">alert_regression()</a></code>.</li>
+<li>New test <code>test-alert_switch.R</code> added for
+<code><a href="../reference/alert_switch.html">alert_switch()</a></code>.</li>
+<li>New test <code>test-add_rmd_template.R</code> added for
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code>.</li>
+<li>New test <code>test-remove_rmd_template.R</code> added for
+<code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code>.</li>
+<li>New test <code>test-get_api_data.R</code> added for the
+<code><a href="../reference/get_api_data.html">get_api_data()</a></code> function.</li>
+<li>New test <code>test-get_api_response.R</code> added for the
+<code><a href="../reference/get_api_response.html">get_api_response()</a></code> function.</li>
+<li>New test <code>test-get_api_tsgraph.R</code> added for the
+<code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> function.</li>
+<li>New test <code>test-get_api_data_method.R</code> added for the
+<code>$get_api_data()</code> method.</li>
+<li>New test <code>test-get_api_response_method.R</code> added for the
+<code>$get_api_response()</code> method.</li>
+<li>New test <code>test-get_api_tsgraph_method.R</code> added for the
+<code>$get_api_tsgraph()</code> method.</li>
+<li>New test <code>test-webscrape_icd.R</code> added for
+<code><a href="../reference/webscrape_icd.html">webscrape_icd()</a></code>
+</li>
+<li>Added shapefile for US Hospital Service Area (HSA) Shapefile
+(<code>hsa_sf</code>)</li>
 <li>Added Rnssp stopwords (<code>rnssp_stopwords</code>)</li>
 <li>
-<code><a href="../reference/alert_mar.html">alert_mar()</a></code> is depecrated. Use <code>alert_regression</code> instead.</li>
-<li>Test <code>test_alert_mar.R</code> has been removed for <code><a href="../reference/alert_mar.html">alert_mar()</a></code>.</li>
-<li>Regression models in <code><a href="../reference/alert_regression.html">alert_regression()</a></code> are fit using <code><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit()</a></code> instead of <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> to reduce computation time associated with extraneous computations made by <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>.</li>
+<code>alert_mar()</code> is depecrated. Use
+<code>alert_regression</code> instead.</li>
+<li>Test <code>test_alert_mar.R</code> has been removed for
+<code>alert_mar()</code>.</li>
+<li>Regression models in <code><a href="../reference/alert_regression.html">alert_regression()</a></code> are fit using
+<code><a href="https://rdrr.io/r/stats/lmfit.html">lm.fit()</a></code> instead of <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> to reduce computation
+time associated with extraneous computations made by
+<code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>.</li>
 <li>New vignette added to demonstrate the use of Rnssp addins.</li>
 </ul>
 </div>
@@ -230,36 +355,45 @@
 <li>
 <code>slider</code> package dependency no longer needed.</li>
 <li>
-<code>cli</code> package is now a dependency for attractive Command Line Interfaces (CLIs)</li>
+<code>cli</code> package is now a dependency for attractive Command
+Line Interfaces (CLIs)</li>
 </ul>
 </div>
 </div>
     <div id="rnssp-002" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.2">
 <a href="#rnssp-002" class="anchor"></a>Rnssp 0.0.2</h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New Features</h2>
+<a href="#new-features-2" class="anchor"></a>New Features</h2>
 <ul>
-<li>All vignettes can be browsed with the <code><a href="../reference/Rnssp_vignettes.html">Rnssp_vignettes()</a></code> function</li>
+<li>All vignettes can be browsed with the <code><a href="../reference/Rnssp_vignettes.html">Rnssp_vignettes()</a></code>
+function</li>
 <li>
-<code><a href="../reference/list_templates.html">list_templates()</a></code> lists available templates from the <a href="https://github.com/CDCgov/Rnssp-rmd-templates">Rnssp-rmd-templates</a> Github repository</li>
+<code><a href="../reference/list_templates.html">list_templates()</a></code> lists available templates from the <a href="https://github.com/CDCgov/Rnssp-rmd-templates">Rnssp-rmd-templates</a>
+Github repository</li>
 <li>
-<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> can now add RMarkdown templates from <a href="https://github.com/CDCgov/Rnssp-rmd-templates">Rnssp-rmd-templates</a> Github repository</li>
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> can now add RMarkdown templates from
+<a href="https://github.com/CDCgov/Rnssp-rmd-templates">Rnssp-rmd-templates</a>
+Github repository</li>
 <li>
-<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> can now run in non-interactive mode</li>
+<code><a href="../reference/add_rmd_template.html">add_rmd_template()</a></code> can now run in non-interactive
+mode</li>
 <li>
-<code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code> removes an existing RMarkdown template from an existing <code>Rnssp</code> package template list.</li>
+<code><a href="../reference/remove_rmd_template.html">remove_rmd_template()</a></code> removes an existing RMarkdown
+template from an existing <code>Rnssp</code> package template list.</li>
 <li>
-<code><a href="../reference/change_dates.html">change_dates()</a></code> changes the start and/or end dates in an ESSENCE API URL</li>
+<code><a href="../reference/change_dates.html">change_dates()</a></code> changes the start and/or end dates in an
+ESSENCE API URL</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>Abstracted critical user credentials from response object.</li>
-<li>The <code>$get_api_data()</code> method has been extended to accept further arguments to parse CSV files.</li>
+<li>The <code>$get_api_data()</code> method has been extended to accept
+further arguments to parse CSV files.</li>
 </ul>
 </div>
 <div id="other-news-1" class="section level2">
@@ -269,27 +403,34 @@
 <li>Added CI/CD pipeline</li>
 <li>Updated all <code>Rnssp</code> vignettes.</li>
 <li>
-<a href="https://cdcgov.github.io/Rnssp/">Rnssp Online documentation</a> website is now available.</li>
+<a href="https://cdcgov.github.io/Rnssp/">Rnssp Online
+documentation</a> website is now available.</li>
 <li>Added new hex sticker for Rnssp package branding.</li>
-<li>Added a <code>THANKS.md</code> to acknowledge various supports and other contributions.</li>
+<li>Added a <code>THANKS.md</code> to acknowledge various supports and
+other contributions.</li>
 </ul>
 </div>
 </div>
     <div id="rnssp-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
 <a href="#rnssp-001" class="anchor"></a>Rnssp 0.0.1</h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>New Features</h2>
+<a href="#new-features-3" class="anchor"></a>New Features</h2>
 <ul>
 <li>
-<code><a href="../reference/alert_ewma.html">alert_ewma()</a></code> implements EWMA time series anomaly detection algorithm</li>
+<code><a href="../reference/alert_ewma.html">alert_ewma()</a></code> implements EWMA time series anomaly
+detection algorithm</li>
 <li>
-<code><a href="../reference/alert_mar.html">alert_mar()</a></code> implements MAR time series anomaly detection algorithm</li>
+<code>alert_mar()</code> implements MAR time series anomaly
+detection algorithm</li>
 <li>
-<code><a href="../reference/classify_trend.html">classify_trend()</a></code> implements a time series trend classification algorithm</li>
-<li>Added a vignette for time series anomaly detection and trend classification</li>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<code><a href="../reference/classify_trend.html">classify_trend()</a></code> implements a time series trend
+classification algorithm</li>
+<li>Added a vignette for time series anomaly detection and trend
+classification</li>
+<li>Added a <code>NEWS.md</code> file to track changes to the
+package.</li>
 </ul>
 </div>
 </div>

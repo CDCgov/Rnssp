@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -114,7 +114,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -178,8 +178,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-exported-functions-and-classes" class="hasAnchor"><a href="#section-exported-functions-and-classes" class="anchor"></a>Exported Functions and Classes</h2>
-          <p class="section-desc"><p>Functions and classes exported by the Rnssp package</p></p>
+          <h2 id="section-exported-functions" class="hasAnchor"><a href="#section-exported-functions" class="anchor"></a>Exported Functions</h2>
+          <p class="section-desc"><p>Functions exported by the Rnssp package</p></p>
         </th>
       </tr>
       
@@ -208,15 +208,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="alert_mar.html">alert_mar()</a></code> </p>
+          <p><code><a href="alert_nbinom.html">alert_nbinom()</a></code> </p>
         </td>
-        <td><p>Adaptive Multiple Regression (DEPRECATED!)</p></td>
+        <td><p>Negative binomial detection algorithm for weekly counts</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="alert_regression.html">alert_regression()</a></code> </p>
         </td>
         <td><p>Adaptive Multiple Regression</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="alert_serfling.html">alert_serfling()</a></code> </p>
+        </td>
+        <td><p>Original Serfling method for weekly time series</p></td>
       </tr><tr>
         
         <td>
@@ -250,39 +256,51 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="Credentials.html">Credentials</a></code> </p>
+          <p><code><a href="create_profile.html">create_profile()</a></code> </p>
         </td>
-        <td><p>A <code>NSSPCredentials</code> Class Representing a Credentials object</p></td>
+        <td><p>Create a profile with a username and password</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="create_token_profile.html">create_token_profile()</a></code> </p>
+        </td>
+        <td><p>Create a profile with an API token</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_api_data.html">get_api_data()</a></code> </p>
         </td>
-        <td><p>Get ESSENCE API data</p></td>
+        <td><p>Get API data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_api_graph.html">get_api_graph()</a></code> </p>
+        </td>
+        <td><p>Get an API graph</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_api_response.html">get_api_response()</a></code> </p>
         </td>
-        <td><p>Get ESSENCE API response</p></td>
+        <td><p>Get API response</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_api_tsgraph.html">get_api_tsgraph()</a></code> </p>
         </td>
-        <td><p>Get ESSENCE API Time Series Graph</p></td>
+        <td><p>Get an API graph</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_essence_data.html">get_essence_data()</a></code> </p>
+        </td>
+        <td><p>Get ESSENCE data</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="list_templates.html">list_templates()</a></code> </p>
         </td>
         <td><p>List Available Report Templates</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="NSSPContainer.html">NSSPContainer</a></code> </p>
-        </td>
-        <td><p>A <code>NSSPCredentials</code> Class to store a value in a container object</p></td>
       </tr><tr>
         
         <td>
@@ -304,9 +322,46 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="run_app.html">run_app()</a></code> </p>
+        </td>
+        <td><p>Run embedded shiny applications</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="webscrape_icd.html">webscrape_icd()</a></code> </p>
         </td>
         <td><p>ICD Code Web Scraper</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-exported-classes" class="hasAnchor"><a href="#section-exported-classes" class="anchor"></a>Exported Classes</h2>
+          <p class="section-desc"><p>Classes exported by the Rnssp package</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="Credentials.html">Credentials</a></code> </p>
+        </td>
+        <td><p>A <code>Credentials</code> Class Representing a Credentials object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="NSSPContainer.html">NSSPContainer</a></code> </p>
+        </td>
+        <td><p>A <code>NSSPContainer</code> Class to store a value or an object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Token.html">Token</a></code> </p>
+        </td>
+        <td><p>A <code>Token</code> Class Representing a Token object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -362,6 +417,12 @@
           <p><code><a href="tribal_sf.html">tribal_sf</a></code> </p>
         </td>
         <td><p>US Native American Lands Shapefile</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="simulated_data.html">simulated_data</a></code> </p>
+        </td>
+        <td><p>Simulated Time Series data</p></td>
       </tr><tr>
         
         <td>

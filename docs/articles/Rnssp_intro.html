@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -65,7 +65,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -112,14 +112,14 @@
 
       
 
-      </header><script src="Rnssp_intro_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="Rnssp_intro_files/header-attrs-2.19/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to the Rnssp package</h1>
                         <h4 class="author"></h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/master/vignettes/Rnssp_intro.Rmd"><code>vignettes/Rnssp_intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/HEAD/vignettes/Rnssp_intro.Rmd"><code>vignettes/Rnssp_intro.Rmd</code></a></small>
       <div class="hidden name"><code>Rnssp_intro.Rmd</code></div>
 
     </div>
@@ -129,8 +129,15 @@
 <div id="introduction" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>The goal of <code>Rnssp</code> package is to facilitate the access to the Electronic Surveillance System for the Early Notification of Community-based Epidemics (<code>ESSENCE</code>) via a secure and simplified interface. In addition, <code>Rnssp</code> provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.</p>
-<p>In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:</p>
+<p>The goal of <code>Rnssp</code> package is to facilitate the access to
+the Electronic Surveillance System for the Early Notification of
+Community-based Epidemics (<code>ESSENCE</code>) via a secure and
+simplified interface. In addition, <code>Rnssp</code> provides methods
+and functions that streamline the data pull by abstracting the
+complexity of the R codes from the users.</p>
+<p>In this vignette, we explained how to create an NSSP user profile,
+and provide various examples to how to use it to pull data from ESSENCE
+using the following ESSENCE APIs:</p>
 <ol style="list-style-type: decimal">
 <li>Time series data table,</li>
 <li>Time series png image,</li>
@@ -138,7 +145,8 @@
 <li>Data details (line level),</li>
 <li>Summary stats</li>
 <li>Alert list detection table</li>
-<li>Time series data table with stratified, historical alerts (from ESSENCE2)</li>
+<li>Time series data table with stratified, historical alerts (from
+ESSENCE2)</li>
 </ol>
 </div>
 <div id="creating-an-nssp-user-profile" class="section level1 unnumbered">
@@ -146,259 +154,305 @@
 <a href="#creating-an-nssp-user-profile" class="anchor"></a>Creating an NSSP user profile</h1>
 <p>We start by loading the <code>Rnssp</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Loading useful R packages...</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CDCgov/Rnssp">Rnssp</a></span><span class="op">)</span></code></pre></div>
-<p>The next step is to create an NSSP user profile by creating an object of the class <code>Credentials</code>. The <code>Credentials</code> class has been designed with the R6 object system which integrates classical Object Oriented Programing concepts into R.</p>
+<code class="sourceCode R"><span><span class="co"># Loading useful R packages...</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span></code></pre></div>
+<p>The next step is to create an NSSP user profile by creating an object
+of the class <code>Credentials</code>. The <code>Credentials</code>
+class has been designed with the R6 object system which integrates
+classical Object Oriented Programming concepts into R. Here, we use the
+<code><a href="../reference/create_profile.html">create_profile()</a></code> function to create a user profile.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Creating an ESSENCE user profile</span>
-<span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/Credentials.html">Credentials</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  username <span class="op">=</span> <span class="fu"><a href="../reference/askme.html">askme</a></span><span class="op">(</span><span class="st">"Enter your username: "</span><span class="op">)</span>, 
-  password <span class="op">=</span> <span class="fu"><a href="../reference/askme.html">askme</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="co"># save profile object to file for future use</span>
-<span class="co"># save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")</span>
-<span class="co"># Load profile object</span>
-<span class="co"># load("myProfile.rda") # myProfile &lt;- readRDS("myProfile.rds")</span></code></pre></div>
-<p>The above code needs to be executed only once. Upon execution, it prompts the user to provide his username and password. Although, the username and password can be directly provided in plain texts, we <strong>highly recommend the use of the askme() function</strong> to interactively enter the user NSSP credentials (as shown above).</p>
-<p>Alternatively, the <code>myProfile</code> object can be saved on file as an <code>.RData</code> (<code>.rda</code>) or <code>.rds</code> file and loaded to automate Rmarkdown reports generation.</p>
-<p>Be assured that your password is highly protected and completely insulated from being accessible in plain text. In fact, both password and username are fully encrypted, even the encrypted texts are not available for display as shown (below) when the <code>myProfile</code> object is inspected.</p>
+<code class="sourceCode R"><span><span class="co"># Creating an ESSENCE user profile</span></span>
+<span><span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_profile.html">create_profile</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># save profile object to file for future use</span></span>
+<span><span class="co"># save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")</span></span>
+<span><span class="co"># Load profile object</span></span>
+<span><span class="co"># load("myProfile.rda") # myProfile &lt;- readRDS("myProfile.rds")</span></span></code></pre></div>
+<p>The above code needs to be executed only once. Upon execution, it
+prompts the user to provide his username and password. Although, the
+username and password can be directly provided in plain texts, we
+<strong>highly recommend the use of the askme() function</strong> to
+interactively enter the user NSSP credentials (as shown above).</p>
+<p>Alternatively, the <code>myProfile</code> object can be saved on file
+as an <code>.RData</code> (<code>.rda</code>) or <code>.rds</code> file
+and loaded to automate Rmarkdown reports generation.</p>
+<p>Be assured that your password is highly protected and completely
+insulated from being accessible in plain text. In fact, both password
+and username are fully encrypted, even the encrypted texts are not
+available for display as shown (below) when the <code>myProfile</code>
+object is inspected.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Inspecting the myProfile object</span>
-<span class="va">myProfile</span>
-<span class="co">#&gt; &lt;NSSPCredentials&gt;</span>
-<span class="co">#&gt;   Public:</span>
-<span class="co">#&gt;     clone: function (deep = FALSE) </span>
-<span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span>
-<span class="co">#&gt;     get_api_response: function (url) </span>
-<span class="co">#&gt;     get_api_tsgraph: function (url) </span>
-<span class="co">#&gt;     initialize: function (username, password) </span>
-<span class="co">#&gt;   Private:</span>
-<span class="co">#&gt;     ..__: NSSPContainer, R6</span>
-<span class="co">#&gt;     ..password: NSSPContainer, R6</span>
-<span class="co">#&gt;     ..username: NSSPContainer, R6</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Inspecting the myProfile object</span></span>
+<span><span class="va">myProfile</span></span>
+<span><span class="co">#&gt; &lt;NSSPCredentials&gt;</span></span>
+<span><span class="co">#&gt;   Public:</span></span>
+<span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
+<span><span class="co">#&gt;     get_api_graph: function (url, file_ext = ".png") </span></span>
+<span><span class="co">#&gt;     get_api_response: function (url) </span></span>
+<span><span class="co">#&gt;     get_api_tsgraph: function (url) </span></span>
+<span><span class="co">#&gt;     initialize: function (username, password) </span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     ..__: NSSPContainer, R6</span></span>
+<span><span class="co">#&gt;     ..password: NSSPContainer, R6</span></span>
+<span><span class="co">#&gt;     ..username: NSSPContainer, R6</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Alternatively, you may look at the structure of the myProfile object</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">myProfile</span><span class="op">)</span> <span class="co"># or `structure(myProfile)`</span>
-<span class="co">#&gt; Classes 'NSSPCredentials', 'R6' &lt;NSSPCredentials&gt;</span>
-<span class="co">#&gt;   Public:</span>
-<span class="co">#&gt;     clone: function (deep = FALSE) </span>
-<span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span>
-<span class="co">#&gt;     get_api_response: function (url) </span>
-<span class="co">#&gt;     get_api_tsgraph: function (url) </span>
-<span class="co">#&gt;     initialize: function (username, password) </span>
-<span class="co">#&gt;   Private:</span>
-<span class="co">#&gt;     ..__: NSSPContainer, R6</span>
-<span class="co">#&gt;     ..password: NSSPContainer, R6</span>
-<span class="co">#&gt;     ..username: NSSPContainer, R6</span></code></pre></div>
-<p>The created <code>myProfile</code> object comes with the <code>$get_api_response()</code>, <code>$get_api_data()</code>, and <code>$get_api_tsgraph()</code> methods with various parameters to pull ESSENCE data. Alternatively, the <code><a href="../reference/get_api_response.html">get_api_response()</a></code>, <code><a href="../reference/get_api_data.html">get_api_data()</a></code>, and <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code> functions serve as wrappers to their respective methods.</p>
-<p>For a full documentation on all the methods available, execute the <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in the R console. Similarly, execute <code>?get_api_response()</code>, <code>?get_api_data()</code>, or <code>?get_api_tsgraph()</code> for a full documentation on each function.</p>
-<p>In the following sections, we show how to pull data from ESSENCE using the seven APIs listed above.</p>
+<code class="sourceCode R"><span><span class="co"># Alternatively, you may look at the structure of the myProfile object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">myProfile</span><span class="op">)</span> <span class="co"># or `structure(myProfile)`</span></span>
+<span><span class="co">#&gt; Classes 'NSSPCredentials', 'R6' &lt;NSSPCredentials&gt;</span></span>
+<span><span class="co">#&gt;   Public:</span></span>
+<span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
+<span><span class="co">#&gt;     get_api_graph: function (url, file_ext = ".png") </span></span>
+<span><span class="co">#&gt;     get_api_response: function (url) </span></span>
+<span><span class="co">#&gt;     get_api_tsgraph: function (url) </span></span>
+<span><span class="co">#&gt;     initialize: function (username, password) </span></span>
+<span><span class="co">#&gt;   Private:</span></span>
+<span><span class="co">#&gt;     ..__: NSSPContainer, R6</span></span>
+<span><span class="co">#&gt;     ..password: NSSPContainer, R6</span></span>
+<span><span class="co">#&gt;     ..username: NSSPContainer, R6</span></span></code></pre></div>
+<p>The created <code>myProfile</code> object comes with the
+<code>$get_api_response()</code>, <code>$get_api_data()</code>,
+<code>$get_api_graph()</code> and <code>$get_api_tsgraph()</code>
+methods with various parameters to pull ESSENCE data. Alternatively, the
+<code><a href="../reference/get_api_response.html">get_api_response()</a></code>, <code><a href="../reference/get_api_data.html">get_api_data()</a></code>,
+<code><a href="../reference/get_api_graph.html">get_api_graph()</a></code> and <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code>
+functions serve as wrappers to their respective methods.</p>
+<p>For a full documentation on all the methods available, execute the
+<code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in
+the R console. Similarly, execute <code>?get_api_response()</code>,
+<code>?get_api_data()</code>, <code>?get_api_graph()</code> or
+<code>?get_api_tsgraph()</code> for a full documentation on each
+function.</p>
+<p>In the following sections, we show how to pull data from ESSENCE
+using the seven APIs listed above.</p>
 </div>
 <div id="time-series-data-table" class="section level1">
 <h1 class="hasAnchor">
 <a href="#time-series-data-table" class="anchor"></a>Time Series Data Table</h1>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
-
-<span class="co"># pull time series data</span>
-<span class="va">api_data_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data_ts &lt;- myProfile$get_api_data(url)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span>
-<span class="co">#&gt; [1] "title"          "timeSeriesData"</span>
-<span class="co"># glimpse(api_data_ts$timeSeriesData)</span></code></pre></div>
-<p>Alternatively, the example below could be performed via the <code>$get_api_response()</code> method (as shown below), but with extra steps:</p>
+<code class="sourceCode R"><span><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
+<span></span>
+<span><span class="co"># pull time series data</span></span>
+<span><span class="va">api_data_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data_ts &lt;- myProfile$get_api_data(url)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "title"          "timeSeriesData"</span></span>
+<span><span class="co"># glimpse(api_data_ts$timeSeriesData)</span></span></code></pre></div>
+<p>Alternatively, the example below with the
+<code><a href="../reference/get_api_response.html">get_api_response()</a></code> function achieves the same outcome as
+previously (<em>we recommend using this for debugging
+purposes</em>):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
-
-<span class="co"># pull time series data</span>
-<span class="va">api_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_response.html">get_api_response</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> 
-
-<span class="va">api_response_content</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html">content</a></span><span class="op">(</span><span class="va">api_response</span>, as <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span>
-<span class="va">api_data_ts2</span> <span class="op">&lt;-</span> <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="va">api_response_content</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">$</span><span class="va">timeSeriesData</span><span class="op">)</span>
-<span class="co">#&gt; [1] "date"     "count"    "expected" "levels"   "colorID"  "color"    "altText" </span>
-<span class="co">#&gt; [8] "details"</span>
-
-<span class="co"># glimpse(api_data_ts2$timeSeriesData)</span></code></pre></div>
-<p>Although, we present the alternate code above, the following sections will only demonstrate the direct approach using the <code>$get_api_data()</code> method. The alternate code can nevertheless be easily adapted to the other types of ESSENCE API data pulls.</p>
+<code class="sourceCode R"><span><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
+<span></span>
+<span><span class="co"># pull time series data</span></span>
+<span><span class="va">api_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_response.html">get_api_response</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">api_response_content</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html">content</a></span><span class="op">(</span><span class="va">api_response</span>, as <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="va">api_data_ts2</span> <span class="op">&lt;-</span> <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="va">api_response_content</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">$</span><span class="va">timeSeriesData</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "date"     "count"    "expected" "levels"   "colorID"  "color"    "altText" </span></span>
+<span><span class="co">#&gt; [8] "details"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_ts2$timeSeriesData)</span></span></code></pre></div>
+<p>Although, we present the alternate code above, the following sections
+will only demonstrate the direct approach using the
+<code><a href="../reference/get_api_data.html">get_api_data()</a></code> function The alternate code can nevertheless
+be easily adapted to the other types of ESSENCE API data pulls.</p>
 </div>
 <div id="time-series-graph-from-essence" class="section level1">
 <h1 class="hasAnchor">
 <a href="#time-series-graph-from-essence" class="anchor"></a>Time Series Graph from ESSENCE</h1>
-<p>The example below shows how to retrieve the Time Series Graph from ESSENCE and insert it in the Rmarkdown report.</p>
+<p>The example below shows how to retrieve the Time Series Graph from
+ESSENCE and insert it in the Rmarkdown report.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from ESSENCE Time Series Graph from ESSENCE API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span>
-
-<span class="co"># Data pull from ESSENCE</span>
-<span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_tsgraph.html">get_api_tsgraph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="co"># Inspecting api_data_graph object</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span>
-<span class="co">#&gt; [1] "api_response" "tsgraph"</span>
-
-<span class="co"># Inserting graph in the report</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">tsgraph</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from ESSENCE Time Series Graph from ESSENCE API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span></span>
+<span></span>
+<span><span class="co"># Data pull from ESSENCE</span></span>
+<span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_tsgraph.html">get_api_tsgraph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspecting api_data_graph object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "api_response" "tsgraph"</span></span>
+<span></span>
+<span><span class="co"># Inserting graph in the report</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">tsgraph</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="table-builder-results" class="section level1">
 <h1 class="hasAnchor">
 <a href="#table-builder-results" class="anchor"></a>Table Builder Results</h1>
-<p>The CSV option of the Table Builder Results API pulls in data in the tabular format seen on ESSENCE. The JSON option on the other hand, pulls in the data in a long, pivoted format. In the following subsections, we demonstrate how to pull the Table Builder results data with both options.</p>
+<p>The CSV option of the Table Builder Results API pulls in data in the
+tabular format seen on ESSENCE. The JSON option on the other hand, pulls
+in the data in a long, pivoted format. In the following subsections, we
+demonstrate how to pull the Table Builder results data with both
+options.</p>
 <div id="csv-option" class="section level2">
 <h2 class="hasAnchor">
 <a href="#csv-option" class="anchor"></a>CSV option</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from CSV ESSENCE Table Builder results API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># Inspecting api_data_graph object</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> 
-<span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span>
-
-<span class="co"># glimpse(api_data_tb_csv)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from CSV ESSENCE Table Builder results API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspecting api_data_graph object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_tb_csv)</span></span></code></pre></div>
 </div>
 <div id="json-option" class="section level2">
 <h2 class="hasAnchor">
 <a href="#json-option" class="anchor"></a>JSON option</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Table Builder results API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tb_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span>
-<span class="co">#&gt; [1] "data.frame"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span>
-<span class="co">#&gt; [1] "timeResolution"              "geographyhospitaldhhsregion"</span>
-<span class="co">#&gt; [3] "ageNCHS"                     "count"</span>
-
-<span class="co"># glimpse(api_data_tb_json)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Table Builder results API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_tb_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "data.frame"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "timeResolution"              "geographyhospitaldhhsregion"</span></span>
+<span><span class="co">#&gt; [3] "ageNCHS"                     "count"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_tb_json)</span></span></code></pre></div>
 </div>
 </div>
 <div id="data-details-line-level" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-details-line-level" class="anchor"></a>Data Details (line level)</h1>
-<p>Similarly to the Table builder Results API, the Data Details (line level) provides CSV and JSON data outputs.</p>
+<p>Similarly to the Table builder Results API, the Data Details (line
+level) provides CSV and JSON data outputs.</p>
 <div id="csv-option-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#csv-option-1" class="anchor"></a>CSV option</h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from CSV ESSENCE Data Details (line level) API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;startDate=31Jan2021&amp;endDate=31Jan2021"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_dd_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_csv</span><span class="op">)</span>  
-<span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span>
-
-<span class="co"># glimpse(api_data_dd_csv)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from CSV ESSENCE Data Details (line level) API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;startDate=31Jan2021&amp;endDate=31Jan2021"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_dd_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_csv</span><span class="op">)</span>  </span>
+<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_dd_csv)</span></span></code></pre></div>
 </div>
 <div id="json-option-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#json-option-1" class="anchor"></a>JSON option</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Data Details (line level) API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?endDate=31Jan2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=31Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=DataDetails"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_dd_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span>
-<span class="co">#&gt; [1] "dataDetails"</span>
-
-<span class="co"># glimpse(api_data_dd_json$dataDetails)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Data Details (line level) API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?endDate=31Jan2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=31Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=DataDetails"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_dd_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "dataDetails"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_dd_json$dataDetails)</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-stats" class="section level1">
 <h1 class="hasAnchor">
 <a href="#summary-stats" class="anchor"></a>Summary Stats</h1>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Summary Stats API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/summaryData?endDate=31Jan2021&amp;medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hosp&amp;detector=probrepswitch&amp;startDate=29Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span>
-<span class="co">#&gt; [1] "summaryData"</span>
-
-<span class="co"># glimpse(api_data_ss$summaryData)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Summary Stats API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/summaryData?endDate=31Jan2021&amp;medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hosp&amp;detector=probrepswitch&amp;startDate=29Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "summaryData"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_ss$summaryData)</span></span></code></pre></div>
 </div>
 <div id="alert-list-detection-table" class="section level1">
 <h1 class="hasAnchor">
 <a href="#alert-list-detection-table" class="anchor"></a>Alert List Detection Table</h1>
-<p>Since the Alert List API provides programmatic access to the Alert List table on the ESSENCE user interface by patient region or by hospital regions, we provide two use cases of data pull in the following subsections:</p>
+<p>Since the Alert List API provides programmatic access to the Alert
+List table on the ESSENCE user interface by patient region or by
+hospital regions, we provide two use cases of data pull in the following
+subsections:</p>
 <div id="alert-list-detection-table-by-patient-region" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alert-list-detection-table-by-patient-region" class="anchor"></a>Alert List Detection Table by Patient Region</h2>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_alr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span>
-<span class="co">#&gt; [1] "regionSyndromeAlerts"</span>
-
-<span class="co"># glimpse(api_data_alr$regionSyndromeAlerts)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_alr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "regionSyndromeAlerts"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_alr$regionSyndromeAlerts)</span></span></code></pre></div>
 </div>
 <div id="alert-list-detection-table-by-hospital-region" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alert-list-detection-table-by-hospital-region" class="anchor"></a>Alert List Detection Table by Hospital Region</h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/hospitalSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_alh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span>
-<span class="co">#&gt; [1] "hospitalSyndromeAlerts"</span>
-
-<span class="co"># glimpse(api_data_alh$hospitalSyndromeAlerts)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/hospitalSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_alh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hospitalSyndromeAlerts"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_alh$hospitalSyndromeAlerts)</span></span></code></pre></div>
 </div>
 </div>
 <div id="time-series-data-table-with-stratified-historical-alerts-from-essence2" class="section level1">
 <h1 class="hasAnchor">
-<a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from ESSENCE2)</h1>
-<p>This functionality as of March 16, 2022 is available from ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from the one you define for ESSENCE above, you will have to recreate another profile object for ESSENCE 2 and use it to run the code below. In this example, it is assumed that the same user profile has been used for both ESSENCE and ESSENCE 2.</p>
+<a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from
+ESSENCE2)</h1>
+<p>This functionality as of February 10, 2023 is available from
+ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from
+the one you define for ESSENCE above, you will have to recreate another
+profile object for ESSENCE 2 and use it to run the code below. In this
+example, it is assumed that the same user profile has been used for both
+ESSENCE and ESSENCE 2.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span>
-
-<span class="co"># Data Pull from ESSENCE</span>
-<span class="va">api_data_tssh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span>
-<span class="co">#&gt; [1] "list"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span>
-<span class="co">#&gt; [1] "timeSeriesData"</span>
-
-<span class="co"># glimpse(api_data_tssh$timeSeriesData)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span></span>
+<span></span>
+<span><span class="co"># Data Pull from ESSENCE</span></span>
+<span><span class="va">api_data_tssh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "timeSeriesData"</span></span>
+<span></span>
+<span><span class="co"># glimpse(api_data_tssh$timeSeriesData)</span></span></code></pre></div>
 </div>
   </div>
 
