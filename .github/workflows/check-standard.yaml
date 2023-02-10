@@ -12,7 +12,7 @@ jobs:
   node-docker:
     runs-on: ubuntu-latest
     container:
-      image: rocker/geospatial:4.0.2-ubuntugis
+      image: rocker/geospatial:4.2.2-ubuntugis
     steps:
       - name: Checkout Rnssp repository code
         uses: actions/checkout@v2
