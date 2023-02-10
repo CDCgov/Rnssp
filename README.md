@@ -20,7 +20,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # install the Rnssp package
-devtools::install_github("cdcgov/Rnssp@dev")
+devtools::install_github("cdcgov/Rnssp")
 ```
 
 
@@ -35,7 +35,10 @@ This is a basic example which shows you how to:
 ``` r
 library(Rnssp)
 
-## Creating an NSSP user profile
+## Creating a user profile (token)
+myProfile <- create_token_profile()
+
+## Creating a user profile (username and password)
 myProfile <- create_profile()
 
 ## Inspect your `myProfile` confirming that username and password are completely hidden
@@ -64,8 +67,16 @@ Should you want to contribute to this project, submit a push request to this Git
 If you encounter a clear bug, please consider emailing the author at gazondekon@cdc.gov and/or file an issue with a minimal reproducible example.
 
 ## Citing the `Rnssp` package
-```r
-citation("Rnssp")
+```tex
+@software{Azondekon_Rnssp_A_Signature_2023,
+  author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
+  license = {Apache License (>= 2)},
+  month = {2},
+  title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
+  url = {https://github.com/CDCgov/Rnssp},
+  version = {0.2.0},
+  year = {2023}
+}
 ```
 
 ## Public Domain Standard Notice
