@@ -33,7 +33,9 @@ helpPopup <- function(
     title,
     content,
     placement=c('right', 'top', 'left', 'bottom'),
-    trigger=c('click', 'hover', 'focus', 'manual')
+    trigger=c('click', 'hover', 'focus', 'manual'),
+    icon_name = "question-circle",
+    icon_style = "color:red"
 ) {
   tagList(
     singleton(
@@ -51,8 +53,8 @@ helpPopup <- function(
       `data-animation` = TRUE,
       `data-placement` = match.arg(placement, several.ok=TRUE)[1],
       `data-trigger` = match.arg(trigger, several.ok=TRUE)[1],
-      
-      shiny::icon(name = "question-circle", class = "shinyhelper-icon", style="color:red")
+
+      shiny::icon(name = icon_name, class = "shinyhelper-icon", style = icon_style)
     )
   )
 }
@@ -80,7 +82,7 @@ if(load_profile){
   if (!any(endsWith(prof_file, c(".rda", ".rds")))) {
     cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rds} file")
   }
-  
+
   if(all(endsWith(tolower(prof_file), ".rda"))){
     myProfile <- get(load(prof_file))
   } else {
@@ -330,6 +332,20 @@ ui <- tagList(
           actionButton("go", "Load Data")
         ),
         mainPanel(
+          helpPopup(
+            id = "", title = "",
+            content = paste0(
+              "The settings allow testing of an ‘m-out-of-n’ alerting criterion, ",
+              "meaning ‘m alerts in the last n days. The settings allow you to set ",
+              "an alert if there are (m out of n red alerts) OR (m out of n yellow alerts), ",
+              "with an option to require a minimum number of records in the last n days. ",
+              "The p-value limits may also be changed from the default values of 0.01 ",
+              "for red and 0.05 for yellow alerts."
+            ),
+            placement = "bottom", trigger = "focus",
+            icon_name = "bell",
+            icon_style = "color:blue;font-size:15px"
+          ),
           br(), br(),
           fluidRow(
             tableOutput("table")
@@ -369,7 +385,7 @@ server <- function(input, output, session) {
       server = TRUE
     )
   })
-  
+
   observeEvent(input$State2, {
     updateSelectizeInput(
       session,
@@ -381,20 +397,20 @@ server <- function(input, output, session) {
       server = TRUE
     )
   })
-  
+
   # To avoid RStudio timeouts -- server code
   output$keepAlive <- renderText({
     req(input$count)
     paste("keep alive ", input$count)
   })
-  
+
   output$summary <- renderPrint(
     {
       summary(df1()$count)
     },
     width = 10
   )
-  
+
   url <- eventReactive(input$go, {
     input$County %>%
       tolower() %>%
@@ -404,7 +420,7 @@ server <- function(input, output, session) {
              url3, input$Detector, url4) %>%
       change_dates(input$StartDate, input$EndDate)
   })
-  
+
   df1 <- reactive({
     api_data <- myProfile$get_api_data(url())
     df <- api_data$timeSeriesData
@@ -424,7 +440,7 @@ server <- function(input, output, session) {
         blueCounts = ifelse(is.na(redCounts) & is.na(yellowCounts), count, NA)
       )
   })
-  
+
   output$table <- renderTable({
     nrCriteria <- sum(df1()$criterion > 0, na.rm = TRUE)
     nrRed <- sum(!is.na(df1()$redCounts))
@@ -440,11 +456,11 @@ server <- function(input, output, session) {
     names(df_table) <- tableNames
     df_table
   })
-  
+
   oPlot <- reactive({
     input$go
     df1()
-    
+
     plt <- plot_ly(data = df1()) %>%
       add_trace(
         x = ~date,
@@ -478,8 +494,8 @@ server <- function(input, output, session) {
           showspikes = TRUE,
           spikemode = "across",
           ticks = "outside",
-          spikedash = "dot", 
-          spikecolor = "black", 
+          spikedash = "dot",
+          spikecolor = "black",
           spikethickness = -2
         ),
         yaxis = list(
@@ -488,8 +504,8 @@ server <- function(input, output, session) {
           rangemode = "tozero",
           ticks = "outside"
         )
-      ) 
-    
+      )
+
     if ("RedYel" %in% input$markers) {
       plt <- plt %>%
         add_markers(
@@ -516,9 +532,9 @@ server <- function(input, output, session) {
           ),
           name = "Alert"
         )
-      
+
     }
-    
+
     if ("Crit" %in% input$markers) {
       plt <- plt %>%
         add_markers(
@@ -534,15 +550,15 @@ server <- function(input, output, session) {
           ),
           name = "Criterion Met"
         )
-      
+
     }
-    
+
     plt %>%
       config(modeBarButtons = list(list("toImage"), list("autoScale2d")))
-    
-    
+
+
   })
-  
+
   output$tsPlotly <- renderPlotly({
     oPlot()
   })
