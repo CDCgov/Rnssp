@@ -7,7 +7,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/CDCgov/Rnssp)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![DOI](https://zenodo.org/badge/369309753.svg)](https://zenodo.org/badge/latestdoi/369309753)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5034152.svg)](https://doi.org/10.5281/zenodo.5034152)
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->
 
