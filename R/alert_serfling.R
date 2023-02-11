@@ -227,12 +227,6 @@ alert_serfling <- function(df, t = date, y = count, baseline_end) {
   # Check for grouping variables
   grouped_df <- is.grouped_df(df)
 
-  base_tbl <- df #%>%
-  #   mutate(
-  #     {{ t }} := as.Date(!!t),
-  #     {{ y }} := as.numeric(!!y)
-  #   )
-
   if (grouped_df) {
     groups <- group_vars(df)
 
