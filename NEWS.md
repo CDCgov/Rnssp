@@ -1,3 +1,7 @@
+# Rnssp 0.2.1
+## Bug Fixes
+The `Credentials` class has been updated. It now interfaces with API services no authorization requirement.
+
 # Rnssp 0.2.0
 
 ## New Features
