@@ -75,6 +75,9 @@ Credentials <- R6::R6Class(
       assertive.types::assert_is_a_string(url)
       apir <- self$get_api_response(url)
       if(apir$status_code == 200){
+        if(any("data.frame" %in% class(httr::content(apir)))){
+          return(httr::content(apir))
+        }
         apir %>% {
           if (fromCSV) {
             httr::content(., by = "text/csv") %>% readr::read_csv(...)
