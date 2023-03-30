@@ -20,7 +20,7 @@ Credentials <- R6::R6Class(
     #' @param username a string for username
     #' @param password a string for password
     #' @return A new \code{Credentials} object
-    initialize = function(username, password) {
+    initialize = function(username = NULL, password = NULL) {
       if (!missing(username)) {
         private$..username <- NSSPContainer$new(safer::encrypt_string(username, key = private$..__$value, ascii = FALSE))
       }
@@ -40,8 +40,9 @@ Credentials <- R6::R6Class(
     #' api_response <- myProfile$get_api_response(url)
     #' }
     get_api_response = function(url) {
-      if (is.null(private$..username$value) | is.null(private$..password$value)) {
-        message("Please, set your credentials (username and password)!")
+      if (is.null(private$..password$value)) {
+        assertive.types::assert_is_a_string(url)
+        res <- httr::GET(url)
       } else {
         assertive.types::assert_is_a_string(url)
         res <- url %>%
@@ -49,10 +50,10 @@ Credentials <- R6::R6Class(
             private$..username$value %>% safer::decrypt_string(., private$..__$value),
             private$..password$value %>% safer::decrypt_string(., private$..__$value)
           ))
-        res$request$options$userpwd <- ""
-        cli::cli_alert_info(httr::http_status(res$status_code)$message)
-        return(res)
       }
+      res$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(res$status_code)$message)
+      return(res)
     },
 
     #' @description
