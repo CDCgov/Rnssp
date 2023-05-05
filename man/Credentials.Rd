@@ -35,19 +35,6 @@ api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 
 ## ------------------------------------------------
-## Method `Credentials$get_api_tsgraph`
-## ------------------------------------------------
-
-\dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "https://httpbin.org/image/png"
-api_data_tsgraph <- myProfile$get_api_tsgraph(url)
-names(api_data_tsgraph)
-img <- png::readPNG(api_data_tsgraph$tsgraph)
-grid::grid.raster(img)
-}
-
-## ------------------------------------------------
 ## Method `Credentials$get_api_graph`
 ## ------------------------------------------------
 
@@ -66,7 +53,6 @@ grid::grid.raster(img)
 \item \href{#method-NSSPCredentials-new}{\code{Credentials$new()}}
 \item \href{#method-NSSPCredentials-get_api_response}{\code{Credentials$get_api_response()}}
 \item \href{#method-NSSPCredentials-get_api_data}{\code{Credentials$get_api_data()}}
-\item \href{#method-NSSPCredentials-get_api_tsgraph}{\code{Credentials$get_api_tsgraph()}}
 \item \href{#method-NSSPCredentials-get_api_graph}{\code{Credentials$get_api_graph()}}
 \item \href{#method-NSSPCredentials-clone}{\code{Credentials$clone()}}
 }
@@ -77,7 +63,7 @@ grid::grid.raster(img)
 \subsection{Method \code{new()}}{
 Initializes a new Credentials object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Credentials$new(username, password)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Credentials$new(username = NULL, password = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -157,41 +143,6 @@ api_data_json <- myProfile$get_api_data(json_url)
 
 csv_url <- "https://httpbin.org/robots.txt"
 api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-NSSPCredentials-get_api_tsgraph"></a>}}
-\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_tsgraph}{}}}
-\subsection{Method \code{get_api_tsgraph()}}{
-Get API graph
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_tsgraph(url)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character of API URL}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A list containing an api_response object and a path to a time series graph in .png format
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-url <- "https://httpbin.org/image/png"
-api_data_tsgraph <- myProfile$get_api_tsgraph(url)
-names(api_data_tsgraph)
-img <- png::readPNG(api_data_tsgraph$tsgraph)
-grid::grid.raster(img)
 }
 }
 \if{html}{\out{</div>}}
