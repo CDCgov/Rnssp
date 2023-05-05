@@ -1,7 +1,7 @@
 context("test-get_api_data")
 
 test_that("get_api_data() function works!", {
-  url <- "http://httpbin.org/json"
+  url <- "https://httpbin.org/json"
   url2 <- "http://httpbin.org/robots.txt"
 
   handle <- Credentials$new("", "")
