@@ -5,7 +5,7 @@ test_that("get_api_data() function works!", {
   url2 <- "http://httpbin.org/robots.txt"
 
   handle <- Credentials$new("", "")
-  handle2 <- Token$new("abc1234567890")
+  handle2 <- Token$new("")
 
   expect_s3_class(handle, "R6")
   expect_s3_class(handle, "NSSPCredentials")
