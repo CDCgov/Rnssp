@@ -1,4 +1,8 @@
 # Rnssp 0.2.1
+## Updates
+* The deprecated `$get_api_tsgraph()` method has been removed.
+* The `get_api_tsgraph` function has been removed as a consequence of the removal of the deprecated `$get_api_tsgraph` method.
+
 ## Bug Fixes
 The `Credentials` class has been updated. It now interfaces with API services no authorization requirement.
 
