@@ -229,6 +229,7 @@ get_essence_data <- function(url, start_date = NULL,
     "timeSeries/graph" = profile$get_api_graph(url_new) %>%
       extract2("graph"),
     "tableBuilder/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
+    "tableBuilder" = profile$get_api_data(url_new, ...),
     "dataDetails" = profile$get_api_data(url_new) %>%
       extract2("dataDetails"),
     "dataDetails/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
