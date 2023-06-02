@@ -368,7 +368,7 @@ Each baseline model is used to make weekly forecasts for all weeks following the
 
 The  Original Serfling detector can be applied with the `alert_serfling()` function (run `help(alert_serfling)` or `?alert_serfling` in the R console for more).
 
-Using the same simulated time series from the previous examples, the Negative Binomial Regression detector can be applied as below:
+Using the same simulated time series from the previous examples, the Original Serfling detector can be applied as below:
 
 ```{r alert_serfling_detector}
 df_serfling <- alert_serfling(
