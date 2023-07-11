@@ -162,7 +162,7 @@ alert_switch <- function(df, t = date, y = count, B = 28,
       filter(adjusted_r_squared >= 0.60) %>%
       select(-adjusted_r_squared) %>%
       bind_rows(replace_dates) %>%
-      arrange(!!sym(groups), !!enquo(t)) %>%
+      arrange(!!!syms(groups), !!enquo(t)) %>%
       mutate(detector = ifelse(is.na(test_statistic), NA, detector))
   } else {
     combined_out <- alert_tbl_reg %>%
