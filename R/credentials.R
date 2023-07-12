@@ -20,7 +20,7 @@ Credentials <- R6::R6Class(
     #' @param username a string for username
     #' @param password a string for password
     #' @return A new \code{Credentials} object
-    initialize = function(username, password) {
+    initialize = function(username = NULL, password = NULL) {
       if (!missing(username)) {
         private$..username <- NSSPContainer$new(safer::encrypt_string(username, key = private$..__$value, ascii = FALSE))
       }
@@ -40,8 +40,9 @@ Credentials <- R6::R6Class(
     #' api_response <- myProfile$get_api_response(url)
     #' }
     get_api_response = function(url) {
-      if (is.null(private$..username$value) | is.null(private$..password$value)) {
-        message("Please, set your credentials (username and password)!")
+      if (is.null(private$..password$value)) {
+        assertive.types::assert_is_a_string(url)
+        res <- httr::GET(url)
       } else {
         assertive.types::assert_is_a_string(url)
         res <- url %>%
@@ -49,10 +50,10 @@ Credentials <- R6::R6Class(
             private$..username$value %>% safer::decrypt_string(., private$..__$value),
             private$..password$value %>% safer::decrypt_string(., private$..__$value)
           ))
-        res$request$options$userpwd <- ""
-        cli::cli_alert_info(httr::http_status(res$status_code)$message)
-        return(res)
       }
+      res$request$options$userpwd <- ""
+      cli::cli_alert_info(httr::http_status(res$status_code)$message)
+      return(res)
     },
 
     #' @description
@@ -74,6 +75,9 @@ Credentials <- R6::R6Class(
       assertive.types::assert_is_a_string(url)
       apir <- self$get_api_response(url)
       if(apir$status_code == 200){
+        if(any("data.frame" %in% class(httr::content(apir)))){
+          return(httr::content(apir))
+        }
         apir %>% {
           if (fromCSV) {
             httr::content(., by = "text/csv") %>% readr::read_csv(...)
@@ -82,32 +86,6 @@ Credentials <- R6::R6Class(
           }
         }
       }
-    },
-
-    #' @description
-    #' Get API graph
-    #' @param url a character of API URL
-    #' @return A list containing an api_response object and a path to a time series graph in .png format
-    #' @examples
-    #' \dontrun{
-    #' myProfile <- Credentials$new(askme("Enter my username: "), askme())
-    #' url <- "https://httpbin.org/image/png"
-    #' api_data_tsgraph <- myProfile$get_api_tsgraph(url)
-    #' names(api_data_tsgraph)
-    #' img <- png::readPNG(api_data_tsgraph$tsgraph)
-    #' grid::grid.raster(img)
-    #' }
-    get_api_tsgraph = function(url) {
-      .Deprecated("get_api_graph")
-      tsgraph <- tempfile(fileext = ".png")
-      apir <- url %>%
-        httr::GET(., httr::authenticate(
-          private$..username$value %>% safer::decrypt_string(., private$..__$value),
-          private$..password$value %>% safer::decrypt_string(., private$..__$value)
-        ), httr::write_disk(tsgraph, overwrite = TRUE))
-      apir$request$options$userpwd <- ""
-      cli::cli_alert_info(httr::http_status(apir$status_code)$message)
-      list("api_response" = apir, "tsgraph" = tsgraph)
     },
 
     #' @description
