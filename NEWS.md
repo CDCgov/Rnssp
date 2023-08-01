@@ -6,7 +6,7 @@
 ## Bug Fixes
 * The `Credentials` class has been updated. It now interfaces with API services no authorization requirement.
 * The `get_essence_data()` function has been upgraded to accommodate the table builder ESSENCE API.
-* The `change_dates()` function has been upgraded to fix a flip-flopping start and end date values ([#13](https://github.com/CDCgov/Rnssp/issues/13))
+* The `change_dates()` function has been upgraded to fix flip-flopping start and end date values ([#13](https://github.com/CDCgov/Rnssp/issues/13))
 
 # Rnssp 0.2.0
 
