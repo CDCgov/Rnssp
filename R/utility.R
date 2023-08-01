@@ -238,18 +238,18 @@ change_dates <- function(url, start_date = NULL, end_date = NULL) {
       str_trim()
   }
   new_startd <- ifelse(nchar(new_start) > 7,
-    as.Date(new_start, "%e%b%Y"),
-    as.Date(new_start, "%e%b%y")
+                       as.Date(new_start, "%e%b%Y"),
+                       as.Date(new_start, "%e%b%y")
   )
   new_endd <- ifelse(nchar(new_end) > 7,
-    as.Date(new_end, "%e%b%Y"),
-    as.Date(new_end, "%e%b%y")
+                     as.Date(new_end, "%e%b%Y"),
+                     as.Date(new_end, "%e%b%y")
   )
   if (new_startd > new_endd) {
     cli::cli_abort("Start Date {.field {new_start}} is posterior to End Date {.field {new_end}}.")
   }
-  str_replace(url, old_end, new_end) %>%
-    str_replace(., old_start, new_start) %>%
+  str_replace(url, paste0(prefixes[["epref"]], old_end), paste0(prefixes[["epref"]], new_end)) %>%
+    str_replace(., paste0(prefixes[["spref"]], old_start), paste0(prefixes[["spref"]], new_start)) %>%
     gsub("[[:space:]]", "", .)
 }
 
