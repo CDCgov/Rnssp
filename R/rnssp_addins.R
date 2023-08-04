@@ -434,7 +434,7 @@ run_app_gui <- function() {
     output$table <- DT::renderDataTable({
       datatable2(
         x = app_df,
-        vars = c("name", "description"),#, "documentation"),
+        vars = names(app_df)[2:(ncol(app_df) - 1)],#, "documentation"),
         opts = list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px")
       )
     })
