@@ -61,7 +61,7 @@ add_rmd_template_gui <- function() {
 
       pos <- pos[pos <= ncol(x)] + 1
       rownames(x) <- NULL
-      if (nrow(x) > 0) x <- cbind(" " = "&oplus;", x)
+      if (nrow(x) > 0) x <- cbind(" " = "&#x25B6;", x)
 
       # options
       opts <- c(
