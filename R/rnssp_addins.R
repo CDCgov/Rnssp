@@ -310,7 +310,7 @@ create_user_profile_gui <- function() {
 #'
 #' @keywords internal
 #'
-run_apps_gui <- function() {
+run_app_gui <- function() {
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Run Rnssp Shinyapps",
