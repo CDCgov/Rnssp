@@ -322,3 +322,46 @@ list_templates <- function(as.table = FALSE) {
     templates
   }
 }
+
+#' List Available Shinyapps
+#'
+#' List available NSSP Shinyapps from the Rnssp-shiny-apps Github repository.
+#'
+#' @param as.table a logical, if TRUE, a data frame is returned.
+#'      Otherwise, a vector is returned (Default is FALSE).
+#'
+#' @return A data frame or a vector
+#' @seealso \href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-rmd-templates}
+#' @export
+#'
+#' @examples
+#' list_apps()
+#' list_apps(as.table = TRUE)
+list_apps <- function(as.table = FALSE) {
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-shiny-apps/git/trees/master?recursive=1")
+  repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-shiny-apps/master"
+  httr::stop_for_status(req)
+  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = F)
+  apps <- unique(dirname(filelist[grepl("/app.yaml$", filelist)]))
+  if (as.table) {
+    do.call(
+      rbind.data.frame,
+      lapply(
+        apps,
+        function(app) {
+          tibble::add_column(
+            tibble::as_tibble(
+              yaml::read_yaml(
+                file.path(repoURL, app, "app.yaml")
+              )
+            ),
+            .before = 1,
+            id = app
+          )
+        }
+      )
+    )
+  } else {
+    apps
+  }
+}
