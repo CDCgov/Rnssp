@@ -39,7 +39,8 @@ run_app <- function(app, launch_browser = TRUE) {
     )
   } else {
     shiny::runGitHub(
-      "https://github.com/CDCgov/Rnssp-shiny-apps", 
+      repo = "Rnssp-shiny-apps", 
+      username = "cdcgov",
       subdir = app, 
       destdir = apps_dir, 
       ref = "master", 
