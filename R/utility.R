@@ -202,7 +202,7 @@ remove_rmd_template <- function(template, pkg = "Rnssp", recursive = TRUE,
 #' # Change end and start dates to respectively "current" and "current - 7 days"
 #' url %>% change_dates(start_date = Sys.Date() - 7, end_date = Sys.Date())
 change_dates <- function(url, start_date = NULL, end_date = NULL) {
-  assertthat::is.string(url)
+  assertions::assert_string(url)
   prefixes <- list(
     epref = url %>%
       regmatches(., regexpr("endDate=\\d+[A-Za-z]+\\d+|end_date=\\d+[A-Za-z]+\\d+", .)) %>%
