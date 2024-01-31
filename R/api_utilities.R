@@ -110,34 +110,6 @@ get_api_response <- function(url, profile = myProfile) {
 
 #' Get an API graph
 #'
-#' A wrapper to the \code{get_api_tsgraph} method defined in the
-#' \code{\link[Rnssp]{Credentials}} class.
-#'
-#' @param url a character of API URL.
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
-#'     Default is \code{myProfile}.
-#'
-#' @seealso \code{\link[Rnssp]{Credentials}}
-#' @return An object of class \code{response}.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' myProfile <- create_profile("", "")
-#' url <- "http://httpbin.org/image/png"
-#'
-#' api_data_tsgraph <- get_api_tsgraph(url)
-#'
-#' names(api_data_tsgraph)
-#' img <- png::readPNG(api_data_tsgraph$tsgraph)
-#' grid::grid.raster(img)
-#' }
-get_api_tsgraph <- function(url, profile = myProfile) {
-  profile$get_api_tsgraph(url = url)
-}
-
-#' Get an API graph
-#'
 #' A wrapper to the \code{get_api_graph} method defined in the
 #' \code{\link[Rnssp]{Credentials}} class.
 #'
@@ -257,6 +229,7 @@ get_essence_data <- function(url, start_date = NULL,
     "timeSeries/graph" = profile$get_api_graph(url_new) %>%
       extract2("graph"),
     "tableBuilder/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
+    "tableBuilder" = profile$get_api_data(url_new, ...),
     "dataDetails" = profile$get_api_data(url_new) %>%
       extract2("dataDetails"),
     "dataDetails/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),

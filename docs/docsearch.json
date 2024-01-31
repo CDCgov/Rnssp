@@ -2,21 +2,21 @@
   "index_name": "rnssp",
   "start_urls": [
     {
-      "url": "https://cdcgov.github.io/Rnssp//index.html",
+      "url": "https://cdcgov.github.io/Rnssp/index.html",
       "selectors_key": "homepage",
       "tags": [
         "homepage"
       ]
     },
     {
-      "url": "https://cdcgov.github.io/Rnssp//reference",
+      "url": "https://cdcgov.github.io/Rnssp/reference",
       "selectors_key": "reference",
       "tags": [
         "reference"
       ]
     },
     {
-      "url": "https://cdcgov.github.io/Rnssp//articles",
+      "url": "https://cdcgov.github.io/Rnssp/articles",
       "selectors_key": "articles",
       "tags": [
         "articles"
@@ -30,7 +30,7 @@
     "/articles/index.html"
   ],
   "sitemap_urls": [
-    "https://cdcgov.github.io/Rnssp//sitemap.xml"
+    "https://cdcgov.github.io/Rnssp/sitemap.xml"
   ],
   "selectors": {
     "homepage": {

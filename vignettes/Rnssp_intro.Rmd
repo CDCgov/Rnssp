@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 # Introduction {-}
 The goal of `Rnssp` package is to facilitate the access to the Electronic Surveillance System for the Early Notification of Community-based Epidemics (`ESSENCE`) via a secure and simplified interface. In addition, `Rnssp` provides methods and functions that streamline the data pull by abstracting the complexity of the R codes from the users.
 
-In this vignette, we explained how to create an NSSP user profile, and provide various examples to how to use it to pull data from ESSENCE using the following ESSENCE APIs:
+In this vignette, we explained how to create a user profile, and provide various examples to how to use it to pull data from NSSP-ESSENCE using the following ESSENCE APIs:
 
 1. Time series data table,
 2. Time series png image,
@@ -48,7 +48,7 @@ We start by loading the `Rnssp` package.
 library(Rnssp)
 ```
 
-The next step is to create an NSSP user profile by creating an object of the class `Credentials`. The `Credentials` class has been designed with the R6 object system which integrates classical Object Oriented Programing concepts into R.
+The next step is to create a user profile with NSSP-ESSENCE user credentials (username and password). The created user profile is an object of class `Credentials` class which has been designed with the R6 system. R6 integrates classical Object Oriented Programming concepts into R. Here, we use the `create_profile()` function to create a user profile.
 
 ```{r load, echo=FALSE, eval=TRUE}
 myProfile <- readRDS("../myProfile.rds")
@@ -57,10 +57,7 @@ myProfile <- readRDS("../myProfile.rds")
 
 ```{r create_profile, eval=FALSE}
 # Creating an ESSENCE user profile
-myProfile <- Credentials$new(
-  username = askme("Enter your username: "), 
-  password = askme()
-)
+myProfile <- create_profile()
 
 # save profile object to file for future use
 # save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
@@ -68,7 +65,8 @@ myProfile <- Credentials$new(
 # load("myProfile.rda") # myProfile <- readRDS("myProfile.rds")
 ```
 
-The above code needs to be executed only once. Upon execution, it prompts the user to provide his username and password. Although, the username and password can be directly provided in plain texts, we **highly recommend the use of the askme() function** to interactively enter the user NSSP credentials (as shown above).
+The above code needs to be executed only once. Upon execution, it prompts the user to provide his username and password. 
+<!-- Although, the username and password can be directly provided in plain texts, we **highly recommend the use of the askme() function** to interactively enter the user NSSP credentials (as shown above). -->
 
 Alternatively, the `myProfile` object can be saved on file as an `.RData` (`.rda`) or `.rds` file and loaded to automate Rmarkdown reports generation.
 
@@ -85,11 +83,11 @@ myProfile
 str(myProfile) # or `structure(myProfile)`
 ```
 
-The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, and `get_api_tsgraph()` functions serve as wrappers to their respective methods. 
+The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, `$get_api_graph()` and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, `get_api_graph()` and `get_api_tsgraph()` functions serve as wrappers to their respective methods. 
 
-For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, or `?get_api_tsgraph()` for a full documentation on each function.
+For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, `?get_api_graph()` or `?get_api_tsgraph()` for a full documentation on each function.
 
-In the following sections, we show how to pull data from ESSENCE using the seven APIs listed above.
+In the following sections, we show how to pull data from NSSP-ESSENCE using the seven APIs listed above.
 
 
 # Time Series Data Table
@@ -105,7 +103,7 @@ names(api_data_ts)
 # glimpse(api_data_ts$timeSeriesData)
 ```
 
-Alternatively, the example below could be performed via the `$get_api_response()` method (as shown below), but with extra steps:
+Alternatively, the example below with the `get_api_response()` function achieves the same outcome as previously (*we recommend using this for debugging purposes*):
 
 ```{r alternate_tsdt}
 # URL from ESSENCE JSON Time Series Data Table API
@@ -123,12 +121,12 @@ names(api_data_ts2$timeSeriesData)
 # glimpse(api_data_ts2$timeSeriesData)
 ```
 
-Although, we present the alternate code above, the following sections will only demonstrate the direct approach using the `$get_api_data()` method. The alternate code can nevertheless be easily adapted to the other types of ESSENCE API data pulls.
+Although, we present the alternate code above, the following sections will only demonstrate the direct approach using the `get_api_data()` function The alternate code can nevertheless be easily adapted to the other types of ESSENCE API data pulls.
 
 
 # Time Series Graph from ESSENCE
 
-The example below shows how to retrieve the Time Series Graph from ESSENCE and insert it in the Rmarkdown report.
+The example below shows how to retrieve the Time Series Graph from NSSP-ESSENCE and insert it in the Rmarkdown report.
 ```{r tsgraph, fig.width=8, fig.height=6, eval=FALSE}
 # URL from ESSENCE Time Series Graph from ESSENCE API
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries&graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&xAxisLabel=Date&yAxisLabel=Count"
@@ -150,7 +148,7 @@ knitr::include_graphics(api_data_graph$tsgraph)
 
 # Table Builder Results
 
-The CSV option of the Table Builder Results API pulls in data in the tabular format seen on ESSENCE. The JSON option on the other hand, pulls in the data in a long, pivoted format. In the following subsections, we demonstrate how to pull the Table Builder results data with both options.
+The CSV option of the Table Builder Results API pulls in data in the tabular format seen on NSSP-ESSENCE. The JSON option on the other hand, pulls in the data in a long, pivoted format. In the following subsections, we demonstrate how to pull the Table Builder results data with both options.
 
 ## CSV option
 
@@ -159,7 +157,7 @@ The CSV option of the Table Builder Results API pulls in data in the tabular for
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
 
 # Data Pull from ESSENCE
-api_data_tb_csv <-get_api_data(url, fromCSV = TRUE)
+api_data_tb_csv <- get_api_data(url, fromCSV = TRUE)
 
 # Inspecting api_data_graph object
 class(api_data_tb_csv) 

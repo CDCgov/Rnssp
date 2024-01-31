@@ -7,7 +7,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/CDCgov/Rnssp)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![DOI](https://zenodo.org/badge/369309753.svg)](https://zenodo.org/badge/latestdoi/369309753)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5034152.svg)](https://doi.org/10.5281/zenodo.5034152)
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->
 
@@ -35,7 +35,10 @@ This is a basic example which shows you how to:
 ``` r
 library(Rnssp)
 
-## Creating an NSSP user profile
+## Creating a user profile (token)
+myProfile <- create_token_profile()
+
+## Creating a user profile (username and password)
 myProfile <- create_profile()
 
 ## Inspect your `myProfile` confirming that username and password are completely hidden
@@ -64,8 +67,16 @@ Should you want to contribute to this project, submit a push request to this Git
 If you encounter a clear bug, please consider emailing the author at gazondekon@cdc.gov and/or file an issue with a minimal reproducible example.
 
 ## Citing the `Rnssp` package
-```r
-citation("Rnssp")
+```tex
+@software{Azondekon_Rnssp_A_Signature_2023,
+  author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
+  license = {Apache License (>= 2)},
+  month = {2},
+  title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
+  url = {https://github.com/CDCgov/Rnssp},
+  version = {0.2.0},
+  year = {2023}
+}
 ```
 
 ## Public Domain Standard Notice

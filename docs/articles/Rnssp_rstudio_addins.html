@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -65,7 +65,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -112,14 +112,14 @@
 
       
 
-      </header><script src="Rnssp_rstudio_addins_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="Rnssp_rstudio_addins_files/header-attrs-2.19/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using Rnssp RStudio Addins</h1>
                         <h4 class="author"></h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/master/vignettes/Rnssp_rstudio_addins.Rmd"><code>vignettes/Rnssp_rstudio_addins.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/HEAD/vignettes/Rnssp_rstudio_addins.Rmd"><code>vignettes/Rnssp_rstudio_addins.Rmd</code></a></small>
       <div class="hidden name"><code>Rnssp_rstudio_addins.Rmd</code></div>
 
     </div>
@@ -140,59 +140,74 @@ img {
 <div id="create-a-user-profile-with-the-gui" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#create-a-user-profile-with-the-gui" class="anchor"></a>Create a User Profile with the GUI</h2>
-<p>Users may create and save a profile via the <em>Create User Profile (GUI)</em> addin menu as shown below:</p>
+<p>Users may create and save a profile via the <em>Create User Profile
+(GUI)</em> addin menu as shown below:</p>
 <p><img src="assets/create_user_profile_gui.gif"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile_gui.html">create_user_profile_gui</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile_gui.html">create_user_profile_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="generate-a-skeleton-to-create-a-user-profile" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#generate-a-skeleton-to-create-a-user-profile" class="anchor"></a>Generate a Skeleton to create a User Profile</h2>
-<p>Alternatively, users may generate a code skeleton in the R console from the <em>Create User Profile (code skeleton)</em> addin as demonstrated below:</p>
+<p>Alternatively, users may generate a code skeleton in the R console
+from the <em>Create User Profile (code skeleton)</em> addin as
+demonstrated below:</p>
 <p><img src="assets/create_user_profile_skeleton.gif"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile.html">create_user_profile</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile.html">create_user_profile</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="listing-available-rnssp-templates" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#listing-available-rnssp-templates" class="anchor"></a>Listing Available Rnssp templates</h2>
-<p>Users may check the list of all the currently available <a href="https://cdcgov.github.io/Rnssp-rmd-templates">Rnssp R Markdown templates</a> with the <em>List Rnssp Templates</em> addin:</p>
+<p>Users may check the list of all the currently available <a href="https://cdcgov.github.io/Rnssp-rmd-templates">Rnssp R Markdown
+templates</a> with the <em>List Rnssp Templates</em> addin:</p>
 <p><img src="assets/list_templates_addins.gif"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="addupdate-rnssp-templates" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#addupdate-rnssp-templates" class="anchor"></a>Add/Update Rnssp Templates</h2>
-<p>A unique feature of the <code>Rnssp</code> package is the ability to add R Markdown templates dynamically to an existing installation of the package. The National Syndromic Surveillance Program (NSSP), in collaboration with its Community of Practice (CoP), develops various R Markdown templates which can be dynamically added or updated via with the <em>Add/Update Rnssp Templates</em> addin:</p>
+<p>A unique feature of the <code>Rnssp</code> package is the ability to
+add R Markdown templates dynamically to an existing installation of the
+package. The National Syndromic Surveillance Program (NSSP), in
+collaboration with its Community of Practice (CoP), develops various R
+Markdown templates which can be dynamically added or updated via with
+the <em>Add/Update Rnssp Templates</em> addin:</p>
 <p><img src="assets/add_update_templates.gif"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/add_rmd_template_gui.html">add_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/add_rmd_template_gui.html">add_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="remove-rnssp-templates" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#remove-rnssp-templates" class="anchor"></a>Remove Rnssp Templates</h2>
-<p>When one or more Rnssp templates are no longer needed, they can be removed via the <em>Remove Rnssp Templates</em> addin:</p>
+<p>When one or more Rnssp templates are no longer needed, they can be
+removed via the <em>Remove Rnssp Templates</em> addin:</p>
 <p><img src="assets/remove_templates.gif"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/remove_rmd_template_gui.html">remove_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/remove_rmd_template_gui.html">remove_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="accessing-package-and-templates-documentations" class="section level2 unnumbered">
 <h2 class="hasAnchor">
-<a href="#accessing-package-and-templates-documentations" class="anchor"></a>Accessing Package and Templates Documentations</h2>
-<p>The <em>Rnssp Templates Documentation</em> and the <em>Rnssp Documentation</em> addins are provided to allow users to easily access respectively, the Rnssp R Markdown templates and the Rnssp package online documentation.</p>
+<a href="#accessing-package-and-templates-documentations" class="anchor"></a>Accessing Package and Templates
+Documentations</h2>
+<p>The <em>Rnssp Templates Documentation</em> and the <em>Rnssp
+Documentation</em> addins are provided to allow users to easily access
+respectively, the Rnssp R Markdown templates and the Rnssp package
+online documentation.</p>
 <div id="rnssp-r-markdown-templates-documentation-addin" class="section level3 unnumbered">
 <h3 class="hasAnchor">
-<a href="#rnssp-r-markdown-templates-documentation-addin" class="anchor"></a>Rnssp R Markdown Templates Documentation Addin</h3>
+<a href="#rnssp-r-markdown-templates-documentation-addin" class="anchor"></a>Rnssp R Markdown Templates Documentation
+Addin</h3>
 <p><img src="assets/templates_doc.png"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_templates_manual.html">rnssp_templates_manual</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_templates_manual.html">rnssp_templates_manual</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="rnssp-package-documentation" class="section level3 unnumbered">
 <h3 class="hasAnchor">
@@ -200,7 +215,7 @@ img {
 <p><img src="assets/package_doc.png"></p>
 <p>Or in the R console :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_manual.html">rnssp_manual</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_manual.html">rnssp_manual</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>

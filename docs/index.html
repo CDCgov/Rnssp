@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Signature R package for the National Syndromic and Surveillance Program (NSSP) • Rnssp</title>
+<title>A Signature R package for the National Syndromic Surveillance Program (NSSP) • Rnssp</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="A Signature R package for the National Syndromic and Surveillance Program (NSSP)">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="A Signature R package for the National Syndromic Surveillance Program (NSSP)">
 <meta property="og:description" content="A collection of tools, functions, and Rmarkdown templates 
     that supports the National Syndromic and Surveillance Program Community of Practice.">
 <meta property="og:image" content="https://cdcgov.github.io/Rnssp/logo.png">
@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -66,7 +66,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -117,103 +117,157 @@
   <div class="contents col-md-9">
 <div id="rnssp-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#rnssp-" class="anchor"></a>Rnssp <a href="https://cdcgov.github.io/Rnssp"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a href="#rnssp-" class="anchor"></a>Rnssp
+<a href="https://cdcgov.github.io/Rnssp"><img src="reference/figures/logo.png" align="right" height="139"></a>
 </h1></div>
 <!-- badges: start -->
 
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>The <strong>Rnssp</strong> R package is a catalog of data processing and analytics tools, templates, and functions commonly used across the National Syndromic Surveillance Program at the Centers for Disease Control and Prevention (CDC). Its goal is to improve code reproducibility, standardize and document reusable functions, facilitate the sharing of routine reports across the NSSP Community of Practice (CoP), and better engage the NSSP CoP.</p>
+<p>The <strong>Rnssp</strong> R package is a catalog of data processing
+and analytics tools, templates, and functions commonly used across the
+National Syndromic Surveillance Program at the Centers for Disease
+Control and Prevention (CDC). Its goal is to improve code
+reproducibility, standardize and document reusable functions, facilitate
+the sharing of routine reports across the NSSP Community of Practice
+(CoP), and better engage the NSSP CoP.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version of <code>Rnssp</code> from GitHub:</p>
+<p>You can install the development version of <code>Rnssp</code> from
+GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install the Rnssp package</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"cdcgov/Rnssp"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install the Rnssp package</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"cdcgov/Rnssp"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>This is a basic example which shows you how to:</p>
 <ul>
-<li>use the <code>Rnssp</code> package to create an NSSP user profile</li>
-<li>and use the NSSP user profile to pull data from ESSENCE via the ESSENCE API</li>
+<li>use the <code>Rnssp</code> package to create an NSSP user
+profile</li>
+<li>and use the NSSP user profile to pull data from ESSENCE via the
+ESSENCE API</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/CDCgov/Rnssp">Rnssp</a></span><span class="op">)</span>
-
-<span class="co">## Creating an NSSP user profile</span>
-<span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/Credentials.html">Credentials</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  username <span class="op">=</span> <span class="fu"><a href="reference/askme.html">askme</a></span><span class="op">(</span><span class="st">"Enter your username: "</span><span class="op">)</span>, 
-  password <span class="op">=</span> <span class="fu"><a href="reference/askme.html">askme</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="co">## Inspect your `myProfile` confirming that username and password are completely hidden</span>
-<span class="va">myProfile</span>
-
-<span class="co">## JSON URL from ESSENCE API</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span>
-
-<span class="co">## Update Start and End dates in ESSENCE API URL</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/change_dates.html">change_dates</a></span><span class="op">(</span><span class="va">url</span>, start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>, end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co">## Pull Time Series Data from ESSENCE</span>
-<span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data &lt;- myProfile$get_api_data(url)</span>
-
-<span class="co">## Inspect data object structure</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data</span><span class="op">)</span>
-
-<span class="co">## Get a glimpse of the pulled dataset</span>
-<span class="fu">glimpse</span><span class="op">(</span><span class="va">api_data</span><span class="op">$</span><span class="va">regionSyndromeAlerts</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Creating a user profile (token)</span></span>
+<span><span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_token_profile.html">create_token_profile</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Creating a user profile (username and password)</span></span>
+<span><span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_profile.html">create_profile</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Inspect your `myProfile` confirming that username and password are completely hidden</span></span>
+<span><span class="va">myProfile</span></span>
+<span></span>
+<span><span class="co">## JSON URL from ESSENCE API</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span></span>
+<span></span>
+<span><span class="co">## Update Start and End dates in ESSENCE API URL</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/change_dates.html">change_dates</a></span><span class="op">(</span><span class="va">url</span>, start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>, end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Pull Time Series Data from ESSENCE</span></span>
+<span><span class="va">api_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data &lt;- myProfile$get_api_data(url)</span></span>
+<span></span>
+<span><span class="co">## Inspect data object structure</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Get a glimpse of the pulled dataset</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">api_data</span><span class="op">$</span><span class="va">regionSyndromeAlerts</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div id="contributing-to-this-project" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing-to-this-project" class="anchor"></a>Contributing to this project</h2>
-<p>Should you want to contribute to this project, submit a push request to this Github repository and consider submitting a request to be added as a developer to <a href="mailto:gazondekon@cdc.gov" class="email">gazondekon@cdc.gov</a>.</p>
+<p>Should you want to contribute to this project, submit a push request
+to this Github repository and consider submitting a request to be added
+as a developer to <a href="mailto:gazondekon@cdc.gov" class="email">gazondekon@cdc.gov</a>.</p>
 </div>
 <div id="getting-help" class="section level2">
 <h2 class="hasAnchor">
 <a href="#getting-help" class="anchor"></a>Getting Help</h2>
-<p>If you encounter a clear bug, please consider emailing the author at <a href="mailto:gazondekon@cdc.gov" class="email">gazondekon@cdc.gov</a> and/or file an issue with a minimal reproducible example.</p>
+<p>If you encounter a clear bug, please consider emailing the author at
+<a href="mailto:gazondekon@cdc.gov" class="email">gazondekon@cdc.gov</a>
+and/or file an issue with a minimal reproducible example.</p>
 </div>
 <div id="citing-the-rnssp-package" class="section level2">
 <h2 class="hasAnchor">
 <a href="#citing-the-rnssp-package" class="anchor"></a>Citing the <code>Rnssp</code> package</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html">citation</a></span><span class="op">(</span><span class="st">"Rnssp"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>@software{Azondekon_Rnssp_A_Signature_2023,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  license = {Apache License (&gt;= 2)},</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  month = {2},</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  url = {https://github.com/CDCgov/Rnssp},</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  version = {0.2.0},</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  year = {2023}</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="public-domain-standard-notice" class="section level2">
 <h2 class="hasAnchor">
 <a href="#public-domain-standard-notice" class="anchor"></a>Public Domain Standard Notice</h2>
-<p>This repository constitutes a work of the United States Government and is not subject to domestic copyright protection under 17 USC ? 105. This repository is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal public domain dedication</a>. All contributions to this repository will be released under the CC0 dedication. By submitting a pull request you are agreeing to comply with this waiver of copyright interest.</p>
+<p>This repository constitutes a work of the United States Government
+and is not subject to domestic copyright protection under 17 USC ? 105.
+This repository is in the public domain within the United States, and
+copyright and related rights in the work worldwide are waived through
+the <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0
+Universal public domain dedication</a>. All contributions to this
+repository will be released under the CC0 dedication. By submitting a
+pull request you are agreeing to comply with this waiver of copyright
+interest.</p>
 </div>
 <div id="license-standard-notice" class="section level2">
 <h2 class="hasAnchor">
 <a href="#license-standard-notice" class="anchor"></a>License Standard Notice</h2>
-<p>The repository utilizes code licensed under the terms of the Apache Software License and therefore is licensed under ASL v2 or later.</p>
-<p>This source code in this repository is free: you can redistribute it and/or modify it under the terms of the Apache Software License version 2, or (at your option) any later version.</p>
-<p>This source code in this repository is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache Software License for more details.</p>
-<p>You should have received a copy of the Apache Software License along with this program. If not, see <a href="http://www.apache.org/licenses/LICENSE-2.0.html" class="uri">http://www.apache.org/licenses/LICENSE-2.0.html</a></p>
-<p>The source code forked from other open source projects will inherit its license.</p>
+<p>The repository utilizes code licensed under the terms of the Apache
+Software License and therefore is licensed under ASL v2 or later.</p>
+<p>This source code in this repository is free: you can redistribute it
+and/or modify it under the terms of the Apache Software License version
+2, or (at your option) any later version.</p>
+<p>This source code in this repository is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+Apache Software License for more details.</p>
+<p>You should have received a copy of the Apache Software License along
+with this program. If not, see <a href="http://www.apache.org/licenses/LICENSE-2.0.html" class="uri">http://www.apache.org/licenses/LICENSE-2.0.html</a></p>
+<p>The source code forked from other open source projects will inherit
+its license.</p>
 </div>
 <div id="privacy-standard-notice" class="section level2">
 <h2 class="hasAnchor">
 <a href="#privacy-standard-notice" class="anchor"></a>Privacy Standard Notice</h2>
-<p>This repository contains only non-sensitive, publicly available data and information. All material and community participation is covered by the <a href="https://github.com/CDCgov/template/blob/master/DISCLAIMER.md">Disclaimer</a> and <a href="https://github.com/CDCgov/template/blob/master/code-of-conduct.md">Code of Conduct</a>. For more information about CDC’s privacy policy, please visit <a href="https://www.cdc.gov/other/privacy.html">http://www.cdc.gov/other/privacy.html</a>.</p>
+<p>This repository contains only non-sensitive, publicly available data
+and information. All material and community participation is covered by
+the <a href="https://github.com/CDCgov/template/blob/master/DISCLAIMER.md">Disclaimer</a>
+and <a href="https://github.com/CDCgov/template/blob/master/code-of-conduct.md">Code
+of Conduct</a>. For more information about CDC’s privacy policy, please
+visit <a href="https://www.cdc.gov/other/privacy.html">http://www.cdc.gov/other/privacy.html</a>.</p>
 </div>
 <div id="contributing-standard-notice" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing-standard-notice" class="anchor"></a>Contributing Standard Notice</h2>
-<p>Anyone is encouraged to contribute to the repository by <a href="https://help.github.com/articles/fork-a-repo">forking</a> and submitting a pull request. (If you are new to GitHub, you might start with a <a href="https://help.github.com/articles/set-up-git">basic tutorial</a>.) By contributing to this project, you grant a world-wide, royalty-free, perpetual, irrevocable, non-exclusive, transferable license to all users under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License v2</a> or later.</p>
-<p>All comments, messages, pull requests, and other submissions received through CDC including this GitHub page may be subject to applicable federal law, including but not limited to the Federal Records Act, and may be archived. Learn more at <a href="http://www.cdc.gov/other/privacy.html">http://www.cdc.gov/other/privacy.html</a>.</p>
+<p>Anyone is encouraged to contribute to the repository by <a href="https://help.github.com/articles/fork-a-repo">forking</a> and
+submitting a pull request. (If you are new to GitHub, you might start
+with a <a href="https://help.github.com/articles/set-up-git">basic
+tutorial</a>.) By contributing to this project, you grant a world-wide,
+royalty-free, perpetual, irrevocable, non-exclusive, transferable
+license to all users under the terms of the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+License v2</a> or later.</p>
+<p>All comments, messages, pull requests, and other submissions received
+through CDC including this GitHub page may be subject to applicable
+federal law, including but not limited to the Federal Records Act, and
+may be archived. Learn more at <a href="http://www.cdc.gov/other/privacy.html">http://www.cdc.gov/other/privacy.html</a>.</p>
 </div>
 <div id="records-management-standard-notice" class="section level2">
 <h2 class="hasAnchor">
 <a href="#records-management-standard-notice" class="anchor"></a>Records Management Standard Notice</h2>
-<p>This repository is not a source of government records, but is a copy to increase collaboration and collaborative potential. All government records will be published through the <a href="http://www.cdc.gov">CDC web site</a>.</p>
+<p>This repository is not a source of government records, but is a copy
+to increase collaboration and collaborative potential. All government
+records will be published through the <a href="http://www.cdc.gov">CDC
+web site</a>.</p>
 </div>
 </div>
   </div>
@@ -249,7 +303,7 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9155-4153" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a> <br><small class="roles"> Author, maintainer, contributor </small> <a href="https://orcid.org/0000-0001-9155-4153" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0003-3660-575X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>

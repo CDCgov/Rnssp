@@ -8,9 +8,9 @@ Description: Generate a user profile skeleton script into the console
 Binding: create_user_profile
 Interactive: true
 
-Name: List Rnssp Templates
-Description: List available NSSP report templates from the Rnssp templates Github repository
-Binding: list_templates
+Name: Run Rnssp Shinyapps
+Description: Run Rnssp Shinyapps from the Rnssp Shinyapps Github repository
+Binding: run_app_gui
 Interactive: true
 
 Name: Add/Update Rnssp Templates

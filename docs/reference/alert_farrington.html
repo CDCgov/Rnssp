@@ -97,7 +97,7 @@ spanning multiple years." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ spanning multiple years." />
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -167,7 +167,7 @@ spanning multiple years." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Farrington Temporal Detector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/master/R/alert_farrington.R'><code>R/alert_farrington.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/HEAD/R/alert_farrington.R'><code>R/alert_farrington.R</code></a></small>
     <div class="hidden name"><code>alert_farrington.Rd</code></div>
     </div>
 
@@ -176,14 +176,24 @@ spanning multiple years." />
 spanning multiple years.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span>, B <span class='op'>=</span> <span class='fl'>4</span>, w <span class='op'>=</span> <span class='fl'>3</span>, method <span class='op'>=</span> <span class='st'>"original"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span><span class='fu'>alert_farrington</span><span class='op'>(</span></span>
+<span>  <span class='va'>df</span>,</span>
+<span>  t <span class='op'>=</span> <span class='va'>date</span>,</span>
+<span>  y <span class='op'>=</span> <span class='va'>count</span>,</span>
+<span>  B <span class='op'>=</span> <span class='fl'>4</span>,</span>
+<span>  g <span class='op'>=</span> <span class='fl'>27</span>,</span>
+<span>  w <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span>  p <span class='op'>=</span> <span class='fl'>10</span>,</span>
+<span>  method <span class='op'>=</span> <span class='st'>"original"</span></span>
+<span><span class='op'>)</span></span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>A dataframe, dataframe extension (e.g., a <code>tibble</code>), or a lazy dataframe</p></td>
+      <td><p>A dataframe, dataframe extension (e.g., a <code>tibble</code>), or
+a lazy dataframe</p></td>
     </tr>
     <tr>
       <th>t</th>
@@ -195,17 +205,26 @@ spanning multiple years.</p>
     </tr>
     <tr>
       <th>B</th>
-      <td><p>An integer specifying the number of baseline years (default is 4)</p></td>
+      <td><p>Number of years to include in baseline (default is 4)</p></td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td><p>Number of guardband weeks to separate the test date from the
+baseline (default is 27)</p></td>
     </tr>
     <tr>
       <th>w</th>
-      <td><p>An integer specifying the number of weeks to include before and after the
-reference date (default is 3)</p></td>
+      <td><p>Half the number of weeks included in reference window, before and
+after each reference date (default is 3)</p></td>
+    </tr>
+    <tr>
+      <th>p</th>
+      <td><p>Number of seasonal periods for each year in baseline</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>A string of either "<code>original</code>" (default) or "<code>modified</code>" to
-specify the version of the Farrington algorithm (original vs modified).</p></td>
+      <td><p>A string of either "<code>original</code>" (default) or "<code>modified</code>"
+to specify the version of the Farrington algorithm (original vs modified).</p></td>
     </tr>
     </table>
 
@@ -214,33 +233,36 @@ specify the version of the Farrington algorithm (original vs modified).</p></td>
     <p>A dataframe</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Original Farrington Algorithm: Quasi-Poisson generalized linear regression models
-are fit to baseline counts associated with reference dates in the B previous
-years, including w weeks before and after each reference date. The algorithm
-checks for convergence with a time term and refits a model with only an
-intercept term in the scenario the model does not converge. The inclusion of
-high baseline counts associated with past outbreaks or public health events is
-known to result in alerting thresholds that are too high and a reduction in
-sensitivity. An empirically derived weighting function is used to calculate
-weights from Anscombe residuals that assign low weight to baseline observations
-with large residuals. A 2/3rds transformation is applied to account for
-skewness common to time series with lower counts, after which expected value
-and variance estimates are used to derive upper and lower bounds for the
-prediction interval. The alert score is defined as the current observation minus
-the forecast value divided by the upper prediction interval bound minus the
-forecast value. If this score exceeds 1, an alert (red value) is raised given that the
-number of counts in the last 4 days is above 5. This algorithm requires that the number
-of years included in the baseline is 3 or higher. Blue values are returned if an alert
-does not occur. Grey values represent instances where anomaly detection did not apply
-(i.e., observations for which baseline data were unavailable).</p>
+    <p>Original Farrington Algorithm: Quasi-Poisson generalized linear regression
+models are fit to baseline counts associated with reference dates in
+the B previous years, including w weeks before and after each reference date.
+The algorithm checks for convergence with a time term and refits a model with
+only an intercept term in the scenario the model does not converge.
+The inclusion of high baseline counts associated with past outbreaks or
+public health events is known to result in alerting thresholds that are too
+high and a reduction in sensitivity. An empirically derived weighting
+function is used to calculate weights from Anscombe residuals that assign
+low weight to baseline observations with large residuals.
+A 2/3rds transformation is applied to account for skewness common to
+time series with lower counts, after which expected value and variance
+estimates are used to derive upper and lower bounds for the prediction interval.
+The alert score is defined as the current observation minus the forecast value
+divided by the upper prediction interval bound minus the forecast value.
+If this score exceeds 1, an alert (red value) is raised given that the number
+of counts in the last 4 days is above 5. This algorithm requires that
+the number of years included in the baseline is 3 or higher.
+Blue values are returned if an alert does not occur. Grey values represent
+instances where anomaly detection did not apply (i.e., observations for which
+baseline data were unavailable).</p>
 <p>Modified Farrington Algorithm: In 2012, Angela Noufaily developed a modified
-implementation of the original Farrington algorithm that improved performance by
-including more historical data in the baseline. The modified algorithm includes
-all weeks from the beginning of the first reference window to the last week proceeding
-a 27-week guardband period used to separate the test week from the baseline. A 10-level
-factor is used to account for seasonality throughout the baseline. Additionally, the
-modified algorithm assumes a negative binomial distribution on the weekly time series
-counts, where thresholds are computed as quantiles of the negative binomial distribution
+implementation of the original Farrington algorithm that improved performance
+by including more historical data in the baseline. The modified algorithm
+includes all weeks from the beginning of the first reference window to the
+last week proceeding a 27-week guardband period used to separate the test week
+from the baseline. A 10-level factor is used to account for seasonality
+throughout the baseline. Additionally, the modified algorithm assumes a
+negative binomial distribution on the weekly time series counts, where
+thresholds are computed as quantiles of the negative binomial distribution
 with plug-in estimates for mu and phi.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -252,80 +274,87 @@ with plug-in estimates for mu and phi.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># Example 1</span>
-
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-05"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2022-02-05"</span><span class='op'>)</span>, <span class='st'>"weeks"</span><span class='op'>)</span>,
-  count <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-05"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2022-02-05"</span><span class='op'>)</span>, <span class='st'>"weeks"</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>25</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'>## Original Farrington algorithm</span>
-
-<span class='va'>df_farr_original</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>
-
-
-<span class='co'>## Modified Farrington algorithm</span>
-
-<span class='va'>df_farr_modified</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span>, method <span class='op'>=</span> <span class='st'>"modified"</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/CDCgov/Rnssp'>Rnssp</a></span><span class='op'>)</span>
-
-<span class='va'>myProfile</span> <span class='op'>&lt;-</span> <span class='va'><a href='Credentials.html'>Credentials</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fu'><a href='askme.html'>askme</a></span><span class='op'>(</span><span class='st'>"Enter your username:"</span><span class='op'>)</span>, <span class='fu'><a href='askme.html'>askme</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>url</span> <span class='op'>&lt;-</span> <span class='st'>"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
-Feb2022&amp;ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&amp;percentParam=noPercent
-&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector
-&amp;startDate=29Dec2013&amp;timeResolution=weekly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes
-&amp;userId=2362&amp;aqtTarget=TimeSeries"</span>
-
-
-<span class='va'>url</span> <span class='op'>&lt;-</span> <span class='va'>url</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"\n"</span>, <span class='st'>""</span>, <span class='va'>.</span><span class='op'>)</span>
-
-<span class='va'>api_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_api_data.html'>get_api_data</a></span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span>
-
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>api_data</span><span class='op'>$</span><span class='va'>timeSeriesData</span>
-
-
-<span class='co'>## Original Farrington algorithm</span>
-
-<span class='va'>df_farr_original</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>
-
-
-<span class='co'>## Modified Farrington algorithm</span>
-
-<span class='va'>df_farr_modified</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span>, method <span class='op'>=</span> <span class='st'>"modified"</span><span class='op'>)</span>
-
-
-<span class='co'>### Visualize alert</span>
-<span class='va'>df_farr_modified</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>0.4</span>, color <span class='op'>=</span> <span class='st'>"grey70"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>!=</span> <span class='st'>"grey"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span>
-  <span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"blue"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span>
-  <span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"yellow"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"yellow"</span>
-  <span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"red"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>dataCount</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span>
-  <span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>
-    x <span class='op'>=</span> <span class='st'>"Date"</span>,
-    y <span class='op'>=</span> <span class='st'>"Weekly ED Visits"</span>
-  <span class='op'>)</span>
-<span class='op'>}</span>
-
-</pre>
+    <pre class="examples"><span><span class='co'># Example 1</span></span>
+<span></span>
+<span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span>  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-05"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2022-02-05"</span><span class='op'>)</span>, <span class='st'>"weeks"</span><span class='op'>)</span>,</span>
+<span>  count <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2014-01-05"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2022-02-05"</span><span class='op'>)</span>, <span class='st'>"weeks"</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>25</span><span class='op'>)</span></span>
+<span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>## Original Farrington algorithm</span></span>
+<span></span>
+<span><span class='va'>df_farr_original</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_farr_original</span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>## Modified Farrington algorithm</span></span>
+<span></span>
+<span><span class='va'>df_farr_modified</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span>, method <span class='op'>=</span> <span class='st'>"modified"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span><span class='co'># Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1</span></span>
+<span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://cdcgov.github.io/Rnssp'>Rnssp</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>myProfile</span> <span class='op'>&lt;-</span> <span class='fu'><a href='create_profile.html'>create_profile</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>url</span> <span class='op'>&lt;-</span> <span class='st'>"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12</span></span>
+<span><span class='st'>Feb2022&amp;ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&amp;percentParam=noPercent</span></span>
+<span><span class='st'>&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector</span></span>
+<span><span class='st'>&amp;startDate=29Dec2013&amp;timeResolution=weekly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes</span></span>
+<span><span class='st'>&amp;userId=2362&amp;aqtTarget=TimeSeries"</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>url</span> <span class='op'>&lt;-</span> <span class='va'>url</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"\n"</span>, <span class='st'>""</span>, <span class='va'>.</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>api_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_api_data.html'>get_api_data</a></span><span class='op'>(</span><span class='va'>url</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>api_data</span><span class='op'>$</span><span class='va'>timeSeriesData</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>## Original Farrington algorithm</span></span>
+<span></span>
+<span><span class='va'>df_farr_original</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>## Modified Farrington algorithm</span></span>
+<span></span>
+<span><span class='va'>df_farr_modified</span> <span class='op'>&lt;-</span> <span class='fu'>alert_farrington</span><span class='op'>(</span><span class='va'>df</span>, t <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span>, method <span class='op'>=</span> <span class='st'>"modified"</span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>### Visualize alert</span></span>
+<span><span class='va'>df_farr_modified</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>, linewidth <span class='op'>=</span> <span class='fl'>0.4</span>, color <span class='op'>=</span> <span class='st'>"grey70"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span></span>
+<span>    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>!=</span> <span class='st'>"grey"</span><span class='op'>)</span>,</span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span></span>
+<span>  <span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span></span>
+<span>    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"blue"</span><span class='op'>)</span>,</span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"navy"</span></span>
+<span>  <span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span></span>
+<span>    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"yellow"</span><span class='op'>)</span>,</span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"yellow"</span></span>
+<span>  <span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span></span>
+<span>    data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>df_farr_modified</span>, <span class='va'>alert</span> <span class='op'>==</span> <span class='st'>"red"</span><span class='op'>)</span>,</span>
+<span>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>date</span>, y <span class='op'>=</span> <span class='va'>count</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"red"</span></span>
+<span>  <span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_bw</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span></span>
+<span>    x <span class='op'>=</span> <span class='st'>"Date"</span>,</span>
+<span>    y <span class='op'>=</span> <span class='st'>"Weekly ED Visits"</span></span>
+<span>  <span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -13,8 +13,8 @@ A collection of tools, functions, and Rmarkdown templates that supports the Nati
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/CDCgov/Rnssp}
   \item \url{https://cdcgov.github.io/Rnssp}
+  \item \url{https://github.com/CDCgov/Rnssp}
 }
 
 }

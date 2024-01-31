@@ -32,11 +32,10 @@ helpPopup <- function(
     id,
     title,
     content,
-    placement=c('right', 'top', 'left', 'bottom'),
-    trigger=c('click', 'hover', 'focus', 'manual'),
+    placement = c("right", "top", "left", "bottom"),
+    trigger = c("click", "hover", "focus", "manual"),
     icon_name = "question-circle",
-    icon_style = "color:red"
-) {
+    icon_style = "color:red") {
   tagList(
     singleton(
       tags$head(
@@ -46,14 +45,13 @@ helpPopup <- function(
     HTML(id),
     tags$a(
       href = "#",
-      style="margin-left:10px;",
+      style = "margin-left:10px;",
       `data-toggle` = "popover",
       title = title,
       `data-content` = content,
       `data-animation` = TRUE,
-      `data-placement` = match.arg(placement, several.ok=TRUE)[1],
-      `data-trigger` = match.arg(trigger, several.ok=TRUE)[1],
-
+      `data-placement` = match.arg(placement, several.ok = TRUE)[1],
+      `data-trigger` = match.arg(trigger, several.ok = TRUE)[1],
       shiny::icon(name = icon_name, class = "shinyhelper-icon", style = icon_style)
     )
   )
@@ -69,9 +67,11 @@ load_profile <- rstudioapi::showQuestion(
 myProfile <- NULL
 prof_file <- NULL
 
-if(load_profile){
-  filtres = matrix(c("R images (*.RData,*.rda)", "Binary R files (*.rds)",
-                     "*.RData;*.rda", "*.rds"), 2, 2)
+if (load_profile) {
+  filtres <- matrix(c(
+    "R images (*.RData,*.rda)", "Binary R files (*.rds)",
+    "*.RData;*.rda", "*.rds"
+  ), 2, 2)
   if (interactive() && .Platform$OS.type == "windows") {
     prof_file <- choose.files(filters = filtres)
   } else if (interactive() && .Platform$OS.type == "unix") {
@@ -83,25 +83,25 @@ if(load_profile){
     cli::cli_alert_danger("Failed to load. File provided must be either an {.field .rda} or {.field .rds} file")
   }
 
-  if(all(endsWith(tolower(prof_file), ".rda"))){
+  if (all(endsWith(tolower(prof_file), ".rda"))) {
     myProfile <- get(load(prof_file))
   } else {
     myProfile <- prof_file %>%
       readRDS() %>%
       try(silent = TRUE)
   }
-  if(all(class(myProfile) == "try-error")){
+  if (all(class(myProfile) == "try-error")) {
     cli::cli_alert_danger("No or corrupt file loaded!")
     myProfile <- create_profile() %>%
       try(silent = TRUE)
-    if(all(class(myProfile) == "try-error")){
+    if (all(class(myProfile) == "try-error")) {
       cli::cli_abort("App stopped. No credentials provided!")
     }
   }
 } else {
   myProfile <- create_profile() %>%
     try(silent = TRUE)
-  if(all(class(myProfile) == "try-error")){
+  if (all(class(myProfile) == "try-error")) {
     cli::cli_abort("App stopped. No credentials provided!")
   }
 }
@@ -112,7 +112,7 @@ ccdd_cats <- "https://essence.syndromicsurveillance.org/nssp_essence/api/datasou
   pull("value") %>%
   try(silent = TRUE)
 
-if(any(class(ccdd_cats) == "try-error")){
+if (any(class(ccdd_cats) == "try-error")) {
   cli::cli_abort("App failed to establish connection with ESSENCE server!
                  Check your credentials and try again")
 }
@@ -202,7 +202,7 @@ ui <- tagList(
               selectInput("County", "County", NULL, NULL)
             )
           ),
-          selectInput("CCDD", "CCDD", ccdd_cats, ccdd_cats[which(grepl("COVID-Specific",ccdd_cats))]),
+          selectInput("CCDD", "CCDD", ccdd_cats, ccdd_cats[which(grepl("COVID-Specific", ccdd_cats))]),
           selectInput("Detector", "Detector", detector_choices, "probrepswitch"),
           fluidRow(
             column(
@@ -320,7 +320,7 @@ ui <- tagList(
           br(),
           fluidRow(
             column(
-              width=4,
+              width = 4,
               checkboxGroupInput(
                 "markers", "Markers to show:",
                 choices = c("Red/Yellow" = "RedYel", "Criterion" = "Crit"),
@@ -415,9 +415,11 @@ server <- function(input, output, session) {
     input$County %>%
       tolower() %>%
       gsub(" ", "%20", .) %>%
-      paste0(url1, tolower(input$State2), "_", .,
-             url2, gsub(" ", "%20", input$CCDD),
-             url3, input$Detector, url4) %>%
+      paste0(
+        url1, tolower(input$State2), "_", .,
+        url2, gsub(" ", "%20", input$CCDD),
+        url3, input$Detector, url4
+      ) %>%
       change_dates(input$StartDate, input$EndDate)
   })
 
@@ -434,8 +436,8 @@ server <- function(input, output, session) {
         alertRollSumY = frollsum(x = levels < input$Pval_Y, n = input$AlertingInterval_Y, fill = NA),
         countRollSumY = frollsum(x = count, n = input$AlertingInterval_Y, fill = NA),
         criterion = ifelse((((alertRollSumR >= input$ReqNumberOfAlerts_R) & (countRollSumR >= input$MinCaseCount_R)) |
-                              ((alertRollSumY >= input$ReqNumberOfAlerts_Y) & (countRollSumY >= input$MinCaseCount_Y))) &
-                             (!is.na(redCounts) | !is.na(yellowCounts)), count, NA),
+          ((alertRollSumY >= input$ReqNumberOfAlerts_Y) & (countRollSumY >= input$MinCaseCount_Y))) &
+          (!is.na(redCounts) | !is.na(yellowCounts)), count, NA),
         levels = as.numeric(levels),
         blueCounts = ifelse(is.na(redCounts) & is.na(yellowCounts), count, NA)
       )
@@ -470,7 +472,7 @@ server <- function(input, output, session) {
         mode = "lines",
         showlegend = FALSE,
         hoverinfo = "text",
-        text = ~paste(
+        text = ~ paste(
           "<br>Date:</b>", date,
           "<br>Count:</b>", format(count, big.mark = ","),
           "<br>p-value:</b>", format(levels, digits = 2, scientific = TRUE)
@@ -481,7 +483,7 @@ server <- function(input, output, session) {
         y = ~blueCounts,
         marker = list(color = "rgb(22, 96, 167)", line = list(color = "black", width = 0.5)),
         hoverinfo = "text",
-        text = ~paste(
+        text = ~ paste(
           "<br>Date:</b>", date,
           "<br>Count:</b>", format(count, big.mark = ","),
           "<br>p-value:</b>", format(levels, digits = 2, scientific = TRUE)
@@ -513,7 +515,7 @@ server <- function(input, output, session) {
           y = ~yellowCounts,
           marker = list(color = "#FFC107", line = list(color = "black", width = 0.5)),
           hoverinfo = "text",
-          text = ~paste(
+          text = ~ paste(
             "<br>Date:</b>", date,
             "<br>Count:</b>", format(count, big.mark = ","),
             "<br>p-value:</b>", format(levels, digits = 2, scientific = TRUE)
@@ -525,14 +527,13 @@ server <- function(input, output, session) {
           y = ~redCounts,
           marker = list(color = "#DC3545", line = list(color = "black", width = 0.5)),
           hoverinfo = "text",
-          text = ~paste(
+          text = ~ paste(
             "<br>Date:</b>", date,
             "<br>Count:</b>", format(count, big.mark = ","),
             "<br>p-value:</b>", format(levels, digits = 2, scientific = TRUE)
           ),
           name = "Alert"
         )
-
     }
 
     if ("Crit" %in% input$markers) {
@@ -543,20 +544,17 @@ server <- function(input, output, session) {
           mode = "markers",
           marker = list(symbol = "diamond-open", size = 10, color = "black"),
           hoverinfo = "text",
-          text = ~paste(
+          text = ~ paste(
             "<br>Date:</b>", date,
             "<br>Count:</b>", format(count, big.mark = ","),
             "<br>p-value:</b>", format(levels, digits = 2, scientific = TRUE)
           ),
           name = "Criterion Met"
         )
-
     }
 
     plt %>%
       config(modeBarButtons = list(list("toImage"), list("autoScale2d")))
-
-
   })
 
   output$tsPlotly <- renderPlotly({
