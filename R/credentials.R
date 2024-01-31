@@ -43,7 +43,7 @@ Credentials <- R6::R6Class(
       if (is.null(private$..username$value) | is.null(private$..password$value)) {
         message("Please, set your credentials (username and password)!")
       } else {
-        assertive.types::assert_is_a_string(url)
+        assertions::assert_string(url)
         res <- url %>%
           httr::GET(., httr::authenticate(
             private$..username$value %>% safer::decrypt_string(., private$..__$value),
@@ -71,7 +71,7 @@ Credentials <- R6::R6Class(
     #' api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
     #' }
     get_api_data = function(url, fromCSV = FALSE, ...) {
-      assertive.types::assert_is_a_string(url)
+      assertions::assert_string(url)
       apir <- self$get_api_response(url)
       if(apir$status_code == 200){
         apir %>% {

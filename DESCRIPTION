@@ -43,7 +43,7 @@ Suggests:
 Imports: 
     R6,
     stringi,
-    assertive.types,
+    assertions,
     safer,
     jsonlite,
     httr,

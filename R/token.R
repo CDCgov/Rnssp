@@ -41,7 +41,7 @@ Token <- R6::R6Class(
       if (is.null(private$..token$value)) {
         message("Please, set your token!")
       } else {
-        assertive.types::assert_is_a_string(url)
+        assertions::assert_string(url)
         res <- url %>%
           httr::GET(., httr::add_headers(
             Authorization = paste(
@@ -72,7 +72,7 @@ Token <- R6::R6Class(
     #' api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
     #' }
     get_api_data = function(url, fromCSV = FALSE, ...) {
-      assertive.types::assert_is_a_string(url)
+      assertions::assert_string(url)
       apir <- self$get_api_response(url)
       if(apir$status_code == 200){
         apir %>% {
