@@ -100,6 +100,7 @@ Token <- R6::R6Class(
     #' grid::grid.raster(img)
     #' }
     get_api_graph = function(url, file_ext = ".png") {
+      assertions::assert_string(url)
       graph <- tempfile(fileext = file_ext)
       apir <- url %>%
         httr::GET(., httr::add_headers(

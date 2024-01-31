@@ -41,7 +41,7 @@ Credentials <- R6::R6Class(
     #' }
     get_api_response = function(url) {
       if (is.null(private$..password$value)) {
-        assertive.types::assert_is_a_string(url)
+        assertions::assert_string(url)
         res <- httr::GET(url)
       } else {
         assertions::assert_string(url)
@@ -103,6 +103,7 @@ Credentials <- R6::R6Class(
     #' grid::grid.raster(img)
     #' }
     get_api_graph = function(url, file_ext = ".png") {
+      assertions::assert_string(url)
       graph <- tempfile(fileext = file_ext)
       apir <- url %>%
         httr::GET(., httr::authenticate(
