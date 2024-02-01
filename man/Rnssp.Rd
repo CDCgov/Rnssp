@@ -35,6 +35,14 @@ the Rnssp R markdown template Github repository at
 \href{https://github.com/cdcgov/rnssp-rmd-templates}{https://github.com/cdcgov/rnssp-rmd-templates}.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://cdcgov.github.io/Rnssp}
+  \item \url{https://github.com/CDCgov/Rnssp}
+}
+
+}
 \author{
 Gbedegnon Roseric Azondekon (\email{gazondekon@cdc.gov})
 }

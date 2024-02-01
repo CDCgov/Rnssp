@@ -2,7 +2,6 @@
 % Please edit documentation in R/Rnssp-package.R
 \docType{package}
 \name{Rnssp-package}
-\alias{Rnssp}
 \alias{Rnssp-package}
 \title{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}
 \description{
