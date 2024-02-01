@@ -28,8 +28,8 @@ devtools::install_github("cdcgov/Rnssp@dev")
 
 This is a basic example which shows you how to:
 
-- use the `Rnssp` package to create an NSSP user profile
-- and use the NSSP user profile to pull data from ESSENCE via the ESSENCE API
+- use the `Rnssp` package to create a user profile
+- and use the user profile to pull data from an API (here the ESSENCE API)
 
 
 ``` r
