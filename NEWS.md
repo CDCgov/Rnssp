@@ -7,6 +7,7 @@
 * The `Credentials` class has been updated. It now interfaces with API services no authorization requirement.
 * The `get_essence_data()` function has been upgraded to accommodate the table builder ESSENCE API.
 * The `change_dates()` function has been upgraded to fix flip-flopping start and end date values ([#13](https://github.com/CDCgov/Rnssp/issues/13))
+* The `assertive.types` package dependency has been replaced by the `assertions` package ([#14](https://github.com/CDCgov/Rnssp/issues/14)).
 
 # Rnssp 0.2.0
 
