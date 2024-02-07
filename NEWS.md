@@ -1,4 +1,8 @@
 # Rnssp 0.2.1
+## New Features
+* `list_apps()` lists available custom-built shiny apps from the [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github repository.
+* New addin added for RStudio users to run Rnssp shiny apps (`run_app_gui()`).
+
 ## Updates
 * The deprecated `$get_api_tsgraph()` method has been removed.
 * The `get_api_tsgraph` function has been removed as a consequence of the removal of the deprecated `$get_api_tsgraph` method.
