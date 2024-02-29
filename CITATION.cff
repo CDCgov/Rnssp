@@ -8,7 +8,7 @@ authors:
     given-names: Michael
     orcid: "https://orcid.org/0000-0003-3660-575X"
 title: "Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)"
-version: 0.2.0.9000 beta
+version: 0.2.0.9000
 date-released: TBD
 license: "Apache License (>= 2)"
 repository-code: "https://github.com/CDCgov/Rnssp"
