@@ -74,7 +74,7 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
   month = {2},
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
-  version = {0.3.0},
+  version = {0.2.0.9000},
   year = {2024}
 }
 ```
