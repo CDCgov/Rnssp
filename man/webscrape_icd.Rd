@@ -35,16 +35,16 @@ space removed to enable successful joining.
 \examples{
 
 # Example 1
-icd9 <- webscrape_icd(icd_version = "ICD9")
-head(icd9)
+icd9_2014 <- webscrape_icd(icd_version = "ICD9")
+head(icd9_2014)
 
 # Example 2
-icd10_2021 <- webscrape_icd(icd_version = "ICD10", year = 2021)
-head(icd10_2021)
+icd10_2024 <- webscrape_icd(icd_version = "ICD10", year = 2024)
+head(icd10_2024)
 
 # Example 3
-icd10_2020 <- webscrape_icd(icd_version = "ICD10", year = 2020)
-head(icd10_2020)
+icd10_2023 <- webscrape_icd(icd_version = "ICD10", year = 2023)
+head(icd10_2023)
 
 }
 \references{
