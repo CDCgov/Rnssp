@@ -43,7 +43,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
   predict_data <- input_data %>%
     filter(split == "Prediction Period")
 
-  baseline_model <- MASS::glm.nb(y ~ obs + cos + sin, data = baseline_data)
+  baseline_model <- suppressWarnings(MASS::glm.nb(y ~ obs + cos + sin, data = baseline_data))
 
   inv_link <- baseline_model$family$linkinv
   df_residual <- baseline_model$df.residual
@@ -78,7 +78,7 @@ nb_model <- function(df, t, y, baseline_end, include_time) {
 
     time_included <- FALSE
 
-    baseline_model <- MASS::glm.nb(y ~ cos + sin, data = baseline_data)
+    baseline_model <- suppressWarnings(MASS::glm.nb(y ~ cos + sin, data = baseline_data))
 
     inv_link <- baseline_model$family$linkinv
     df_residual <- baseline_model$df.residual
