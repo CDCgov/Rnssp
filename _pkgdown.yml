@@ -56,8 +56,8 @@ reference:
       - get_api_data
       - get_api_graph
       - get_api_response
-      - get_api_tsgraph
       - get_essence_data
+      - list_apps
       - list_templates
       - remove_rmd_template
       - Rnssp
