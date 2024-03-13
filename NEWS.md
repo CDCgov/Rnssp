@@ -1,7 +1,7 @@
 # Rnssp 0.2.0.9000
 ## New Features
 * `list_apps()` lists available custom-built shiny apps from the [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github repository.
-* New addin added for RStudio users to run Rnssp shiny apps (`run_app_gui()`).
+* New addin added for RStudio users to run [Rnssp shiny apps](https://github.com/CDCgov/Rnssp-shiny-apps) (`run_app_gui()`).
 
 ## Updates
 * The deprecated `$get_api_tsgraph()` method has been removed.
@@ -12,6 +12,7 @@
 * The `get_essence_data()` function has been upgraded to accommodate the table builder ESSENCE API.
 * The `change_dates()` function has been upgraded to fix flip-flopping start and end date values ([#13](https://github.com/CDCgov/Rnssp/issues/13))
 * The `assertive.types` package dependency has been replaced by the `assertions` package ([#14](https://github.com/CDCgov/Rnssp/issues/14)).
+* The `webscrape_icd()` function has been fixed to webscrape 2024 ICD10 code sets.
 
 # Rnssp 0.2.0
 
