@@ -1,6 +1,8 @@
-# Rnssp 0.2.0.9000
+# Rnssp 0.3.0
 ## New Features
-* `list_apps()` lists available custom-built shiny apps from the [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github repository.
+* The `Rnssp` R package has a new hexsticker.
+* Custom built shiny applications from the [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github repository are seamlessly integrated to `Rnssp`.
+* New function `list_apps()` lists available custom-built shiny apps from the [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github repository.
 * New addin added for RStudio users to run [Rnssp shiny apps](https://github.com/CDCgov/Rnssp-shiny-apps) (`run_app_gui()`).
 
 ## Updates
