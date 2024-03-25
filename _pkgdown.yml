@@ -31,6 +31,8 @@ home:
   links:
   - text: Download build release
     href: https://github.com/CDCgov/Rnssp/releases/
+  - text: Rnssp Webassembly build
+    href: https://github.com/CDCgov/Rnssp_wasm
   - text: Report a bug
     href: https://github.com/CDCgov/Rnssp/issues
   - text: Rnssp Templates Documentation
