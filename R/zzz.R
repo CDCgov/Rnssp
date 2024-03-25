@@ -4,7 +4,7 @@
 |  _ \\ _ __  ___ ___ _ __
 | |_) | '_ \\/ __/ __| '_ \\
 |  _ <| | | \\__ \\__ \\ |_) |
-|_| \\_\\_| |_|___/___/ .__/   package version 0.3.0 beta,
+|_| \\_\\_| |_|___/___/ .__/   package version 0.3.0,
                     |_|
 A Signature R package for the National Syndromic Surveillance Program at
 the Centers for Disease Control and Prevention (CDC)
@@ -14,7 +14,7 @@ Rnssp RMD Templates Documentation: https://cdcgov.github.io/Rnssp-rmd-templates
 
 Run 'Rnssp_vignettes()' to browse all Rnssp vignettes.
 ")
-  url <- paste0("https://raw.githubusercontent.com/cdcgov/Rnssp/master/DESCRIPTION")
+  url <- "https://raw.githubusercontent.com/cdcgov/Rnssp/master/DESCRIPTION"
 
   x <- suppressWarnings(try(readLines(url), silent = TRUE))
   remote_version <- gsub("Version:\\s*", "", x[grep('Version:', x)])
