@@ -35,6 +35,8 @@ home:
     href: https://github.com/CDCgov/Rnssp/issues
   - text: Rnssp Templates Documentation
     href: https://cdcgov.github.io/Rnssp-rmd-templates
+  - text: Rnssp Shiny Apps Github Repository
+    href: https://github.com/CDCgov/Rnssp-shiny-apps
 
 reference:
   - title: Exported Functions
