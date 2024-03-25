@@ -11,6 +11,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->
 
+
 ## Overview
 The **Rnssp** R package is a catalog of data processing and analytics tools, templates, and functions commonly used across the National Syndromic Surveillance Program at the Centers for Disease Control and Prevention (CDC). Its goal is to improve code reproducibility, standardize and document reusable functions, facilitate the sharing of routine reports across the NSSP Community of Practice (CoP), and better engage the NSSP CoP.
 
@@ -19,10 +20,22 @@ The **Rnssp** R package is a catalog of data processing and analytics tools, tem
 You can install the development version of `Rnssp` from GitHub:
 
 ```r
-# install the Rnssp package
+# Install the Rnssp package
 devtools::install_github("cdcgov/Rnssp@dev")
 ```
 
+To install the package for Webassembly, run the following in your `webr` REPL or add the following to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:
+
+```r
+# Install the Rnssp package for webr
+webr::install(
+    "Rnssp", 
+    repos = c(
+        "https://cdcgov.github.io/Rnssp-wasm"
+        "https://repo.r-wasm.org", 
+    )
+)
+```
 
 ## Usage
 
@@ -68,13 +81,13 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 
 ## Citing the `Rnssp` package
 ```tex
-@software{Azondekon_Rnssp_A_Signature_2023,
+@software{Azondekon_Rnssp_A_Signature_2024,
   author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
   license = {Apache License (>= 2)},
-  month = {2},
+  month = {3},
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
-  version = {0.2.0.9000},
+  version = {0.3.0},
   year = {2024}
 }
 ```
