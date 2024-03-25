@@ -35,7 +35,7 @@ img {
 
 ## Launch the addin {-}
 
-In RStudio, you can use the *Addins* menu : 
+In RStudio, you can use the *Addins* menu: 
 
 ![](assets/launch-addin.png)
 
@@ -45,7 +45,7 @@ Users may create and save a profile via the *Create User Profile (GUI)* addin me
 
 ![](assets/create_user_profile_gui.gif)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::create_user_profile_gui()
@@ -59,10 +59,25 @@ Alternatively, users may generate a code skeleton in the R console from the *Cre
 ![](assets/create_user_profile_skeleton.gif)
 
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::create_user_profile()
+```
+
+
+## Run Rnssp shiny apps {-}
+
+Rnssp Shiny Apps are custom-built applications for the `Rnssp` community of users, providing on-demand tools to enhance user experiences and streamline workflows.
+
+Starting from `Rnssp v0.3.0`, RStudio users may run Rnssp shiny apps via Rnssp Addins:
+
+![](assets/Run_Rnssp_shiny_apps.gif)
+
+Or in the R console:
+
+```{r, eval=FALSE}
+Rnssp:::run_app_gui()
 ```
 
 
@@ -72,7 +87,7 @@ Users may check the list of all the currently available [Rnssp R Markdown templa
 
 ![](assets/list_templates_addins.gif)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::list_templates()
@@ -85,7 +100,7 @@ A unique feature of the `Rnssp` package is the ability to add R Markdown templat
 
 ![](assets/add_update_templates.gif)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::add_rmd_template_gui()
@@ -98,7 +113,7 @@ When one or more Rnssp templates are no longer needed, they can be removed via t
 
 ![](assets/remove_templates.gif)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::remove_rmd_template_gui()
@@ -114,7 +129,7 @@ The *Rnssp Templates Documentation* and the *Rnssp Documentation* addins are pro
 
 ![](assets/templates_doc.png)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::rnssp_templates_manual()
@@ -125,7 +140,7 @@ Rnssp:::rnssp_templates_manual()
 
 ![](assets/package_doc.png)
 
-Or in the R console :
+Or in the R console:
 
 ```{r, eval=FALSE}
 Rnssp:::rnssp_manual()
