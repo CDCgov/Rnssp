@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data via NSSP ESSENCE — Rnssp • Rnssp</title>
+<title>Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data — Rnssp • Rnssp</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,9 @@
 
 
 
-<meta property="og:title" content="Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data via NSSP ESSENCE — Rnssp" />
+<meta property="og:title" content="Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data — Rnssp" />
 <meta property="og:description" content="The National Syndromic Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
-including state and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
+including states and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
 analytic tools, and assisted with scripts to interface with ESSENCE. The Rnssp R package is built in an attempt to
 improve reusability, reproducibility, and distribution of the analytical resources developed at the CDC NSSP." />
 <meta property="og:image" content="https://cdcgov.github.io/Rnssp/logo.png" />
@@ -99,7 +99,7 @@ improve reusability, reproducibility, and distribution of the analytical resourc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -168,14 +168,14 @@ improve reusability, reproducibility, and distribution of the analytical resourc
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data via NSSP ESSENCE</h1>
+    <h1>Tools, Functions, Shapefiles data, and Rmarkdown templates to work with Syndromic Surveillance data</h1>
     <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/HEAD/R/Rnssp-package.R'><code>R/Rnssp-package.R</code></a></small>
     <div class="hidden name"><code>Rnssp.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>The National Syndromic Surveillance Program (NSSP) at the Centers for Disease and Control has a large Community of Practice (CoP)
-including state and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
+including states and local Departments of Health. The NSSP has developed multiple resources including analysis reports,
 analytic tools, and assisted with scripts to interface with ESSENCE. The <code>Rnssp</code> R package is built in an attempt to
 improve reusability, reproducibility, and distribution of the analytical resources developed at the CDC NSSP.</p>
     </div>
@@ -187,9 +187,11 @@ improve reusability, reproducibility, and distribution of the analytical resourc
     
 
 <p>The Rnssp functions include:</p><ul>
-<li><p>API functions to pull data from the ESSENCE system</p></li>
+<li><p>API functions to pull data from the ESSENCE system or any REST API service</p></li>
 <li><p>Various utility functions to securely set user credentials, add or remove R Markdown templates, or set new dates in API urls.</p></li>
 <li><p>Anomaly detection and Time Series Trend classification algorithms</p></li>
+<li><p>A feature to extend the package installation with NSSP custom-built parameterized R Markdown templates</p></li>
+<li><p>Utilities to run custom-built shiny apps provided by NSSP</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="rnssp-vignettes"><a class="anchor" href="#rnssp-vignettes"></a>Rnssp vignettes</h2>
@@ -207,6 +209,24 @@ to users to decide which template to extend the package with post-installation.
 To list all available template, run the <code><a href='list_templates.html'>list_templates()</a></code> function. Please, check
 the Rnssp R markdown template Github repository at
 <a href='https://github.com/cdcgov/rnssp-rmd-templates'>https://github.com/cdcgov/rnssp-rmd-templates</a>.</p>
+    <h2 class="hasAnchor" id="rnssp-shiny-applications"><a class="anchor" href="#rnssp-shiny-applications"></a>Rnssp Shiny Applications</h2>
+
+    
+
+<p>The Rnssp package comes with one custom-built Rnssp Shiny application.
+Users may run Rnssp custom-built shiny applications via Rnssp Rstudio addins
+or via the <code><a href='run_app.html'>run_app()</a></code> utility function.
+To list all available Rnssp shiny apps, run the <code><a href='list_apps.html'>list_apps()</a></code> function.
+Please, check the Rnssp-shiny-appse Github repository at
+<a href='https://github.com/cdcgov/rnssp-shiny-apps'>https://github.com/cdcgov/rnssp-shiny-apps</a>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p><a href='https://cdcgov.github.io/Rnssp'>https://cdcgov.github.io/Rnssp</a></p></li>
+<li><p><a href='https://github.com/CDCgov/Rnssp'>https://github.com/CDCgov/Rnssp</a></p></li>
+</ul>
+
+</div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Gbedegnon Roseric Azondekon (<a href='mailto:gazondekon@cdc.gov'>gazondekon@cdc.gov</a>)</p>

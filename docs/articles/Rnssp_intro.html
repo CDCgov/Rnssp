@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
 
       
 
-      </header><script src="Rnssp_intro_files/header-attrs-2.19/header-attrs.js"></script><div class="row">
+      </header><script src="Rnssp_intro_files/header-attrs-2.25/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to the Rnssp package</h1>
@@ -135,8 +135,8 @@ Community-based Epidemics (<code>ESSENCE</code>) via a secure and
 simplified interface. In addition, <code>Rnssp</code> provides methods
 and functions that streamline the data pull by abstracting the
 complexity of the R codes from the users.</p>
-<p>In this vignette, we explained how to create an NSSP user profile,
-and provide various examples to how to use it to pull data from ESSENCE
+<p>In this vignette, we explained how to create a user profile, and
+provide various examples to how to use it to pull data from NSSP-ESSENCE
 using the following ESSENCE APIs:</p>
 <ol style="list-style-type: decimal">
 <li>Time series data table,</li>
@@ -156,11 +156,12 @@ ESSENCE2)</li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Loading useful R packages...</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span></code></pre></div>
-<p>The next step is to create an NSSP user profile by creating an object
-of the class <code>Credentials</code>. The <code>Credentials</code>
-class has been designed with the R6 object system which integrates
-classical Object Oriented Programming concepts into R. Here, we use the
-<code><a href="../reference/create_profile.html">create_profile()</a></code> function to create a user profile.</p>
+<p>The next step is to create a user profile with NSSP-ESSENCE user
+credentials (username and password). The created user profile is an
+object of class <code>Credentials</code> class which has been designed
+with the R6 system. R6 integrates classical Object Oriented Programming
+concepts into R. Here, we use the <code><a href="../reference/create_profile.html">create_profile()</a></code> function
+to create a user profile.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creating an ESSENCE user profile</span></span>
 <span><span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_profile.html">create_profile</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -170,10 +171,8 @@ classical Object Oriented Programming concepts into R. Here, we use the
 <span><span class="co"># Load profile object</span></span>
 <span><span class="co"># load("myProfile.rda") # myProfile &lt;- readRDS("myProfile.rds")</span></span></code></pre></div>
 <p>The above code needs to be executed only once. Upon execution, it
-prompts the user to provide his username and password. Although, the
-username and password can be directly provided in plain texts, we
-<strong>highly recommend the use of the askme() function</strong> to
-interactively enter the user NSSP credentials (as shown above).</p>
+prompts the user to provide his username and password.
+<!-- Although, the username and password can be directly provided in plain texts, we **highly recommend the use of the askme() function** to interactively enter the user NSSP credentials (as shown above). --></p>
 <p>Alternatively, the <code>myProfile</code> object can be saved on file
 as an <code>.RData</code> (<code>.rda</code>) or <code>.rds</code> file
 and loaded to automate Rmarkdown reports generation.</p>
@@ -191,8 +190,7 @@ object is inspected.</p>
 <span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
 <span><span class="co">#&gt;     get_api_graph: function (url, file_ext = ".png") </span></span>
 <span><span class="co">#&gt;     get_api_response: function (url) </span></span>
-<span><span class="co">#&gt;     get_api_tsgraph: function (url) </span></span>
-<span><span class="co">#&gt;     initialize: function (username, password) </span></span>
+<span><span class="co">#&gt;     initialize: function (username = NULL, password = NULL) </span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     ..__: NSSPContainer, R6</span></span>
 <span><span class="co">#&gt;     ..password: NSSPContainer, R6</span></span>
@@ -206,8 +204,7 @@ object is inspected.</p>
 <span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
 <span><span class="co">#&gt;     get_api_graph: function (url, file_ext = ".png") </span></span>
 <span><span class="co">#&gt;     get_api_response: function (url) </span></span>
-<span><span class="co">#&gt;     get_api_tsgraph: function (url) </span></span>
-<span><span class="co">#&gt;     initialize: function (username, password) </span></span>
+<span><span class="co">#&gt;     initialize: function (username = NULL, password = NULL) </span></span>
 <span><span class="co">#&gt;   Private:</span></span>
 <span><span class="co">#&gt;     ..__: NSSPContainer, R6</span></span>
 <span><span class="co">#&gt;     ..password: NSSPContainer, R6</span></span>
@@ -217,7 +214,7 @@ object is inspected.</p>
 <code>$get_api_graph()</code> and <code>$get_api_tsgraph()</code>
 methods with various parameters to pull ESSENCE data. Alternatively, the
 <code><a href="../reference/get_api_response.html">get_api_response()</a></code>, <code><a href="../reference/get_api_data.html">get_api_data()</a></code>,
-<code><a href="../reference/get_api_graph.html">get_api_graph()</a></code> and <code><a href="../reference/get_api_tsgraph.html">get_api_tsgraph()</a></code>
+<code><a href="../reference/get_api_graph.html">get_api_graph()</a></code> and <code>get_api_tsgraph()</code>
 functions serve as wrappers to their respective methods.</p>
 <p>For a full documentation on all the methods available, execute the
 <code><a href="../reference/Credentials.html">help(Credentials)</a></code> or <code><a href="../reference/Credentials.html">?Credentials</a></code> command in
@@ -225,7 +222,7 @@ the R console. Similarly, execute <code>?get_api_response()</code>,
 <code>?get_api_data()</code>, <code>?get_api_graph()</code> or
 <code>?get_api_tsgraph()</code> for a full documentation on each
 function.</p>
-<p>In the following sections, we show how to pull data from ESSENCE
+<p>In the following sections, we show how to pull data from NSSP-ESSENCE
 using the seven APIs listed above.</p>
 </div>
 <div id="time-series-data-table" class="section level1">
@@ -260,8 +257,8 @@ purposes</em>):</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "list"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">$</span><span class="va">timeSeriesData</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "date"     "count"    "expected" "levels"   "colorID"  "color"    "altText" </span></span>
-<span><span class="co">#&gt; [8] "details"</span></span>
+<span><span class="co">#&gt;  [1] "date"      "count"     "expected"  "levels"    "colorID"   "color"    </span></span>
+<span><span class="co">#&gt;  [7] "altText"   "details"   "graphType" "lineLabel" "title"</span></span>
 <span></span>
 <span><span class="co"># glimpse(api_data_ts2$timeSeriesData)</span></span></code></pre></div>
 <p>Although, we present the alternate code above, the following sections
@@ -273,13 +270,13 @@ be easily adapted to the other types of ESSENCE API data pulls.</p>
 <h1 class="hasAnchor">
 <a href="#time-series-graph-from-essence" class="anchor"></a>Time Series Graph from ESSENCE</h1>
 <p>The example below shows how to retrieve the Time Series Graph from
-ESSENCE and insert it in the Rmarkdown report.</p>
+NSSP-ESSENCE and insert it in the Rmarkdown report.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from ESSENCE Time Series Graph from ESSENCE API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span></span>
 <span></span>
 <span><span class="co"># Data pull from ESSENCE</span></span>
-<span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_tsgraph.html">get_api_tsgraph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu">get_api_tsgraph</span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Inspecting api_data_graph object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
@@ -294,10 +291,10 @@ ESSENCE and insert it in the Rmarkdown report.</p>
 <h1 class="hasAnchor">
 <a href="#table-builder-results" class="anchor"></a>Table Builder Results</h1>
 <p>The CSV option of the Table Builder Results API pulls in data in the
-tabular format seen on ESSENCE. The JSON option on the other hand, pulls
-in the data in a long, pivoted format. In the following subsections, we
-demonstrate how to pull the Table Builder results data with both
-options.</p>
+tabular format seen on NSSP-ESSENCE. The JSON option on the other hand,
+pulls in the data in a long, pivoted format. In the following
+subsections, we demonstrate how to pull the Table Builder results data
+with both options.</p>
 <div id="csv-option" class="section level2">
 <h2 class="hasAnchor">
 <a href="#csv-option" class="anchor"></a>CSV option</h2>
@@ -434,12 +431,12 @@ subsections:</p>
 <h1 class="hasAnchor">
 <a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from
 ESSENCE2)</h1>
-<p>This functionality as of February 10, 2023 is available from
-ESSENCE2. Therefore, if your ESSENCE 2 credentials are different from
-the one you define for ESSENCE above, you will have to recreate another
-profile object for ESSENCE 2 and use it to run the code below. In this
-example, it is assumed that the same user profile has been used for both
-ESSENCE and ESSENCE 2.</p>
+<p>This functionality as of March 25, 2024 is available from ESSENCE2.
+Therefore, if your ESSENCE 2 credentials are different from the one you
+define for ESSENCE above, you will have to recreate another profile
+object for ESSENCE 2 and use it to run the code below. In this example,
+it is assumed that the same user profile has been used for both ESSENCE
+and ESSENCE 2.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span></span>
@@ -450,7 +447,7 @@ ESSENCE and ESSENCE 2.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "list"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "timeSeriesData"</span></span>
+<span><span class="co">#&gt; [1] "graphCharacterization" "timeSeriesData"</span></span>
 <span></span>
 <span><span class="co"># glimpse(api_data_tssh$timeSeriesData)</span></span></code></pre></div>
 </div>

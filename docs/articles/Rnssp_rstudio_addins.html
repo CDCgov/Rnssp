@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
 
       
 
-      </header><script src="Rnssp_rstudio_addins_files/header-attrs-2.19/header-attrs.js"></script><div class="row">
+      </header><script src="Rnssp_rstudio_addins_files/header-attrs-2.25/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using Rnssp RStudio Addins</h1>
@@ -134,7 +134,7 @@ img {
 <div id="launch-the-addin" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#launch-the-addin" class="anchor"></a>Launch the addin</h2>
-<p>In RStudio, you can use the <em>Addins</em> menu :</p>
+<p>In RStudio, you can use the <em>Addins</em> menu:</p>
 <p><img src="assets/launch-addin.png"></p>
 </div>
 <div id="create-a-user-profile-with-the-gui" class="section level2 unnumbered">
@@ -143,7 +143,7 @@ img {
 <p>Users may create and save a profile via the <em>Create User Profile
 (GUI)</em> addin menu as shown below:</p>
 <p><img src="assets/create_user_profile_gui.gif"></p>
-<p>Or in the R console :</p>
+<p>Or in the R console:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile_gui.html">create_user_profile_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -154,9 +154,22 @@ img {
 from the <em>Create User Profile (code skeleton)</em> addin as
 demonstrated below:</p>
 <p><img src="assets/create_user_profile_skeleton.gif"></p>
-<p>Or in the R console :</p>
+<p>Or in the R console:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile.html">create_user_profile</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="run-rnssp-shiny-apps" class="section level2 unnumbered">
+<h2 class="hasAnchor">
+<a href="#run-rnssp-shiny-apps" class="anchor"></a>Run Rnssp shiny apps</h2>
+<p>Rnssp Shiny Apps are custom-built applications for the
+<code>Rnssp</code> community of users, providing on-demand tools to
+enhance user experiences and streamline workflows.</p>
+<p>Starting from <code>Rnssp v0.3.0</code>, RStudio users may run Rnssp
+shiny apps via Rnssp Addins:</p>
+<p><img src="assets/Run_Rnssp_shiny_apps.gif"></p>
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/run_app_gui.html">run_app_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="listing-available-rnssp-templates" class="section level2 unnumbered">
 <h2 class="hasAnchor">
@@ -164,8 +177,8 @@ demonstrated below:</p>
 <p>Users may check the list of all the currently available <a href="https://cdcgov.github.io/Rnssp-rmd-templates">Rnssp R Markdown
 templates</a> with the <em>List Rnssp Templates</em> addin:</p>
 <p><img src="assets/list_templates_addins.gif"></p>
-<p>Or in the R console :</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="addupdate-rnssp-templates" class="section level2 unnumbered">
@@ -178,8 +191,8 @@ collaboration with its Community of Practice (CoP), develops various R
 Markdown templates which can be dynamically added or updated via with
 the <em>Add/Update Rnssp Templates</em> addin:</p>
 <p><img src="assets/add_update_templates.gif"></p>
-<p>Or in the R console :</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/add_rmd_template_gui.html">add_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="remove-rnssp-templates" class="section level2 unnumbered">
@@ -188,8 +201,8 @@ the <em>Add/Update Rnssp Templates</em> addin:</p>
 <p>When one or more Rnssp templates are no longer needed, they can be
 removed via the <em>Remove Rnssp Templates</em> addin:</p>
 <p><img src="assets/remove_templates.gif"></p>
-<p>Or in the R console :</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/remove_rmd_template_gui.html">remove_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="accessing-package-and-templates-documentations" class="section level2 unnumbered">
@@ -205,16 +218,16 @@ online documentation.</p>
 <a href="#rnssp-r-markdown-templates-documentation-addin" class="anchor"></a>Rnssp R Markdown Templates Documentation
 Addin</h3>
 <p><img src="assets/templates_doc.png"></p>
-<p>Or in the R console :</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_templates_manual.html">rnssp_templates_manual</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="rnssp-package-documentation" class="section level3 unnumbered">
 <h3 class="hasAnchor">
 <a href="#rnssp-package-documentation" class="anchor"></a>Rnssp Package Documentation</h3>
 <p><img src="assets/package_doc.png"></p>
-<p>Or in the R console :</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Or in the R console:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_manual.html">rnssp_manual</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>

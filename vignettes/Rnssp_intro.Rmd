@@ -51,7 +51,7 @@ library(Rnssp)
 The next step is to create a user profile with NSSP-ESSENCE user credentials (username and password). The created user profile is an object of class `Credentials` class which has been designed with the R6 system. R6 integrates classical Object Oriented Programming concepts into R. Here, we use the `create_profile()` function to create a user profile.
 
 ```{r load, echo=FALSE, eval=TRUE}
-myProfile <- readRDS("../myProfile.rds")
+myProfile <- readRDS("~/myProfile.rds")
 ```
 
 

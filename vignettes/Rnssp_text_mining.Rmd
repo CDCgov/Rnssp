@@ -48,7 +48,7 @@ library(ggraph)
 Next, we create an NSSP user profile.
 
 ```{r load, echo=FALSE, eval=TRUE}
-myProfile <- readRDS("../myProfile.rds")
+myProfile <- readRDS("~/myProfile.rds")
 ```
 
 

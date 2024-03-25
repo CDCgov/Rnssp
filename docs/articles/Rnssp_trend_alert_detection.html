@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
 
       
 
-      </header><script src="Rnssp_trend_alert_detection_files/header-attrs-2.19/header-attrs.js"></script><div class="row">
+      </header><script src="Rnssp_trend_alert_detection_files/header-attrs-2.25/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Anomaly Detection and Trend Classification</h1>
@@ -139,10 +139,10 @@ all other necessary packages.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jrnold/ggthemes">ggthemes</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jrnold.github.io/ggthemes/">ggthemes</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jtlandis/ggside">ggside</a></span><span class="op">)</span></span></code></pre></div>
-<p>The next step is to create an NSSP user profile by creating an object
-of the class <code>Credentials</code>.</p>
+<p>The next step is to create a user profile with our NSSP-ESSENCE
+credentials.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creating an ESSENCE user profile</span></span>
 <span><span class="va">myProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_profile.html">create_profile</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -155,7 +155,7 @@ of the class <code>Credentials</code>.</p>
 <div id="data-pull-from-nssp-essence" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-pull-from-nssp-essence" class="anchor"></a>Data Pull from NSSP-ESSENCE</h1>
-<p>With the NSSP <code>myProfile</code> object, we authenticate to
+<p>Using the <code>myProfile</code> object, we authenticate to
 NSSP-ESSENCE and pull in the data using the Time series data table
 API.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -176,8 +176,7 @@ API.</p>
 <div id="anomaly-detection" class="section level1">
 <h1 class="hasAnchor">
 <a href="#anomaly-detection" class="anchor"></a>Anomaly Detection</h1>
-<p>As of February 10, 2023, the <code>Rnssp</code> package implements
-two anomaly detection algorithms:</p>
+<!-- As of March 25, 2024, the `Rnssp` package implements two anomaly detection algorithms: -->
 <div id="exponentially-weighted-moving-average-ewma" class="section level2">
 <h2 class="hasAnchor">
 <a href="#exponentially-weighted-moving-average-ewma" class="anchor"></a>Exponentially Weighted Moving Average (EWMA)</h2>
@@ -238,8 +237,8 @@ baseline of counts or percentages, and forecasts a predicted value for
 test dates following a pre-defined buffer period following the baseline.
 This model includes terms to account for linear trends and day-of-week
 effects. This implementation does NOT include holiday terms as in the
-Regression 1.4 algorithm in ESSENCE. The EWMA detection algorithm can be
-performed with the <code><a href="../reference/alert_regression.html">alert_regression()</a></code> function (run
+Regression 1.4 algorithm in NSSP-ESSENCE. The EWMA detection algorithm
+can be performed with the <code><a href="../reference/alert_regression.html">alert_regression()</a></code> function (run
 <code><a href="../reference/alert_regression.html">help(alert_regression)</a></code> or <code><a href="../reference/alert_regression.html">?alert_regression</a></code> in
 the R console for more).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -521,7 +520,7 @@ upper bound of the prediction interval.</p>
 <code><a href="../reference/alert_serfling.html">help(alert_serfling)</a></code> or <code><a href="../reference/alert_serfling.html">?alert_serfling</a></code> in the
 R console for more).</p>
 <p>Using the same simulated time series from the previous examples, the
-Negative Binomial Regression detector can be applied as below:</p>
+Original Serfling detector can be applied as below:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_serfling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alert_serfling.html">alert_serfling</a></span><span class="op">(</span></span>
 <span>  <span class="va">synth_ts1</span>,</span>
@@ -606,7 +605,7 @@ representing the trend classification of each day over time:</p>
 <span>    name <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/ggside/man/ggside-scales-discrete.html">scale_xsidey_discrete</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggside/man/ggside.html">ggside</a></span><span class="op">(</span>x.pos <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggside/man/ggside-options.html">ggside</a></span><span class="op">(</span>x.pos <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html">scale_x_date</a></span><span class="op">(</span></span>
 <span>    date_breaks <span class="op">=</span> <span class="st">"1 week"</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"Date"</span></span>

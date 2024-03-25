@@ -82,9 +82,6 @@
     <loc>https://cdcgov.github.io/Rnssp/reference/get_api_response.html</loc>
   </url>
   <url>
-    <loc>https://cdcgov.github.io/Rnssp/reference/get_api_tsgraph.html</loc>
-  </url>
-  <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/get_essence_data.html</loc>
   </url>
   <url>
@@ -92,6 +89,9 @@
   </url>
   <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/hsa_sf.html</loc>
+  </url>
+  <url>
+    <loc>https://cdcgov.github.io/Rnssp/reference/list_apps.html</loc>
   </url>
   <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/list_templates.html</loc>
@@ -130,6 +130,9 @@
     <loc>https://cdcgov.github.io/Rnssp/reference/run_app.html</loc>
   </url>
   <url>
+    <loc>https://cdcgov.github.io/Rnssp/reference/run_app_gui.html</loc>
+  </url>
+  <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/seasonal_groups.html</loc>
   </url>
   <url>
@@ -140,6 +143,9 @@
   </url>
   <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/state_sf.html</loc>
+  </url>
+  <url>
+    <loc>https://cdcgov.github.io/Rnssp/reference/state_territories_sf.html</loc>
   </url>
   <url>
     <loc>https://cdcgov.github.io/Rnssp/reference/territories_sf.html</loc>

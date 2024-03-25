@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a profile with an API token — create_token_profile • Rnssp</title>
+<title>List Available Shinyapps — list_apps • Rnssp</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Create a profile with an API token — create_token_profile" />
-<meta property="og:description" content="A wrapper to the new method defined in the Token class." />
+<meta property="og:title" content="List Available Shinyapps — list_apps" />
+<meta property="og:description" content="List available NSSP Shinyapps from the Rnssp-shiny-apps Github repository." />
 <meta property="og:image" content="https://cdcgov.github.io/Rnssp/logo.png" />
 
 
@@ -165,49 +165,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a profile with an API token</h1>
-    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/HEAD/R/api_utilities.R'><code>R/api_utilities.R</code></a></small>
-    <div class="hidden name"><code>create_token_profile.Rd</code></div>
+    <h1>List Available Shinyapps</h1>
+    <small class="dont-index">Source: <a href='https://github.com/CDCgov/Rnssp/blob/HEAD/R/utility.R'><code>R/utility.R</code></a></small>
+    <div class="hidden name"><code>list_apps.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A wrapper to the <code>new</code> method defined in the <code><a href='Token.html'>Token</a></code> class.</p>
+    <p>List available NSSP Shinyapps from the Rnssp-shiny-apps Github repository.</p>
     </div>
 
-    <pre class="usage"><span><span class='fu'>create_token_profile</span><span class='op'>(</span></span>
-<span>  token <span class='op'>=</span> <span class='fu'>askpass</span><span class='fu'>:::</span><span class='fu'>readline_silent</span><span class='op'>(</span><span class='st'>"Enter/Paste a token: "</span><span class='op'>)</span>,</span>
-<span>  auth_type <span class='op'>=</span> <span class='st'>"Bearer"</span></span>
-<span><span class='op'>)</span></span></pre>
+    <pre class="usage"><span><span class='fu'>list_apps</span><span class='op'>(</span>as.table <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>token</th>
-      <td><p>a string for token</p></td>
-    </tr>
-    <tr>
-      <th>auth_type</th>
-      <td><p>type of HTTP authentication.
-Should be <code>Bearer</code> or <code>Basic</code>. Default is <code>Bearer</code></p></td>
+      <th>as.table</th>
+      <td><p>a logical, if TRUE, a data frame is returned.
+Otherwise, a vector is returned (Default is FALSE).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>Token</code></p>
+    <p>A data frame or a vector</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='https://github.com/CDCgov/Rnssp-shiny-apps'>https://github.com/CDCgov/Rnssp-rmd-templates</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span><span class='co'># Create a profile with "Bearer" authentication type</span></span>
-<span><span class='va'>myProfile</span> <span class='op'>&lt;-</span> <span class='fu'>create_token_profile</span><span class='op'>(</span><span class='op'>)</span></span>
-<span><span class='va'>myProfile</span></span>
-<span></span>
-<span><span class='co'># Create a profile with a "Basic" authentication type</span></span>
-<span><span class='va'>myProfile2</span> <span class='op'>&lt;-</span> <span class='fu'>create_token_profile</span><span class='op'>(</span>auth_type <span class='op'>=</span> <span class='st'>"Basic"</span><span class='op'>)</span></span>
-<span><span class='va'>myProfile2</span></span>
-<span><span class='op'>}</span></span>
-<span></span></pre>
+    <pre class="examples"><span><span class='fu'>list_apps</span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='fu'>list_apps</span><span class='op'>(</span>as.table <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
