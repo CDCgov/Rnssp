@@ -7,7 +7,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/CDCgov/Rnssp)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5034152.svg)](https://doi.org/10.5281/zenodo.5034152)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10884244.svg)](https://doi.org/10.5281/zenodo.10884244)
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->
 
@@ -80,8 +80,9 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
   license = {Apache License (>= 2)},
   month = {3},
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
-  url = {https://github.com/CDCgov/Rnssp},
+  url = {https://cdcgov/github.io/Rnssp},
   version = {0.3.0},
+  doi = {10.5281/zenodo.10884244},
   year = {2024}
 }
 ```
