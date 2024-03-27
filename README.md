@@ -75,14 +75,14 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 
 ## Citing the `Rnssp` package
 ```tex
-@software{{Azondekon_Rnssp_A_Signature_2024,,
+@software{Azondekon_Rnssp_A_Signature_2024,
   author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
+  doi = {10.5281/zenodo.10884244},
   license = {Apache License (>= 2)},
   month = mar,
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
   version = {0.3.0},
-  doi = {10.5281/zenodo.10884244},
   year = {2024}
 }
 ```
