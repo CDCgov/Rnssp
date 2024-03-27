@@ -28,7 +28,7 @@ To install the package for Webassembly, run the following in your `webr` REPL or
 
 ```r
 # Install the Rnssp package for webr
-webr::install("Rnssp", repos = c("https://cdcgov.github.io/Rnssp_wasm", "https://repo.r-wasm.org"))
+webr::install("Rnssp", repos = c("https://cdcgov.github.io/Rnssp-wasm", "https://repo.r-wasm.org"))
 ```
 
 ## Usage
