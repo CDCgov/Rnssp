@@ -276,16 +276,16 @@ NSSP-ESSENCE and insert it in the Rmarkdown report.</p>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span></span>
 <span></span>
 <span><span class="co"># Data pull from ESSENCE</span></span>
-<span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu">get_api_tsgraph</span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_graph.html">get_api_graph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Inspecting api_data_graph object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "list"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "api_response" "tsgraph"</span></span>
+<span><span class="co">#&gt; [1] "api_response" "graph"</span></span>
 <span></span>
 <span><span class="co"># Inserting graph in the report</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">tsgraph</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="table-builder-results" class="section level1">
 <h1 class="hasAnchor">
@@ -431,7 +431,7 @@ subsections:</p>
 <h1 class="hasAnchor">
 <a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from
 ESSENCE2)</h1>
-<p>This functionality as of April 16, 2024 is available from ESSENCE2.
+<p>This functionality as of April 22, 2024 is available from ESSENCE2.
 Therefore, if your ESSENCE 2 credentials are different from the one you
 define for ESSENCE above, you will have to recreate another profile
 object for ESSENCE 2 and use it to run the code below. In this example,
