@@ -7,7 +7,7 @@
 #' An \code{Apikey} object can get API data via an API URL.
 
 Apikey <- R6::R6Class(
-  "NSSPToken",
+  "NSSPApikey",
   private = list(
     ..api_key = NSSPContainer$new(NULL),
     ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']")),
