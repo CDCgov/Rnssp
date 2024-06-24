@@ -7,7 +7,7 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/CDCgov/Rnssp)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5034152.svg)](https://doi.org/10.5281/zenodo.5034152)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10884244.svg)](https://doi.org/10.5281/zenodo.10884244)
 [![](https://img.shields.io/badge/CRAN-not%20published-red.svg)](https://github.com/CDCgov/Rnssp)
 <!-- badges: end -->
 
@@ -24,17 +24,11 @@ You can install the development version of `Rnssp` from GitHub:
 devtools::install_github("cdcgov/Rnssp")
 ```
 
-To install the package for Webassembly, run the following in your `webr` REPL or add the following to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:
+To install the package for Webassembly, run the following in your `webr` REPL or add it to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:
 
 ```r
 # Install the Rnssp package for webr
-webr::install(
-    "Rnssp", 
-    repos = c(
-        "https://cdcgov.github.io/Rnssp-wasm"
-        "https://repo.r-wasm.org", 
-    )
-)
+webr::install("Rnssp", repos = c("https://cdcgov.github.io/Rnssp-wasm", "https://repo.r-wasm.org"))
 ```
 
 ## Usage
@@ -83,8 +77,9 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 ```tex
 @software{Azondekon_Rnssp_A_Signature_2024,
   author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
+  doi = {10.5281/zenodo.10884244},
   license = {Apache License (>= 2)},
-  month = {3},
+  month = mar,
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
   version = {0.3.0},

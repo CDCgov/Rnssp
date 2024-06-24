@@ -385,7 +385,7 @@ Let's visualize the time series with the detected anomalies:
 ggplot(data = df_serfling) +
   geom_line(aes(x = date, y = cases, color = "Observed")) +
   geom_line(aes(x = date, y = threshold, color = "Threshold"), linewidth = 0.3) +
-  geom_point(data = subset(df_nbinom, alarm), aes(x = date, y = cases), color = "#A50026") +
+  geom_point(data = subset(df_serfling, alarm), aes(x = date, y = cases), color = "#A50026") +
   geom_vline(xintercept = as.Date("2021-12-26"), linewidth = 0.2) +
   annotate(geom = "text", x = as.Date("2019-12-01"), y = 60, label = "Baseline Data") +
   scale_color_manual(

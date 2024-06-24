@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -142,16 +142,11 @@ GitHub:</p>
 <code class="sourceCode R"><span><span class="co"># Install the Rnssp package</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"cdcgov/Rnssp"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the package for Webassembly, run the following in your
-<code>webr</code> REPL or add the following to your <a href="https://posit-dev.github.io/r-shinylive/"><code>shinylive</code></a>
+<code>webr</code> REPL or add it to your <a href="https://posit-dev.github.io/r-shinylive/"><code>shinylive</code></a>
 application:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Install the Rnssp package for webr</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>webr<span class="sc">::</span><span class="fu">install</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="st">"Rnssp"</span>, </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">repos =</span> <span class="fu">c</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>        <span class="st">"https://cdcgov.github.io/Rnssp-wasm"</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>        <span class="st">"https://repo.r-wasm.org"</span>, </span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    )</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install the Rnssp package for webr</span></span>
+<span><span class="fu">webr</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"Rnssp"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"https://cdcgov.github.io/Rnssp-wasm"</span>, <span class="st">"https://repo.r-wasm.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -208,13 +203,14 @@ and/or file an issue with a minimal reproducible example.</p>
 <a href="#citing-the-rnssp-package" class="anchor"></a>Citing the <code>Rnssp</code> package</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>@software{Azondekon_Rnssp_A_Signature_2024,</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  license = {Apache License (&gt;= 2)},</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  month = {3},</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  url = {https://github.com/CDCgov/Rnssp},</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  version = {0.3.0},</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  year = {2024}</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  doi = {10.5281/zenodo.10884244},</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  license = {Apache License (&gt;= 2)},</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  month = mar,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  url = {https://github.com/CDCgov/Rnssp},</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  version = {0.3.0},</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  year = {2024}</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="public-domain-standard-notice" class="section level2">
 <h2 class="hasAnchor">
@@ -329,7 +325,7 @@ web site</a>.</p>
 <li><a href="https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml"><img src="https://github.com/cdcent/Rnssp/actions/workflows/check-standard.yaml/badge.svg?branch=master" alt="Rnssp Pipeline"></a></li>
 <li><a href="https://github.com/CDCgov/Rnssp"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active - The project has reached a stable, usable state and is being actively developed."></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.5034152"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5034152.svg" alt="DOI"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.10884244"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.10884244.svg" alt="DOI"></a></li>
 <li><a href="https://github.com/CDCgov/Rnssp"><img src="https://img.shields.io/badge/CRAN-not%20published-red.svg"></a></li>
 </ul>
 </div>

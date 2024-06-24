@@ -132,16 +132,16 @@ The example below shows how to retrieve the Time Series Graph from NSSP-ESSENCE 
 url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&medicalGrouping=injury&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=probrepswitch&startDate=11Nov2020&timeResolution=daily&medicalGroupingSystem=essencesyndromes&userId=455&aqtTarget=TimeSeries&graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&xAxisLabel=Date&yAxisLabel=Count"
 
 # Data pull from ESSENCE
-api_data_graph <- get_api_tsgraph(url)
+api_data_graph <- get_api_graph(url)
 
 # Inspecting api_data_graph object
 class(api_data_graph)
 #> [1] "list"
 names(api_data_graph)
-#> [1] "api_response" "tsgraph"
+#> [1] "api_response" "graph"
 
 # Inserting graph in the report
-knitr::include_graphics(api_data_graph$tsgraph)
+knitr::include_graphics(api_data_graph$graph)
 ```
 
 

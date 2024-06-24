@@ -2,7 +2,7 @@ Package: Rnssp
 Type: Package
 Title: A Signature R package for the National Syndromic Surveillance Program (NSSP)
 Version: 0.3.0
-Date: 2023-02-10
+Date: 2024-03-25
 Authors@R: c(
     person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
                   role = c("aut", "cre", "ctb"), comment = c(ORCID = "0000-0001-9155-4153")),
