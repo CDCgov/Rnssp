@@ -17,8 +17,8 @@ Apikey <- R6::R6Class(
 
     #' @description
     #' Initializes a new Credentials object.
-    #' @param api_key a string for api key
-    #' @param key_name Key name. Default is \code{API-KEY}
+    #' @param api_key a string for API key
+    #' @param key_name a string for an API Key name. Default is \code{API-KEY}
     #' @return An object of class \code{Apikey}
     initialize = function(api_key, key_name = "API-KEY") {
       if (!missing(api_key)) {
