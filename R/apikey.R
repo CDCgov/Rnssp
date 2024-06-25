@@ -10,8 +10,8 @@ Apikey <- R6::R6Class(
   "NSSPApikey",
   private = list(
     ..api_key = NSSPContainer$new(NULL),
-    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']")),
-    ..key_name = NULL
+    ..key_name = NULL,
+    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"))
   ),
   public = list(
 
