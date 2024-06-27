@@ -8,10 +8,11 @@
 
 Credentials <- R6::R6Class(
   "NSSPCredentials",
+  inherit = Auth,
   private = list(
     ..username = NSSPContainer$new(NULL),
-    ..password = NSSPContainer$new(NULL),
-    ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"))
+    ..password = NSSPContainer$new(NULL)#,
+    # ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"))
   ),
   public = list(
 
@@ -71,22 +72,22 @@ Credentials <- R6::R6Class(
     #' csv_url <- "https://httpbin.org/robots.txt"
     #' api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
     #' }
-    get_api_data = function(url, fromCSV = FALSE, ...) {
-      assertions::assert_string(url)
-      apir <- self$get_api_response(url)
-      if(apir$status_code == 200){
-        if(any("data.frame" %in% class(httr::content(apir, as = "text")))){
-          return(httr::content(apir, as = "text"))
-        }
-        apir %>% {
-          if (fromCSV) {
-            httr::content(., by = "text/csv") %>% readr::read_csv(...)
-          } else {
-            httr::content(., as = "text") %>% jsonlite::fromJSON()
-          }
-        }
-      }
-    },
+    # get_api_data = function(url, fromCSV = FALSE, ...) {
+    #   assertions::assert_string(url)
+    #   apir <- self$get_api_response(url)
+    #   if(apir$status_code == 200){
+    #     if(any("data.frame" %in% class(httr::content(apir, as = "text")))){
+    #       return(httr::content(apir, as = "text"))
+    #     }
+    #     apir %>% {
+    #       if (fromCSV) {
+    #         httr::content(., by = "text/csv") %>% readr::read_csv(...)
+    #       } else {
+    #         httr::content(., as = "text") %>% jsonlite::fromJSON()
+    #       }
+    #     }
+    #   }
+    # },
 
     #' @description
     #' Get API graph
