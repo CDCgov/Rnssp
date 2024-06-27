@@ -2,6 +2,7 @@
 
 ## New Features
 * New `Apikey` class added for API services token use. The `Apikey` class has the same methods as the `Credentials` and `Token` classes.
+* New `Auth` parent abstract class added.
 
 # Rnssp 0.3.0
 
