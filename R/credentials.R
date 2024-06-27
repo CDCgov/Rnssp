@@ -1,7 +1,7 @@
 #' A \code{Credentials} Class Representing a Credentials object
 #'
 #' @description
-#' A \code{Credentials} object has a username, a password and a key.
+#' A \code{Credentials} object has a username and a password.
 #'
 #' @details
 #' A \code{Credentials} object can get API data via an API URL.
@@ -11,8 +11,7 @@ Credentials <- R6::R6Class(
   inherit = Auth,
   private = list(
     ..username = NSSPContainer$new(NULL),
-    ..password = NSSPContainer$new(NULL)#,
-    # ..__ = NSSPContainer$new(stringi::stri_rand_strings(1, 1024, pattern = "[A-Za-z0-9*-+=/_$@.?!%|;:#~<>()[]\`\']"))
+    ..password = NSSPContainer$new(NULL)
   ),
   public = list(
 
