@@ -24,7 +24,7 @@ test_that("$get_api_response() method works!", {
 
   response <- handle$get_api_response(url)
   response2 <- handle3$get_api_response(url)
-  response3 <- handle4$get_api_response(url)
+  response3 <- handle5$get_api_response(url)
 
   expect_s3_class(response, "response")
   expect_s3_class(response2, "response")
