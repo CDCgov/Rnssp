@@ -36,7 +36,6 @@ h2 {
   flex-wrap: wrap;
   padding: 25px 0px;
   list-style: none;
-  /* scroll-snap-type: y mandatory; */
   justify-content: center;
 }
 
@@ -72,18 +71,10 @@ h2 {
   max-height: 200px;
 }
 
-.card .card-link-wrapper {
-  margin-top: auto;
-}
-
-.card .card-link {
-  display: inline-block;
-  text-decoration: none;
-  color: white;
-  background: var(--blue);
-  padding: 6px 12px;
-  border-radius: 8px;
-  transition: background 0.2s;
+.card .card-authors {
+  margin-top:0px; 
+  margin-bottom:5px;
+  font-style: italic;
 }
 
 .card:hover .card-link {

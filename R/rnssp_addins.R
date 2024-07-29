@@ -337,17 +337,16 @@ run_app_gui <- function() {
       ),
       select = paste0('<input type="radio" name="selected" value="', app, '">')#,
     )
-    
-    app_df <- do.call(rbind, list(app_df, app_df,app_df,app_df,app_df,app_df,app_df,app_df,app_df))
 
     #function to generate a given card UI
-    get_card <- function(id = "id", title = "Title", text = "text"){
+    get_card <- function(id = "id", title = "Title", text = "text", authors = "Authors"){
       image_div <- shiny::tags$img(src = paste0("https://github.com/CDCgov/Rnssp-shiny-apps/blob/master/", id, "/thumbnail.jpg?raw=true"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
       text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
                                   shiny::tags$p(style = "padding:.5rem;", text))
       content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
                                  image_div,
                                  shiny::tags$h3(class = "card-title", title),
+                                 shiny::tags$h6(class = "card-authors", authors),
                                  text_div)
       shiny::tags$li(class = "card",
                      id = id,
@@ -376,7 +375,8 @@ run_app_gui <- function() {
       get_cards(
         shiny::tagList(lapply(1:nrow(app_df), function(i) get_card(id = app_df$app[i],
                                                                    title = app_df$name[i],
-                                                                   text = app_df$description[i]))
+                                                                   text = app_df$description[i],
+                                                                   authors = app_df$author[i]))
         )
       )
     })
