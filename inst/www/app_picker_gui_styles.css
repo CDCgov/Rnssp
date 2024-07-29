@@ -1,4 +1,5 @@
 :root {
+  --lightblue: #97b0cd;
   --blue: #6b8eb7;
   --darkblue: #32527b;
   --platinum: #e5e5e5;
@@ -32,17 +33,17 @@ h2 {
 
 .cards {
   display: flex;
+  flex-wrap: wrap;
   padding: 25px 0px;
   list-style: none;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
+  /* scroll-snap-type: y mandatory; */
+  justify-content: center;
 }
 
 .card {
   display: flex;
-  flex-direction: column;
-  flex: 0 0 100%;
-  padding: 20px;
+  flex-direction: overflow-y;
+  padding: 20px 20px;
   background: var(--white);
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 15%);
@@ -53,15 +54,12 @@ h2 {
 .selected {
   color: var(--white);
   background: var(--blue);
-}
-
-.card:not(:last-child) {
-  margin-right: 10px;
+  pointer-events: none;
 }
 
 .card:hover {
   color: var(--white);
-  background: var(--blue);
+  background: var(--lightblue);
 }
 
 .card .card-title {
@@ -71,6 +69,7 @@ h2 {
 .card .card-content {
   margin: 20px 0;
   max-width: 85%;
+  max-height: 200px;
 }
 
 .card .card-link-wrapper {
@@ -111,29 +110,23 @@ h2 {
 @media (min-width: 500px) {
   .card {
     flex-basis: calc(50% - 10px);
-  }
-
-  .card:not(:last-child) {
     margin-right: 20px;
+    margin-bottom: 20px;
   }
 }
 
 @media (min-width: 700px) {
   .card {
     flex-basis: calc(calc(100% / 3) - 20px);
-  }
-
-  .card:not(:last-child) {
     margin-right: 30px;
+    margin-bottom: 30px;
   }
 }
 
 @media (min-width: 1100px) {
   .card {
     flex-basis: calc(25% - 30px);
-  }
-
-  .card:not(:last-child) {
     margin-right: 40px;
+    margin-bottom: 40px;
   }
 }

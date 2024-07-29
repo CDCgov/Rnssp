@@ -311,9 +311,9 @@ create_user_profile_gui <- function() {
 #' @keywords internal
 #'
 run_app_gui <- function() {
-  #set working directory and add ressource path to load images from
+  #set working directory and add resource path to load images from
   setwd(system.file("www", package = "Rnssp"))
-  shiny::addResourcePath(prefix = "imgResources", directoryPath = "shinyapp_thumbnails")
+  shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
 
   ui <- miniUI::miniPage(
     #load css file
@@ -337,11 +337,13 @@ run_app_gui <- function() {
       ),
       select = paste0('<input type="radio" name="selected" value="', app, '">')#,
     )
+    
+    app_df <- do.call(rbind, list(app_df, app_df,app_df,app_df,app_df,app_df,app_df,app_df,app_df))
 
     #function to generate a given card UI
     get_card <- function(id = "id", title = "Title", text = "text"){
-      image_div <- shiny::tags$img(src = file.path("imgResources", paste0(id, ".jpg")), width = "250px")
-      text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:40vh;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
+      image_div <- shiny::tags$img(src = paste0("https://github.com/CDCgov/Rnssp-shiny-apps/blob/master/", id, "/thumbnail.jpg?raw=true"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
+      text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
                                   shiny::tags$p(style = "padding:.5rem;", text))
       content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
                                  image_div,
@@ -362,8 +364,10 @@ run_app_gui <- function() {
     #function to generate card container UI
     get_cards <- function(cards_list = shiny::tagList(get_card(), get_card())){
       shiny::tags$div(class = "container",
-                      shiny::tags$ul(class = "cards",
-                                     cards_list
+                      shiny::tags$div(class = "grid", 
+                                      shiny::tags$ul(class = "cards",
+                                                     cards_list
+                                      )
                       )
       )
     }
@@ -393,6 +397,6 @@ run_app_gui <- function() {
     })
   }
   #runGadget call
-  viewer <- shiny::dialogViewer("Add", width = 1000, height = 600)
+  viewer <- shiny::dialogViewer("Add", width = 1250, height = 1000)
   shiny::runGadget(ui, server, viewer = viewer)
 }
