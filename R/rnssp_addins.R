@@ -61,15 +61,12 @@ add_rmd_template_gui <- function() {
                             var selected_template_ids = [];
                             for (var i = 0; i < card_ele.length; ++i){
                               if(card_ele[i].classList.contains('selected')){
-                                console.log(card_ele[i].id);
                                 selected_template_ids.push(card_ele[i].id);
                               }
                             };
                             Shiny.setInputValue('selected_templates', {selected_templates: selected_template_ids, time: Date()})",
-                     shiny::tags$div(
-                       #shiny::tags$h3(class = "card-title", title),
-                       shiny::tags$div(class = "Card-content", content)
-                     )
+                     shiny::tags$div(class = "Card-content", content)
+                     
       )
     }
     #function to generate card container UI
