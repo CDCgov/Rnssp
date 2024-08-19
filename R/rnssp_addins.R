@@ -23,30 +23,39 @@ add_rmd_template_gui <- function() {
       shiny::uiOutput("cards_ui")
     )
   )
-
+  
   server <- function(input, output, session) {
     
-    template_df <- dplyr::mutate(
-      dplyr::rename(
-        dplyr::select(
-          Rnssp::list_templates(TRUE), -create_dir
+    rv <- reactiveValues(df_ready = FALSE)
+    
+    # fetch the template_df data only once the loader UI is rendered
+    observeEvent(input$loader_rendered, {
+      
+      rv$template_df <- dplyr::mutate(
+        dplyr::rename(
+          dplyr::select(
+            Rnssp::list_templates(TRUE), -create_dir
+          ),
+          template = id
         ),
-        template = id
-      ),
-      select = paste0('<input type="checkbox" name="selected" value="', template, '">'),
-      documentation = paste0(
-        "<a href='",
-        file.path(
-          "https://cdcgov.github.io/Rnssp-rmd-templates/templates",
-          stringr::str_remove_all(template, "_")
-        ),
-        "/' target='_blank'>Full documentation</a>"
+        select = paste0('<input type="checkbox" name="selected" value="', template, '">'),
+        documentation = paste0(
+          "<a href='",
+          file.path(
+            "https://cdcgov.github.io/Rnssp-rmd-templates/templates",
+            stringr::str_remove_all(template, "_")
+          ),
+          "/' target='_blank'>Full documentation</a>"
+        )
       )
-    )
+      
+      #update a flag indicating that the data is done loading
+      rv$df_ready <- TRUE
+    })
     
     #function to generate a given card UI
     get_card <- function(id = "id", title = "Title", text = "text", authors = "Authors"){
-      image_div <- shiny::tags$img(src = paste0("https://github.com/CDCgov/Rnssp-shiny-apps/blob/master/", id, "/thumbnail.jpg?raw=true"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
+      image_div <- shiny::tags$img(src = paste0("https://raw.github.com/CDCgov/Rnssp-rmd-templates/master/", id, "/thumbnail.jpg"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
       text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
                                   shiny::tags$p(style = "padding:.5rem;", text))
       content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
@@ -79,19 +88,33 @@ add_rmd_template_gui <- function() {
                       )
       )
     }
-
+    
     #cards UI
     output$cards_ui <- shiny::renderUI({
+      
+      #conditionally render a loader UI when rv$template_df is not yet fetched
+      if(!rv$df_ready) return({
+        div(class = "wrapper", 
+            HTML('<svg height="200" width="200">
+                    <circle id="loader" cx="100" cy="100" r="50" stroke="#506396" stroke-width="5" fill="transparent" />
+                  </svg>'),
+            #set shiny input flag indicating that the loader is rendered on screen
+            tags$script("Shiny.setInputValue('loader_rendered', Date());")
+        )
+        
+      })
+      
+      #render cards UI
       get_cards(
-        shiny::tagList(lapply(1:nrow(template_df), function(i) get_card(id = template_df$template[i],
-                                                                   title = template_df$name[i],
-                                                                   text = template_df$description[i],
-                                                                   #authors = template_df$author[i]
-                                                                   ))
+        shiny::tagList(lapply(1:nrow(rv$template_df), function(i) get_card(id = rv$template_df$template[i],
+                                                                           title = rv$template_df$name[i],
+                                                                           text = rv$template_df$description[i],
+                                                                           #authors = rv$template_df$author[i]
+        ))
         )
       )
     })
-
+    
     shiny::observeEvent(input$done, {
       
       selected_templates <- sapply(input$selected_templates$selected_templates, function(x) x)
@@ -105,16 +128,15 @@ add_rmd_template_gui <- function() {
       rstudioapi::restartSession()
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
+  
   viewer <- shiny::dialogViewer("Add", width = 1250, height = 1000)
   shiny::runGadget(ui, server, viewer = viewer)
 }
-
 
 #' Remove Rnssp templates
 #'
@@ -132,7 +154,7 @@ remove_rmd_template_gui <- function() {
       recursive = FALSE
     )
   )
-
+  
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Remove Rnssp RMD Templates",
@@ -146,7 +168,7 @@ remove_rmd_template_gui <- function() {
       )
     )
   )
-
+  
   server <- function(input, output, session) {
     shiny::observeEvent(input$done, {
       if (is.null(input$templ)) {
@@ -158,12 +180,12 @@ remove_rmd_template_gui <- function() {
       rstudioapi::restartSession()
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
+  
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
@@ -199,7 +221,7 @@ create_user_profile_gui <- function() {
       cli::cli_alert_success(paste("User Profile saved to", "{.file {y}}"))
     }
   }
-
+  
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Create/Save User Credentials",
@@ -222,7 +244,7 @@ create_user_profile_gui <- function() {
       )
     )
   )
-
+  
   server <- function(input, output, session) {
     shiny::observeEvent(input$done, {
       filename <- input$filename
@@ -239,7 +261,7 @@ create_user_profile_gui <- function() {
           envir = .GlobalEnv
         )
       }
-
+      
       if (input$saveProfile) {
         target <- file.path(Sys.getenv("HOME"), paste0(filename, input$format))
         if (input$format == ".rda") {
@@ -252,12 +274,12 @@ create_user_profile_gui <- function() {
       }
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
+  
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
@@ -273,7 +295,7 @@ run_app_gui <- function() {
   #set working directory and add resource path to load images from
   setwd(system.file("www", package = "Rnssp"))
   shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
-
+  
   ui <- miniUI::miniPage(
     #load css file
     shiny::tags$head(shiny::includeCSS("app_picker_gui_styles.css")),
@@ -286,20 +308,29 @@ run_app_gui <- function() {
       shiny::uiOutput("cards_ui")
     )
   )
-
+  
   server <- function(input, output, session) {
-    #pull app data
-    app_df <- dplyr::mutate(
-      dplyr::rename(
-        Rnssp::list_apps(TRUE),
-        app = id
-      ),
-      select = paste0('<input type="radio" name="selected" value="', app, '">')#,
-    )
-
+    
+    rv <- reactiveValues(df_ready = FALSE)
+    
+    # fetch the app_df data only once the loader UI is rendered
+    observeEvent(input$loader_rendered, {
+      
+      rv$app_df <- dplyr::mutate(
+        dplyr::rename(
+          Rnssp::list_apps(TRUE),
+          app = id
+        ),
+        select = paste0('<input type="radio" name="selected" value="', app, '">')#,
+      )
+      
+      #update a flag indicating that the data is done loading
+      rv$df_ready <- TRUE
+    })
+    
     #function to generate a given card UI
     get_card <- function(id = "id", title = "Title", text = "text", authors = "Authors"){
-      image_div <- shiny::tags$img(src = paste0("https://github.com/CDCgov/Rnssp-shiny-apps/blob/master/", id, "/thumbnail.jpg?raw=true"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
+      image_div <- shiny::tags$img(src = paste0("https://raw.github.com/CDCgov/Rnssp-shiny-apps/master/", id, "/thumbnail.jpg"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
       text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
                                   shiny::tags$p(style = "padding:.5rem;", text))
       content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
@@ -331,11 +362,24 @@ run_app_gui <- function() {
     }
     #cards UI
     output$cards_ui <- shiny::renderUI({
+      #conditionally render a loader UI when rv$template_df is not yet fetched
+      if(!rv$df_ready) return({
+        div(class = "wrapper", 
+            HTML('<svg height="200" width="200">
+                    <circle id="loader" cx="100" cy="100" r="50" stroke="#506396" stroke-width="5" fill="transparent" />
+                  </svg>'),
+            #set shiny input flag indicating that the loader is rendered on screen
+            tags$script("Shiny.setInputValue('loader_rendered', Date());")
+        )
+        
+      })
+      
+      #render cards UI
       get_cards(
-        shiny::tagList(lapply(1:nrow(app_df), function(i) get_card(id = app_df$app[i],
-                                                                   title = app_df$name[i],
-                                                                   text = app_df$description[i],
-                                                                   authors = app_df$author[i]))
+        shiny::tagList(lapply(1:nrow(rv$app_df), function(i) get_card(id = rv$app_df$app[i],
+                                                                      title = rv$app_df$name[i],
+                                                                      text = rv$app_df$description[i],
+                                                                      authors = rv$app_df$author[i]))
         )
       )
     })

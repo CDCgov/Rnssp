@@ -121,3 +121,23 @@ h2 {
     margin-bottom: 40px;
   }
 }
+
+.wrapper{
+  height:90vh;
+  display:flex;
+  justify-content:center;
+  align-items:center
+}
+
+#loader{
+   stroke-dasharray: 80;
+   stroke-dashoffset: 500;
+   animation: loading3 2s linear infinite;
+   -webkit-animation: loading3 2s linear infinite;
+}
+@keyframes loading3 {
+    to {
+        stroke-dashoffset: 0;
+    }
+ }
+
