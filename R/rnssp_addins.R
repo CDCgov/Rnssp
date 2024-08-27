@@ -13,7 +13,7 @@ add_rmd_template_gui <- function() {
   
   ui <- miniUI::miniPage(
     #load css file
-    shiny::tags$head(shiny::includeCSS("app_picker_gui_styles.css")),
+    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
     
     miniUI::gadgetTitleBar(
       "Add/Update Rnssp RMD Templates",
@@ -298,7 +298,7 @@ run_app_gui <- function() {
   
   ui <- miniUI::miniPage(
     #load css file
-    shiny::tags$head(shiny::includeCSS("app_picker_gui_styles.css")),
+    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
     #gadget UI
     miniUI::gadgetTitleBar(
       "Run Rnssp Shinyapps",

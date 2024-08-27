@@ -1,6 +1,7 @@
 :root {
   --lightblue: #97b0cd;
   --blue: #6b8eb7;
+  --midblue: #51739C;
   --darkblue: #32527b;
   --platinum: #e5e5e5;
   --black: #2b2d42;
@@ -53,7 +54,11 @@ h2 {
 .selected {
   color: var(--white);
   background: var(--blue);
-  pointer-events: none;
+}
+
+.card.selected:hover {
+  color: var(--white);
+  background: var(--midblue);
 }
 
 .card:hover {
