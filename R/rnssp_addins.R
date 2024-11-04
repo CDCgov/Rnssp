@@ -336,24 +336,16 @@ run_app_gui <- function() {
       )
     )
   )
-  
+
   server <- function(input, output, session) {
     app_df <- dplyr::mutate(
       dplyr::rename(
         Rnssp::list_apps(TRUE),
         app = id
       ),
-      select = paste0('<input type="radio" name="selected" value="', app, '">')#,
-      # documentation = paste0(
-      #   "<a href='",
-      #   file.path(
-      #     "https://cdcgov.github.io/Rnssp-shiny-apps/templates",
-      #     stringr::str_remove_all(template, "_")
-      #   ),
-      #   "/' target='_blank'>Full documentation</a>"
-      # )
+      select = paste0('<input type="radio" name="selected" value="', app, '">')
     )
-    
+
     datatable2 <- function(x, vars = NULL, opts = NULL, ...) {
       names_x <- names(x)
       if (is.null(vars)) cli::cli_abort("{.var vars} must be specified!")
@@ -361,11 +353,11 @@ run_app_gui <- function() {
       if (any(purrr::map_chr(x[, pos], typeof) == "list")) {
         cli::cli_abort("list columns are not supported in {.fn datatable2}")
       }
-      
+
       pos <- pos[pos <= ncol(x)] + 1
       rownames(x) <- NULL
       if (nrow(x) > 0) x <- cbind(" " = "&#x25B6;", x)
-      
+
       # options
       opts <- c(
         opts,
@@ -378,7 +370,7 @@ run_app_gui <- function() {
           )
         )
       )
-      
+
       DT::datatable(
         x,
         ...,
@@ -387,12 +379,12 @@ run_app_gui <- function() {
         callback = DT::JS(.callback2(x = x, pos = c(0, pos)))
       )
     }
-    
+
     .callback2 <- function(x, pos = NULL) {
       part1 <- "table.column(1).nodes().to$().css({cursor: 'pointer'});"
-      
+
       part2 <- .child_row_table2(x, pos = pos)
-      
+
       part3 <- "
         table.on('click', 'td.details-control', function() {
           var td = $(this), row = table.row(td.closest('tr'));
@@ -404,17 +396,17 @@ run_app_gui <- function() {
           td.html('&#9660;');
         }
       });"
-      
+
       paste(part1, part2, part3)
     }
-    
+
     .child_row_table2 <- function(x, pos = NULL) {
       names_x <- paste0(names(x), ":")
       text <- "
         var format = function(d) {
           text = '<div><table >' +
       "
-      
+
       for (i in seq_along(pos)) {
         text <- paste(text, glue::glue(
           "'<tr>' +
@@ -423,40 +415,40 @@ run_app_gui <- function() {
         '</tr>' + "
         ))
       }
-      
+
       paste0(
         text,
         "'</table></div>'
       return text;};"
       )
     }
-    
+
     output$table <- DT::renderDataTable({
       datatable2(
         x = app_df,
-        vars = names(app_df)[2:(ncol(app_df) - 1)],#, "documentation"),
+        vars = names(app_df)[2:(ncol(app_df) - 1)],
         opts = list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px")
       )
     })
-    
+
     shiny::observeEvent(input$done, {
       if (is.null(input$checked_rows)) {
         shiny::stopApp()
       }
       for (app_name in input$checked_rows) {
         rstudioapi::sendToConsole(
-          paste0("Rnssp::run_app('", app_name, "')"), 
+          paste0("Rnssp::run_app('", app_name, "')"),
           execute = TRUE
         )
       }
       shiny::stopApp()
     })
-    
+
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-  
+
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
