@@ -5,7 +5,7 @@
 \title{Create a profile with an API token}
 \usage{
 create_token_profile(
-  token = askpass:::readline_silent("Enter/Paste a token: "),
+  token = getPass::getPass("Enter/Paste a token: "),
   auth_type = "Bearer"
 )
 }

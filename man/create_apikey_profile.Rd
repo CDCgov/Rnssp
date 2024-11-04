@@ -5,7 +5,7 @@
 \title{Create a profile with an API key}
 \usage{
 create_apikey_profile(
-  api_key = askpass:::readline_silent("Enter/Paste an API key: "),
+  api_key = getPass::getPass("Enter/Paste an API key: "),
   key_name = "API-KEY"
 )
 }

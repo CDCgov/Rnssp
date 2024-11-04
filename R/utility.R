@@ -11,7 +11,7 @@
 #' @examples
 #' password <- askme()
 askme <- function(prompt = "Please enter your password: ") {
-  getPass::getPass(prompt = prompt)
+  getPass::getPass(msg = prompt)
 }
 
 

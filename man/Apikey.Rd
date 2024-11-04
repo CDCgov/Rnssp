@@ -22,19 +22,6 @@ api_response <- myProfile$get_api_response(url)
 }
 
 ## ------------------------------------------------
-## Method `Apikey$get_api_data`
-## ------------------------------------------------
-
-\dontrun{
-myProfile <- Apikey$new("abc1234567890")
-json_url <- "https://httpbin.org/json"
-api_data_json <- myProfile$get_api_data(json_url)
-
-csv_url <- "https://httpbin.org/robots.txt"
-api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
-}
-
-## ------------------------------------------------
 ## Method `Apikey$get_api_graph`
 ## ------------------------------------------------
 
@@ -47,16 +34,25 @@ img <- png::readPNG(api_data_graph$graph)
 grid::grid.raster(img)
 }
 }
+\section{Super class}{
+\code{Rnssp::NSSPAuth} -> \code{NSSPApikey}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-NSSPApikey-new}{\code{Apikey$new()}}
 \item \href{#method-NSSPApikey-get_api_response}{\code{Apikey$get_api_response()}}
-\item \href{#method-NSSPApikey-get_api_data}{\code{Apikey$get_api_data()}}
 \item \href{#method-NSSPApikey-get_api_graph}{\code{Apikey$get_api_graph()}}
 \item \href{#method-NSSPApikey-clone}{\code{Apikey$clone()}}
 }
 }
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="Rnssp" data-topic="NSSPAuth" data-id="get_api_data"><a href='../../Rnssp/html/NSSPAuth.html#method-NSSPAuth-get_api_data'><code>Rnssp::NSSPAuth$get_api_data()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPApikey-new"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPApikey-new}{}}}
@@ -104,45 +100,6 @@ An object of class \code{response}
 myProfile <- Apikey$new("abc1234567890")
 url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-NSSPApikey-get_api_data"></a>}}
-\if{latex}{\out{\hypertarget{method-NSSPApikey-get_api_data}{}}}
-\subsection{Method \code{get_api_data()}}{
-Get API data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Apikey$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character ofAPI URL}
-
-\item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
-
-\item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-myProfile <- Apikey$new("abc1234567890")
-json_url <- "https://httpbin.org/json"
-api_data_json <- myProfile$get_api_data(json_url)
-
-csv_url <- "https://httpbin.org/robots.txt"
-api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 }
 \if{html}{\out{</div>}}
