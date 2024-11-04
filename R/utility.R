@@ -295,7 +295,7 @@ Rnssp_vignettes <- function(topic = NULL) {
 #' list_templates()
 #' list_templates(as.table = TRUE)
 list_templates <- function(as.table = FALSE) {
-  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-rmd-templates/git/trees/master?recursive=1", timeout(180))
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-rmd-templates/git/trees/master?recursive=1", httr::timeout(180))
   repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
   httr::stop_for_status(req)
   filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = FALSE)
@@ -338,7 +338,7 @@ list_templates <- function(as.table = FALSE) {
 #' list_apps()
 #' list_apps(as.table = TRUE)
 list_apps <- function(as.table = FALSE) {
-  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-shiny-apps/git/trees/master?recursive=1", timeout(180))
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-shiny-apps/git/trees/master?recursive=1", httr::timeout(180))
   repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-shiny-apps/master"
   httr::stop_for_status(req)
   filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = FALSE)
