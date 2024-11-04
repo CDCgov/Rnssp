@@ -45,7 +45,7 @@ create_profile <- function(
 #' }
 #'
 create_token_profile <- function(
-    token = askpass:::readline_silent("Enter/Paste a token: "),
+    token = getPass::getPass("Enter/Paste a token: "),
     auth_type = "Bearer"
 ){
   Token$new(token = token, auth_type = auth_type)
@@ -73,7 +73,7 @@ create_token_profile <- function(
 #' }
 #'
 create_apikey_profile <- function(
-    api_key = askpass:::readline_silent("Enter/Paste an API key: "),
+    api_key = getPass::getPass("Enter/Paste an API key: "),
     key_name = "API-KEY"
 ){
   Apikey$new(api_key = api_key, key_name = key_name)
