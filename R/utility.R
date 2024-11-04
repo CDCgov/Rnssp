@@ -1,17 +1,17 @@
 #' Password Prompt Utility
 #'
-#' Prompt the user for a password. This function is a wrapper for the \code{\link[askpass]{askpass}} function.
+#' Prompt the user for a password. This function is a wrapper for the \code{\link[getPass]{getPass}} function.
 #'
-#' @inheritParams askpass::askpass
+#' @inheritParams getPass::getPass
 #' @return a character string
 #'
-#' @seealso \code{\link[askpass]{askpass}}
+#' @seealso \code{\link[getPass]{getPass}}
 #' @export
 #'
 #' @examples
 #' password <- askme()
 askme <- function(prompt = "Please enter your password: ") {
-  askpass::askpass(prompt = prompt)
+  getPass::getPass(prompt = prompt)
 }
 
 
