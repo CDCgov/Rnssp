@@ -6,156 +6,137 @@
 #' @keywords internal
 #'
 add_rmd_template_gui <- function() {
+  
+  #set working directory and add resource path to load images from
+  setwd(system.file("www", package = "Rnssp"))
+  shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
+  
   ui <- miniUI::miniPage(
+    #load css file
+    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
+    
     miniUI::gadgetTitleBar(
       "Add/Update Rnssp RMD Templates",
       right = miniUI::miniTitleBarButton("done", "Add/Update", primary = TRUE)
     ),
     miniUI::miniContentPanel(
-      shiny::column(
-        12,
-        DT::dataTableOutput("table"),
-        shiny::tags$script(
-          shiny::HTML(
-            '$(document).on("click", "input", function () {
-              var checkboxes = document.getElementsByName("selected");
-              var checkboxesChecked = [];
-              for (var i=0; i<checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                  checkboxesChecked.push(checkboxes[i].value);
-                }
-              }
-              Shiny.onInputChange("checked_rows",checkboxesChecked);  })'
-          )
-        )
-      )
+      shiny::uiOutput("cards_ui")
     )
   )
-
+  
   server <- function(input, output, session) {
-    template_df <- dplyr::mutate(
-      dplyr::rename(
-        dplyr::select(
-          Rnssp::list_templates(TRUE), -create_dir
+    
+    rv <- reactiveValues(df_ready = FALSE)
+    
+    # fetch the template_df data only once the loader UI is rendered
+    observeEvent(input$loader_rendered, {
+      
+      rv$template_df <- dplyr::mutate(
+        dplyr::rename(
+          dplyr::select(
+            Rnssp::list_templates(TRUE), -create_dir
+          ),
+          template = id
         ),
-        template = id
-      ),
-      select = paste0('<input type="checkbox" name="selected" value="', template, '">'),
-      documentation = paste0(
-        "<a href='",
-        file.path(
-          "https://cdcgov.github.io/Rnssp-rmd-templates/templates",
-          stringr::str_remove_all(template, "_")
-        ),
-        "/' target='_blank'>Full documentation</a>"
-      )
-    )
-
-    datatable2 <- function(x, vars = NULL, opts = NULL, ...) {
-      names_x <- names(x)
-      if (is.null(vars)) cli::cli_abort("{.var vars} must be specified!")
-      pos <- match(vars, names_x)
-      if (any(purrr::map_chr(x[, pos], typeof) == "list")) {
-        cli::cli_abort("list columns are not supported in {.fn datatable2}")
-      }
-
-      pos <- pos[pos <= ncol(x)] + 1
-      rownames(x) <- NULL
-      if (nrow(x) > 0) x <- cbind(" " = "&#x25B6;", x)
-
-      # options
-      opts <- c(
-        opts,
-        list(
-          columnDefs = list(
-            list(visible = FALSE, targets = c(0, pos)),
-            list(orderable = FALSE, className = "details-control", targets = 1),
-            list(className = "dt-left", targets = 1:3),
-            list(className = "dt-right", targets = 4:ncol(x))
-          )
+        select = paste0('<input type="checkbox" name="selected" value="', template, '">'),
+        documentation = paste0(
+          "<a href='",
+          file.path(
+            "https://cdcgov.github.io/Rnssp-rmd-templates/templates",
+            stringr::str_remove_all(template, "_")
+          ),
+          "/' target='_blank'>Full documentation</a>"
         )
       )
-
-      DT::datatable(
-        x,
-        ...,
-        escape = FALSE,
-        options = opts,
-        callback = DT::JS(.callback2(x = x, pos = c(0, pos)))
+      
+      #update a flag indicating that the data is done loading
+      rv$df_ready <- TRUE
+    })
+    
+    #function to generate a given card UI
+    get_card <- function(id = "id", title = "Title", text = "text", authors = "Authors"){
+      image_div <- shiny::tags$img(src = paste0("https://raw.github.com/CDCgov/Rnssp-rmd-templates/master/", id, "/thumbnail.jpg"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
+      text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
+                                  shiny::tags$p(style = "padding:.5rem;", text))
+      content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
+                                 image_div,
+                                 shiny::tags$h3(class = "card-title", title),
+                                 #shiny::tags$h6(class = "card-authors", authors),
+                                 text_div)
+      shiny::tags$li(class = "card",
+                     id = id,
+                     onclick = "this.classList.toggle('selected');
+                            var card_ele = document.getElementsByClassName('card');
+                            var selected_template_ids = [];
+                            for (var i = 0; i < card_ele.length; ++i){
+                              if(card_ele[i].classList.contains('selected')){
+                                selected_template_ids.push(card_ele[i].id);
+                              }
+                            };
+                            Shiny.setInputValue('selected_templates', {selected_templates: selected_template_ids, time: Date()})",
+                     shiny::tags$div(class = "Card-content", content)
+                     
       )
     }
-
-    .callback2 <- function(x, pos = NULL) {
-      part1 <- "table.column(1).nodes().to$().css({cursor: 'pointer'});"
-
-      part2 <- .child_row_table2(x, pos = pos)
-
-      part3 <- "
-        table.on('click', 'td.details-control', function() {
-          var td = $(this), row = table.row(td.closest('tr'));
-          if (row.child.isShown()) {
-            row.child.hide();
-            td.html('&#x25B6;');
-          } else {
-          row.child(format(row.data())).show();
-          td.html('&#9660;');
-        }
-      });"
-
-      paste(part1, part2, part3)
+    #function to generate card container UI
+    get_cards <- function(cards_list = shiny::tagList(get_card(), get_card())){
+      shiny::tags$div(class = "container",
+                      shiny::tags$div(class = "grid", 
+                                      shiny::tags$ul(class = "cards",
+                                                     cards_list
+                                      )
+                      )
+      )
     }
-
-    .child_row_table2 <- function(x, pos = NULL) {
-      names_x <- paste0(names(x), ":")
-      text <- "
-        var format = function(d) {
-          text = '<div><table >' +
-      "
-
-      for (i in seq_along(pos)) {
-        text <- paste(text, glue::glue(
-          "'<tr>' +
-          '<td>' + '{names_x[pos[i]]}' + '</td>' +
-          '<td>' + d[{pos[i]}] + '</td>' +
-        '</tr>' + "
+    
+    #cards UI
+    output$cards_ui <- shiny::renderUI({
+      
+      #conditionally render a loader UI when rv$template_df is not yet fetched
+      if(!rv$df_ready) return({
+        div(class = "wrapper", 
+            HTML('<svg height="200" width="200">
+                    <circle id="loader" cx="100" cy="100" r="50" stroke="#506396" stroke-width="5" fill="transparent" />
+                  </svg>'),
+            #set shiny input flag indicating that the loader is rendered on screen
+            tags$script("Shiny.setInputValue('loader_rendered', Date());")
+        )
+        
+      })
+      
+      #render cards UI
+      get_cards(
+        shiny::tagList(lapply(1:nrow(rv$template_df), function(i) get_card(id = rv$template_df$template[i],
+                                                                           title = rv$template_df$name[i],
+                                                                           text = rv$template_df$description[i],
+                                                                           #authors = rv$template_df$author[i]
         ))
-      }
-
-      paste0(
-        text,
-        "'</table></div>'
-      return text;};"
-      )
-    }
-
-    output$table <- DT::renderDataTable({
-      datatable2(
-        x = template_df,
-        vars = c("name", "description", "documentation"),
-        opts = list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px")
+        )
       )
     })
-
+    
     shiny::observeEvent(input$done, {
-      if (is.null(input$checked_rows)) {
+      
+      selected_templates <- sapply(input$selected_templates$selected_templates, function(x) x)
+      
+      if (is.null(selected_templates)) {
         shiny::stopApp()
       }
-      for (templ in input$checked_rows) {
+      for (templ in selected_templates) {
         Rnssp::add_rmd_template(templ, restart = FALSE, verbose = FALSE)
       }
       rstudioapi::restartSession()
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
-  viewer <- shiny::dialogViewer("Add")
+  
+  viewer <- shiny::dialogViewer("Add", width = 1250, height = 1000)
   shiny::runGadget(ui, server, viewer = viewer)
 }
-
 
 #' Remove Rnssp templates
 #'
@@ -173,7 +154,7 @@ remove_rmd_template_gui <- function() {
       recursive = FALSE
     )
   )
-
+  
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Remove Rnssp RMD Templates",
@@ -181,13 +162,13 @@ remove_rmd_template_gui <- function() {
     ),
     miniUI::miniContentPanel(
       shiny::checkboxGroupInput("templ",
-        label = "Existing templates",
-        inline = TRUE,
-        choices = templates
+                                label = "Existing templates",
+                                inline = TRUE,
+                                choices = templates
       )
     )
   )
-
+  
   server <- function(input, output, session) {
     shiny::observeEvent(input$done, {
       if (is.null(input$templ)) {
@@ -199,12 +180,12 @@ remove_rmd_template_gui <- function() {
       rstudioapi::restartSession()
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
+  
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
@@ -240,7 +221,7 @@ create_user_profile_gui <- function() {
       cli::cli_alert_success(paste("User Profile saved to", "{.file {y}}"))
     }
   }
-
+  
   ui <- miniUI::miniPage(
     miniUI::gadgetTitleBar(
       "Create/Save User Credentials",
@@ -263,7 +244,7 @@ create_user_profile_gui <- function() {
       )
     )
   )
-
+  
   server <- function(input, output, session) {
     shiny::observeEvent(input$done, {
       filename <- input$filename
@@ -280,7 +261,7 @@ create_user_profile_gui <- function() {
           envir = .GlobalEnv
         )
       }
-
+      
       if (input$saveProfile) {
         target <- file.path(Sys.getenv("HOME"), paste0(filename, input$format))
         if (input$format == ".rda") {
@@ -293,12 +274,12 @@ create_user_profile_gui <- function() {
       }
       shiny::stopApp()
     })
-
+    
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
+  
   viewer <- shiny::dialogViewer("Add")
   shiny::runGadget(ui, server, viewer = viewer)
 }
@@ -311,131 +292,101 @@ create_user_profile_gui <- function() {
 #' @keywords internal
 #'
 run_app_gui <- function() {
+  #set working directory and add resource path to load images from
+  setwd(system.file("www", package = "Rnssp"))
+  shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
+  
   ui <- miniUI::miniPage(
+    #load css file
+    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
+    #gadget UI
     miniUI::gadgetTitleBar(
       "Run Rnssp Shinyapps",
       right = miniUI::miniTitleBarButton("done", "Run/Execute", primary = TRUE)
     ),
     miniUI::miniContentPanel(
-      shiny::column(
-        12,
-        DT::dataTableOutput("table"),
-        shiny::tags$script(
-          shiny::HTML(
-            '$(document).on("click", "input", function () {
-              var checkboxes = document.getElementsByName("selected");
-              var checkboxesChecked = [];
-              for (var i=0; i<checkboxes.length; i++) {
-                if (checkboxes[i].checked) {
-                  checkboxesChecked.push(checkboxes[i].value);
-                }
-              }
-              Shiny.onInputChange("checked_rows",checkboxesChecked);  })'
-          )
-        )
-      )
+      shiny::uiOutput("cards_ui")
     )
   )
 
   server <- function(input, output, session) {
-    app_df <- dplyr::mutate(
-      dplyr::rename(
-        Rnssp::list_apps(TRUE),
-        app = id
-      ),
-      select = paste0('<input type="radio" name="selected" value="', app, '">')
-    )
-
-    datatable2 <- function(x, vars = NULL, opts = NULL, ...) {
-      names_x <- names(x)
-      if (is.null(vars)) cli::cli_abort("{.var vars} must be specified!")
-      pos <- match(vars, names_x)
-      if (any(purrr::map_chr(x[, pos], typeof) == "list")) {
-        cli::cli_abort("list columns are not supported in {.fn datatable2}")
-      }
-
-      pos <- pos[pos <= ncol(x)] + 1
-      rownames(x) <- NULL
-      if (nrow(x) > 0) x <- cbind(" " = "&#x25B6;", x)
-
-      # options
-      opts <- c(
-        opts,
-        list(
-          columnDefs = list(
-            list(visible = FALSE, targets = c(0, pos)),
-            list(orderable = FALSE, className = "details-control", targets = 1),
-            list(className = "dt-left", targets = 1:3),
-            list(className = "dt-right", targets = 4:ncol(x))
-          )
+    
+    rv <- reactiveValues(df_ready = FALSE)
+    
+    # fetch the app_df data only once the loader UI is rendered
+    observeEvent(input$loader_rendered, {
+      
+      rv$app_df <- dplyr::mutate(
+        dplyr::rename(
+          Rnssp::list_apps(TRUE),
+          app = id
+        ),
+        select = paste0('<input type="radio" name="selected" value="', app, '">')#,
+      )
+      
+      #update a flag indicating that the data is done loading
+      rv$df_ready <- TRUE
+    })
+    
+    #function to generate a given card UI
+    get_card <- function(id = "id", title = "Title", text = "text", authors = "Authors"){
+      image_div <- shiny::tags$img(src = paste0("https://raw.github.com/CDCgov/Rnssp-shiny-apps/master/", id, "/thumbnail.jpg"), onerror=paste0("this.onerror=null; this.src='", file.path("appResources", "default_thumbnail.png"), "'"), width = "250px", height = "100px")
+      text_div <- shiny::tags$div(style = "font-size:14px;line-height:105%;max-height:200px;overflow-y:scroll;padding-top:1rem;padding-bottom:1rem;",
+                                  shiny::tags$p(style = "padding:.5rem;", text))
+      content <- shiny::tags$div(style = "display: flex;flex-direction: column;",
+                                 image_div,
+                                 shiny::tags$h3(class = "card-title", title),
+                                 shiny::tags$h6(class = "card-authors", authors),
+                                 text_div)
+      shiny::tags$li(class = "card",
+                     id = id,
+                     onclick = "var card_ele = document.getElementsByClassName('card');
+                            for (var i = 0; i < card_ele.length; ++i) card_ele[i].classList.remove('selected');
+                            this.classList.toggle('selected');
+                            Shiny.setInputValue('selected_app', {app_name: this.id, time: Date(), is_selected: this.classList.contains('selected')})",
+                     shiny::tags$div(
+                       #shiny::tags$h3(class = "card-title", title),
+                       shiny::tags$div(class = "Card-content", content)
+                     )
+      )
+    }
+    #function to generate card container UI
+    get_cards <- function(cards_list = shiny::tagList(get_card(), get_card())){
+      shiny::tags$div(class = "container",
+                      shiny::tags$div(class = "grid", 
+                                      shiny::tags$ul(class = "cards",
+                                                     cards_list
+                                      )
+                      )
+      )
+    }
+    #cards UI
+    output$cards_ui <- shiny::renderUI({
+      #conditionally render a loader UI when rv$template_df is not yet fetched
+      if(!rv$df_ready) return({
+        div(class = "wrapper", 
+            HTML('<svg height="200" width="200">
+                    <circle id="loader" cx="100" cy="100" r="50" stroke="#506396" stroke-width="5" fill="transparent" />
+                  </svg>'),
+            #set shiny input flag indicating that the loader is rendered on screen
+            tags$script("Shiny.setInputValue('loader_rendered', Date());")
+        )
+        
+      })
+      
+      #render cards UI
+      get_cards(
+        shiny::tagList(lapply(1:nrow(rv$app_df), function(i) get_card(id = rv$app_df$app[i],
+                                                                      title = rv$app_df$name[i],
+                                                                      text = rv$app_df$description[i],
+                                                                      authors = rv$app_df$author[i]))
         )
       )
-
-      DT::datatable(
-        x,
-        ...,
-        escape = FALSE,
-        options = opts,
-        callback = DT::JS(.callback2(x = x, pos = c(0, pos)))
-      )
-    }
-
-    .callback2 <- function(x, pos = NULL) {
-      part1 <- "table.column(1).nodes().to$().css({cursor: 'pointer'});"
-
-      part2 <- .child_row_table2(x, pos = pos)
-
-      part3 <- "
-        table.on('click', 'td.details-control', function() {
-          var td = $(this), row = table.row(td.closest('tr'));
-          if (row.child.isShown()) {
-            row.child.hide();
-            td.html('&#x25B6;');
-          } else {
-          row.child(format(row.data())).show();
-          td.html('&#9660;');
-        }
-      });"
-
-      paste(part1, part2, part3)
-    }
-
-    .child_row_table2 <- function(x, pos = NULL) {
-      names_x <- paste0(names(x), ":")
-      text <- "
-        var format = function(d) {
-          text = '<div><table >' +
-      "
-
-      for (i in seq_along(pos)) {
-        text <- paste(text, glue::glue(
-          "'<tr>' +
-          '<td>' + '{names_x[pos[i]]}' + '</td>' +
-          '<td>' + d[{pos[i]}] + '</td>' +
-        '</tr>' + "
-        ))
-      }
-
-      paste0(
-        text,
-        "'</table></div>'
-      return text;};"
-      )
-    }
-
-    output$table <- DT::renderDataTable({
-      datatable2(
-        x = app_df,
-        vars = names(app_df)[2:(ncol(app_df) - 1)],
-        opts = list(pageLength = 10, searching = FALSE, lengthChange = FALSE, scrollY = "400px")
-      )
     })
-
+    #execute button functionality
     shiny::observeEvent(input$done, {
-      if (is.null(input$checked_rows)) {
-        shiny::stopApp()
-      }
-      for (app_name in input$checked_rows) {
+      app_name <- input$selected_app$app_name
+      if (!is.null(app_name)) {
         rstudioapi::sendToConsole(
           paste0("Rnssp::run_app('", app_name, "')"),
           execute = TRUE
@@ -443,12 +394,12 @@ run_app_gui <- function() {
       }
       shiny::stopApp()
     })
-
+    #cancel button functionality
     shiny::observeEvent(input$cancel, {
       shiny::stopApp()
     })
   }
-
-  viewer <- shiny::dialogViewer("Add")
+  #runGadget call
+  viewer <- shiny::dialogViewer("Add", width = 1250, height = 1000)
   shiny::runGadget(ui, server, viewer = viewer)
 }
