@@ -7,13 +7,13 @@
 #'
 add_rmd_template_gui <- function() {
   
-  #set working directory and add resource path to load images from
-  setwd(system.file("www", package = "Rnssp"))
-  shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
+  # add resource path to load images from
+  dir_path <- system.file("www", package = "Rnssp")
+  shiny::addResourcePath(prefix = "appResources", directoryPath = dir_path)
   
   ui <- miniUI::miniPage(
-    #load css file
-    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
+    # load css file
+    shiny::tags$head(shiny::includeCSS(file.path(dir_path, "card_picker_gui_styles.css"))),
     
     miniUI::gadgetTitleBar(
       "Add/Update Rnssp RMD Templates",
@@ -292,14 +292,14 @@ create_user_profile_gui <- function() {
 #' @keywords internal
 #'
 run_app_gui <- function() {
-  #set working directory and add resource path to load images from
-  setwd(system.file("www", package = "Rnssp"))
-  shiny::addResourcePath(prefix = "appResources", directoryPath = ".")
+  # set working directory and add resource path to load images from
+  dir_path <- system.file("www", package = "Rnssp")
+  shiny::addResourcePath(prefix = "appResources", directoryPath = dir_path)
   
   ui <- miniUI::miniPage(
-    #load css file
-    shiny::tags$head(shiny::includeCSS("card_picker_gui_styles.css")),
-    #gadget UI
+    # load css file
+    shiny::tags$head(shiny::includeCSS(file.path(dir_path, "card_picker_gui_styles.css"))),
+    # gadget UI
     miniUI::gadgetTitleBar(
       "Run Rnssp Shinyapps",
       right = miniUI::miniTitleBarButton("done", "Run/Execute", primary = TRUE)
