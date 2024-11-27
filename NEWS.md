@@ -13,6 +13,7 @@
 * The `run_app_gui()` RStudio addin has been enhanced with a new, user-friendly design.
 * The `alert_ewma()` function has been updated to include median scaling for time series of percentages less than 1.
 * The `alert_regression()` function has been updated to include moving average test for suppressing alerts during down slopes.
+* The `clean_text()` function has been removed from the `Rnssp` R package.
 
 # Rnssp 0.3.0
 
