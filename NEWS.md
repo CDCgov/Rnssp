@@ -11,6 +11,8 @@
 * The `create_token_profile()` function has been updated as a consequence of the replacement of the `askpass` dependency by `getPass`.
 * The `add_rmd_template_gui()` RStudio addin has been enhanced with a new, user-friendly design.
 * The `run_app_gui()` RStudio addin has been enhanced with a new, user-friendly design.
+* The `alert_ewma()` function has been updated to include median scaling for time series of percentages less than 1.
+* The `alert_regression()` function has been updated to include moving average test for suppressing alerts during down slopes.
 
 # Rnssp 0.3.0
 
