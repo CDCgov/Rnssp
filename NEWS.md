@@ -4,6 +4,7 @@
 * New `Apikey` class added for API services token use. The `Apikey` class has the same methods as the `Credentials` and `Token` classes.
 * New `Auth` parent abstract class added.
 * New function `create_apikey_profile()` added as a wrapper to the `$new()` method defined in the `Apikey` class.
+* New function `explain_url()` to parse URLs to a table of key-value pairs has been added.
 
 ## Updates
 * The `askpass` dependency as been replaced by `getPass`.
