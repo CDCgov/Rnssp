@@ -316,7 +316,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       nest(data_split = -all_of(groups)) %>%
       mutate(anomalies = map(
         .x = data_split,
-        .f = adaptive_regression2, t = !!t, y = !!y, B = B, g = g)
+        .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)
       ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
