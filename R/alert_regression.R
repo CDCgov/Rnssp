@@ -316,7 +316,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       nest(data_split = -all_of(groups)) %>%
       mutate(anomalies = map(
         .x = data_split,
-        .f = adaptive_regression2, t = !!t, y = !!y, B = B, g = g)
+        .f = adaptive_regression, t = !!t, y = !!y, B = B, g = g)
       ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
@@ -340,7 +340,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
     
     ds_check2 <- ds_check1 %>%
       filter(dow %in% c("Sat", "Sun")) %>%
-      arrange(get(groups_t), dow, !!t) %>%
+      arrange(get(groups), dow, !!t) %>%
       group_by(across(all_of(groups)), dow) %>%
       mutate(
         wday_ma7 = zoo::rollmean(!!y, k = 7, align = "right", fill = NA), 
