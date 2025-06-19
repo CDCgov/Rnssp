@@ -331,7 +331,7 @@ list_templates <- function(as.table = FALSE) {
 #'      Otherwise, a vector is returned (Default is FALSE).
 #'
 #' @return A data frame or a vector
-#' @seealso \href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-rmd-templates}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-shiny-apps}
 #' @export
 #'
 #' @examples
