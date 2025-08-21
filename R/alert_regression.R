@@ -333,7 +333,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       group_by(across(all_of(groups))) %>%
       mutate(
         dow = weekdays(!!t, abbreviate = TRUE), 
-        ma7 = zoo::rollmean(!!y, k = 7, align = "right", fill = NA), 
+        ma7 = data.table::frollmean(!!y, n = 7, align = "right", fill = NA), 
         lt_ma7 = if_else(!!y < ma7, TRUE, FALSE), 
         remove_alert = if_else(alert != "blue" & lt_ma7, TRUE, FALSE)
       )
@@ -343,7 +343,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       arrange(get(groups), dow, !!t) %>%
       group_by(across(all_of(groups)), dow) %>%
       mutate(
-        wday_ma7 = zoo::rollmean(!!y, k = 7, align = "right", fill = NA), 
+        wday_ma7 = data.table::frollmean(!!y, n = 7, align = "right", fill = NA), 
         lt_wday_ma7 = if_else(!!y < wday_ma7, TRUE, FALSE), 
         remove_wday_alert = case_when(
           alert != "blue" & remove_alert & lt_wday_ma7 ~ TRUE, 
@@ -403,7 +403,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
     ds_check1 <- reg_initial %>%
       mutate(
         dow = weekdays(!!t, abbreviate = TRUE), 
-        ma7 = zoo::rollmean(!!y, k = 7, align = "right", fill = NA), 
+        ma7 = data.table::frollmean(!!y, n = 7, align = "right", fill = NA), 
         lt_ma7 = if_else(!!y < ma7, TRUE, FALSE), 
         remove_alert = if_else(alert != "blue" & lt_ma7, TRUE, FALSE)
       )
@@ -413,7 +413,7 @@ alert_regression <- function(df, t = date, y = count, B = 28, g = 2) {
       group_by(dow) %>%
       arrange(dow, !!t) %>%
       mutate(
-        wday_ma7 = zoo::rollmean(!!y, k = 7, align = "right", fill = NA), 
+        wday_ma7 = data.table::frollmean(!!y, n = 7, align = "right", fill = NA), 
         lt_wday_ma7 = if_else(!!y < wday_ma7, TRUE, FALSE), 
         remove_wday_alert = case_when(
           alert != "blue" & remove_alert & lt_wday_ma7 ~ TRUE, 
