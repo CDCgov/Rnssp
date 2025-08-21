@@ -41,7 +41,7 @@ The next step is to create a user profile with our NSSP-ESSENCE credentials.
 
 ```{r load, echo=FALSE, eval=TRUE}
 # myProfile <- readRDS("../myProfile.rds")
-load("~/myProfile.rda")
+myProfile <- readRDS("~/myProfile.rds")
 ```
 
 
