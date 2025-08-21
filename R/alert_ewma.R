@@ -25,19 +25,27 @@
 ewma_loop <- function(df, t, y, B, g, w1, w2) {
   t <- enquo(t)
   y <- enquo(y)
-
+  
   N <- nrow(df)
-
+  
   # Populate algorithm parameters
-  min_df <- 3
-  min_baseline <- 11
+  # min_df <- 3
+  # min_baseline <- 11
+  min_baseline <- 7
   max_baseline <- B
   length_baseline <- min_baseline:max_baseline
-
+  
   # Vector of observations
-  y <- df %>%
+  y_initial <- df %>%
     pull(!!y)
-
+  
+  # Scaling for percentage time series with values < 1
+  if (max(y_initial) < 1) {
+    y <- y_initial / median(y_initial[y_initial > 0])
+  } else {
+    y <- y_initial
+  }
+  
   # Initialize result vectors
   expected <- rep(NA, N)
   z1 <- rep(NA, N)
@@ -48,86 +56,86 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
   test_stat2 <- rep(NA, N)
   pval1 <- rep(NA, N)
   pval2 <- rep(NA, N)
-
+  
   z <- z1
   test_stat <- test_stat1
   p_val <- pval1
-
+  
   # Initialize EWMA values
   z1[1] <- y[1]
   z2[1] <- y[1]
-
+  
   for (i0 in 2:(min_baseline + g)) {
     z1[i0] <- w1 * y[i0] + (1 - w1) * z1[i0 - 1]
     z2[i0] <- w2 * y[i0] + (1 - w2) * z2[i0 - 1]
   }
-
+  
   # Initialize baseline indices
   ndx_baseline <- 1:(min_baseline - 1)
-
+  
   # EWMA loop
   for (i in (min_baseline + g + 1):N) {
-
+    
     # Pad baseline until full baseline is obtained
     if (last(ndx_baseline) < max_baseline) {
       ndx_baseline <- c(0, ndx_baseline)
     }
-
+    
     # Advance baseline for current iteration
     ndx_baseline <- ndx_baseline + 1
-
+    
     # Set number of degrees of freedom
     n_df <- length(ndx_baseline) - 1
-
+    
     # Baseline and current data
     y_baseline <- y[ndx_baseline]
-
+    
     expected[i] <- mean(y_baseline)
     sigma <- sd(y_baseline)
-
+    
     sigma_correction1 <- sqrt(
       (w1 / (2 - w1)) + (1 / length(ndx_baseline)) - 2 * (1 - w1)^(g + 1) *
         ((1 - (1 - w1)^length(ndx_baseline)) / length(ndx_baseline))
-      )
+    )
     sigma_correction2 <- sqrt(
       (w2 / (2 - w2)) + (1 / length(ndx_baseline)) - 2 * (1 - w2)^(g + 1) *
         ((1 - (1 - w2)^length(ndx_baseline)) / length(ndx_baseline))
-      )
-
+    )
+    
     ucl_alert <- round(qt(1 - 0.01, df = n_df), 5)
     ucl_warning <- round(qt(1 - 0.05, df = n_df), 5)
-
-    min_sigma1 <- (w1 / ucl_warning) * (1 + 0.5 * (1 - w1)^2)
-    min_sigma2 <- (w2 / ucl_warning) * (1 + 0.5 * (1 - w2)^2)
-
+    
+    min_sigma1 <- (w1 / ucl_warning) * (0.01 + 0.05 * (1 - w1)^2)
+    min_sigma2 <- (w2 / ucl_warning) * (0.01 + 0.05 * (1 - w2)^2)
+    
     constant1 <- (0.1289 - (0.2414 - 0.1826 * (1 - w1)^4) *
                     log(10 * 0.05)) * (w1 / ucl_warning)
     constant2 <- (0.1289 - (0.2414 - 0.1826 * (1 - w2)^4) *
                     log(10 * 0.05)) * (w2 / ucl_warning)
-
+    
     sigma1[i] <- max(min_sigma1, sigma * sigma_correction1 + constant1)
     sigma2[i] <- max(min_sigma2, sigma * sigma_correction2 + constant2)
-
+    
     # EWMA values
     z1[i] <- w1 * y[i] + (1 - w1) * z1[i - 1]
     z2[i] <- w2 * y[i] + (1 - w2) * z2[i - 1]
-
+    
     # Calculate test statistics
     test_stat1[i] <- (z1[i] - expected[i]) / sigma1[i]
     test_stat2[i] <- (z2[i] - expected[i]) / sigma2[i]
-
+    
     if (abs(test_stat1[i]) > ucl_alert) {
       z1[i] <- expected[i] + sign(test_stat1[i]) * ucl_alert * sigma1[i]
     }
-
+    
     if (abs(test_stat2[i]) > ucl_alert) {
       z2[i] <- expected[i] + sign(test_stat2[i]) * ucl_alert * sigma2[i]
     }
-
+    
     # Compute p-values
     pval1[i] <- 1 - pt(test_stat1[i], df = n_df)
     pval2[i] <- 1 - pt(test_stat2[i], df = n_df)
-
+    
     # Determine minimum p-value
     if (pval1[i] < pval2[i]) {
       p_val[i] <- pval1[i]
@@ -139,7 +147,7 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
       z[i] <- z2[i]
     }
   }
-
+  
   tibble::tibble(
     baseline_expected = expected,
     test_statistic = test_stat,
@@ -266,43 +274,43 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
 #' }
 #'
 alert_ewma <- function(df, t = date, y = count,
-                       B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
-
+                        B = 28, g = 2, w1 = 0.4, w2 = 0.9) {
+  
   # Check baseline length argument
   if (B < 7) {
     cli::cli_abort("Error in {.fn alert_ewma}: baseline length argument {.var B}
                    must be greater than or equal to 7")
   }
-
+  
   # Check guardband length argument
   if (g < 0) {
     cli::cli_abort("Error in {.fn alert_ewma}: guardband length argument {.var g}
                    cannot be negative")
   }
-
+  
   # Check for sufficient baseline data
   if (nrow(df) < B + g + 1) {
     cli::cli_abort("Error in {.fn alert_ewma}: not enough historical data")
   }
-
+  
   # Check for grouping variables
   grouped_df <- is.grouped_df(df)
-
+  
   t <- enquo(t)
   y <- enquo(y)
-
+  
   base_tbl <- df %>%
     mutate({{ t }} := as.Date(!!t))
-
+  
   if (grouped_df) {
     groups <- group_vars(base_tbl)
-
+    
     alert_tbl <- base_tbl %>%
       nest(data_split = -all_of(groups)) %>%
       mutate(
         anomalies = map(.x = data_split, .f = ewma_loop,
                         t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)
-        ) %>%
+      ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(
@@ -312,25 +320,25 @@ alert_ewma <- function(df, t = date, y = count,
           TRUE ~ "grey"
         )
       )
-
+    
     return(alert_tbl)
   } else {
     unique_dates <- base_tbl %>%
       pull(!!t) %>%
       unique()
-
+    
     if (length(unique_dates) != nrow(base_tbl)) {
       cli::cli_abort("Error in {.fn alert_regression}: Number of unique dates
                      does not equal the number of rows.
                      Should your dataframe be grouped?")
     }
-
+    
     alert_tbl <- base_tbl %>%
       nest(data_split = everything()) %>%
       mutate(
         anomalies = map(.x = data_split, .f = ewma_loop,
                         t = !!t, y = !!y, B = B, g = g, w1 = w1, w2 = w2)
-        ) %>%
+      ) %>%
       unnest(c(data_split, anomalies)) %>%
       mutate(
         alert = case_when(

@@ -21,7 +21,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # Install the Rnssp package
-devtools::install_github("cdcgov/Rnssp")
+devtools::install_github("cdcgov/Rnssp@dev")
 ```
 
 To install the package for Webassembly, run the following in your `webr` REPL or add it to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:

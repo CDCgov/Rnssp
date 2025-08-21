@@ -45,10 +45,38 @@ create_profile <- function(
 #' }
 #'
 create_token_profile <- function(
-    token = askpass:::readline_silent("Enter/Paste a token: "),
+    token = getPass::getPass("Enter/Paste a token: "),
     auth_type = "Bearer"
 ){
   Token$new(token = token, auth_type = auth_type)
+}
+
+
+#' Create a profile with an API key
+#'
+#' A wrapper to the \code{new} method defined in the \code{\link[Rnssp]{Apikey}} class.
+#'
+#' @param api_key a string for API key
+#' @param key_name a string for an API Key name. Default is \code{API-KEY}
+#' @return An object of class \code{Apikey}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Create a profile with API key named "API-KEY"
+#' myProfile <- create_apikey_profile()
+#' myProfile
+#'
+#' # Create a profile with an API key named "key"
+#' myProfile2 <- create_apikey_profile(key_name = "key")
+#' myProfile2
+#' }
+#'
+create_apikey_profile <- function(
+    api_key = getPass::getPass("Enter/Paste an API key: "),
+    key_name = "API-KEY"
+){
+  Apikey$new(api_key = api_key, key_name = key_name)
 }
 
 #' Get API data
