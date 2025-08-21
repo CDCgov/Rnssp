@@ -1,16 +1,16 @@
 #' ICD Code Web Scraper
 #'
-#' Function to web scrape ICD discharge diagnosis code sets from the CDC FTP server
-#' (for ICD-10) or CMS website (for ICD-9). If pulling ICD-10 codes, by default the
-#' function will search for the most recent year's code set publication by NCHS.
-#' Users can specify earlier publication years back to 2019 if needed. The ICD-9
-#' option will only web scrape the most recent, final ICD-9 code set
-#' publication (2014) from the CMS website. This function will return an error
-#' message if the FTP server or CMS website is  unresponsive or if a timeout
-#' of 60 seconds is reached. The result is a dataframe with 3 fields: code,
-#' description, and set (ICD version concatenated with year). Codes are
-#' standardized to upper case with punctuation and extra leading/tailing white
-#' space removed to enable successful joining.
+#' Function to web scrape ICD discharge diagnosis code sets from the CDC FTP
+#' server or CMS website. If pulling ICD-10 codes, by default the function will
+#' search for the most recent year's code set publication by NCHS. Users can
+#' specify earlier publication years back to 2019 if needed. The ICD-9 option
+#' will only web scrape the most recent, final ICD-9 code set publication (2014)
+#' from the CMS website. This function will return an error message if the FTP
+#' server or CMS website is  unresponsive or if a timeout of 60 seconds is
+#' reached. The result is a dataframe with 3 fields: code, description, and
+#' set (ICD version concatenated with year). Codes are standardized to upper
+#' case with punctuation and extra leading/tailing white space removed to
+#' enable successful joining.
 #'
 #' @param icd_version A character value of either "icd10", "ICD10", "icd9", or
 #'     "ICD9" to specify ICD version
@@ -24,6 +24,7 @@
 #' @references
 #' \itemize{
 #'     \item \href{https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/}{CDC NCHS FTP Server Location for Published ICD-10 Code Sets}
+#'     \item \href{https://www.cms.gov/medicare/coding-billing/icd-10-codes}{CMS Website for Published 2024 ICD-10 Code Set}
 #'     \item \href{https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes}{CMS Website for Published ICD-9 Code Sets}
 #' }
 #'
@@ -97,7 +98,8 @@ webscrape_icd <- function(icd_version = "ICD10", year = NULL, quiet = FALSE) {
 
       file_list <- unlist(
         str_extract_all(
-          path_files, pattern = paste0(
+          path_files,
+          pattern = paste0(
             path, "[a-zA-Z\\d-_ %20]+\\w+(?:\\.(?:xlsx|pdf|zip|txt))?"
           )
         )
@@ -160,7 +162,44 @@ webscrape_icd <- function(icd_version = "ICD10", year = NULL, quiet = FALSE) {
             set = paste("ICD-10", file_year)
           )
       }
+    } else if (as.numeric(year) == 2024) {
+      file_year <- year
 
+      url_cms_2024 <- "https://www.cms.gov/files/zip/2024-code-descriptions-tabular-order-updated-02/01/2024.zip"
+
+      temp_dir <- tempdir()
+      temp_file <- tempfile(tmpdir = temp_dir, fileext = ".zip")
+
+      download_exit_status <- try(
+        download.file(url_cms_2024, temp_file, quiet = quiet)
+      )
+
+      if (all(class(download_exit_status) == "try-error")) {
+        cli::cli_abort("Error in {.fn webscrape_icd}: ICD-10 webscrape failed.
+                         CMS website is currently unresponsive.")
+      }
+
+      file_name <- unzip(temp_file, list = TRUE) %>%
+        filter(Name == "icd10cm_codes_2024.txt") %>%
+        pull(Name)
+
+      unzip(temp_file, files = file_name, exdir = temp_dir, overwrite = TRUE)
+
+      file_path <- file.path(temp_dir, file_name)
+
+      icd_dictionary <- fread(file_path, sep = "\t", header = FALSE) %>%
+        setnames(old = "V1", new = "code_combo") %>%
+        as.data.frame() %>%
+        mutate(
+          code_combo = str_replace_all(code_combo, "\\s{2,4}", "_"),
+          code_combo = str_replace_all(code_combo, "(?<=^[[:alnum:]]{7})\\s{1}", "_")
+        ) %>%
+        separate(code_combo, c("code", "description"), sep = "_") %>%
+        mutate(
+          code = str_squish(code),
+          description = str_squish(description),
+          set = paste("ICD-10", file_year)
+        )
     } else if (as.numeric(year) == 2023) {
       file_year <- year
 
@@ -178,7 +217,8 @@ webscrape_icd <- function(icd_version = "ICD10", year = NULL, quiet = FALSE) {
 
       file_list <- unlist(
         str_extract_all(
-          path_files, pattern = paste0(
+          path_files,
+          pattern = paste0(
             path, "[a-zA-Z\\d-_ %20]+\\w+(?:\\.(?:xlsx|pdf|zip|txt))?"
           )
         )
@@ -241,7 +281,6 @@ webscrape_icd <- function(icd_version = "ICD10", year = NULL, quiet = FALSE) {
             set = paste("ICD-10", file_year)
           )
       }
-
     } else {
       file_year <- year
       path <- paste0("pub/Health_Statistics/NCHS/Publications/ICD10CM/", file_year, "/")
@@ -307,4 +346,3 @@ webscrape_icd <- function(icd_version = "ICD10", year = NULL, quiet = FALSE) {
     return(icd_dictionary)
   }
 }
-
