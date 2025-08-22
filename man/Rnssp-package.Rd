@@ -25,5 +25,10 @@ Authors:
   \item Michael Sheppard \email{msheppard@cdc.gov} (\href{https://orcid.org/0000-0003-3660-575X}{ORCID}) [contributor]
 }
 
+Other contributors:
+\itemize{
+  \item Andrew Manigault \email{andrewmanigaultw@gmail.com} (\href{https://orcid.org/0000-0003-4197-1295}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}
