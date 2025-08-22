@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -34,6 +34,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,18 +48,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Rnssp_intro.html">Get started</a>
 </li>
@@ -91,7 +87,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/CDCgov/Rnssp/">
+  <a href="https://github.com/CDCgov/Rnssp/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -112,23 +108,23 @@
 
       
 
-      </header><script src="Rnssp_intro_files/header-attrs-2.25/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to the Rnssp package</h1>
-                        <h4 class="author"></h4>
+                        <h4 data-toc-skip class="author"></h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/master/vignettes/Rnssp_intro.Rmd"><code>vignettes/Rnssp_intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/HEAD/vignettes/Rnssp_intro.Rmd" class="external-link"><code>vignettes/Rnssp_intro.Rmd</code></a></small>
       <div class="hidden name"><code>Rnssp_intro.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 class="unnumbered" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>The goal of <code>Rnssp</code> package is to facilitate the access to
 the Electronic Surveillance System for the Early Notification of
 Community-based Epidemics (<code>ESSENCE</code>) via a secure and
@@ -149,13 +145,13 @@ using the following ESSENCE APIs:</p>
 ESSENCE2)</li>
 </ol>
 </div>
-<div id="creating-an-nssp-user-profile" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#creating-an-nssp-user-profile" class="anchor"></a>Creating an NSSP user profile</h1>
+<div class="section level2">
+<h2 class="unnumbered" id="creating-an-nssp-user-profile">Creating an NSSP user profile<a class="anchor" aria-label="anchor" href="#creating-an-nssp-user-profile"></a>
+</h2>
 <p>We start by loading the <code>Rnssp</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Loading useful R packages...</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cdcgov.github.io/Rnssp">Rnssp</a></span><span class="op">)</span></span></code></pre></div>
 <p>The next step is to create a user profile with NSSP-ESSENCE user
 credentials (username and password). The created user profile is an
 object of class <code>Credentials</code> class which has been designed
@@ -185,6 +181,7 @@ object is inspected.</p>
 <code class="sourceCode R"><span><span class="co"># Inspecting the myProfile object</span></span>
 <span><span class="va">myProfile</span></span>
 <span><span class="co">#&gt; &lt;NSSPCredentials&gt;</span></span>
+<span><span class="co">#&gt;   Inherits from: &lt;NSSPAuth&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
@@ -197,8 +194,9 @@ object is inspected.</p>
 <span><span class="co">#&gt;     ..username: NSSPContainer, R6</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Alternatively, you may look at the structure of the myProfile object</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">myProfile</span><span class="op">)</span> <span class="co"># or `structure(myProfile)`</span></span>
-<span><span class="co">#&gt; Classes 'NSSPCredentials', 'R6' &lt;NSSPCredentials&gt;</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">myProfile</span><span class="op">)</span> <span class="co"># or `structure(myProfile)`</span></span>
+<span><span class="co">#&gt; Classes 'NSSPCredentials', 'NSSPAuth', 'R6' &lt;NSSPCredentials&gt;</span></span>
+<span><span class="co">#&gt;   Inherits from: &lt;NSSPAuth&gt;</span></span>
 <span><span class="co">#&gt;   Public:</span></span>
 <span><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
 <span><span class="co">#&gt;     get_api_data: function (url, fromCSV = FALSE, ...) </span></span>
@@ -225,9 +223,9 @@ function.</p>
 <p>In the following sections, we show how to pull data from NSSP-ESSENCE
 using the seven APIs listed above.</p>
 </div>
-<div id="time-series-data-table" class="section level1">
-<h1 class="hasAnchor">
-<a href="#time-series-data-table" class="anchor"></a>Time Series Data Table</h1>
+<div class="section level2">
+<h2 id="time-series-data-table">Time Series Data Table<a class="anchor" aria-label="anchor" href="#time-series-data-table"></a>
+</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
@@ -235,43 +233,47 @@ using the seven APIs listed above.</p>
 <span><span class="co"># pull time series data</span></span>
 <span><span class="va">api_data_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="co"># or api_data_ts &lt;- myProfile$get_api_data(url)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "title"          "timeSeriesData"</span></span>
-<span><span class="co"># glimpse(api_data_ts$timeSeriesData)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_ts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "title"          "timeSeriesData"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># glimpse(api_data_ts$timeSeriesData)</span></span></code></pre></div>
 <p>Alternatively, the example below with the
 <code><a href="../reference/get_api_response.html">get_api_response()</a></code> function achieves the same outcome as
 previously (<em>we recommend using this for debugging
 purposes</em>):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from ESSENCE JSON Time Series Data Table API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
 <span></span>
 <span><span class="co"># pull time series data</span></span>
 <span><span class="va">api_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_response.html">get_api_response</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="va">api_response_content</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html">content</a></span><span class="op">(</span><span class="va">api_response</span>, as <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
-<span><span class="va">api_data_ts2</span> <span class="op">&lt;-</span> <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">fromJSON</a></span><span class="op">(</span><span class="va">api_response_content</span><span class="op">)</span></span>
+<span><span class="va">api_response_content</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="va">api_response</span>, as <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
+<span><span class="va">api_data_ts2</span> <span class="op">&lt;-</span> <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">fromJSON</a></span><span class="op">(</span><span class="va">api_response_content</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">$</span><span class="va">timeSeriesData</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_ts2</span><span class="op">$</span><span class="va">timeSeriesData</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "date"      "count"     "expected"  "levels"    "colorID"   "color"    </span></span>
-<span><span class="co">#&gt;  [7] "altText"   "details"   "graphType" "lineLabel" "title"</span></span>
-<span></span>
+<span><span class="co">#&gt;  [7] "altText"   "details"   "graphType" "lineLabel" "title"</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_ts2$timeSeriesData)</span></span></code></pre></div>
 <p>Although, we present the alternate code above, the following sections
 will only demonstrate the direct approach using the
 <code><a href="../reference/get_api_data.html">get_api_data()</a></code> function The alternate code can nevertheless
 be easily adapted to the other types of ESSENCE API data pulls.</p>
 </div>
-<div id="time-series-graph-from-essence" class="section level1">
-<h1 class="hasAnchor">
-<a href="#time-series-graph-from-essence" class="anchor"></a>Time Series Graph from ESSENCE</h1>
+<div class="section level2">
+<h2 id="time-series-graph-from-essence">Time Series Graph from ESSENCE<a class="anchor" aria-label="anchor" href="#time-series-graph-from-essence"></a>
+</h2>
 <p>The example below shows how to retrieve the Time Series Graph from
 NSSP-ESSENCE and insert it in the Rmarkdown report.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from ESSENCE Time Series Graph from ESSENCE API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/timeSeries/graph?endDate=9Feb2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;graphTitle=National%20-%20Injury%20Syndrome%20Daily%20Counts&amp;xAxisLabel=Date&amp;yAxisLabel=Count"</span></span>
 <span></span>
@@ -279,26 +281,26 @@ NSSP-ESSENCE and insert it in the Rmarkdown report.</p>
 <span><span class="va">api_data_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_graph.html">get_api_graph</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Inspecting api_data_graph object</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "api_response" "graph"</span></span>
 <span></span>
 <span><span class="co"># Inserting graph in the report</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="va">api_data_graph</span><span class="op">$</span><span class="va">graph</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="table-builder-results" class="section level1">
-<h1 class="hasAnchor">
-<a href="#table-builder-results" class="anchor"></a>Table Builder Results</h1>
+<div class="section level2">
+<h2 id="table-builder-results">Table Builder Results<a class="anchor" aria-label="anchor" href="#table-builder-results"></a>
+</h2>
 <p>The CSV option of the Table Builder Results API pulls in data in the
 tabular format seen on NSSP-ESSENCE. The JSON option on the other hand,
 pulls in the data in a long, pivoted format. In the following
 subsections, we demonstrate how to pull the Table Builder results data
 with both options.</p>
-<div id="csv-option" class="section level2">
-<h2 class="hasAnchor">
-<a href="#csv-option" class="anchor"></a>CSV option</h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="csv-option">CSV option<a class="anchor" aria-label="anchor" href="#csv-option"></a>
+</h3>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from CSV ESSENCE Table Builder results API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder/csv?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span></span>
 <span></span>
@@ -306,149 +308,163 @@ with both options.</p>
 <span><span class="va">api_data_tb_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Inspecting api_data_graph object</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_tb_csv</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_tb_csv)</span></span></code></pre></div>
 </div>
-<div id="json-option" class="section level2">
-<h2 class="hasAnchor">
-<a href="#json-option" class="anchor"></a>JSON option</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="json-option">JSON option<a class="anchor" aria-label="anchor" href="#json-option"></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Table Builder results API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&amp;ccddCategory=cdc%20opioid%20overdose%20v3&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=nodetectordetector&amp;startDate=1Oct2020&amp;ageNCHS=11-14&amp;ageNCHS=15-24&amp;ageNCHS=25-34&amp;ageNCHS=35-44&amp;ageNCHS=45-54&amp;ageNCHS=55-64&amp;ageNCHS=65-74&amp;ageNCHS=75-84&amp;ageNCHS=85-1000&amp;ageNCHS=unknown&amp;timeResolution=monthly&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TableBuilder&amp;rowFields=timeResolution&amp;rowFields=geographyhospitaldhhsregion&amp;columnField=ageNCHS"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_tb_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "data.frame"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "data.frame"</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_tb_json</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "timeResolution"              "geographyhospitaldhhsregion"</span></span>
-<span><span class="co">#&gt; [3] "ageNCHS"                     "count"</span></span>
-<span></span>
+<span><span class="co">#&gt; [3] "ageNCHS"                     "count"</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_tb_json)</span></span></code></pre></div>
 </div>
 </div>
-<div id="data-details-line-level" class="section level1">
-<h1 class="hasAnchor">
-<a href="#data-details-line-level" class="anchor"></a>Data Details (line level)</h1>
+<div class="section level2">
+<h2 id="data-details-line-level">Data Details (line level)<a class="anchor" aria-label="anchor" href="#data-details-line-level"></a>
+</h2>
 <p>Similarly to the Table builder Results API, the Data Details (line
 level) provides CSV and JSON data outputs.</p>
-<div id="csv-option-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#csv-option-1" class="anchor"></a>CSV option</h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="csv-option-1">CSV option<a class="anchor" aria-label="anchor" href="#csv-option-1"></a>
+</h3>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from CSV ESSENCE Data Details (line level) API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries&amp;startDate=31Jan2021&amp;endDate=31Jan2021"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_dd_csv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span>, fromCSV <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_csv</span><span class="op">)</span>  </span>
-<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_dd_csv</span><span class="op">)</span>  </span>
+<span><span class="co">#&gt; [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_dd_csv)</span></span></code></pre></div>
 </div>
-<div id="json-option-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#json-option-1" class="anchor"></a>JSON option</h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="json-option-1">JSON option<a class="anchor" aria-label="anchor" href="#json-option-1"></a>
+</h3>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Data Details (line level) API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/dataDetails?endDate=31Jan2021&amp;medicalGrouping=injury&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=31Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=DataDetails"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_dd_json</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "dataDetails"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_dd_json</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "dataDetails"</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_dd_json$dataDetails)</span></span></code></pre></div>
 </div>
 </div>
-<div id="summary-stats" class="section level1">
-<h1 class="hasAnchor">
-<a href="#summary-stats" class="anchor"></a>Summary Stats</h1>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="summary-stats">Summary Stats<a class="anchor" aria-label="anchor" href="#summary-stats"></a>
+</h2>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Summary Stats API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/summaryData?endDate=31Jan2021&amp;medicalGrouping=injury&amp;geography=region%20i&amp;percentParam=noPercent&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hosp&amp;detector=probrepswitch&amp;startDate=29Jan2021&amp;timeResolution=daily&amp;medicalGroupingSystem=essencesyndromes&amp;userId=455&amp;aqtTarget=TimeSeries"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "summaryData"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_ss</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "summaryData"</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_ss$summaryData)</span></span></code></pre></div>
 </div>
-<div id="alert-list-detection-table" class="section level1">
-<h1 class="hasAnchor">
-<a href="#alert-list-detection-table" class="anchor"></a>Alert List Detection Table</h1>
+<div class="section level2">
+<h2 id="alert-list-detection-table">Alert List Detection Table<a class="anchor" aria-label="anchor" href="#alert-list-detection-table"></a>
+</h2>
 <p>Since the Alert List API provides programmatic access to the Alert
 List table on the ESSENCE user interface by patient region or by
 hospital regions, we provide two use cases of data pull in the following
 subsections:</p>
-<div id="alert-list-detection-table-by-patient-region" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alert-list-detection-table-by-patient-region" class="anchor"></a>Alert List Detection Table by Patient Region</h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="alert-list-detection-table-by-patient-region">Alert List Detection Table by Patient Region<a class="anchor" aria-label="anchor" href="#alert-list-detection-table-by-patient-region"></a>
+</h3>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/regionSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_alr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "regionSyndromeAlerts"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_alr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "regionSyndromeAlerts"</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_alr$regionSyndromeAlerts)</span></span></code></pre></div>
 </div>
-<div id="alert-list-detection-table-by-hospital-region" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alert-list-detection-table-by-hospital-region" class="anchor"></a>Alert List Detection Table by Hospital Region</h2>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="alert-list-detection-table-by-hospital-region">Alert List Detection Table by Hospital Region<a class="anchor" aria-label="anchor" href="#alert-list-detection-table-by-hospital-region"></a>
+</h3>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Alert List Detection Table API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence.syndromicsurveillance.org/nssp_essence/api/alerts/hospitalSyndromeAlerts?end_date=31Jan2021&amp;start_date=29Jan2021"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_alh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "hospitalSyndromeAlerts"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_alh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hospitalSyndromeAlerts"</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_alh$hospitalSyndromeAlerts)</span></span></code></pre></div>
 </div>
 </div>
-<div id="time-series-data-table-with-stratified-historical-alerts-from-essence2" class="section level1">
-<h1 class="hasAnchor">
-<a href="#time-series-data-table-with-stratified-historical-alerts-from-essence2" class="anchor"></a>Time series data table with stratified, historical alerts (from
-ESSENCE2)</h1>
-<p>This functionality as of April 22, 2024 is available from ESSENCE2.
+<div class="section level2">
+<h2 id="time-series-data-table-with-stratified-historical-alerts-from-essence2">Time series data table with stratified, historical alerts (from
+ESSENCE2)<a class="anchor" aria-label="anchor" href="#time-series-data-table-with-stratified-historical-alerts-from-essence2"></a>
+</h2>
+<p>This functionality as of August 22, 2025 is available from ESSENCE2.
 Therefore, if your ESSENCE 2 credentials are different from the one you
 define for ESSENCE above, you will have to recreate another profile
 object for ESSENCE 2 and use it to run the code below. In this example,
 it is assumed that the same user profile has been used for both ESSENCE
 and ESSENCE 2.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># URL from JSON ESSENCE Time series data table with stratified, historical alerts API</span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=9Feb2021&amp;ccddCategory=cdc%20pneumonia%20ccdd%20v1&amp;ccddCategory=cdc%20coronavirus-dd%20v1&amp;ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2&amp;percentParam=ccddCategory&amp;geographySystem=hospitaldhhsregion&amp;datasource=va_hospdreg&amp;detector=probrepswitch&amp;startDate=11Nov2020&amp;timeResolution=daily&amp;hasBeenE=1&amp;medicalGroupingSystem=essencesyndromes&amp;userId=2362&amp;aqtTarget=TimeSeries&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;nonZeroComposite=false&amp;removeZeroSeries=true&amp;startMonth=January&amp;stratVal=ccddCategory&amp;multiStratVal=geography&amp;graphOnly=true&amp;numSeries=3&amp;graphOptions=multipleSmall&amp;seriesPerYear=false&amp;startMonth=January&amp;nonZeroComposite=false"</span></span>
 <span></span>
 <span><span class="co"># Data Pull from ESSENCE</span></span>
 <span><span class="va">api_data_tssh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_api_data.html">get_api_data</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "list"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "graphCharacterization" "timeSeriesData"</span></span>
-<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">api_data_tssh</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "timeSeriesData"</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># glimpse(api_data_tssh$timeSeriesData)</span></span></code></pre></div>
 </div>
   </div>
@@ -464,11 +480,13 @@ and ESSENCE 2.</p>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://rosericazondekon.github.io" class="external-link">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard" class="external-link">Michael Sheppard</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

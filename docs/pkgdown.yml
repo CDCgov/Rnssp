@@ -1,13 +1,13 @@
-pandoc: 3.1.1
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   Rnssp_intro: Rnssp_intro.html
   Rnssp_rstudio_addins: Rnssp_rstudio_addins.html
   Rnssp_text_mining: Rnssp_text_mining.html
   Rnssp_trend_alert_detection: Rnssp_trend_alert_detection.html
-last_built: 2024-04-22T12:53Z
+last_built: 2025-08-22T18:13Z
 urls:
-  reference: https://cdcgov.github.io/Rnssp//reference
-  article: https://cdcgov.github.io/Rnssp//articles
+  reference: https://cdcgov.github.io/Rnssp/reference
+  article: https://cdcgov.github.io/Rnssp/articles
 

@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -34,6 +34,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,18 +48,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Rnssp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/Rnssp_intro.html">Get started</a>
 </li>
@@ -91,7 +87,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/CDCgov/Rnssp/">
+  <a href="https://github.com/CDCgov/Rnssp/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -112,14 +108,14 @@
 
       
 
-      </header><script src="Rnssp_rstudio_addins_files/header-attrs-2.25/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using Rnssp RStudio Addins</h1>
-                        <h4 class="author"></h4>
+                        <h4 data-toc-skip class="author"></h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/master/vignettes/Rnssp_rstudio_addins.Rmd"><code>vignettes/Rnssp_rstudio_addins.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CDCgov/Rnssp/blob/HEAD/vignettes/Rnssp_rstudio_addins.Rmd" class="external-link"><code>vignettes/Rnssp_rstudio_addins.Rmd</code></a></small>
       <div class="hidden name"><code>Rnssp_rstudio_addins.Rmd</code></div>
 
     </div>
@@ -131,15 +127,15 @@ img {
   max-width: 700px;
 }
 </style>
-<div id="launch-the-addin" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#launch-the-addin" class="anchor"></a>Launch the addin</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="launch-the-addin">Launch the addin<a class="anchor" aria-label="anchor" href="#launch-the-addin"></a>
+</h2>
 <p>In RStudio, you can use the <em>Addins</em> menu:</p>
 <p><img src="assets/launch-addin.png"></p>
 </div>
-<div id="create-a-user-profile-with-the-gui" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#create-a-user-profile-with-the-gui" class="anchor"></a>Create a User Profile with the GUI</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="create-a-user-profile-with-the-gui">Create a User Profile with the GUI<a class="anchor" aria-label="anchor" href="#create-a-user-profile-with-the-gui"></a>
+</h2>
 <p>Users may create and save a profile via the <em>Create User Profile
 (GUI)</em> addin menu as shown below:</p>
 <p><img src="assets/create_user_profile_gui.gif"></p>
@@ -147,9 +143,9 @@ img {
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile_gui.html">create_user_profile_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="generate-a-skeleton-to-create-a-user-profile" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#generate-a-skeleton-to-create-a-user-profile" class="anchor"></a>Generate a Skeleton to create a User Profile</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="generate-a-skeleton-to-create-a-user-profile">Generate a Skeleton to create a User Profile<a class="anchor" aria-label="anchor" href="#generate-a-skeleton-to-create-a-user-profile"></a>
+</h2>
 <p>Alternatively, users may generate a code skeleton in the R console
 from the <em>Create User Profile (code skeleton)</em> addin as
 demonstrated below:</p>
@@ -158,9 +154,9 @@ demonstrated below:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/create_user_profile.html">create_user_profile</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="run-rnssp-shiny-apps" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#run-rnssp-shiny-apps" class="anchor"></a>Run Rnssp shiny apps</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="run-rnssp-shiny-apps">Run Rnssp shiny apps<a class="anchor" aria-label="anchor" href="#run-rnssp-shiny-apps"></a>
+</h2>
 <p>Rnssp Shiny Apps are custom-built applications for the
 <code>Rnssp</code> community of users, providing on-demand tools to
 enhance user experiences and streamline workflows.</p>
@@ -171,9 +167,9 @@ shiny apps via Rnssp Addins:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/run_app_gui.html">run_app_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="listing-available-rnssp-templates" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#listing-available-rnssp-templates" class="anchor"></a>Listing Available Rnssp templates</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="listing-available-rnssp-templates">Listing Available Rnssp templates<a class="anchor" aria-label="anchor" href="#listing-available-rnssp-templates"></a>
+</h2>
 <p>Users may check the list of all the currently available <a href="https://cdcgov.github.io/Rnssp-rmd-templates">Rnssp R Markdown
 templates</a> with the <em>List Rnssp Templates</em> addin:</p>
 <p><img src="assets/list_templates_addins.gif"></p>
@@ -181,9 +177,9 @@ templates</a> with the <em>List Rnssp Templates</em> addin:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/list_templates.html">list_templates</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="addupdate-rnssp-templates" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#addupdate-rnssp-templates" class="anchor"></a>Add/Update Rnssp Templates</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="addupdate-rnssp-templates">Add/Update Rnssp Templates<a class="anchor" aria-label="anchor" href="#addupdate-rnssp-templates"></a>
+</h2>
 <p>A unique feature of the <code>Rnssp</code> package is the ability to
 add R Markdown templates dynamically to an existing installation of the
 package. The National Syndromic Surveillance Program (NSSP), in
@@ -195,9 +191,9 @@ the <em>Add/Update Rnssp Templates</em> addin:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/add_rmd_template_gui.html">add_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="remove-rnssp-templates" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#remove-rnssp-templates" class="anchor"></a>Remove Rnssp Templates</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="remove-rnssp-templates">Remove Rnssp Templates<a class="anchor" aria-label="anchor" href="#remove-rnssp-templates"></a>
+</h2>
 <p>When one or more Rnssp templates are no longer needed, they can be
 removed via the <em>Remove Rnssp Templates</em> addin:</p>
 <p><img src="assets/remove_templates.gif"></p>
@@ -205,26 +201,26 @@ removed via the <em>Remove Rnssp Templates</em> addin:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/remove_rmd_template_gui.html">remove_rmd_template_gui</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="accessing-package-and-templates-documentations" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#accessing-package-and-templates-documentations" class="anchor"></a>Accessing Package and Templates
-Documentations</h2>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="accessing-package-and-templates-documentations">Accessing Package and Templates
+Documentations<a class="anchor" aria-label="anchor" href="#accessing-package-and-templates-documentations"></a>
+</h2>
 <p>The <em>Rnssp Templates Documentation</em> and the <em>Rnssp
 Documentation</em> addins are provided to allow users to easily access
 respectively, the Rnssp R Markdown templates and the Rnssp package
 online documentation.</p>
-<div id="rnssp-r-markdown-templates-documentation-addin" class="section level3 unnumbered">
-<h3 class="hasAnchor">
-<a href="#rnssp-r-markdown-templates-documentation-addin" class="anchor"></a>Rnssp R Markdown Templates Documentation
-Addin</h3>
+<div class="section level3 unnumbered">
+<h3 class="unnumbered" id="rnssp-r-markdown-templates-documentation-addin">Rnssp R Markdown Templates Documentation
+Addin<a class="anchor" aria-label="anchor" href="#rnssp-r-markdown-templates-documentation-addin"></a>
+</h3>
 <p><img src="assets/templates_doc.png"></p>
 <p>Or in the R console:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rnssp</span><span class="fu">:::</span><span class="fu"><a href="../reference/rnssp_templates_manual.html">rnssp_templates_manual</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="rnssp-package-documentation" class="section level3 unnumbered">
-<h3 class="hasAnchor">
-<a href="#rnssp-package-documentation" class="anchor"></a>Rnssp Package Documentation</h3>
+<div class="section level3 unnumbered">
+<h3 class="unnumbered" id="rnssp-package-documentation">Rnssp Package Documentation<a class="anchor" aria-label="anchor" href="#rnssp-package-documentation"></a>
+</h3>
 <p><img src="assets/package_doc.png"></p>
 <p>Or in the R console:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -244,11 +240,13 @@ Addin</h3>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://rosericazondekon.github.io">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard">Michael Sheppard</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://rosericazondekon.github.io" class="external-link">Gbedegnon Roseric Azondekon</a>, <a href="https://github.com/Michael-Sheppard" class="external-link">Michael Sheppard</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
