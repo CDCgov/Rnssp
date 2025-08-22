@@ -26,7 +26,7 @@
 #' to users to decide which template to extend the package with post-installation.
 #' To list all available template, run the \code{\link[Rnnsp]{list_templates()}} function. Please, check
 #' the Rnssp R markdown template Github repository at
-#' \href{https://github.com/cdcgov/rnssp-rmd-templates}{https://github.com/cdcgov/rnssp-rmd-templates}.
+#' \href{https://github.com/cdcgov/Rnssp-rmd-templates}{https://github.com/cdcgov/Rnssp-rmd-templates}.
 #'
 #' @section Rnssp Shiny Applications:
 #' The Rnssp package comes with one custom-built Rnssp Shiny application.
@@ -34,7 +34,7 @@
 #' or via the \code{\link[Rnssp]{run_app()}} utility function.
 #' To list all available Rnssp shiny apps, run the \code{\link[Rnnsp]{list_apps()}} function.
 #' Please, check the Rnssp-shiny-appse Github repository at
-#' \href{https://github.com/cdcgov/rnssp-shiny-apps}{https://github.com/cdcgov/rnssp-shiny-apps}.
+#' \href{https://github.com/cdcgov/Rnssp-shiny-apps}{https://github.com/cdcgov/Rnssp-shiny-apps}.
 #'
 #' @docType package
 #' @name Rnssp
