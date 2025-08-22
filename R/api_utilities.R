@@ -81,15 +81,15 @@ create_apikey_profile <- function(
 
 #' Get API data
 #'
-#' A wrapper to the \code{get_api_data} method defined in the
-#' \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}},
+#' \code{\link[Rnssp]{Token}}, and \code{\link[Rnssp]{Apikey}} classes.
 #'
 #' @param url a character of API URL.
 #' @param fromCSV a logical, defines whether data are returned in .csv format or .json format.
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.
+#' @param profile an object of class \code{\link[Rnssp]{Auth}}. Default is \code{myProfile}.
 #' @param ... further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
 #'
-#' @seealso \code{\link[Rnssp]{Credentials}}
+#' @seealso \code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_graph}}
 #' @return a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 #' @export
 #'
@@ -113,13 +113,13 @@ get_api_data <- function(url, fromCSV = FALSE, profile = myProfile, ...) {
 #' Get API response
 #'
 #' A wrapper to the \code{get_api_response} method defined in the
-#' \code{\link[Rnssp]{Credentials}} class.
+#' \code{\link[Rnssp]{Auth}} class.
 #'
 #' @param url a character of API URL
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#' @param profile an object of class \code{\link[Rnssp]{Auth}}.
 #'     Default is \code{myProfile}.
 #'
-#' @seealso \code{\link[Rnssp]{Credentials}}
+#' @seealso \code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_graph}}
 #' @return An object of class \code{response}.
 #' @export
 #'
@@ -138,16 +138,16 @@ get_api_response <- function(url, profile = myProfile) {
 
 #' Get an API graph
 #'
-#' A wrapper to the \code{get_api_graph} method defined in the
-#' \code{\link[Rnssp]{Credentials}} class.
+#' A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{Credentials}},
+#' \code{\link[Rnssp]{Token}}, and \code{\link[Rnssp]{Apikey}} classes.
 #'
 #' @param url a character of API URL.
 #' @param file_ext a non-empty character vector giving the file extension.
 #'     Default is \code{.png}.
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#' @param profile an object of class \code{\link[Rnssp]{Auth}}.
 #'     Default is \code{myProfile}.
 #'
-#' @seealso \code{\link[Rnssp]{Credentials}}
+#' @seealso \code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_data}}
 #' @return An object of class \code{response}.
 #' @export
 #'
@@ -180,13 +180,13 @@ get_api_graph <- function(url, file_ext = ".png", profile = myProfile) {
 #'     format (e.g. "2019-08-01")
 #' @param end_date a date object or a character string in date format
 #'     (e.g. "2020-08-01")
-#' @param profile an object of class \code{\link[Rnssp]{Credentials}}.
+#' @param profile an object of class \code{\link[Rnssp]{Auth}}.
 #'     Default is \code{myProfile}.
 #' @param ... further arguments and CSV parsing parameters to be passed to
 #'     \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.
 #'
 #' @return a dataframe or a character string.
-#' @seealso \code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_tsgraph}}
+#' @seealso \code{\link[Rnssp]{get_api_response}}, \code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_graph}}
 #' @export
 #'
 #' @examples

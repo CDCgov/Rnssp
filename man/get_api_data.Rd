@@ -11,7 +11,7 @@ get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 
 \item{fromCSV}{a logical, defines whether data are returned in .csv format or .json format.}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}. Default is \code{myProfile}.}
+\item{profile}{an object of class \code{\link[Rnssp]{Auth}}. Default is \code{myProfile}.}
 
 \item{...}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
 }
@@ -19,8 +19,8 @@ get_api_data(url, fromCSV = FALSE, profile = myProfile, ...)
 a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE}).
 }
 \description{
-A wrapper to the \code{get_api_data} method defined in the
-\code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_data} method defined in the \code{\link[Rnssp]{Credentials}},
+\code{\link[Rnssp]{Token}}, and \code{\link[Rnssp]{Apikey}} classes.
 }
 \examples{
 \dontrun{
@@ -36,5 +36,5 @@ head(api_data_csv)
 }
 }
 \seealso{
-\code{\link[Rnssp]{Credentials}}
+\code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_graph}}
 }
