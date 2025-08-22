@@ -1,13 +1,15 @@
 Package: Rnssp
 Type: Package
 Title: A Signature R package for the National Syndromic Surveillance Program (NSSP)
-Version: 0.3.0.9000
+Version: 0.3.1
 Date: 2024-03-25
 Authors@R: c(
     person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
                   role = c("aut", "cre", "ctb"), comment = c(ORCID = "0000-0001-9155-4153")),
     person("Michael", "Sheppard", email = "msheppard@cdc.gov",
-                  role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-3660-575X")))
+                  role = c("aut", "ctb"), comment = c(ORCID = "0000-0003-3660-575X")),
+    person("Andrew", "Manigault", email = "andrewmanigaultw@gmail.com", 
+                  role = c("ctb"), comment = c(ORCID = "0000-0003-4197-1295")))
 Maintainer: Gbedegnon Roseric Azondekon <gazondekon@cdc.gov>
 Description: A collection of tools, functions, and Rmarkdown templates 
     that supports the National Syndromic and Surveillance Program Community of Practice.

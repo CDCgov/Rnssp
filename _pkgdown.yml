@@ -54,9 +54,10 @@ reference:
       - askme
       - change_dates
       - classify_trend
-      - clean_text
       - create_profile
+      - create_apikey_profile
       - create_token_profile
+      - explain_url
       - get_api_data
       - get_api_graph
       - get_api_response
@@ -71,6 +72,8 @@ reference:
   - title: Exported Classes
     desc: Classes exported by the Rnssp package
     contents:
+      - Apikey
+      - Auth
       - Credentials
       - NSSPContainer
       - Token

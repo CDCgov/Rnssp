@@ -1,4 +1,4 @@
-# Rnssp 0.3.0.9000
+# Rnssp 0.3.1
 
 ## New Features
 * New `Apikey` class added for API services token use. The `Apikey` class has the same methods as the `Credentials` and `Token` classes.

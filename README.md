@@ -21,7 +21,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # Install the Rnssp package
-devtools::install_github("cdcgov/Rnssp@dev")
+devtools::install_github("cdcgov/Rnssp")
 ```
 
 To install the package for Webassembly, run the following in your `webr` REPL or add it to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:
@@ -75,15 +75,15 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 
 ## Citing the `Rnssp` package
 ```tex
-@software{Azondekon_Rnssp_A_Signature_2024,
+@software{Azondekon_Rnssp_A_Signature_2025,
   author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
   doi = {10.5281/zenodo.10884244},
   license = {Apache License (>= 2)},
   month = mar,
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
-  version = {0.3.0},
-  year = {2024}
+  version = {0.3.1},
+  year = {2025}
 }
 ```
 
