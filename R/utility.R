@@ -1,17 +1,17 @@
 #' Password Prompt Utility
 #'
-#' Prompt the user for a password. This function is a wrapper for the \code{\link[askpass]{askpass}} function.
+#' Prompt the user for a password. This function is a wrapper for the \code{\link[getPass]{getPass}} function.
 #'
-#' @inheritParams askpass::askpass
+#' @inheritParams getPass::getPass
 #' @return a character string
 #'
-#' @seealso \code{\link[askpass]{askpass}}
+#' @seealso \code{\link[getPass]{getPass}}
 #' @export
 #'
 #' @examples
 #' password <- askme()
 askme <- function(prompt = "Please enter your password: ") {
-  askpass::askpass(prompt = prompt)
+  getPass::getPass(msg = prompt)
 }
 
 
@@ -295,10 +295,10 @@ Rnssp_vignettes <- function(topic = NULL) {
 #' list_templates()
 #' list_templates(as.table = TRUE)
 list_templates <- function(as.table = FALSE) {
-  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-rmd-templates/git/trees/master?recursive=1")
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-rmd-templates/git/trees/master?recursive=1", httr::timeout(180))
   repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-rmd-templates/master"
   httr::stop_for_status(req)
-  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = F)
+  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = FALSE)
   templates <- unique(dirname(filelist[grepl("/skeleton$", filelist)]))
   if (as.table) {
     do.call(
@@ -331,17 +331,17 @@ list_templates <- function(as.table = FALSE) {
 #'      Otherwise, a vector is returned (Default is FALSE).
 #'
 #' @return A data frame or a vector
-#' @seealso \href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-rmd-templates}
+#' @seealso \href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-shiny-apps}
 #' @export
 #'
 #' @examples
 #' list_apps()
 #' list_apps(as.table = TRUE)
 list_apps <- function(as.table = FALSE) {
-  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-shiny-apps/git/trees/master?recursive=1")
+  req <- httr::GET("https://api.github.com/repos/cdcgov/Rnssp-shiny-apps/git/trees/master?recursive=1", httr::timeout(180))
   repoURL <- "https://raw.githubusercontent.com/cdcgov/Rnssp-shiny-apps/master"
   httr::stop_for_status(req)
-  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = F)
+  filelist <- unlist(lapply(httr::content(req)$tree, "[", "path"), use.names = FALSE)
   apps <- unique(dirname(filelist[grepl("/app.yaml$", filelist)]))
   if (as.table) {
     do.call(
@@ -364,4 +364,40 @@ list_apps <- function(as.table = FALSE) {
   } else {
     apps
   }
+}
+
+#' Parse and Explain URL Query Parameters
+#'
+#' Extracts and parses the query parameters from a given URL. It splits the
+#' query string into key-value pairs and returns a structured dataframe.
+#'
+#' @param url A character string representing the URL to be parsed.
+#'
+#' @return A dataframe with two columns: \code{Key} and \code{Value},
+#'    containing the parsed query parameters.
+#' @export
+#'
+#' @examples
+#' explain_url("https://example.com/page?name=John&age=30&city=New%20York")
+explain_url <- function(url) {
+  if (!grepl("\\?", url)) {
+    return(data.frame(Key = character(), Value = character(), stringsAsFactors = FALSE))
+  }
+
+  query_string <- stringr::str_split(url, "\\?", simplify = TRUE)[, 2]
+
+  if (is.na(query_string) || query_string == "") {
+    return(data.frame(Key = character(), Value = character(), stringsAsFactors = FALSE))
+  }
+
+  key_value_pairs <- stringr::str_split(query_string, "&")[[1]]
+
+  parsed_pairs <- lapply(key_value_pairs, function(pair) {
+    split_pair <- stringr::str_split(pair, "=", simplify = TRUE)
+    key <- split_pair[1]
+    value <- ifelse(length(split_pair) > 1, utils::URLdecode(split_pair[2]), NA)
+    data.frame(Key = key, Value = value, stringsAsFactors = FALSE)
+  })
+
+  do.call(rbind, parsed_pairs)
 }

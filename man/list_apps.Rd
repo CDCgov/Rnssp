@@ -21,5 +21,5 @@ list_apps()
 list_apps(as.table = TRUE)
 }
 \seealso{
-\href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-rmd-templates}
+\href{https://github.com/CDCgov/Rnssp-shiny-apps}{https://github.com/CDCgov/Rnssp-shiny-apps}
 }

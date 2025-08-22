@@ -21,7 +21,7 @@ format (e.g. "2019-08-01")}
 \item{end_date}{a date object or a character string in date format
 (e.g. "2020-08-01")}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+\item{profile}{an object of class \code{\link[Rnssp]{Auth}}.
 Default is \code{myProfile}.}
 
 \item{...}{further arguments and CSV parsing parameters to be passed to
@@ -85,5 +85,5 @@ plot(graph)
 
 }
 \seealso{
-\code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_tsgraph}}
+\code{\link[Rnssp]{get_api_response}}, \code{\link[Rnssp]{get_api_data}} and \code{\link[Rnssp]{get_api_graph}}
 }

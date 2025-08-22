@@ -9,7 +9,7 @@ get_api_response(url, profile = myProfile)
 \arguments{
 \item{url}{a character of API URL}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+\item{profile}{an object of class \code{\link[Rnssp]{Auth}}.
 Default is \code{myProfile}.}
 }
 \value{
@@ -17,7 +17,7 @@ An object of class \code{response}.
 }
 \description{
 A wrapper to the \code{get_api_response} method defined in the
-\code{\link[Rnssp]{Credentials}} class.
+\code{\link[Rnssp]{Auth}} class.
 }
 \examples{
 \dontrun{
@@ -29,5 +29,5 @@ names(api_response)
 }
 }
 \seealso{
-\code{\link[Rnssp]{Credentials}}
+\code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_graph}}
 }

@@ -1,0 +1,148 @@
+:root {
+  --lightblue: #97b0cd;
+  --blue: #6b8eb7;
+  --midblue: #51739C;
+  --darkblue: #32527b;
+  --platinum: #e5e5e5;
+  --black: #2b2d42;
+  --white: #fff;
+  --thumb: #edf2f4;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font: 16px / 24px \"Rubik\", sans-serif;
+  color: var(--black);
+  background: var(--platinum);
+}
+
+.container {
+  max-width: 1400px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 1em;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 25px 0px;
+  list-style: none;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: overflow-y;
+  padding: 20px 20px;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 15%);
+  scroll-snap-align: start;
+  transition: all 0.2s;
+}
+
+.selected {
+  color: var(--white);
+  background: var(--blue);
+}
+
+.card.selected:hover {
+  color: var(--white);
+  background: var(--midblue);
+}
+
+.card:hover {
+  color: var(--white);
+  background: var(--lightblue);
+}
+
+.card .card-title {
+  font-size: 20px;
+}
+
+.card .card-content {
+  margin: 20px 0;
+  max-width: 85%;
+  max-height: 200px;
+}
+
+.card .card-authors {
+  margin-top:0px; 
+  margin-bottom:5px;
+  font-style: italic;
+}
+
+.card:hover .card-link {
+  background: var(--darkblue);
+}
+
+*::-webkit-scrollbar {
+  height: 12px;
+}
+
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-track {
+  border-radius: 92px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--darkblue);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--thumb);
+}
+
+@media (min-width: 500px) {
+  .card {
+    flex-basis: calc(50% - 10px);
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 700px) {
+  .card {
+    flex-basis: calc(calc(100% / 3) - 20px);
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .card {
+    flex-basis: calc(25% - 30px);
+    margin-right: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.wrapper{
+  height:90vh;
+  display:flex;
+  justify-content:center;
+  align-items:center
+}
+
+#loader{
+   stroke-dasharray: 80;
+   stroke-dashoffset: 500;
+   animation: loading3 2s linear infinite;
+   -webkit-animation: loading3 2s linear infinite;
+}
+@keyframes loading3 {
+    to {
+        stroke-dashoffset: 0;
+    }
+ }
+

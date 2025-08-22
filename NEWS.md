@@ -1,3 +1,21 @@
+# Rnssp 0.3.1
+
+## New Features
+* New `Apikey` class added for API services token use. The `Apikey` class has the same methods as the `Credentials` and `Token` classes.
+* New `Auth` parent abstract class added.
+* New function `create_apikey_profile()` added as a wrapper to the `$new()` method defined in the `Apikey` class.
+* New function `explain_url()` to parse URLs to a table of key-value pairs has been added.
+
+## Updates
+* The `askpass` dependency as been replaced by `getPass`.
+* The `askme()` function has been updated as a consequence of the replacement of the `askpass` dependency by `getPass`.
+* The `create_token_profile()` function has been updated as a consequence of the replacement of the `askpass` dependency by `getPass`.
+* The `add_rmd_template_gui()` RStudio addin has been enhanced with a new, user-friendly design.
+* The `run_app_gui()` RStudio addin has been enhanced with a new, user-friendly design.
+* The `alert_ewma()` function has been updated to include median scaling for time series of percentages less than 1.
+* The `alert_regression()` function has been updated to include moving average test for suppressing alerts during down slopes.
+* The `clean_text()` function has been removed from the `Rnssp` R package.
+
 # Rnssp 0.3.0
 
 ## New Features

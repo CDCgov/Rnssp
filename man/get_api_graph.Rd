@@ -12,15 +12,15 @@ get_api_graph(url, file_ext = ".png", profile = myProfile)
 \item{file_ext}{a non-empty character vector giving the file extension.
 Default is \code{.png}.}
 
-\item{profile}{an object of class \code{\link[Rnssp]{Credentials}}.
+\item{profile}{an object of class \code{\link[Rnssp]{Auth}}.
 Default is \code{myProfile}.}
 }
 \value{
 An object of class \code{response}.
 }
 \description{
-A wrapper to the \code{get_api_graph} method defined in the
-\code{\link[Rnssp]{Credentials}} class.
+A wrapper to the \code{get_api_graph} method defined in the \code{\link[Rnssp]{Credentials}},
+\code{\link[Rnssp]{Token}}, and \code{\link[Rnssp]{Apikey}} classes.
 }
 \examples{
 \dontrun{
@@ -35,5 +35,5 @@ grid::grid.raster(img)
 }
 }
 \seealso{
-\code{\link[Rnssp]{Credentials}}
+\code{\link[Rnssp]{get_api_response}} and \code{\link[Rnssp]{get_api_data}}
 }

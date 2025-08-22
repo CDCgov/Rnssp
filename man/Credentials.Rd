@@ -4,7 +4,7 @@
 \alias{Credentials}
 \title{A \code{Credentials} Class Representing a Credentials object}
 \description{
-A \code{Credentials} object has a username, a password and a key.
+A \code{Credentials} object has a username and a password.
 }
 \details{
 A \code{Credentials} object can get API data via an API URL.
@@ -22,19 +22,6 @@ api_response <- myProfile$get_api_response(url)
 }
 
 ## ------------------------------------------------
-## Method `Credentials$get_api_data`
-## ------------------------------------------------
-
-\dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "https://httpbin.org/json"
-api_data_json <- myProfile$get_api_data(json_url)
-
-csv_url <- "https://httpbin.org/robots.txt"
-api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
-}
-
-## ------------------------------------------------
 ## Method `Credentials$get_api_graph`
 ## ------------------------------------------------
 
@@ -47,16 +34,25 @@ img <- png::readPNG(api_data_graph$graph)
 grid::grid.raster(img)
 }
 }
+\section{Super class}{
+\code{Rnssp::NSSPAuth} -> \code{NSSPCredentials}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-NSSPCredentials-new}{\code{Credentials$new()}}
 \item \href{#method-NSSPCredentials-get_api_response}{\code{Credentials$get_api_response()}}
-\item \href{#method-NSSPCredentials-get_api_data}{\code{Credentials$get_api_data()}}
 \item \href{#method-NSSPCredentials-get_api_graph}{\code{Credentials$get_api_graph()}}
 \item \href{#method-NSSPCredentials-clone}{\code{Credentials$clone()}}
 }
 }
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="Rnssp" data-topic="NSSPAuth" data-id="get_api_data"><a href='../../Rnssp/html/NSSPAuth.html#method-NSSPAuth-get_api_data'><code>Rnssp::NSSPAuth$get_api_data()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPCredentials-new"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPCredentials-new}{}}}
@@ -104,45 +100,6 @@ An object of class \code{response}
 myProfile <- Credentials$new(askme("Enter my username: "), askme())
 url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-NSSPCredentials-get_api_data"></a>}}
-\if{latex}{\out{\hypertarget{method-NSSPCredentials-get_api_data}{}}}
-\subsection{Method \code{get_api_data()}}{
-Get API data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Credentials$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character ofAPI URL}
-
-\item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
-
-\item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-myProfile <- Credentials$new(askme("Enter my username: "), askme())
-json_url <- "https://httpbin.org/json"
-api_data_json <- myProfile$get_api_data(json_url)
-
-csv_url <- "https://httpbin.org/robots.txt"
-api_data_csv <- myProfile$get_api_data(csv_url, fromCSV = TRUE)
 }
 }
 \if{html}{\out{</div>}}
