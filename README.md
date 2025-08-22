@@ -77,7 +77,7 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
 ```tex
 @software{,
   author = {Azondekon, Gbedegnon Roseric and Sheppard, Michael},
-  doi = {10.5281/zenodo.10884244},
+  doi = {10.5281/zenodo.16929440},
   license = {Apache License (>= 2)},
   month = aug,
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
