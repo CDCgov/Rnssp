@@ -21,7 +21,7 @@ You can install the development version of `Rnssp` from GitHub:
 
 ```r
 # Install the Rnssp package
-devtools::install_github("cdcgov/Rnssp")
+devtools::install_github("cdcgov/Rnssp@dev")
 ```
 
 To install the package for Webassembly, run the following in your `webr` REPL or add it to your [`shinylive`](https://posit-dev.github.io/r-shinylive/) application:
@@ -136,3 +136,4 @@ CDC including this GitHub page may be subject to applicable federal law, includi
 This repository is not a source of government records, but is a copy to increase
 collaboration and collaborative potential. All government records will be
 published through the [CDC web site](http://www.cdc.gov).
+
