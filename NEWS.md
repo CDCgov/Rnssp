@@ -3,8 +3,7 @@
 ## New Features
 
 ## Bug Fixes
-
-# Rnssp 0.3.1.9000
+* The `alert_ewma()` function has been updated with a patch to prevent errors when detector is applied to a zero series.
 
 # Rnssp 0.3.1
 
