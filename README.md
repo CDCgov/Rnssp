@@ -82,7 +82,7 @@ If you encounter a clear bug, please consider emailing the author at gazondekon@
   month = aug,
   title = {{Rnssp: A Signature R package for the National Syndromic Surveillance Program (NSSP)}},
   url = {https://github.com/CDCgov/Rnssp},
-  version = {0.3.1},
+  version = {0.3.1.9000},
   year = {2025}
 }
 ```
@@ -136,4 +136,5 @@ CDC including this GitHub page may be subject to applicable federal law, includi
 This repository is not a source of government records, but is a copy to increase
 collaboration and collaborative potential. All government records will be
 published through the [CDC web site](http://www.cdc.gov).
+
 
