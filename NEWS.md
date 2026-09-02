@@ -4,6 +4,7 @@
 
 ## Bug Fixes
 * The `alert_ewma()` function has been updated with a patch to prevent errors when detector is applied to a zero series.
+* The `get_essence_data()` function has been updated with a patch to properly match the function signature ([#34](https://github.com/CDCgov/Rnssp/pull/34)).
 
 # Rnssp 0.3.1
 
