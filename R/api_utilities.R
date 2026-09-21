@@ -263,7 +263,7 @@ get_essence_data <- function(url, start_date = NULL,
     "dataDetails/csv" = profile$get_api_data(url_new, fromCSV = TRUE, ...),
     "summaryData" = profile$get_api_data(url_new) %>%
       extract2("summaryData"),
-    "alerts/regionSyndromeAlerts" = myProfile$get_api_data(url_new) %>%
+    "alerts/regionSyndromeAlerts" = profile$get_api_data(url_new) %>%
       extract2("regionSyndromeAlerts"),
     "alerts/hospitalSyndromeAlerts" = profile$get_api_data(url_new) %>%
       extract2("hospitalSyndromeAlerts"),
