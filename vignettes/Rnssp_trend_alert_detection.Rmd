@@ -50,7 +50,7 @@ myProfile <- readRDS("~/myProfile.rds")
 myProfile <- create_profile()
 
 # save profile object to file for future use
-# save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
+# save(myProfile, file = "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
 # Load profile object
 # load("myProfile.rda") # myProfile <- readRDS("myProfile.rds")
 ```
@@ -223,7 +223,7 @@ The Modified implementation of the original Farrington algorithm improves perfor
 
 Both the Original and the Modified Farrington algorithm can be performed with the `alert_farrington()` function. By default, `alert_farrington()` implements the original Farrington. Add `method = "modified"` to the function to apply the modified Farrington algorithm to your data (run `?alert_farrington` in the R console for more).
 
-The example below applies the Negative Binomial Regression detector to a synthetic time series prepackaged in `Rnssp`. The `simulated_data` dataset includes two simulated time series of weekly counts with annual seasonality. This example uses the Scenario #1 time series with moderate counts, 4 injected outbreaks over weeks 1-261, and 1 injected outbreak during weeks 262-313. The methods outlined in [*An Improved Algorithm for Outbreak Detection in Multiple Surveillance Systems*](https://onlinelibrary.wiley.com/doi/10.1002/sim.5595) (Angela Noufaily et al. [2012]) were used to generate these synthetic time series and inject outbreak cases.
+The example below applies the Farrington detector to a synthetic time series prepackaged in `Rnssp`. The `simulated_data` dataset includes two simulated time series of weekly counts with annual seasonality. This example uses the Scenario #1 time series with moderate counts, 4 injected outbreaks over weeks 1-261, and 1 injected outbreak during weeks 262-313. The methods outlined in [*An Improved Algorithm for Outbreak Detection in Multiple Surveillance Systems*](https://onlinelibrary.wiley.com/doi/10.1002/sim.5595) (Angela Noufaily et al. [2012]) were used to generate these synthetic time series and inject outbreak cases.
 
 The Original Farrington temporal detector can be applied as below:
 
