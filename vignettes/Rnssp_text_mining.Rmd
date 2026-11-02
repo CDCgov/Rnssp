@@ -57,7 +57,7 @@ myProfile <- readRDS("~/myProfile.rds")
 myProfile <- create_profile()
 
 # save profile object to file for future use
-# save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
+# save(myProfile, file = "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
 # Load profile object
 # load("myProfile.rda") # myProfile <- readRDS("myProfile.rds")
 ```
