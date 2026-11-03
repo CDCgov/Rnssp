@@ -52,12 +52,12 @@ myProfile <- readRDS("~/myProfile.rds")
 ```
 
 
-```{r create_profile, eval=FALSE}
+```{r create-profile, eval=FALSE}
 # Creating an ESSENCE user profile
 myProfile <- create_profile()
 
 # save profile object to file for future use
-# save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
+# save(myProfile, file = "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
 # Load profile object
 # load("myProfile.rda") # myProfile <- readRDS("myProfile.rds")
 ```
@@ -68,11 +68,11 @@ Alternatively, the `myProfile` object can be saved on file as an `.RData` (`.rda
 
 # Data Pull from NSSP-ESSENCE
 We now use the `myProfile` object to authenticate to NSSP-ESSENCE and pull the data.
-```{r data_pull, collapse=TRUE}
+```{r data-pull, collapse=TRUE}
 url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/dataDetails/csv?endDate=31Dec2020&ccddCategory=cdc%20coronavirus-dd%20v1&timeResolution=weekly&hasBeenE=1&percentParam=noPercent&userId=2362&datasource=va_erccdd&aqtTarget=DataDetails&detector=nodetectordetector&startDate=30Dec2020"
 
 # Data Pull from NSSP-ESSENCE
-api_data <- get_api_data(url, fromCSV = TRUE) # or myProfile$get_api_data(url, fromCSV = TRUE)
+api_data <- get_essence_data(url) # or get_api_data(url, fromCSV = TRUE)
 
 # glimpse(api_data)
 
@@ -80,7 +80,7 @@ api_data <- get_api_data(url, fromCSV = TRUE) # or myProfile$get_api_data(url, f
 
 We perform a standard series of text cleansing and pre-processing operations to remove meaningless patterns, common stop words, standardize free-text, and returns a clean version of the original dataframe that is ideal for summarizing a large corpus.
 
-```{r data_clean}
+```{r data-clean}
 .stopwords <- paste0(
     "\\bOF\\b|\\bOR\\b|\\bWITH\\b|\\bFOR\\b|\\bON\\b|\\bLEFT\\b|\\bRIGHT\\b|",
     "\\bPT\\b|\\bUNSPECIFIED\\b|\\bSTATUS\\b|\\bIN\\b|\\bHX\\b|//bDAYS\\b|\\bAGO\\b|\\bUNKNOWN",
@@ -174,7 +174,7 @@ cc_trigrams <- data %>%
 
 To summarize the top 10 chief complaint unigram and bigram frequencies, we can use the `count` and `top_n` functions from `dplyr` and visualize the results in horizontal bar charts. In order for the bars to be in descending order, we need to use `fct_reorder` from `forcats` to factor the n-grams with the levels being the frequencies themselves. By default, `ggplot` will arrange the bars in alphabetical order unless the categorical variable is factored. After creating two separate `ggplot` objects, we can use `ggarrange` to arrange the plots into a horizontal grid. 
 
-```{r bigram frequencies, warning = FALSE, message = FALSE, fig.width = 10, fig.height = 7}
+```{r bigram-frequencies, warning = FALSE, message = FALSE, fig.width = 10, fig.height = 7}
 
 pal <- economist_pal()(2)
 
@@ -224,7 +224,7 @@ ggarrange(cc_unigram_freq, cc_bigram_freq, nrow = 1, ncol = 2)
 
 ## Chief Complaint Term Co-occurrence Network Graph
 
-```{r co-occurrence network, message = FALSE, warning = FALSE, fig.width = 13, fig.height = 10}
+```{r co-occurrence-network, message = FALSE, warning = FALSE, fig.width = 13, fig.height = 10}
 
 cc_cooccurrence_net <- cc_unigrams %>%
   pairwise_count(word, linenumber, sort = TRUE, upper = FALSE) %>%
@@ -267,7 +267,7 @@ Total          & $n_{\bullet 1}$ & $n_{\bullet 0}$        & $n$
 \end{tabular}
 \end{table}
 
-```{r correlation network, message = FALSE, warning = FALSE, fig.width = 13, fig.height = 10}
+```{r correlation-network, message = FALSE, warning = FALSE, fig.width = 13, fig.height = 10}
 
 cc_correlation_net <- cc_unigrams %>%
   group_by(word) %>%

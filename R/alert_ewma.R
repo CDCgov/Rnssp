@@ -40,8 +40,10 @@ ewma_loop <- function(df, t, y, B, g, w1, w2) {
     pull(!!y)
   
   # Scaling for percentage time series with values < 1
-  if (max(y_initial) < 1) {
+  if (max(y_initial) < 1 & length(y_initial[y_initial > 0]) >= 1) {
     y <- y_initial / median(y_initial[y_initial > 0])
+  } else if (sum(y_initial) == 0) {
+    y <- y_initial
   } else {
     y <- y_initial
   }

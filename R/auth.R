@@ -25,7 +25,7 @@ Auth <- R6::R6Class(
         }
         apir %>% {
           if (fromCSV) {
-            httr::content(., by = "text/csv") %>% readr::read_csv(...)
+            httr::content(., by = "text/csv") %>% I() %>% readr::read_csv(...)
           } else {
             httr::content(., as = "text") %>% jsonlite::fromJSON()
           }

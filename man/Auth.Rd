@@ -8,50 +8,52 @@ An \code{Auth} has a private key attribute.
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-NSSPAuth-get_api_data}{\code{Auth$get_api_data()}}
-\item \href{#method-NSSPAuth-clone}{\code{Auth$clone()}}
-}
+  \itemize{
+    \item \href{#method-NSSPAuth-get_api_data}{\code{NSSPAuth$get_api_data()}}
+    \item \href{#method-NSSPAuth-clone}{\code{NSSPAuth$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPAuth-get_api_data"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPAuth-get_api_data}{}}}
-\subsection{Method \code{get_api_data()}}{
-Get API data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Auth$get_api_data(url, fromCSV = FALSE, ...)}\if{html}{\out{</div>}}
+\subsection{\code{NSSPAuth$get_api_data()}}{
+  Get API data
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPAuth$get_api_data(url, fromCSV = FALSE, ...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{url}}{a character of API URL}
+      \item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
+      \item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character of API URL}
-
-\item{\code{fromCSV}}{a logical, defines whether data are returned in .csv format or .json format}
-
-\item{\code{...}}{further arguments and CSV parsing parameters to be passed to \code{\link[readr]{read_csv}} when \code{fromCSV = TRUE}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a dataframe (\code{fromCSV = TRUE}) or a list containing a dataframe and its metadata (\code{fromCSV = TRUE})
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPAuth-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPAuth-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Auth$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{NSSPAuth$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPAuth$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

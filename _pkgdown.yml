@@ -6,8 +6,8 @@ navbar:
       text: Get started
       href: articles/Rnssp_intro.html
   structure:
-    left:  [home, get-started, reference, articles, tutorials, news, search]
-    right: [github]
+    left:  [home, get-started, reference, articles, tutorials, news]
+    right: [search, github]
 
 sidebar:
   components:
@@ -16,6 +16,7 @@ sidebar:
       href: DISCLAIMER.html
 
 template:
+  bootstrap: 5
   params:
     bootswatch: flatly
     ganalytics: G-ZWFZHWFRD0

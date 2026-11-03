@@ -1,7 +1,7 @@
 Package: Rnssp
 Type: Package
 Title: A Signature R package for the National Syndromic Surveillance Program (NSSP)
-Version: 0.3.1
+Version: 0.3.2
 Date: 2025-08-22
 Authors@R: c(
     person("Gbedegnon Roseric", "Azondekon", email = "gazondekon@cdc.gov",
@@ -28,7 +28,6 @@ License: Apache License (>= 2)
 URL: https://cdcgov.github.io/Rnssp, https://github.com/CDCgov/Rnssp
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
 Suggests: 
     testthat,
     knitr,
@@ -60,3 +59,4 @@ Imports:
     miniUI (>= 0.1.1),
     rstudioapi (>= 0.5)
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1

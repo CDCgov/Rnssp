@@ -1,0 +1,316 @@
+# Changelog
+
+## Rnssp 0.3.2
+
+### New Features
+
+### Bug Fixes
+
+- The
+  [`alert_ewma()`](https://cdcgov.github.io/Rnssp/reference/alert_ewma.md)
+  function has been updated with a patch to prevent errors when detector
+  is applied to a zero series.
+- The
+  [`get_essence_data()`](https://cdcgov.github.io/Rnssp/reference/get_essence_data.md)
+  function has been updated with a patch to properly match the function
+  signature ([\#34](https://github.com/CDCgov/Rnssp/pull/34)).
+- The
+  [`webscrape_icd()`](https://cdcgov.github.io/Rnssp/reference/webscrape_icd.md)
+  function has been updated.
+
+## Rnssp 0.3.1
+
+### New Features
+
+- New `Apikey` class added for API services token use. The `Apikey`
+  class has the same methods as the `Credentials` and `Token` classes.
+- New `Auth` parent abstract class added.
+- New function
+  [`create_apikey_profile()`](https://cdcgov.github.io/Rnssp/reference/create_apikey_profile.md)
+  added as a wrapper to the `$new()` method defined in the `Apikey`
+  class.
+- New function
+  [`explain_url()`](https://cdcgov.github.io/Rnssp/reference/explain_url.md)
+  to parse URLs to a table of key-value pairs has been added.
+
+### Updates
+
+- The `askpass` dependency as been replaced by `getPass`.
+- The [`askme()`](https://cdcgov.github.io/Rnssp/reference/askme.md)
+  function has been updated as a consequence of the replacement of the
+  `askpass` dependency by `getPass`.
+- The
+  [`create_token_profile()`](https://cdcgov.github.io/Rnssp/reference/create_token_profile.md)
+  function has been updated as a consequence of the replacement of the
+  `askpass` dependency by `getPass`.
+- The
+  [`add_rmd_template_gui()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template_gui.md)
+  RStudio addin has been enhanced with a new, user-friendly design.
+- The
+  [`run_app_gui()`](https://cdcgov.github.io/Rnssp/reference/run_app_gui.md)
+  RStudio addin has been enhanced with a new, user-friendly design.
+- The
+  [`alert_ewma()`](https://cdcgov.github.io/Rnssp/reference/alert_ewma.md)
+  function has been updated to include median scaling for time series of
+  percentages less than 1.
+- The
+  [`alert_regression()`](https://cdcgov.github.io/Rnssp/reference/alert_regression.md)
+  function has been updated to include moving average test for
+  suppressing alerts during down slopes.
+- The `clean_text()` function has been removed from the `Rnssp` R
+  package.
+
+## Rnssp 0.3.0
+
+### New Features
+
+- The `Rnssp` R package has a new hexsticker.
+- [`Rnssp` webassembly build](https://github.com/CDCgov/Rnssp_wasm) now
+  available for `webr` and `shinylive`.
+- Custom built shiny applications from the
+  [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github
+  repository are seamlessly integrated to `Rnssp`.
+- New function
+  [`list_apps()`](https://cdcgov.github.io/Rnssp/reference/list_apps.md)
+  lists available custom-built shiny apps from the
+  [Rnssp-shiny-apps](https://github.com/CDCgov/Rnssp-shiny-apps) Github
+  repository.
+- New addin added for RStudio users to run [Rnssp shiny
+  apps](https://github.com/CDCgov/Rnssp-shiny-apps)
+  ([`run_app_gui()`](https://cdcgov.github.io/Rnssp/reference/run_app_gui.md)).
+
+### Updates
+
+- The deprecated `$get_api_tsgraph()` method has been removed.
+- The `get_api_tsgraph` function has been removed as a consequence of
+  the removal of the deprecated `$get_api_tsgraph` method.
+
+### Bug Fixes
+
+- The `Credentials` class has been updated. It now interfaces with API
+  services no authorization requirement.
+- The
+  [`get_essence_data()`](https://cdcgov.github.io/Rnssp/reference/get_essence_data.md)
+  function has been upgraded to accommodate the table builder ESSENCE
+  API.
+- The
+  [`change_dates()`](https://cdcgov.github.io/Rnssp/reference/change_dates.md)
+  function has been upgraded to fix flip-flopping start and end date
+  values ([\#13](https://github.com/CDCgov/Rnssp/issues/13))
+- The `assertive.types` package dependency has been replaced by the
+  `assertions` package
+  ([\#14](https://github.com/CDCgov/Rnssp/issues/14)).
+- The
+  [`webscrape_icd()`](https://cdcgov.github.io/Rnssp/reference/webscrape_icd.md)
+  function has been fixed to webscrape 2024 ICD10 code sets.
+
+## Rnssp 0.2.0
+
+### New Features
+
+- New function
+  [`create_profile()`](https://cdcgov.github.io/Rnssp/reference/create_profile.md)
+  added as a wrapper to the `$new()` method defined in the `Credentials`
+  class.
+- New function
+  [`get_essence_data()`](https://cdcgov.github.io/Rnssp/reference/get_essence_data.md)
+  added to specifically pull data using the NSSP-ESSENCE API.
+- Negative binomial detection algorithm
+  [`alert_nbinom()`](https://cdcgov.github.io/Rnssp/reference/alert_nbinom.md)
+  added for weekly time series of counts spanning multiple years.
+- [`run_app()`](https://cdcgov.github.io/Rnssp/reference/run_app.md) has
+  been added as a utility to run embedded shiny apps.
+- New `Token` class added for API services token use. The `Token` class
+  has the same methods as the `Credentials` class.
+- New function
+  [`create_token_profile()`](https://cdcgov.github.io/Rnssp/reference/create_token_profile.md)
+  added as a wrapper to the `$new()` method defined in the `Token`
+  class.
+- `Rnssp` detects new version and suggests package upgrade.
+
+### Updates
+
+- New test `test-create_profile.R` added for
+  [`create_profile()`](https://cdcgov.github.io/Rnssp/reference/create_profile.md).
+- New test `test-create_token_profile.R` added for
+  [`create_token_profile()`](https://cdcgov.github.io/Rnssp/reference/create_token_profile.md).
+- New test `test-alert_nbinom.R` added for
+  [`alert_nbinom()`](https://cdcgov.github.io/Rnssp/reference/alert_nbinom.md).
+- New test `test-alert_serfling.R` added for
+  [`alert_serfling()`](https://cdcgov.github.io/Rnssp/reference/alert_serfling.md).
+- New test `test-get_essence_data.R` added for
+  [`get_essence_data()`](https://cdcgov.github.io/Rnssp/reference/get_essence_data.md).
+- New test `test-get_api_graph.R` added for
+  [`get_api_graph()`](https://cdcgov.github.io/Rnssp/reference/get_api_graph.md).
+- New test `test-get_api_tsgraph.R` added for `get_api_tsgraph()`.
+- `slider` package added as a dependency.
+- `lubridate` package added as a dependency.
+- Deprecated `alert_mar()` function has been removed.
+- [`add_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template.md)
+  has been improved with additional arguments and better error handling.
+- [`remove_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/remove_rmd_template.md)
+  has been improved with additional arguments and better error handling.
+- `Rnssp:::add_rmd_template_gui()` has been improved with additional
+  arguments and better error handling.
+- `Rnssp:::remove_rmd_template_gui()` has been improved with additional
+  arguments and better error handling.
+- `$get_api_response()` has been improved and now prints HTTP status
+  code.
+- `$get_api_tsgraph()` has been improved with additional arguments and
+  now prints HTTP status code.
+- The `$get_api_tsgraph()` method has been deprecated and will be
+  removed in the next release of `Rnssp`.
+- New method `$get_api_graph()` has been added as a replacement to the
+  `$get_api_tsgraph()`.
+
+### Bug Fixes
+
+- Abstracted critical user credentials from the `$get_api_ts_graph()`
+  method.
+- Fix the `get_api_tsgraph()` function which was previously returning an
+  API response object.
+
+## Rnssp 0.1.0
+
+### New Features
+
+- New function
+  [`get_api_response()`](https://cdcgov.github.io/Rnssp/reference/get_api_response.md)
+  added as a wrapper to the `$get_api_response()` method defined in the
+  `Credentials` class.
+- New function
+  [`get_api_data()`](https://cdcgov.github.io/Rnssp/reference/get_api_data.md)
+  added as a wrapper to the `$get_api_data()` method defined in the
+  `Credentials` class.
+- New function `get_api_tsgraph()` added as a wrapper to the
+  `$get_api_tsgraph()` method defined in the `Credentials` class.
+- Regression/EWMA Switch algorithm
+  [`alert_switch()`](https://cdcgov.github.io/Rnssp/reference/alert_switch.md)
+  added for anomaly detection.
+- Adaptive Multiple Regression algorithm
+  [`alert_regression()`](https://cdcgov.github.io/Rnssp/reference/alert_regression.md)
+  added for anomaly detection.
+- Farrington Temporal Detector algorithm
+  [`alert_farrington()`](https://cdcgov.github.io/Rnssp/reference/alert_farrington.md)
+  added for weekly time series of counts spanning multiple years.
+- ICD Code Web Scraper function
+  [`webscrape_icd()`](https://cdcgov.github.io/Rnssp/reference/webscrape_icd.md)
+  added to web scrape ICD discharge diagnosis code sets from the CDC FTP
+  server (for ICD-10) or CMS website (for ICD-9).
+- The following Addins have been added for RStudio users:
+  - Create User Profile via a Graphical User Interface
+    (`Rnssp:::create_user_profile_gui()`)
+  - Create a User Profile with a script skeleton
+    (`Rnssp:::create_user_profile()`)
+  - List available Rnssp templates
+    ([`list_templates()`](https://cdcgov.github.io/Rnssp/reference/list_templates.md))
+  - Add or Update Rnssp templates (`Rnssp:::add_rmd_template_gui()`)
+  - Remove Rnssp templates (`Rnssp:::remove_rmd_template_gui()`)
+  - Open Rnssp templates online documentation
+    (`Rnssp:::rnssp_templates_manual()`)
+  - Open Rnssp package online documentation (`Rnssp:::rnssp_manual()`)
+
+### Updates
+
+- [`add_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template.md)
+  no longer has a `template_name` argument. The argument `template_name`
+  has been replaced by `template` which is the first argument in the
+  function call.
+- New test `test-alert_farrington.R` added for
+  [`alert_farrington()`](https://cdcgov.github.io/Rnssp/reference/alert_farrington.md).
+- New test `test-alert_regression.R` added for
+  [`alert_regression()`](https://cdcgov.github.io/Rnssp/reference/alert_regression.md).
+- New test `test-alert_switch.R` added for
+  [`alert_switch()`](https://cdcgov.github.io/Rnssp/reference/alert_switch.md).
+- New test `test-add_rmd_template.R` added for
+  [`add_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template.md).
+- New test `test-remove_rmd_template.R` added for
+  [`remove_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/remove_rmd_template.md).
+- New test `test-get_api_data.R` added for the
+  [`get_api_data()`](https://cdcgov.github.io/Rnssp/reference/get_api_data.md)
+  function.
+- New test `test-get_api_response.R` added for the
+  [`get_api_response()`](https://cdcgov.github.io/Rnssp/reference/get_api_response.md)
+  function.
+- New test `test-get_api_tsgraph.R` added for the `get_api_tsgraph()`
+  function.
+- New test `test-get_api_data_method.R` added for the `$get_api_data()`
+  method.
+- New test `test-get_api_response_method.R` added for the
+  `$get_api_response()` method.
+- New test `test-get_api_tsgraph_method.R` added for the
+  `$get_api_tsgraph()` method.
+- New test `test-webscrape_icd.R` added for
+  [`webscrape_icd()`](https://cdcgov.github.io/Rnssp/reference/webscrape_icd.md)
+- Added shapefile for US Hospital Service Area (HSA) Shapefile
+  (`hsa_sf`)
+- Added Rnssp stopwords (`rnssp_stopwords`)
+- `alert_mar()` is depecrated. Use `alert_regression` instead.
+- Test `test_alert_mar.R` has been removed for `alert_mar()`.
+- Regression models in
+  [`alert_regression()`](https://cdcgov.github.io/Rnssp/reference/alert_regression.md)
+  are fit using [`lm.fit()`](https://rdrr.io/r/stats/lmfit.html) instead
+  of [`lm()`](https://rdrr.io/r/stats/lm.html) to reduce computation
+  time associated with extraneous computations made by
+  [`lm()`](https://rdrr.io/r/stats/lm.html).
+- New vignette added to demonstrate the use of Rnssp addins.
+
+### Other News
+
+- `slider` package dependency no longer needed.
+- `cli` package is now a dependency for attractive Command Line
+  Interfaces (CLIs)
+
+## Rnssp 0.0.2
+
+### New Features
+
+- All vignettes can be browsed with the
+  [`Rnssp_vignettes()`](https://cdcgov.github.io/Rnssp/reference/Rnssp_vignettes.md)
+  function
+- [`list_templates()`](https://cdcgov.github.io/Rnssp/reference/list_templates.md)
+  lists available templates from the
+  [Rnssp-rmd-templates](https://github.com/CDCgov/Rnssp-rmd-templates)
+  Github repository
+- [`add_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template.md)
+  can now add RMarkdown templates from
+  [Rnssp-rmd-templates](https://github.com/CDCgov/Rnssp-rmd-templates)
+  Github repository
+- [`add_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/add_rmd_template.md)
+  can now run in non-interactive mode
+- [`remove_rmd_template()`](https://cdcgov.github.io/Rnssp/reference/remove_rmd_template.md)
+  removes an existing RMarkdown template from an existing `Rnssp`
+  package template list.
+- [`change_dates()`](https://cdcgov.github.io/Rnssp/reference/change_dates.md)
+  changes the start and/or end dates in an ESSENCE API URL
+
+### Bug Fixes
+
+- Abstracted critical user credentials from response object.
+- The `$get_api_data()` method has been extended to accept further
+  arguments to parse CSV files.
+
+### Other News
+
+- Added CI/CD pipeline
+- Updated all `Rnssp` vignettes.
+- [Rnssp Online documentation](https://cdcgov.github.io/Rnssp/) website
+  is now available.
+- Added new hex sticker for Rnssp package branding.
+- Added a `THANKS.md` to acknowledge various supports and other
+  contributions.
+
+## Rnssp 0.0.1
+
+### New Features
+
+- [`alert_ewma()`](https://cdcgov.github.io/Rnssp/reference/alert_ewma.md)
+  implements EWMA time series anomaly detection algorithm
+- `alert_mar()` implements MAR time series anomaly detection algorithm
+- [`classify_trend()`](https://cdcgov.github.io/Rnssp/reference/classify_trend.md)
+  implements a time series trend classification algorithm
+- Added a vignette for time series anomaly detection and trend
+  classification
+- Added a `NEWS.md` file to track changes to the package.
+
+## Rnssp 0.0.0.9000

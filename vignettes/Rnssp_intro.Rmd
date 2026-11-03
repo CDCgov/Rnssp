@@ -60,7 +60,7 @@ myProfile <- readRDS("~/myProfile.rds")
 myProfile <- create_profile()
 
 # save profile object to file for future use
-# save(myProfile, "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
+# save(myProfile, file = "myProfile.rda") # saveRDS(myProfile, "myProfile.rds")
 # Load profile object
 # load("myProfile.rda") # myProfile <- readRDS("myProfile.rds")
 ```
@@ -83,9 +83,9 @@ myProfile
 str(myProfile) # or `structure(myProfile)`
 ```
 
-The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, `$get_api_graph()` and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, `get_api_graph()` and `get_api_tsgraph()` functions serve as wrappers to their respective methods. 
+The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, `$get_api_graph()` and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, and `get_api_graph()` functions serve as wrappers to their respective methods. 
 
-For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, `?get_api_graph()` or `?get_api_tsgraph()` for a full documentation on each function.
+For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, or `?get_api_graph()`  for a full documentation on each function.
 
 In the following sections, we show how to pull data from NSSP-ESSENCE using the seven APIs listed above.
 
@@ -168,7 +168,7 @@ class(api_data_tb_csv)
 ## JSON option
 ```{r tbr_json}
 # URL from JSON ESSENCE Table Builder results API
-url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
+url <- "https://essence.syndromicsurveillance.org/nssp_essence/api/tableBuilder?endDate=31Dec2020&ccddCategory=cdc%20opioid%20overdose%20v3&percentParam=noPercent&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector&startDate=1Oct2020&ageNCHS=11-14&ageNCHS=15-24&ageNCHS=25-34&ageNCHS=35-44&ageNCHS=45-54&ageNCHS=55-64&ageNCHS=65-74&ageNCHS=75-84&ageNCHS=85-1000&ageNCHS=unknown&timeResolution=monthly&hasBeenE=1&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TableBuilder&rowFields=timeResolution&rowFields=geographyhospitaldhhsregion&columnField=ageNCHS"
 
 # Data Pull from ESSENCE
 api_data_tb_json <- get_api_data(url)
