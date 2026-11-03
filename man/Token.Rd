@@ -12,7 +12,7 @@ A \code{Token} object can get API data via an API URL.
 \examples{
 
 ## ------------------------------------------------
-## Method `Token$get_api_response`
+## Method `NSSPToken$get_api_response()`
 ## ------------------------------------------------
 
 \dontrun{
@@ -22,7 +22,7 @@ api_response <- myProfile$get_api_response(url)
 }
 
 ## ------------------------------------------------
-## Method `Token$get_api_graph`
+## Method `NSSPToken$get_api_graph()`
 ## ------------------------------------------------
 
 \dontrun{
@@ -35,130 +35,126 @@ grid::grid.raster(img)
 }
 }
 \section{Super class}{
-\code{Rnssp::NSSPAuth} -> \code{NSSPToken}
+\code{NSSPAuth} -> \code{NSSPToken}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-NSSPToken-new}{\code{Token$new()}}
-\item \href{#method-NSSPToken-get_api_response}{\code{Token$get_api_response()}}
-\item \href{#method-NSSPToken-get_api_graph}{\code{Token$get_api_graph()}}
-\item \href{#method-NSSPToken-clone}{\code{Token$clone()}}
+  \itemize{
+    \item \href{#method-NSSPToken-initialize}{\code{NSSPToken$new()}}
+    \item \href{#method-NSSPToken-get_api_response}{\code{NSSPToken$get_api_response()}}
+    \item \href{#method-NSSPToken-get_api_graph}{\code{NSSPToken$get_api_graph()}}
+    \item \href{#method-NSSPToken-clone}{\code{NSSPToken$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Rnssp" data-topic="NSSPAuth" data-id="get_api_data"><a href='../../Rnssp/html/NSSPAuth.html#method-NSSPAuth-get_api_data'><code>Rnssp::NSSPAuth$get_api_data()</code></a></span></li>
+  <li><code>NSSPAuth$get_api_data()</code></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-NSSPToken-new"></a>}}
-\if{latex}{\out{\hypertarget{method-NSSPToken-new}{}}}
-\subsection{Method \code{new()}}{
-Initializes a new Credentials object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Token$new(token, auth_type = "Bearer")}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-NSSPToken-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-NSSPToken-initialize}{}}}
+\subsection{\code{NSSPToken$new()}}{
+  Initializes a new Credentials object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPToken$new(token, auth_type = "Bearer")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{token}}{a string for token}
+      \item{\code{auth_type}}{type of HTTP authentication. Should be \code{Bearer} or \code{Basic}. Default is \code{Bearer}}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An object of class \code{Token}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{token}}{a string for token}
-
-\item{\code{auth_type}}{type of HTTP authentication. Should be \code{Bearer} or \code{Basic}. Default is \code{Bearer}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An object of class \code{Token}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPToken-get_api_response"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPToken-get_api_response}{}}}
-\subsection{Method \code{get_api_response()}}{
-Get API response
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Token$get_api_response(url)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character of API URL}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An object of class \code{response}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-myProfile <- Token$new("abc1234567890")
+\subsection{\code{NSSPToken$get_api_response()}}{
+  Get API response
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPToken$get_api_response(url)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{url}}{a character of API URL}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An object of class \code{response}
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{myProfile <- Token$new("abc1234567890")
 url <- "https://httpbin.org/json"
 api_response <- myProfile$get_api_response(url)
 }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
 
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPToken-get_api_graph"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPToken-get_api_graph}{}}}
-\subsection{Method \code{get_api_graph()}}{
-Get API graph
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Token$get_api_graph(url, file_ext = ".png")}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{url}}{a character of API URL}
-
-\item{\code{file_ext}}{a non-empty character vector giving the file extension. Default is \code{.png}.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A list containing an api_response object and a path to a time series graph in .png format
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-myProfile <- Token$new("abc1234567890")
+\subsection{\code{NSSPToken$get_api_graph()}}{
+  Get API graph
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPToken$get_api_graph(url, file_ext = ".png")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{url}}{a character of API URL}
+      \item{\code{file_ext}}{a non-empty character vector giving the file extension. Default is \code{.png}.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A list containing an api_response object and a path to a time series graph in .png format
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{myProfile <- Token$new("abc1234567890")
 url <- "https://httpbin.org/image/png"
 api_data_graph <- myProfile$get_api_graph(url)
 names(api_data_graph)
 img <- png::readPNG(api_data_graph$graph)
 grid::grid.raster(img)
 }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
 
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-NSSPToken-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-NSSPToken-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Token$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{NSSPToken$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{NSSPToken$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

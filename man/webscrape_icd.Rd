@@ -7,28 +7,31 @@
 webscrape_icd(icd_version = "ICD10", year = NULL, quiet = FALSE)
 }
 \arguments{
-\item{icd_version}{A character value of either "icd10", "ICD10", "icd9", or
-"ICD9" to specify ICD version}
+\item{icd_version}{A character value of either "ICD10" or "ICD9" to
+specify ICD version}
 
-\item{year}{A numeric integer indicating the year of desired ICD-10 code set.
-Defaults to \code{NULL} to pull the most recent year's publication.}
+\item{year}{A numeric integer indicating the publication year of
+desired ICD-10 code set. ICD-10 diagnosis code update files are
+published on October 1 of each year. Defaults to \code{NULL} to pull the
+most recent year's publication. An error will occur if this argument is
+used in combination with setting`icd_version` to "ICD9".}
 
 \item{quiet}{logical. If \code{TRUE}, suppress status messages (if any),
 and the progress bar.}
 }
 \value{
-A dataframe
+A tibble
 }
 \description{
-Function to web scrape ICD discharge diagnosis code sets from the CDC FTP
-server or CMS website. If pulling ICD-10 codes, by default the function will
-search for the most recent year's code set publication by NCHS. Users can
-specify earlier publication years back to 2019 if needed. The ICD-9 option
-will only web scrape the most recent, final ICD-9 code set publication (2014)
-from the CMS website. This function will return an error message if the FTP
-server or CMS website is  unresponsive or if a timeout of 60 seconds is
-reached. The result is a dataframe with 3 fields: code, description, and
-set (ICD version concatenated with year). Codes are standardized to upper
+Function to web scrape ICD discharge diagnosis code sets from the CMS website.
+If pulling ICD-10 codes, by default the function will attempt to pull the
+diagnosis code update file for the current year. Users can specify earlier
+publication years from the last 6 years if needed. The ICD-9 option will only
+pull the most recent, final ICD-9 code set publication from 2014.
+This function will return an error message if the requested diagnosis code
+update file is not yet available or if the CMS website is  unresponsive.
+The result is a tibble with 5 fields: version, code, description,
+published_year, and fy_update_year. Codes are standardized to upper
 case with punctuation and extra leading/tailing white space removed to
 enable successful joining.
 }
@@ -39,18 +42,17 @@ icd9_2014 <- webscrape_icd(icd_version = "ICD9")
 head(icd9_2014)
 
 # Example 2
-icd10_2024 <- webscrape_icd(icd_version = "ICD10", year = 2024)
-head(icd10_2024)
+icd10_2025 <- webscrape_icd(icd_version = "ICD10", year = 2025)
+head(icd10_2025)
 
 # Example 3
-icd10_2023 <- webscrape_icd(icd_version = "ICD10", year = 2023)
-head(icd10_2023)
+icd10_2026 <- webscrape_icd(icd_version = "ICD10", year = 2026)
+head(icd10_2026)
 
 }
 \references{
 \itemize{
-    \item \href{https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/}{CDC NCHS FTP Server Location for Published ICD-10 Code Sets}
-    \item \href{https://www.cms.gov/medicare/coding-billing/icd-10-codes}{CMS Website for Published 2024 ICD-10 Code Set}
-    \item \href{https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes}{CMS Website for Published ICD-9 Code Sets}
+    \item \href{https://www.cms.gov/medicare/coding-billing/icd-10-codes}{CMS website for published ICD-10 diagnosis code update files}
+    \item \href{https://www.cms.gov/medicare/coding-billing/icd-10-codes/icd-9-cm-diagnosis-procedure-codes-abbreviated-and-full-code-titles}{CMS website for published ICD-9 diagnosis code files}
 }
 }
