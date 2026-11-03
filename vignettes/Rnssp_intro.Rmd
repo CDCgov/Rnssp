@@ -83,9 +83,9 @@ myProfile
 str(myProfile) # or `structure(myProfile)`
 ```
 
-The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, `$get_api_graph()` and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, `get_api_graph()` and `get_api_tsgraph()` functions serve as wrappers to their respective methods. 
+The created `myProfile` object comes with the `$get_api_response()`, `$get_api_data()`, `$get_api_graph()` and `$get_api_tsgraph()` methods with various parameters to pull ESSENCE data. Alternatively, the `get_api_response()`, `get_api_data()`, and `get_api_graph()` functions serve as wrappers to their respective methods. 
 
-For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, `?get_api_graph()` or `?get_api_tsgraph()` for a full documentation on each function.
+For a full documentation on all the methods available, execute the `help(Credentials)` or `?Credentials` command in the R console. Similarly, execute `?get_api_response()`, `?get_api_data()`, or `?get_api_graph()`  for a full documentation on each function.
 
 In the following sections, we show how to pull data from NSSP-ESSENCE using the seven APIs listed above.
 
