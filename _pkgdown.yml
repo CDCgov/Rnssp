@@ -1,5 +1,8 @@
 url: https://cdcgov.github.io/Rnssp/
 
+template:
+  bootstrap: 5
+
 navbar:
   components:
     get-started:
