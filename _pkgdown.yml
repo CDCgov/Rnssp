@@ -1,8 +1,5 @@
 url: https://cdcgov.github.io/Rnssp/
 
-template:
-  bootstrap: 5
-
 navbar:
   components:
     get-started:
@@ -19,6 +16,7 @@ sidebar:
       href: DISCLAIMER.html
 
 template:
+  bootstrap: 5
   params:
     bootswatch: flatly
     ganalytics: G-ZWFZHWFRD0
