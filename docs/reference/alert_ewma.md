@@ -1,0 +1,155 @@
+# Exponentially Weighted Moving Average (EWMA)
+
+The EWMA compares a weighted average of the most recent visit counts to
+a baseline expectation. For the weighted average to be tested, an
+exponential weighting gives the most influence to the most recent
+observations. This algorithm is appropriate for daily counts that do not
+have the characteristic features modeled in the regression algorithm. It
+is more applicable for Emergency Department data from certain hospital
+groups and for time series with small counts (daily average below 10)
+because of the limited case definition or chosen geographic region. An
+alert (red value) is signaled if the statistical test (student's t-test)
+applied to the test statistic yields a p-value less than 0.01. If the
+p-value is greater than or equal to 0.01 and strictly less than 0.05, a
+warning (yellow value) is signaled. Blue values are returned if an alert
+or warning does not occur. Grey values represent instances where anomaly
+detection did not apply (i.e., observations for which baseline data were
+unavailable).
+
+## Usage
+
+``` r
+alert_ewma(df, t = date, y = count, B = 28, g = 2, w1 = 0.4, w2 = 0.9)
+```
+
+## Arguments
+
+- df:
+
+  A data frame, data frame extension (e.g., a tibble), or a lazy data
+  frame
+
+- t:
+
+  Name of the column of type Date containing the dates
+
+- y:
+
+  Name of the column of type Numeric containing counts or percentages
+
+- B:
+
+  Baseline parameter. The baseline length is the number of days used to
+  calculate rolling averages, standard deviations, and exponentially
+  weighted moving averages. Defaults to 28 days to match ESSENCE
+  implementation.
+
+- g:
+
+  Guardband parameter. The guardband length is the number of days
+  separating the baseline from the current test date. Defaults to 2 days
+  to match ESSENCE implementation.
+
+- w1:
+
+  Smoothing coefficient for sensitivity to gradual events. Must be
+  between 0 and 1 and is recommended to be between 0.3 and 0.5 to
+  account for gradual effects. Defaults to 0.4 to match ESSENCE
+  implementation.
+
+- w2:
+
+  Smoothed coefficient for sensitivity to sudden events. Must be between
+  0 and 1 and is recommended to be above 0.7 to account for sudden
+  events. Defaults to 0.9 to match ESSENCE implementation and
+  approximate the C2 algorithm.
+
+## Value
+
+Original data frame with detection results.
+
+## Examples
+
+``` r
+# Example 1
+df <- data.frame(
+  date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  count = floor(runif(366, min = 0, max = 101))
+)
+
+head(df)
+
+df_ewma <- alert_ewma(df)
+
+head(df_ewma)
+
+# Example 2
+df <- data.frame(
+  Date = seq.Date(as.Date("2020-01-01"), as.Date("2020-12-31"), by = 1),
+  percent = runif(366)
+)
+
+head(df)
+
+df_ewma <- alert_ewma(df, t = Date, y = percent)
+
+head(df_ewma)
+
+
+if (FALSE) { # \dontrun{
+# Example 3: Data from NSSP-ESSENCE
+library(Rnssp)
+library(ggplot2)
+
+myProfile <- create_profile()
+
+url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?
+endDate=20Nov20&ccddCategory=cli%20cc%20with%20cli%20dd%20and%20coronavirus%20dd%20v2
+&percentParam=ccddCategory&geographySystem=hospitaldhhsregion&datasource=va_hospdreg
+&detector=probrepswitch&startDate=22Aug20&timeResolution=daily&hasBeenE=1
+&medicalGroupingSystem=essencesyndromes&userId=2362&aqtTarget=TimeSeries&stratVal=
+&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall
+&seriesPerYear=false&nonZeroComposite=false&removeZeroSeries=true&startMonth=January
+&stratVal=&multiStratVal=geography&graphOnly=true&numSeries=0&graphOptions=multipleSmall
+&seriesPerYear=false&startMonth=January&nonZeroComposite=false"
+
+url <- url %>% gsub("\n", "", .)
+
+api_data <- get_api_data(url)
+
+df <- api_data$timeSeriesData
+
+df_ewma <- df %>%
+  group_by(hospitaldhhsregion_display) %>%
+  alert_ewma(t = date, y = dataCount)
+
+# Visualize alert for HHS Region 4
+df_ewma_region <- df_ewma %>%
+  filter(hospitaldhhsregion_display == "Region 4")
+
+df_ewma_region %>%
+  ggplot() +
+  geom_line(aes(x = date, y = dataCount), color = "grey70") +
+  geom_line(
+    data = subset(df_ewma_region, alert != "grey"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "blue"),
+    aes(x = date, y = dataCount), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "yellow"),
+    aes(x = date, y = dataCount), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_ewma_region, alert == "red"),
+    aes(x = date, y = dataCount), color = "red"
+  ) +
+  theme_bw() +
+  labs(
+    x = "Date",
+    y = "Count"
+  )
+} # }
+```

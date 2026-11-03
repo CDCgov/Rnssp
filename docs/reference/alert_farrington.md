@@ -1,0 +1,193 @@
+# Farrington Temporal Detector
+
+The Farrington algorithm is intended for weekly time series of counts
+spanning multiple years.
+
+## Usage
+
+``` r
+alert_farrington(
+  df,
+  t = date,
+  y = count,
+  B = 4,
+  g = 27,
+  w = 3,
+  p = 10,
+  method = "original"
+)
+```
+
+## Arguments
+
+- df:
+
+  A dataframe, dataframe extension (e.g., a `tibble`), or a lazy
+  dataframe
+
+- t:
+
+  A column containing date values
+
+- y:
+
+  A column containing time series counts
+
+- B:
+
+  Number of years to include in baseline (default is 4)
+
+- g:
+
+  Number of guardband weeks to separate the test date from the baseline
+  (default is 27)
+
+- w:
+
+  Half the number of weeks included in reference window, before and
+  after each reference date (default is 3)
+
+- p:
+
+  Number of seasonal periods for each year in baseline
+
+- method:
+
+  A string of either "`original`" (default) or "`modified`" to specify
+  the version of the Farrington algorithm (original vs modified).
+
+## Value
+
+A dataframe
+
+## Details
+
+Original Farrington Algorithm: Quasi-Poisson generalized linear
+regression models are fit to baseline counts associated with reference
+dates in the B previous years, including w weeks before and after each
+reference date. The algorithm checks for convergence with a time term
+and refits a model with only an intercept term in the scenario the model
+does not converge. The inclusion of high baseline counts associated with
+past outbreaks or public health events is known to result in alerting
+thresholds that are too high and a reduction in sensitivity. An
+empirically derived weighting function is used to calculate weights from
+Anscombe residuals that assign low weight to baseline observations with
+large residuals. A 2/3rds transformation is applied to account for
+skewness common to time series with lower counts, after which expected
+value and variance estimates are used to derive upper and lower bounds
+for the prediction interval. The alert score is defined as the current
+observation minus the forecast value divided by the upper prediction
+interval bound minus the forecast value. If this score exceeds 1, an
+alert (red value) is raised given that the number of counts in the last
+4 days is above 5. This algorithm requires that the number of years
+included in the baseline is 3 or higher. Blue values are returned if an
+alert does not occur. Grey values represent instances where anomaly
+detection did not apply (i.e., observations for which baseline data were
+unavailable).
+
+Modified Farrington Algorithm: In 2012, Angela Noufaily developed a
+modified implementation of the original Farrington algorithm that
+improved performance by including more historical data in the baseline.
+The modified algorithm includes all weeks from the beginning of the
+first reference window to the last week proceeding a 27-week guardband
+period used to separate the test week from the baseline. A 10-level
+factor is used to account for seasonality throughout the baseline.
+Additionally, the modified algorithm assumes a negative binomial
+distribution on the weekly time series counts, where thresholds are
+computed as quantiles of the negative binomial distribution with plug-in
+estimates for mu and phi.
+
+## References
+
+- [A Statistical Algorithm for the Early Detection of Outbreaks of
+  Infectious
+  Disease](https://www.jstor.org/stable/2983331?seq=1#metadata_info_tab_contents)
+
+- [Monitoring Count Time Series in R: Aberration Detection in Public
+  Health
+  Surveillance](https://cran.r-project.org/web/packages/surveillance/vignettes/monitoringCounts.pdf)
+
+## Examples
+
+``` r
+# Example 1
+
+df <- data.frame(
+  date = seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks"),
+  count = rpois(length(seq(as.Date("2014-01-05"), as.Date("2022-02-05"), "weeks")), 25)
+)
+
+head(df)
+
+## Original Farrington algorithm
+
+df_farr_original <- alert_farrington(df, t = date, y = count)
+
+head(df_farr_original)
+
+
+## Modified Farrington algorithm
+
+df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+
+head(df_farr_modified)
+
+if (FALSE) { # \dontrun{
+# Example 2: Data from NSSP-ESSENCE, national counts for CDC Respiratory Synctial Virus v1
+
+library(Rnssp)
+library(ggplot2)
+
+myProfile <- create_profile()
+
+url <- "https://essence2.syndromicsurveillance.org/nssp_essence/api/timeSeries?endDate=12
+Feb2022&ccddCategory=cdc%20respiratory%20syncytial%20virus%20v1&percentParam=noPercent
+&geographySystem=hospitaldhhsregion&datasource=va_hospdreg&detector=nodetectordetector
+&startDate=29Dec2013&timeResolution=weekly&hasBeenE=1&medicalGroupingSystem=essencesyndromes
+&userId=2362&aqtTarget=TimeSeries"
+
+
+url <- url %>% gsub("\n", "", .)
+
+api_data <- get_api_data(url)
+
+df <- api_data$timeSeriesData
+
+
+## Original Farrington algorithm
+
+df_farr_original <- alert_farrington(df, t = date, y = count)
+
+
+## Modified Farrington algorithm
+
+df_farr_modified <- alert_farrington(df, t = date, y = count, method = "modified")
+
+
+### Visualize alert
+df_farr_modified %>%
+  ggplot() +
+  geom_line(aes(x = date, y = count), linewidth = 0.4, color = "grey70") +
+  geom_line(
+    data = subset(df_farr_modified, alert != "grey"),
+    aes(x = date, y = count), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "blue"),
+    aes(x = date, y = count), color = "navy"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "yellow"),
+    aes(x = date, y = count), color = "yellow"
+  ) +
+  geom_point(
+    data = subset(df_farr_modified, alert == "red"),
+    aes(x = date, y = count), color = "red"
+  ) +
+  theme_bw() +
+  labs(
+    x = "Date",
+    y = "Weekly ED Visits"
+  )
+} # }
+```
